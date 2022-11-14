@@ -119,7 +119,7 @@ const CoursesList = () => {
        Featured courses
     </Button>
     </Top>
-    <AnimationOnScroll animateIn="animate__fadeInUp">
+    <AnimationOnScroll animateIn="animate__fadeInUp animate__slower">
     <Wrapper>
     {featuredCoures.map((courses) =>(
     <Card variant="elevation" elevation={10} 
