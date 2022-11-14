@@ -9,11 +9,12 @@ import { mobile } from "../responsive";
 import Image from "next/image";
 import Link from "next/link";
 
-
+// ":hover":{color: "white"}
 
 // containers section
 const Container = styled.section`
-  height: 60px;
+  position: relative;
+  height: 70px;
   ${mobile({ height: "50px" })}
 `;
 
@@ -89,8 +90,8 @@ const MenuItem = styled.li`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 
   &:hover {
-    background: ${props => props.primary ? "#fff": "rgba(28, 56, 121, 0.9)"};
-    color: ${props => props.primary ? "rgba(28, 56, 121, 0.9)" : "#fff"};
+    background: ${props => props.primary ? "#fff": "#CDDEFF"};
+    color: ${props => props.primary ? "rgba(28, 56, 121, 0.9)" : "#000"};
   }
 `;
 
@@ -124,7 +125,7 @@ const Navbar = () => {
         <Right>
           <Link href="#"><MenuItem noborder style={{ width: 100}}>My learning</MenuItem></Link>
           <Link href="#"><MenuItem noborder >
-            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0, ":hover":{color: "white"}}}>
+            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
               <Badge badgeContent={4}>
                   <ShoppingCartIcon />
               </Badge>

@@ -8,7 +8,8 @@ import {mobile} from "../responsive"
 
 const Container = styled.section`
   width: 100%;
-  height: 80vh;
+  height: 500px;
+  margin: 0px;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -43,8 +44,7 @@ const Wrapper = styled.div`
 
 const Slide = styled.div`
   width: 100vw;
-  height: 100vh;
-  margin-top: 10px;
+  height: 100%;
   position:relative;
   align-items: center; 
   background-image: url(${(props) => props.src});
