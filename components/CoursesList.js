@@ -4,9 +4,38 @@ import Typography from '@mui/joy/Typography';
 import styled, { keyframes } from "styled-components";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import "animate.css/animate.min.css";
+import { AnimationOnScroll } from 'react-animation-on-scroll';
 import {featuredCoures} from "../data"
 
+const fadeInBottom = keyframes`{
+			
+  0% {
+    transform:translateY(50px);
+    opacity:0;
+  }
+  100% {
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+`;
+const swingInTopFwd  = keyframes`{
+  0% {
+        transform: rotateX(-100deg);
+        transformOrigin: top;
+        opacity: 0;
+  }
+  100% {
+        transform: rotateX(0deg);
+        transform-origin: top;
+        opacity: 1;
+  }
+}
+`;
+
 const Container = styled.section`
+  animation: 0.6s ${fadeInBottom} cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   margin:0px 0px;
   padding: 0px 10px;
   background-color: #CDDEFF;
@@ -90,13 +119,11 @@ const CoursesList = () => {
        Featured courses
     </Button>
     </Top>
+    <AnimationOnScroll animateIn="animate__fadeInUp">
     <Wrapper>
     {featuredCoures.map((courses) =>(
     <Card variant="elevation" elevation={10} 
-      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 340,
-      color: "#fff",
-      borderRadius: 3,
-      }}>
+      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 340, color: "#fff",borderRadius: 3}}>
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
           src={courses.img}
@@ -123,7 +150,6 @@ const CoursesList = () => {
         <span style={{margin: "10px"}}>{courses.student} Students</span>
       </Time>
       </Box>
-      
       <Hr />
       <Box>
         <Price>
@@ -137,6 +163,7 @@ const CoursesList = () => {
     </Card>
     ))}
     </Wrapper>
+    </AnimationOnScroll>
     <Top>
     <Button>See All Courses</Button>
     </Top>

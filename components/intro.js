@@ -1,18 +1,9 @@
 import styled, { keyframes } from "styled-components";
+import "animate.css/animate.min.css";
+import { AnimationOnScroll } from 'react-animation-on-scroll';
 import Image from 'next/image'
 import img from "../public/intro.jpg";
 
-const fadeIn = keyframes`
-  0% {
-    transform: translateZ(-80px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateZ(0);
-    opacity: 1;
-  }
-  
-`
 const fadeInBottom = keyframes`{
 			
   0% {
@@ -24,7 +15,7 @@ const fadeInBottom = keyframes`{
     opacity:1;
   }
 }
-`
+`;
 
 const Container = styled.section`
   position: relative;
@@ -80,14 +71,18 @@ const Button = styled.button`
 
 const Intro = () => {
   return <Container>
+            <AnimationOnScroll animateIn="animate__pulse">
             <ImageContainer>
               <Image src={img} alt="Picture of the author" width={300} height={300}/>
             </ImageContainer>
+            </AnimationOnScroll>
+            <AnimationOnScroll animateIn="animate__fadeInUp">
             <InfoContainer>
               <Title>Why Bitkova</Title>
               <Desc>To fill the need of individuals seeking in-demand crypto and blcockchain skills to improve their standard of living and attaining financial freedom by providing excellent hands-on training for a wider variety of students by offering alternate solutions to conventional schooling utilizing current internet technologies and proven teaching practices implemented by a team of professionals in blcockchain, e-commerce, forex, cryptocurrency, social media marketing and motion/graphics industries.</Desc>
               <Button>Learn more</Button>
             </InfoContainer>
+            </AnimationOnScroll>
          </Container>;
 };
 
