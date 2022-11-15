@@ -1,26 +1,29 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PlaceIcon from '@mui/icons-material/Place';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import ShareIcon from '@mui/icons-material/Share';
 import Image from 'next/image'
 import styled from 'styled-components';
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
-import { newsList } from "../data";
+import { events } from "../data";
 
 const Container = styled.section`
   margin:40px 0px;
   padding: 0px 10px;
   border-radius: 10px;
   letter-spacing: 1px;
+  background-color: #CDDEFF;
 `;
 
 const Wrapper = styled.div`
-  display: inline-block;
-  margin: 0px 20px;
+  display: flex;
+  margin: 20px 20px;
   height: 100%;
-  width: 30%;
-  border: 0.5px solid rgba(28, 56, 121, 0.5);
+  width: 100%;
+  border-bottom: 0.5px solid rgba(28, 56, 121, 0.5);
   border-radius: 3px;
 
   &:hover {
@@ -50,7 +53,9 @@ const Box = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  padding: 5px;
+  padding: 10px;
+  margin: 15px;
+  text-align: center;
   borderRadius: 3px;
 `;
 
@@ -63,41 +68,53 @@ const Title = styled.h1`
   margin: 2px;
 `;
 
-const Subheader = styled.h5`
-  margin: 2px;
+const Detail = styled.div`
+
+  align-items: center;
 `;
 
 const Paragraph = styled.p`
   margin: 5px;
+  padding: 20p;
 `;
 
-const News = () => {
-  const [expanded, setExpanded] = React.useState(false);
+const Hr = styled.hr`
+    margin: 15px 0;
+    width: 100%;
+    height: 0.5px;
+`;
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+const ScheduleBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const Events = () => {
 
   return (
     <Container>
         <Card variant="elevation" elevation={15} sx={{m: 2, borderRadius: 2}}>
         <Box>
-        <Title>LATEST NEWS</Title>
-        <Button>See more news</Button>
+        <Title>LATEST EVENTS</Title>
+        <Button>See more events</Button>
         </Box>
-        {newsList.map((news) => (
-        <Wrapper key={news.id}>
+        {events.map((event, id) => (
+        <Wrapper key={id}>
             <ImageBox>
-            <Image src={news.img} alt="Picture of the author" width={390}height={220}/>
+            <Image src={event.img}width={390}height={220}/>
             </ImageBox>
             <InfoContainer>
-              <Title>{news.title}</Title>
-              <Subheader>{news.date}</Subheader>
-              <Paragraph>{news.desc}</Paragraph>
-              <Box style={{justifyContent: "center", cursor: "pointer"}}>
-              <FavoriteIcon sx={{m: 1}}/>
-              <ShareIcon sx={{m: 1}} />
-              </Box>
+              <Title>{event.title}</Title>
+              <Paragraph>{event.desc}</Paragraph>
+              <Hr/>
+              <ScheduleBox>
+              <Detail><CalendarMonthIcon sx={{m: 1}}/></Detail>{event.date}
+              <Detail><AccessTimeFilledIcon sx={{m: 1}}/></Detail>{event.time}
+              </ScheduleBox>
+              <ScheduleBox><Detail><PlaceIcon/></Detail>{event.venue}</ScheduleBox>
           </InfoContainer>
           </Wrapper>
           ))}
@@ -106,4 +123,4 @@ const News = () => {
   );
 }
 
-export default News;
+export default Events;

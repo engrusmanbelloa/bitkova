@@ -8,34 +8,8 @@ import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import {featuredCoures} from "../data"
 
-const fadeInBottom = keyframes`{
-			
-  0% {
-    transform:translateY(50px);
-    opacity:0;
-  }
-  100% {
-    transform:translateY(0);
-    opacity:1;
-  }
-}
-`;
-const swingInTopFwd  = keyframes`{
-  0% {
-        transform: rotateX(-100deg);
-        transformOrigin: top;
-        opacity: 0;
-  }
-  100% {
-        transform: rotateX(0deg);
-        transform-origin: top;
-        opacity: 1;
-  }
-}
-`;
 
 const Container = styled.section`
-  animation: 0.6s ${fadeInBottom} cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   margin:0px 0px;
   padding: 0px 10px;
   background-color: #CDDEFF;
@@ -115,20 +89,21 @@ const CoursesList = () => {
   return (
     <Container>
     <Top>
-    <Button>
-       Featured courses
-    </Button>
+    <Button>Featured courses</Button>
     </Top>
     <AnimationOnScroll animateIn="animate__fadeInUp animate__slower">
     <Wrapper>
     {featuredCoures.map((courses) =>(
-    <Card variant="elevation" elevation={10} 
-      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 340, color: "#fff",borderRadius: 3}}>
+    <Card key={courses.id} variant="elevation" elevation={10} 
+      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 340, 
+      color: "#fff",borderRadius: 3,
+      ":&hover":{}
+      }}>
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
-          src={courses.img}
+          src={courses.img }
           loading="lazy"
-          alt=""
+          alt="Picture of the author"
         />
       </AspectRatio>
       <InfoContainer>
