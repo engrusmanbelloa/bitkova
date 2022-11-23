@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { testimonials } from "../data";
 
 const Container = styled.section`
-  margin:30px 0px;
+  margin: 0px 0px 20px;
   padding: 0px 20px;
   border-radius: 10px;
   letter-spacing: 1px;
@@ -28,7 +28,7 @@ const Button = styled.button`
   cursor: pointer;
   height: 30px;
   width: 100%;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 600;
   margin: 0 10px 0 0;
 

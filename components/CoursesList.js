@@ -6,6 +6,7 @@ import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
+import Link from 'next/link';
 import {featuredCoures} from "../data"
 
 
@@ -54,7 +55,6 @@ const Time = styled.div`
   font-weight: 600;
 `;
 
-
 const Box = styled.div`
   display: flex;
   justify-content: center; 
@@ -69,7 +69,8 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   height: 30px;
-  font-size: 16px;
+  align-items: center;
+  font-size: ${props => props.priceBtn ? "18px" : "25px"};
   font-weight: 600;
   margin: 0 10px 0 0;
 
@@ -85,13 +86,13 @@ const Price = styled.p`
   font-weight: 600;
 `;
 
-const CoursesList = () => {
+const CoursesList = (props) => {
   return (
     <Container>
     <Top>
-    <Button>Featured courses</Button>
+    <Button>{props.title}</Button>
     </Top>
-    <AnimationOnScroll animateIn="animate__fadeInUp animate__slower">
+    <AnimationOnScroll animateIn="animate__slideInUp animate__slower">
     <Wrapper>
     {featuredCoures.map((courses) =>(
     <Card key={courses.id} variant="elevation" elevation={10} 
@@ -130,7 +131,7 @@ const CoursesList = () => {
         <Price>
           Price: N{courses.price}
         </Price>
-        <Button>
+        <Button priceBtn>
           Enroll
         </Button>
       </Box>
@@ -140,7 +141,7 @@ const CoursesList = () => {
     </Wrapper>
     </AnimationOnScroll>
     <Top>
-    <Button>See All Courses</Button>
+    <Button>{props.foot}</Button>
     </Top>
   </Container>
   );

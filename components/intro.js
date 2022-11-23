@@ -26,6 +26,7 @@ const InfoContainer = styled.div`
   flex: 2.5;
   text-align: justify;
   padding: 15px;
+  margin: 20px;
 `;
 
 const Title = styled.h1`
@@ -48,10 +49,12 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  background: rgba(28, 56, 121);
+  color: white;
 
   &:hover {
-    background-color: rgba(28, 56, 121, 0.5);
-    color: #fff;
+    background-color: #CDDEFF;
+    color: rgba(28, 56, 121);
   }
 `;
 

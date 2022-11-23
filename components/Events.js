@@ -15,7 +15,6 @@ const Container = styled.section`
   padding: 0px 10px;
   border-radius: 10px;
   letter-spacing: 1px;
-  background-color: #CDDEFF;
 `;
 
 const Wrapper = styled.div`

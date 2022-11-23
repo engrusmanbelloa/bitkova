@@ -2,6 +2,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import styled from "styled-components";
+import Link from "next/link"
 import { sliderItems } from "../data";
 // import { mobile } from "../";
 import {mobile} from "../responsive"
@@ -106,12 +107,12 @@ const Slider = () => {
        </Arrow>
        <Wrapper slideIndex={slideIndex}>
         {sliderItems.map((item) => (
-           <Slide key={item.id} src={item.img}> alt={"Picture of the author"}
+           <Slide key={item.id} src={item.img} alt={"Picture of the author"}> 
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-               <Button>Our courses</Button>
-               <Button>About us</Button>
+                <Link href="/courses"><Button>Our courses</Button></Link>
+                <Link href="#"><Button>About us</Button></Link>
              </InfoContainer>
            </Slide>
          ))}

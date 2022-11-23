@@ -5,13 +5,12 @@ import News from "../components/News";
 import Events from "../components/Events";
 import Testimonals from "../components/Testimonals";
 import Newsletter from "../components/Newsletter";
-import Footer from "../components/Footer";
 export default function Home() {
   return (
     <div>
       <Slider/>
       <Intro/>
-      <CoursesList/>
+      <CoursesList title="Featured courses" foot="See more"/>
       <News/>
       <Events/>
       <Testimonals/>
