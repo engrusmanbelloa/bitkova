@@ -42,7 +42,7 @@ export const sliderItems = [
       id: 1,
       img: "/courses/trade.png",
       title: "Certified CryptoCurrency Market Analyst (CCA)",
-      desc: "Become a professional profitable trader, full course.",
+      desc: "Become a professional profitable trader in six weeks, full course.",
       time: "6h 40m",
       student: 30,
       price: "19,999",

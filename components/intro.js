@@ -18,15 +18,15 @@ const Container = styled.section`
 const ImageContainer = styled.div`
   flex: 1;
   width: 35%;
-  padding: 15px;
-  margin-left: 5%;
+  padding-right: 15px;
+  margin-left: 0%;
 `;
 
 const InfoContainer = styled.div`
   flex: 2.5;
   text-align: justify;
-  padding: 15px;
-  margin: 20px;
+  padding-left: 35px;
+  margin: 20px 0px 0px 40px;
 `;
 
 const Title = styled.h1`

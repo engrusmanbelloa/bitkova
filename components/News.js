@@ -10,7 +10,7 @@ import { newsList } from "../data";
 
 const Container = styled.section`
   margin:40px 0px;
-  padding: 0px 10px;
+  padding: 0px 0px;
   border-radius: 10px;
   letter-spacing: 1px;
 `;
@@ -80,7 +80,7 @@ const News = () => {
 
   return (
     <Container>
-        <Card variant="elevation" elevation={15} sx={{m: 2, borderRadius: 2}}>
+        <Card variant="elevation" elevation={20} sx={{m: 2, borderRadius: 2}}>
         <Box>
         <Title>LATEST NEWS</Title>
         <Button>See more news</Button>

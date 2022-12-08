@@ -3,7 +3,6 @@ import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchIcon from '@mui/icons-material/Search';
 import LanguageIcon from '@mui/icons-material/Language';
-// import styled from '@mui/icons-material/styled';
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import Image from "next/image";
@@ -15,6 +14,7 @@ import Link from "next/link";
 const Container = styled.section`
   position: relative;
   height: 70px;
+  margin: 0px 0px 0px;
   ${mobile({ height: "50px" })}
 `;
 

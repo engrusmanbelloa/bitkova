@@ -10,9 +10,10 @@ import { testimonials } from "../data";
 const Container = styled.section`
   margin: 0px 0px 20px;
   padding: 0px 20px;
+  border: 1px solid #CDDEFF;
   border-radius: 10px;
   letter-spacing: 1px;
-  background: #CDDEFF;
+  text-align: center;
 `;
 
 const Wrapper = styled.div`
@@ -38,7 +39,7 @@ const Button = styled.button`
 `;
 
 const CardBox = styled.div`
-  margin: 20px 15px;
+  margin: 20px 30px;
   border: 0.5px solid rgba(28, 56, 121, 0.5);
   border-radius: 10px;
 
@@ -75,7 +76,7 @@ export const Testimonals = ()=> {
     {testimonials.map((review) => (
     <Wrapper key={review.id}>
     <CardBox>
-    <Card sx={{width: 230,}}>
+    <Card variant="elevation" elevation={15} sx={{width: 230,}}>
       <CardMedia
         sx={{width: 250, padding: 10}}
         image={review.bg}

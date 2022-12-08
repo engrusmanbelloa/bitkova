@@ -12,7 +12,8 @@ import { events } from "../data";
 
 const Container = styled.section`
   margin:40px 0px;
-  padding: 0px 10px;
+  padding: 0px 0px;
+  background-color: #CDDEFF;
   border-radius: 10px;
   letter-spacing: 1px;
 `;

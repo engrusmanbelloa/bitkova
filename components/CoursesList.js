@@ -11,7 +11,6 @@ import {featuredCoures} from "../data"
 
 
 const Container = styled.section`
-  margin:0px 0px;
   padding: 0px 10px;
   background-color: #CDDEFF;
   border-radius: 10px;
@@ -92,11 +91,12 @@ const CoursesList = (props) => {
     <Top>
     <Button>{props.title}</Button>
     </Top>
-    <AnimationOnScroll animateIn="animate__slideInUp animate__slower">
+    
     <Wrapper>
     {featuredCoures.map((courses) =>(
+    <AnimationOnScroll animateIn="animate__slideInUp animate__slower">
     <Card key={courses.id} variant="elevation" elevation={10} 
-      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 340, 
+      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 450, 
       color: "#fff",borderRadius: 3,
       ":&hover":{}
       }}>
@@ -108,7 +108,7 @@ const CoursesList = (props) => {
         />
       </AspectRatio>
       <InfoContainer>
-      <Typography level="h2" fontWeight="800" fontSize="15px" sx={{ mb: 0.5, }}>
+      <Typography level="h2" fontWeight="800" fontSize="20px" sx={{ mb: 0.5, }}>
         {courses.title}
       </Typography>
       <Typography level="p" fontWeight="300" fontSize="15px" sx={{ mb: 0.5, mt: 1 }}>
@@ -137,9 +137,9 @@ const CoursesList = (props) => {
       </Box>
       </InfoContainer>
     </Card>
+    </AnimationOnScroll>
     ))}
     </Wrapper>
-    </AnimationOnScroll>
     <Top>
     <Button>{props.foot}</Button>
     </Top>
