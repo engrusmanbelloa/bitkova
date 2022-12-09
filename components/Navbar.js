@@ -56,6 +56,7 @@ const SearchContainer = styled.li`
 const Input = styled.input`
   border: none;
   width: 100%;
+  font-size: 20px;
   ${mobile({ width: "50px" })}
 
   &:focus{
@@ -66,7 +67,7 @@ const Input = styled.input`
 // right section of the nav bar
 const Right = styled.ul`
   list-style: none;
-  flex: 1.5;
+  flex: 1.6;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -78,7 +79,7 @@ const MenuItem = styled.li`
   text-align: center;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 500;
   height: 18px;
   padding: 10px;
@@ -123,7 +124,7 @@ const Navbar = () => {
           </SearchContainer>
         </Center>
         <Right>
-          <Link href="#"><MenuItem noborder style={{ width: 100}}>My learning</MenuItem></Link>
+          <Link href="#"><MenuItem noborder style={{ width: 120}}>My learning</MenuItem></Link>
           <Link href="#"><MenuItem noborder >
             <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
               <Badge badgeContent={4}>

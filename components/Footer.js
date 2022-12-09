@@ -28,7 +28,10 @@ const Left = styled.div`
 const Logo = styled.h1``;
 
 const Desc = styled.p`
-  margin: 20px 0px;
+  margin: 15px 0px;
+  font-size: 20px;
+  line-spacing: 1.5;
+  line-height: 1.5;
 `;
 
 const SocialContainer = styled.div`

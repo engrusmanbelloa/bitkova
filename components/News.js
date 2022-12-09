@@ -11,8 +11,10 @@ import { newsList } from "../data";
 const Container = styled.section`
   margin:40px 0px;
   padding: 0px 0px;
+  border: 1px solid #CDDEFF;
   border-radius: 10px;
   letter-spacing: 1px;
+  text-align: center;
 `;
 
 const Wrapper = styled.div`
@@ -56,19 +58,24 @@ const InfoContainer = styled.div`
 
 const ImageBox = styled.div`
   justify-content: center;
-  align-items: center;
+  text-align: center;
 `;
 
 const Title = styled.h1`
   margin: 2px;
+  text-align: left;
 `;
 
 const Subheader = styled.h5`
-  margin: 2px;
+  margin: 10px;
+  font-size: 20px;
+  text-align: left;
 `;
 
 const Paragraph = styled.p`
   margin: 5px;
+  font-size: 20px;
+  text-align: left;
 `;
 
 const News = () => {
@@ -88,7 +95,7 @@ const News = () => {
         {newsList.map((news) => (
         <Wrapper key={news.id}>
             <ImageBox>
-            <Image src={news.img} alt="Picture of the author" width={390}height={220}/>
+            <Image src={news.img} alt="Picture of the author" width={500}height={220}/>
             </ImageBox>
             <InfoContainer>
               <Title>{news.title}</Title>

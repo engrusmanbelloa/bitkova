@@ -76,6 +76,7 @@ const Detail = styled.div`
 const Paragraph = styled.p`
   margin: 5px;
   padding: 20p;
+  font-size: 20px;
 `;
 
 const Hr = styled.hr`
@@ -104,7 +105,7 @@ const Events = () => {
         {events.map((event, id) => (
         <Wrapper key={id}>
             <ImageBox>
-            <Image src={event.img}width={390}height={220}/>
+            <Image src={event.img}width={390}height={230}/>
             </ImageBox>
             <InfoContainer>
               <Title>{event.title}</Title>

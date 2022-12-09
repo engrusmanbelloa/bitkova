@@ -111,7 +111,7 @@ const CoursesList = (props) => {
       <Typography level="h2" fontWeight="800" fontSize="20px" sx={{ mb: 0.5, }}>
         {courses.title}
       </Typography>
-      <Typography level="p" fontWeight="300" fontSize="15px" sx={{ mb: 0.5, mt: 1 }}>
+      <Typography level="p" fontWeight="300" fontSize="20px" sx={{ mb: 0.5, mt: 1 }}>
         {courses.desc}
       </Typography>
       <Box>

@@ -18,7 +18,7 @@ const Title = styled.h1`
 
 const Desc = styled.div`
   font-size: 24px;
-  font-weight: 300;
+  font-weight: 400;
   margin-bottom: 20px;
   ${mobile({ textAlign: "center" })}
 `;
@@ -37,6 +37,7 @@ const Input = styled.input`
   border: none;
   flex: 8;
   padding-left: 20px;
+  font-size: 20px;
 `;
 
 const Button = styled.button`
