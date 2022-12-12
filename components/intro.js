@@ -11,7 +11,6 @@ const Container = styled.section`
   align-items: center;
   font-weight: 400;
   justify-content: center;
-  font-size: 12px;
   letter-spacing: 1px;
 `;
 
@@ -35,9 +34,9 @@ const Title = styled.h1`
 `;
 
 const Desc = styled.p`
-  font-size: 17px;
-  font-weight: 300;
-  letter-spacing: 2px;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 1.5;
   line-height: 1.5;
 `;
 

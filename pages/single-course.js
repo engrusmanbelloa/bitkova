@@ -6,14 +6,24 @@ import { mobile } from "../responsive";
 import Iframe from 'react-iframe'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import Rating from '@mui/material/Rating';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices';
+import CoursesList from '../components/CoursesList';
+import {featuredCoures} from "../data"
 
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
-  padding: 20px 0px 0px 0px;;
+  padding: 20px 0px 10px 0px;
+  margin-bottom: 20px;
   display: flex;
   border-top: 1px solid #CDDEFF;
+  border-bottom: 1px solid #CDDEFF;
   ${mobile({ padding: "10px", flexDirection:"column" })}
 `;
 
@@ -29,13 +39,19 @@ const InfoContainer = styled.div`
 const Box = styled.div`
   margin: 0 0 20px;
   width: 70%;
+  height: 70vh;
 `;
 const CheckoutBox = styled.div`
-  margin: 0 0 20px;
+  margin: 0 0 0 10px;
   width: 25%;
   position: absolute;
-  top: 560px;
+  top: 590px;
   right: 70px;
+`;
+
+const ReviewBox = styled.div`
+  margin: 20px;
+  border-bottom: 1px solid #CDDEFF;
 `;
 
 const Desc = styled.p`
@@ -77,9 +93,8 @@ const Paragraph = styled.p`
 `;
 
 const Image = styled.img`
-    width: 100%;
-    height: 50vh;
-    padding: 10px;
+    width: 90%;
+    height: 40vh;
 `;
 
 const Learn = styled.ul`
@@ -95,23 +110,27 @@ const LearnItem = styled.li`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
-const Price = styled.p`
-  flex: 0.8;
-  margin: 0 10px 0 0;
+const Duration = styled.div`
+  display: flex;
+  justify-content: flex-start; 
+  align-items: center;
   font-size: 16px;
   font-weight: 600;
+  margin: 20px;
+  font-size: 25px;
+  font-weight: 500;
 `;
-
 
 const SingleCourse = () => {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
+
   return (
     <Container>
-      <Wrapper>
-        <InfoContainer>
+      <Wrapper> 
+      <InfoContainer>
           <Title>Certified CryptoCurrency Market Analyst (CCA)</Title>
           <Desc>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
@@ -136,7 +155,7 @@ const SingleCourse = () => {
         <Box>
         <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}>
           <Tabs>
-            <TabList style={{border: "none"}}>
+            <TabList style={{background: "#1C3879", color: "#fff", border: "none"}}>
               <Tab><Title>About the course</Title></Tab>
               <Tab><Title>Course content</Title></Tab>
               <Tab><Title>Review</Title></Tab>
@@ -144,30 +163,43 @@ const SingleCourse = () => {
             <TabPanel>
               <Title style={{textAlign: "left", fontSize: 25}}>About the course</Title>
               <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo amet habitasse orci convallis sodales augue. dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris</Paragraph>
-              <Paragraph>A pellentesque proin tincidunt lobortis sit velit velit dui eget. Massa, lectus orci auctor morbi. A nisl vitae, sagittis elementum placerat nullam id integer leo. Diam venenatis amet diam odio ultrices auctor.</Paragraph>
-              <Title style={{textAlign: "left", fontSize: 25, marginBottom: 20, marginTop: 40}}>What are you going to learn </Title>
-              <Image src="../courses/trading.jpg" alt=""/>
+              <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Commodo amet habitasse orci convallis sodales augue. dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris</Paragraph>
+              <Title style={{textAlign: "left", fontSize: 25, marginBottom: 20, marginTop: 40}}>What you will learn: </Title>
               <Learn>
                 <LearnItem>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
                 </LearnItem>
                 <LearnItem>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                 </LearnItem>
                 <LearnItem>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
                 </LearnItem>
                 <LearnItem>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
+                </LearnItem>
+                <LearnItem>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor
                 </LearnItem>
               </Learn>
-              <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Porta massa, eget natoque tincidunt quis. Suspendisse vitae vestibulum scelerisque egestas. Volutpat, adipiscing a elit platea amet et. At at metus egestas nunc eget. Tempus sapien, augue laoreet morbi habitasse leo mauris arcu amet. Sapien lectus auctor quis in ut morbi risus. Ornare aliquam phasellus consequat amet velit risus. Amet, diam cras morbi hendrerit vitae pretium in enim.</Paragraph>
             </TabPanel>
             <TabPanel>
             <Title style={{textAlign: "left", fontSize: 25}}>Course outline</Title>
               <Learn style={{display: "flex", flexWrap:"wrap"}}>
                 <LearnItem>
-                Lorem ipsum dolor sit amet, consectetur
+                  Lorem ipsum dolor sit amet, consectetur
+                </LearnItem>
+                <LearnItem>
+                  Lorem ipsum dolor sit amet,
+                </LearnItem>
+                <LearnItem>
+                  Lorem ipsum dolor sit amet, consectetur 
+                </LearnItem>
+                <LearnItem>
+                  Lorem ipsum dolor sit amet, consectetur a
+                </LearnItem>
+                <LearnItem>
+                  Lorem ipsum dolor sit amet, consectetur
                 </LearnItem>
                 <LearnItem>
                 Lorem ipsum dolor sit amet,
@@ -181,16 +213,59 @@ const SingleCourse = () => {
               </Learn>
               </TabPanel>
             <TabPanel>
-              <h2>Any content 3</h2>
+            <Title style={{textAlign: "left", fontSize: 25}}>Course reviews</Title>
+              <ReviewBox>
+                <Rating name="read-only" value={4} readOnly />
+                  <Paragraph>
+                    “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.”
+                  </Paragraph>
+                  <Title style={{fontSize: 25}}>Sabiu Muhammad Danfullo</Title>
+              </ReviewBox>
+              <ReviewBox>
+                <Rating name="read-only" value={4} readOnly />
+                  <Paragraph>
+                    “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.”
+                  </Paragraph>
+                  <Title style={{fontSize: 25}}>Bilal</Title>
+              </ReviewBox>
+              <ReviewBox>
+                <Rating name="read-only" value={4} readOnly />
+                  <Paragraph>
+                    “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.”
+                  </Paragraph>
+                  <Title style={{fontSize: 25}}>Sunusi Danjuma Ali</Title>
+              </ReviewBox>
             </TabPanel>
           </Tabs>
         </Card>
-      </Box>
-      <CheckoutBox>
-      <Card variant="elevation" elevation={20} sx={{borderRadius: 3, width:500, height:700}}>
-          Hello
-        </Card>
+        <CheckoutBox>
+          <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:500, }}>
+          <Button style={{width: "100%", marginBottom: 40}}>Buy This Course</Button>
+          <Duration>
+            <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Duration: 6H 30min</span>
+          </Duration>
+          <Duration>
+            <OndemandVideoIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Ondemand videos: 30</span>
+          </Duration>
+          <Duration>
+            <CloudDownloadIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Downloadable files: 15</span>
+          </Duration>
+          <Duration>
+            <PowerSettingsNewIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Lifetime Access</span>
+          </Duration>
+          <Duration>
+            <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Accessable on all devices</span>
+          </Duration>
+          <Button style={{width: "100%"}}>Enroll</Button>
+          </Card>
       </CheckoutBox>
+      </Box>
+      <CoursesList title="Related courses"/>
       <Newsletter />
     </Container>
   );

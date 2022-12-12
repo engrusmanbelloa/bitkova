@@ -72,6 +72,7 @@ const Button = styled.button`
   font-size: ${props => props.priceBtn ? "18px" : "25px"};
   font-weight: 600;
   margin: 0 10px 0 0;
+  color: #000;
 
   &:hover {
     background-color: #CDDEFF;
@@ -131,9 +132,7 @@ const CoursesList = (props) => {
         <Price>
           Price: N{courses.price}
         </Price>
-        <Button priceBtn>
-          Enroll
-        </Button>
+        <Button priceBtn><Link href="/single-course" passHref style={{color: '#000'}}>Enroll</Link></Button>
       </Box>
       </InfoContainer>
     </Card>
@@ -141,7 +140,7 @@ const CoursesList = (props) => {
     ))}
     </Wrapper>
     <Top>
-    <Button>{props.foot}</Button>
+    <Button><Link href="/courses" passHref style={{color: '#000'}}>{props.foot}</Link></Button>
     </Top>
   </Container>
   );
