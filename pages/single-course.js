@@ -12,6 +12,7 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CoursesList from '../components/CoursesList';
 import {featuredCoures} from "../data"
 
@@ -39,7 +40,7 @@ const InfoContainer = styled.div`
 const Box = styled.div`
   margin: 0 0 20px;
   width: 70%;
-  height: 70vh;
+  height: 80vh;
 `;
 const CheckoutBox = styled.div`
   margin: 0 0 0 10px;
@@ -256,6 +257,10 @@ const SingleCourse = () => {
           <Duration>
             <PowerSettingsNewIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
             <span style={{margin: "10px"}}>Lifetime Access</span>
+          </Duration>
+          <Duration>
+            <WorkspacePremiumIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+            <span style={{margin: "10px"}}>Certificate Of Completion</span>
           </Duration>
           <Duration>
             <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>

@@ -2,6 +2,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import styled from "styled-components";
+import { useRouter } from 'next/router'
 import Link from "next/link"
 import { sliderItems } from "../data";
 // import { mobile } from "../";
@@ -99,7 +100,7 @@ const Slider = () => {
       setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
     }
   };
-
+  const router = useRouter()
   return (
     <Container>
     <Arrow direction="left" onClick={() => handleClick("left")}>
@@ -111,8 +112,8 @@ const Slider = () => {
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-                <Link href="/courses"><Button>Our courses</Button></Link>
-                <Link href="#"><Button>About us</Button></Link>
+                <Button type="button" onClick={() => router.push('/courses')}>Our courses</Button>
+                <Button type="button" onClick={() => router.push('/')}>About us</Button>
              </InfoContainer>
            </Slide>
          ))}
