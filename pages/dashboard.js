@@ -9,6 +9,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CoursesList from '../components/CoursesList';
 import {featuredCoures} from "../data"
+import Avatar from '@mui/joy/Avatar';
 
 
 const Container = styled.div``;
@@ -17,16 +18,14 @@ const Wrapper = styled.div`
   padding: 20px 0px 10px 0px;
   margin-bottom: 20px;
   display: flex;
+  justify-content: flex-start;
   border-top: 1px solid #CDDEFF;
   border-bottom: 1px solid #CDDEFF;
   ${mobile({ padding: "10px", flexDirection:"column" })}
 `;
 
 const InfoContainer = styled.div`
-  flex: 1;
   padding: 10px;
-  margin-top: 30px;
-  text-align: justify;
   animation: bounceIn;
   animation-duration: 2s;
 `;
@@ -59,7 +58,9 @@ const Desc = styled.p`
 const Button = styled.button`
   height: 50px;
   width: 200px;
-  margin: auto;
+  position: absolute;
+  margin-top: 50px;
+  right: 100px;
   font-size: 20px;
   font-weight: 600;
   border: none;
@@ -75,12 +76,11 @@ const Button = styled.button`
 `;
 
 const Title = styled.h1`
-  margin: 5px 20px;
+  margin: 40px 0 0 0;
 `;
 
 const Paragraph = styled.p`
   margin: 15px;
-  text-align: left;
   font-size: 20px;
   font-weight: 400;
   line-height: 1.5;
@@ -90,6 +90,13 @@ const Paragraph = styled.p`
 const Image = styled.img`
     width: 90%;
     height: 40vh;
+`;
+
+const AvatarImg = styled.img`
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: auto 50px;
 `;
 
 const Learn = styled.ul`
@@ -140,28 +147,19 @@ const Dashboard = () => {
   return (
     <Container>
       <Wrapper> 
-      <InfoContainer>
-          <Title>Certified CryptoCurrency Market Analyst (CCA)</Title>
+        <InfoContainer>
+          <AvatarImg src="/review/usman.jpg" alt="profile picture"/>
+        </InfoContainer>
+        <InfoContainer>
+          <Title>Bello Usman</Title>
           <Desc>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-            iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-            tristique tortor pretium ut. Curabitur elit justo, consequat id
-            condimentum ac, volutpat ornare.
           </Desc>
-          <Button>ENROLL</Button>
         </InfoContainer>
-        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, borderRadius: 7, position: "relative"}}>
-          <Iframe 
-              url="https://player.vimeo.com/video/779663884?h=6e8a3f19ea&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-              // src="../trade.png"
-              width="1000px"
-              height="400px"
-              display="block"
-              position="relative"
-              />
-        </Card>
-        </Wrapper>
+        <InfoContainer>
+          <Button>Add new course</Button>
+        </InfoContainer>
+      </Wrapper>
         <Box>
         {/* <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}> */}
           <Tabs

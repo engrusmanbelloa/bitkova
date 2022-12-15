@@ -7,6 +7,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import Link from 'next/link';
+import { useRouter } from 'next/router'
 import {featuredCoures} from "../data"
 
 
@@ -87,6 +88,7 @@ const Price = styled.p`
 `;
 
 const CoursesList = (props) => {
+  const router = useRouter()
   return (
     <Container>
     <Top>
@@ -132,7 +134,7 @@ const CoursesList = (props) => {
         <Price>
           Price: N{courses.price}
         </Price>
-        <Button priceBtn><Link href="/single-course" passHref style={{color: '#000'}}>Enroll</Link></Button>
+        <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Enroll</Button>
       </Box>
       </InfoContainer>
     </Card>

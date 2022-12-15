@@ -3,9 +3,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from 'next/router'
-import Link from "next/link"
 import { sliderItems } from "../data";
-// import { mobile } from "../";
 import {mobile} from "../responsive"
 
 const Container = styled.section`
