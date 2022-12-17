@@ -102,10 +102,10 @@ const Events = () => {
         <Title>LATEST EVENTS</Title>
         <Button>See more events</Button>
         </Box>
-        {events.map((event, id) => (
-        <Wrapper key={id}>
+        {events.map((event) => (
+        <Wrapper key={event.id}>
             <ImageBox>
-            <Image src={event.img}width={390}height={230}/>
+            <Image src={event.img}width={390}height={230} alt="profile"/>
             </ImageBox>
             <InfoContainer>
               <Title>{event.title}</Title>

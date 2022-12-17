@@ -97,12 +97,13 @@ const CoursesList = (props) => {
     
     <Wrapper>
     {featuredCoures.map((courses) =>(
-    <AnimationOnScroll animateIn="animate__slideInUp animate__slower">
-    <Card key={courses.id} variant="elevation" elevation={10} 
+    <AnimationOnScroll key={courses.id} animateIn="animate__slideInUp animate__slower">
+    <Card variant="elevation" elevation={10} 
       sx={{m: 2, ml: 4, mr: 4, padding:0, width: 450, 
       color: "#fff",borderRadius: 3,
       ":&hover":{}
       }}>
+      
       <AspectRatio minHeight="120px" maxHeight="200px">
         <img
           src={courses.img }

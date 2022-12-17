@@ -1,15 +1,12 @@
 import * as React from 'react';
 import styled from "styled-components";
-import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Newsletter from "../components/Newsletter"
 import { mobile } from "../responsive";
-import Iframe from 'react-iframe'
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CoursesList from '../components/CoursesList';
 import {featuredCoures} from "../data"
-import Avatar from '@mui/joy/Avatar';
 
 
 const Container = styled.div``;
@@ -31,16 +28,17 @@ const InfoContainer = styled.div`
 `;
 
 const Box = styled.div`
-  margin: 0 0 20px;
+  margin: 0 0 5px 20px;
   display: flex;
-  height: 70vh;
+  height: 60vh;
+  width: 100%;
 `;
-const CheckoutBox = styled.div`
-  margin: 0 0 0 10px;
-  width: 25%;
-  position: absolute;
+const DashBox = styled.div`
+  margin: 20px;
+  width: 10%;
+  ${'' /* position: absolute;
   top: 590px;
-  right: 70px;
+  right: 70px; */}
 `;
 
 const ReviewBox = styled.div`
@@ -76,7 +74,7 @@ const Button = styled.button`
 `;
 
 const Title = styled.h1`
-  margin: 40px 0 0 0;
+  margin: 5% 0 0 0;
 `;
 
 const Paragraph = styled.p`
@@ -161,22 +159,32 @@ const Dashboard = () => {
         </InfoContainer>
       </Wrapper>
         <Box>
-        {/* <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}> */}
           <Tabs
             orientation="vertical"
             value={value}
             onChange={handleChange}
+            selected={false}
             aria-label="Vertical tabs example"
-            sx={{ borderRight: 1, borderColor: 'divider', height: 300}}
+            sx={{ borderRight: 1, borderColor: 'divider', height: 500, width: "25%", ml: 20, mr: 10, mb: 1 }}
           >
-          <Tab label="Dashboard"/>
-          <Tab label="Profile"/>
-          <Tab label="Enrolled sourses"/>
-          <Tab label="Wishlist"/>
-          <Tab label="Logout"/>
+          <Tab label="Dashboard" 
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          />
+          <Tab label="Profile"
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          />
+          <Tab label="Enrolled sourses"
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          />
+          <Tab label="Wishlist"
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          />
+          <Tab label="Logout" 
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          />
         </Tabs>
         <TabPanel value={value} index={0}>
-          Item One
+          he
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two
@@ -190,7 +198,6 @@ const Dashboard = () => {
         <TabPanel value={value} index={4}>
           Item Five
         </TabPanel>
-        {/* </Card> */}
       </Box>
       <CoursesList title="Related courses"/>
       <Newsletter />
