@@ -12,7 +12,6 @@ import Link from "next/link";
 
 // containers section
 const Container = styled.section`
-  position: relative;
   height: 70px;
   margin: 0px 0px 0px;
   ${mobile({ height: "50px" })}

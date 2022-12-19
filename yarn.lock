@@ -300,7 +300,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/base@^5.0.0-alpha.110":
+"@mui/base@5.0.0-alpha.110", "@mui/base@^5.0.0-alpha.110":
   version "5.0.0-alpha.110"
   resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.110.tgz#61174f64b23e667387708b2cbb31339e58c714cf"
   integrity sha512-q4TH9T3sTBknTXXTEf2zO8F3nbHg5iGgiaRx9XErTbXvHrmLrQXbQ4hmrLERocSTBFCFWkKyne/qZj0diWlPtA==
@@ -342,6 +342,20 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
+"@mui/lab@^5.0.0-alpha.112":
+  version "5.0.0-alpha.112"
+  resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.112.tgz#e30589f0f337e57adf83b9ed59eb3bd234895032"
+  integrity sha512-XKxxUevHup9l9THXWhPcWxm8LZj+E8KDOz6cWqXOnXfSZwFYsvK/nB2R4PCiy/wobURk/+qxIAzryBA9pnSk2g==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+    "@mui/base" "5.0.0-alpha.110"
+    "@mui/system" "^5.11.0"
+    "@mui/types" "^7.2.3"
+    "@mui/utils" "^5.11.0"
+    clsx "^1.2.1"
+    prop-types "^15.8.1"
+    react-is "^18.2.0"
+
 "@mui/material@^5.10.12":
   version "5.10.17"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.10.17.tgz#d74c531219c37426b421badc9106f9a67404c251"
@@ -369,6 +383,15 @@
     "@mui/utils" "^5.10.16"
     prop-types "^15.8.1"
 
+"@mui/private-theming@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.11.0.tgz#14e545e74d6da4c20df25702d8c606187b300072"
+  integrity sha512-UFQLb9x5Sj4pg2GhhCGw3Ls/y1Hw/tz9RsBrULvUF0Vgps1z19o7XTq2xqUvp7pN7fJTW7eVIT2gwVg2xlk8PQ==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+    "@mui/utils" "^5.11.0"
+    prop-types "^15.8.1"
+
 "@mui/styled-engine-sc@^5.10.6":
   version "5.10.16"
   resolved "https://registry.yarnpkg.com/@mui/styled-engine-sc/-/styled-engine-sc-5.10.16.tgz#48296acf694a70fe08d15f8d060784e82d15d151"
@@ -387,6 +410,16 @@
     csstype "^3.1.1"
     prop-types "^15.8.1"
 
+"@mui/styled-engine@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.11.0.tgz#79afb30c612c7807c4b77602cf258526d3997c7b"
+  integrity sha512-AF06K60Zc58qf0f7X+Y/QjaHaZq16znliLnGc9iVrV/+s8Ln/FCoeNuFvhlCbZZQ5WQcJvcy59zp0nXrklGGPQ==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+    "@emotion/cache" "^11.10.5"
+    csstype "^3.1.1"
+    prop-types "^15.8.1"
+
 "@mui/system@^5.10.17":
   version "5.10.17"
   resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.10.17.tgz#64420b6b01c3943c0ce58523090b19791db46c53"
@@ -397,6 +430,20 @@
     "@mui/styled-engine" "^5.10.16"
     "@mui/types" "^7.2.2"
     "@mui/utils" "^5.10.16"
+    clsx "^1.2.1"
+    csstype "^3.1.1"
+    prop-types "^15.8.1"
+
+"@mui/system@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.11.0.tgz#9938d5beeddfee3e419911ec43e5f9a6f55fe161"
+  integrity sha512-HFUT7Dlmyq6Wfuxsw8QBXZxXDYIQQaJ4YHaZd7s+nDMcjerLnILxjh2g3a6umtOUM+jEcRaFJAtvLZvlGfa5fw==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+    "@mui/private-theming" "^5.11.0"
+    "@mui/styled-engine" "^5.11.0"
+    "@mui/types" "^7.2.3"
+    "@mui/utils" "^5.11.0"
     clsx "^1.2.1"
     csstype "^3.1.1"
     prop-types "^15.8.1"

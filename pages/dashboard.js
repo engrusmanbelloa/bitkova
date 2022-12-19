@@ -1,12 +1,18 @@
 import * as React from 'react';
 import styled from "styled-components";
-import Typography from '@mui/material/Typography';
 import Newsletter from "../components/Newsletter"
 import { mobile } from "../responsive";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper'
 import CoursesList from '../components/CoursesList';
 import {featuredCoures} from "../data"
+import User from '../components/Users';
 
 
 const Container = styled.div``;
@@ -23,8 +29,7 @@ const Wrapper = styled.div`
 
 const InfoContainer = styled.div`
   padding: 10px;
-  animation: bounceIn;
-  animation-duration: 2s;
+  animation: pulse;
 `;
 
 const Box = styled.div`
@@ -34,16 +39,33 @@ const Box = styled.div`
   width: 100%;
 `;
 const DashBox = styled.div`
-  margin: 20px;
-  width: 10%;
-  ${'' /* position: absolute;
-  top: 590px;
-  right: 70px; */}
+  margin: 0 0 0 10px;
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
-const ReviewBox = styled.div`
-  margin: 20px;
-  border-bottom: 1px solid #CDDEFF;
+const DashItemsBox = styled.div`
+  margin: auto;
+  border: 1px solid #CDDEFF;
+  height: 70%;
+  width: 300px;
+  flex: 1;
+  position: relative;
+  top: 70px;
+  left: -100px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: rgba(28, 56, 121, 1);
+  color: #fff;
+
+  &:hover {
+    background-color: #CDDEFF;
+    color: rgba(28, 56, 121, 1);
+  }
 `;
 
 const Desc = styled.p`
@@ -120,20 +142,35 @@ const Duration = styled.div`
   font-size: 25px;
   font-weight: 500;
 `;
-
+//  dashborad tab pannel 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div>
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box>
+          <DashBox>{children}</DashBox>
         </Box>
       )}
     </div>
   );
 }
+
+//  create the table data structure
+function createData(regDate, fName, lName, username, email,  phone, bio) {
+  return { regDate, fName, lName, username, email, fName, lName, phone, bio };
+}
+
+const rows = [
+  createData('Registered date', "Dec 12, 2022"),
+  createData('Fisrt name', "Bello"),
+  createData('Last name', "Usman"),
+  createData('username', "Bello1234"),
+  createData("email", "bello@gmail.com"),
+  createData('Phone', "1234567890"),
+  createData('Bio', "lorem ipsum dolor sit amet, consectetur adipiscing elit"),
+];
 
 
 const Dashboard = () => {
@@ -165,7 +202,7 @@ const Dashboard = () => {
             onChange={handleChange}
             selected={false}
             aria-label="Vertical tabs example"
-            sx={{ borderRight: 1, borderColor: 'divider', height: 500, width: "25%", ml: 20, mr: 10, mb: 1 }}
+            sx={{ borderRight: 1, borderColor: 'divider', height: 520, width: 300, ml: 20, mr: 10, mb: 1 }}
           >
           <Tab label="Dashboard" 
             sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
@@ -184,22 +221,85 @@ const Dashboard = () => {
           />
         </Tabs>
         <TabPanel value={value} index={0}>
-          he
+          <Title style={{position: "relative", top: -60,}}>Dashboard</Title>
+          <DashItemsBox>
+            <Paragraph>Enlrolled courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Active courses</Paragraph>
+            <Title>4</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Completed courses</Paragraph>
+            <Title>3</Title>
+          </DashItemsBox>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <Title style={{position: "relative", top: -60,}}>Profile</Title>
+          <DashItemsBox style={{width: "900px", left: -42}}>
+            <TableContainer sx={{ width: "100%", background: "#1C3879"}} component={Paper}>
+              <Table aria-label="simple table">
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow
+                      key={row.username}
+                    >
+                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff" }} component="th" scope="row">{row.regDate}</TableCell>
+                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff"}} align="left">{row.fName}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </DashItemsBox>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
+          <DashItemsBox>
+            <Paragraph>Enlrolled courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Active courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Completed courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
         </TabPanel>
         <TabPanel value={value} index={3}>
-          Item Four
+        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
+          <DashItemsBox>
+            <Paragraph>Enlrolled courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Active courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Completed courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
         </TabPanel>
         <TabPanel value={value} index={4}>
-          Item Five
+        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
+          <DashItemsBox>
+            <Paragraph>Enlrolled courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Active courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
+          <DashItemsBox>
+            <Paragraph>Completed courses</Paragraph>
+            <Title>5</Title>
+          </DashItemsBox>
         </TabPanel>
       </Box>
-      <CoursesList title="Related courses"/>
       <Newsletter />
     </Container>
   );
