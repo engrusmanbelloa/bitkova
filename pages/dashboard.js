@@ -9,17 +9,19 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper'
-import CoursesList from '../components/CoursesList';
-import {featuredCoures} from "../data"
-import User from '../components/Users';
+import Paper from '@mui/material/Paper';
+import MyLearning from '../components/MyLearning';
 
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin: 0;
+  padding: 0;
+`;
 
 const Wrapper = styled.div`
   padding: 20px 0px 10px 0px;
   margin-bottom: 20px;
+  margin-top: 0;
   display: flex;
   justify-content: flex-start;
   border-top: 1px solid #CDDEFF;
@@ -38,25 +40,24 @@ const Box = styled.div`
   height: 60vh;
   width: 100%;
 `;
+
 const DashBox = styled.div`
-  margin: 0 0 0 10px;
+  margin: 0 0 0 100px;
   width: 100%;
   height: 40%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 `;
 
 const DashItemsBox = styled.div`
-  margin: auto;
+  margin-right: 30px;
   border: 1px solid #CDDEFF;
   height: 70%;
   width: 300px;
   flex: 1;
   position: relative;
-  top: 70px;
+  top: 10px;
   left: -100px;
+  text-align: center;
   border-radius: 5px;
   cursor: pointer;
   background: rgba(28, 56, 121, 1);
@@ -79,8 +80,10 @@ const Button = styled.button`
   height: 50px;
   width: 200px;
   position: absolute;
+  bottom: 20px;
+  right: 215px;
+  width: 55.7%;
   margin-top: 50px;
-  right: 100px;
   font-size: 20px;
   font-weight: 600;
   border: none;
@@ -96,7 +99,7 @@ const Button = styled.button`
 `;
 
 const Title = styled.h1`
-  margin: 5% 0 0 0;
+  margin: 2% 0 0 0;
 `;
 
 const Paragraph = styled.p`
@@ -107,11 +110,6 @@ const Paragraph = styled.p`
   letter-spacing: 1.5;
 `;
 
-const Image = styled.img`
-    width: 90%;
-    height: 40vh;
-`;
-
 const AvatarImg = styled.img`
     width: 150px;
     height: 150px;
@@ -119,29 +117,13 @@ const AvatarImg = styled.img`
     margin: auto 50px;
 `;
 
-const Learn = styled.ul`
-  list-style: square;
-  ${mobile({ flex: 2, justifyContent: "center" })}
+
+const ImageBox = styled.img`
+  width: 100%;
+  height: 200px;
+  
 `;
 
-const LearnItem = styled.li`
-  font-size: 25px;
-  font-weight: 400;
-  text-align: left;
-  margin: 25px;
-  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
-`;
-
-const Duration = styled.div`
-  display: flex;
-  justify-content: flex-start; 
-  align-items: center;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 20px;
-  font-size: 25px;
-  font-weight: 500;
-`;
 //  dashborad tab pannel 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -150,14 +132,14 @@ function TabPanel(props) {
     <div>
       {value === index && (
         <Box>
-          <DashBox>{children}</DashBox>
+          <div>{children}</div>
         </Box>
       )}
     </div>
   );
 }
 
-//  create the table data structure
+//  create the user table data structure
 function createData(regDate, fName, lName, username, email,  phone, bio) {
   return { regDate, fName, lName, username, email, fName, lName, phone, bio };
 }
@@ -192,7 +174,7 @@ const Dashboard = () => {
           </Desc>
         </InfoContainer>
         <InfoContainer>
-          <Button>Add new course</Button>
+          <Button style={{top: 140, width: "10%"}}>Add new course</Button>
         </InfoContainer>
       </Wrapper>
         <Box>
@@ -210,10 +192,11 @@ const Dashboard = () => {
           <Tab label="Profile"
             sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
           />
-          <Tab label="Enrolled sourses"
-            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
+          <Tab label="My learning"
+            sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} 
+              }}
           />
-          <Tab label="Wishlist"
+          <Tab label="Wishlist" className="tabLabel"
             sx={{fontSize: "25px", m:3, fontWeight: 600, color: "#000", "&:focus":{color: "#1C3879"} }}
           />
           <Tab label="Logout" 
@@ -221,30 +204,31 @@ const Dashboard = () => {
           />
         </Tabs>
         <TabPanel value={value} index={0}>
-          <Title style={{position: "relative", top: -60,}}>Dashboard</Title>
-          <DashItemsBox>
-            <Paragraph>Enlrolled courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Active courses</Paragraph>
-            <Title>4</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Completed courses</Paragraph>
-            <Title>3</Title>
-          </DashItemsBox>
+          <Title>Dashboard</Title>
+          <DashBox>
+            <DashItemsBox>
+              <Paragraph>Enlrolled courses</Paragraph>
+              <Title>5</Title>
+            </DashItemsBox>
+            <DashItemsBox>
+              <Paragraph>Active courses</Paragraph>
+              <Title>4</Title>
+            </DashItemsBox>
+            <DashItemsBox>
+              <Paragraph>Completed courses</Paragraph>
+              <Title>3</Title>
+            </DashItemsBox>
+          </DashBox>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Title style={{position: "relative", top: -60,}}>Profile</Title>
-          <DashItemsBox style={{width: "900px", left: -42}}>
+          <Title>Profile</Title>
+          <DashBox>
+          <DashItemsBox style={{width: "900px"}}>
             <TableContainer sx={{ width: "100%", background: "#1C3879"}} component={Paper}>
               <Table aria-label="simple table">
                 <TableBody>
                   {rows.map((row) => (
-                    <TableRow
-                      key={row.username}
-                    >
+                    <TableRow key={row.email}>
                       <TableCell sx={{ border: 0, fontSize: 20, color: "#fff" }} component="th" scope="row">{row.regDate}</TableCell>
                       <TableCell sx={{ border: 0, fontSize: 20, color: "#fff"}} align="left">{row.fName}</TableCell>
                     </TableRow>
@@ -253,51 +237,19 @@ const Dashboard = () => {
               </Table>
             </TableContainer>
           </DashItemsBox>
+          </DashBox>
         </TabPanel>
         <TabPanel value={value} index={2}>
-        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
-          <DashItemsBox>
-            <Paragraph>Enlrolled courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Active courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Completed courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
+         <MyLearning title="My Learning"/>
+         <Button> View all</Button>
         </TabPanel>
         <TabPanel value={value} index={3}>
-        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
-          <DashItemsBox>
-            <Paragraph>Enlrolled courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Active courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Completed courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
+         <MyLearning title="Wishlist"/>
+         <Button> View all</Button>
         </TabPanel>
         <TabPanel value={value} index={4}>
-        <Title style={{position: "relative", top: -70,}}>Dashboard</Title>
-          <DashItemsBox>
-            <Paragraph>Enlrolled courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Active courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
-          <DashItemsBox>
-            <Paragraph>Completed courses</Paragraph>
-            <Title>5</Title>
-          </DashItemsBox>
+        <Title>Logout</Title>
+          
         </TabPanel>
       </Box>
       <Newsletter />

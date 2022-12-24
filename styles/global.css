@@ -8,6 +8,11 @@ body {
 
 a {
     text-decoration: none;
+    text-transform: lowercase;
+}
+
+a::first-letter {
+    text-transform: uppercase;
 }
 
 /* * {

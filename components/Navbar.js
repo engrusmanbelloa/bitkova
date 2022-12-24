@@ -7,11 +7,12 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/router'
 
 // ":hover":{color: "white"}
 
 // containers section
-const Container = styled.section`
+const Container = styled.div`
   height: 70px;
   margin: 0px 0px 0px;
   ${mobile({ height: "50px" })}
@@ -104,6 +105,7 @@ const Language = styled.span`
 
 
 const Navbar = () => {
+  const router = useRouter()
  
   return (
     <>
@@ -123,7 +125,8 @@ const Navbar = () => {
           </SearchContainer>
         </Center>
         <Right>
-          <Link href="#"><MenuItem noborder style={{ width: 120}}>My learning</MenuItem></Link>
+        <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
+          {/* <Link href="#"><MenuItem noborder style={{ width: 120}}>My learning</MenuItem></Link> */}
           <Link href="#"><MenuItem noborder >
             <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
               <Badge badgeContent={4}>
@@ -132,12 +135,8 @@ const Navbar = () => {
             </IconButton>
             </MenuItem>
           </Link>
-          <Link href="#">
-            <MenuItem primary style={{width: 100}}>Log in</MenuItem>
-          </Link>
-          <Link href="#">
-            <MenuItem style={{ width: 100}}>Sign up</MenuItem>
-          </Link>
+          <MenuItem primary style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Login</MenuItem>
+          <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Sign up</MenuItem>
           <Link href="#">
           <MenuItem>
           <Language><LanguageIcon/></Language>
