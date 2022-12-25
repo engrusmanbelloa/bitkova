@@ -16,16 +16,19 @@ const Container = styled.section`
 
 const ImageContainer = styled.div`
   flex: 1;
-  width: 35%;
-  padding-right: 15px;
-  margin-left: 0%;
+  padding: 0px;
+  margin: 0;
+  animation: pulse;
+  animation-duration: 2s;
 `;
 
 const InfoContainer = styled.div`
-  flex: 2.5;
+  flex: 3;
   text-align: justify;
-  padding-left: 35px;
-  margin: 20px 0px 0px 40px;
+  padding-left: 10px;
+  margin: 20px 0px 0px 10px;
+  animation: pulse;
+  animation-duration: 2s;
 `;
 
 const Title = styled.h1`
@@ -59,18 +62,14 @@ const Button = styled.button`
 
 const Intro = () => {
   return <Container>
-            <AnimationOnScroll animateIn="animate__fadeInBottomLeft animate__slower">
             <ImageContainer>
-              <Image src={img} alt="Picture of the author" width={300} height={300}/>
+              <Image src={img} alt="Picture of the author" width={320} height={320}/>
             </ImageContainer>
-            </AnimationOnScroll>
-            <AnimationOnScroll animateIn="animate__fadeInUp">
             <InfoContainer>
               <Title>Why Bitkova</Title>
               <Desc>To fill the need of individuals seeking in-demand crypto and blcockchain skills to improve their standard of living and attaining financial freedom by providing excellent hands-on training for a wider variety of students by offering alternate solutions to conventional schooling utilizing current internet technologies and proven teaching practices implemented by a team of professionals in blcockchain, e-commerce, forex, cryptocurrency, social media marketing and motion/graphics industries.</Desc>
               <Button>Learn more</Button>
             </InfoContainer>
-            </AnimationOnScroll>
          </Container>;
 };
 

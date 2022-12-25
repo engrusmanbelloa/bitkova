@@ -9,7 +9,7 @@ import MyLearning from "../components/MyLearning";
 import {mobile} from "../responsive";
 
 const Container = styled.div`
-  border-top: 1px solid black;
+  border-top: 1px solid #CDDEFF;
   width: 100%;
   margin-top: 0px;
   padding-top: 50px;

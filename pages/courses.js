@@ -10,7 +10,7 @@ import Newsletter from "../components/Newsletter";
 
 
 const Container = styled.section`
-  
+  border-top: 1px solid #CDDEFF;
 `;
 
 const Wrapper = styled.section`

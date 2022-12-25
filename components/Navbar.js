@@ -127,16 +127,16 @@ const Navbar = () => {
         <Right>
         <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
           {/* <Link href="#"><MenuItem noborder style={{ width: 120}}>My learning</MenuItem></Link> */}
-          <Link href="#"><MenuItem noborder >
+          <MenuItem noborder type="button" onClick={() => router.push("/cart")}>
             <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
               <Badge badgeContent={4}>
                   <ShoppingCartIcon />
               </Badge>
             </IconButton>
             </MenuItem>
-          </Link>
+          
           <MenuItem primary style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Login</MenuItem>
-          <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Sign up</MenuItem>
+          <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/register")}>Sign up</MenuItem>
           <Link href="#">
           <MenuItem>
           <Language><LanguageIcon/></Language>

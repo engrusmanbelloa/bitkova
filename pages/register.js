@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import { useSession, signIn, signOut } from "next-auth/react"
-import {mobile} from "../responsive";
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import accessToken from "../components/AccessToken"
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -49,20 +47,10 @@ const Box = styled.div`
   ${mobile({ width: "75%" })}
 `;
 
-const Social = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Title = styled.h1`
   font-size: 24px;
+  margin: 10px;
   font-weight: 400;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
 `;
 
 const Input = styled.input`
@@ -89,45 +77,57 @@ const Link = styled.a`
   margin: 5px 0px;
   text-decoration: underline;
   cursor: pointer;
-  font-size: 24px;
 `;
 
-const Login = () => {
-  const { data: session } = useSession()
-  
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
-  }
+const Social = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+
+
+const Agreement = styled.span`
+  font-size: 20px;
+  margin: 10px 0px;
+  font-weight: 40;
+`;
+
+const Register = () => {
   return (
     <Container>
       <Wrapper>
-        <Box>
-          <Title>SIGN IN</Title>
-            <Form>
-              <Input placeholder="username" />
-              <Input placeholder="password" />
-              <Button>LOGIN</Button>
-              <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-              <Link>CREATE A NEW ACCOUNT</Link>
-            </Form>
-            <Title>Sign in with</Title>
-            <Social>
-              <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-            </Social>
+      <Box>
+        <Title>CREATE AN ACCOUNT</Title>
+        <Form>
+          <Input placeholder="name" />
+          <Input placeholder="last name" />
+          <Input placeholder="username" />
+          <Input placeholder="email" />
+          <Input placeholder="password" />
+          <Input placeholder="confirm password" />
+          <Agreement>
+            By creating an account, I consent to the processing of my personal
+            data in accordance with the <b>PRIVACY POLICY</b>
+          </Agreement>
+          <Button>CREATE</Button>
+        </Form>
+        <Title>Sign up with</Title>
+        <Social>
+          <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+          <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+          <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+          <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+        </Social>
         </Box>
-        <accessToken/>
       </Wrapper>
     </Container>
   );
 };
 
-export default Login;
-
+export default Register;
