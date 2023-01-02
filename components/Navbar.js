@@ -6,7 +6,6 @@ import LanguageIcon from '@mui/icons-material/Language';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled from "styled-components";
 import { mobile, ipad} from "../responsive";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import React, { useState } from 'react';
@@ -15,10 +14,11 @@ import React, { useState } from 'react';
 
 // containers section
 const Container = styled.div`
-  height: 70px;
+  height: 60px;
   margin: 0;
   padding: 0;
   background: #fff;
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 99;
@@ -131,7 +131,7 @@ const MobileCart = styled.div`
   position: relative;
   right: 20px;
   display: none;
-  ${ipad({display: "flex" })}
+  ${ipad({display: "flex"})}
 `;
 
 const Hr = styled.hr`
@@ -181,35 +181,37 @@ const Navbar = () => {
     <>
     <Container>
       <Wrapper>
+      {/* nav left items container  */}
         <Left>
             <Link href="/">
               <Logo src="/Logo.png" alt="bitkova Logo"/>
             </Link>
         </Left>
+        {/* nav center items container  */}
         <Center>
           <SearchContainer>
             <Input placeholder="Search" />
             <SearchIcon style={{ color: "gray", fontSize: 24, cursor: "pointer"}} />
           </SearchContainer>
         </Center>
+        {/* nav right items container  */}
         <Right>
-        <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
-          {/* <Link href="#"><MenuItem noborder style={{ width: 120}}>My learning</MenuItem></Link> */}
-          <MenuItem noborder type="button" onClick={() => router.push("/cart")}>
-            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
-              <Badge badgeContent={4}>
-                  <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            </MenuItem>
-          
+          <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
+            <MenuItem noborder type="button" onClick={() => router.push("/cart")}>
+              <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
+                <Badge badgeContent={4}>
+                    <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+              </MenuItem>
           <MenuItem primary style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Login</MenuItem>
           <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/register")}>Sign up</MenuItem>
           <Link href="#">
           <MenuItem>
-          <Language><LanguageIcon/></Language>
+            <Language><LanguageIcon/></Language>
           </MenuItem>
           </Link>
+          {/* Mobile navigation menu */}
           <MobileCart>
           <Smenu type="button" onClick={() => router.push("/cart")}>
             <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>

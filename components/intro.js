@@ -1,10 +1,11 @@
 import styled, { keyframes } from "styled-components";
+import { mobile, ipad} from "../responsive";
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import Image from 'next/image'
 import img from "../public/intro.jpg";
 
-const Container = styled.section`
+const Container = styled.div`
   position: relative;
   height: 350px;
   display: flex;
@@ -12,6 +13,10 @@ const Container = styled.section`
   font-weight: 400;
   justify-content: center;
   letter-spacing: 1px;
+  ${ipad({
+    display: "block",
+    height: "100%",
+   })}
 `;
 
 const ImageContainer = styled.div`
@@ -20,6 +25,9 @@ const ImageContainer = styled.div`
   margin: 0;
   animation: pulse;
   animation-duration: 2s;
+  ${ipad({
+    display: "none",
+   })}
 `;
 
 const InfoContainer = styled.div`
@@ -29,6 +37,10 @@ const InfoContainer = styled.div`
   margin: 20px 0px 0px 10px;
   animation: pulse;
   animation-duration: 2s;
+  ${ipad({
+    margin: "0px",
+    padding: "5px",
+   })}
 `;
 
 const Title = styled.h1`

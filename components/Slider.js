@@ -4,7 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from 'next/router'
 import { sliderItems } from "../data";
-import {mobile} from "../responsive"
+import {mobile, ipad} from "../responsive"
 
 const Container = styled.section`
   width: 100%;
@@ -13,7 +13,9 @@ const Container = styled.section`
   display: flex;
   position: relative;
   overflow: hidden;
-  ${mobile({ display: "none" })}
+  ${ipad({
+    height: "300px" 
+    })}
  `;
 
 const Arrow = styled.div`
@@ -33,6 +35,10 @@ const Arrow = styled.div`
   cursor: pointer;
   opacity: 0.5;
   z-index: 2;
+  ${ipad({
+    height: "40px",
+    width: "40px",
+   })}
 `;
 
 const Wrapper = styled.div`
@@ -46,6 +52,7 @@ const Slide = styled.div`
   width: 100vw;
   height: 100%;
   position:relative;
+  display: flex;
   align-items: center; 
   background-image: url(${(props) => props.src});
   background-repeat: no-repeat;
@@ -60,10 +67,23 @@ const InfoContainer = styled.div`
   left: 80px;
   width: 40%;
   color: white;
+  ${ipad({
+    position: "relative",
+    top: "30px",
+    left: "0",
+    margin: "30px",
+    padding: "10px",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+   })}
 `;
 
 const Title = styled.h1`
   font-size: 25px;
+  ${ipad({
+    fontSize: "16px",
+   })}
 `;
 
 const Desc = styled.p`
@@ -71,6 +91,9 @@ const Desc = styled.p`
   font-weight: 300;
   letter-spacing: 2px;
   line-height: 1.5;
+  ${ipad({
+    fontSize: "11px",
+   })}
 `;
 
 const Button = styled.button`
