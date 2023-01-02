@@ -1,7 +1,11 @@
 import styled from "styled-components";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.div`
-  height: 30px;
+  height: 45px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background-color: rgba(28, 56, 121, 0.9);
   color: white;
   display: flex;
@@ -10,7 +14,8 @@ const Container = styled.div`
   justify-content: center;
   font-size: 20px;
   letter-spacing: 1.5;
-  height: 45px;
+
+  ${mobile({fontSize: "12px", height: "30px", textAlign: "center"})}
 `;
 
 const Announcement = () => {
