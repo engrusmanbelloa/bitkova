@@ -1,6 +1,5 @@
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/material/Card';
-import Typography from '@mui/joy/Typography';
 import styled, { keyframes } from "styled-components";
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
@@ -8,27 +7,40 @@ import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
+import { useState } from "react";
 import {featuredCoures} from "../data"
+import { mobile, ipad} from "../responsive";
 
 
 const Container = styled.section`
   padding: 0px 10px;
+  margin: 0px;
   background-color: #CDDEFF;
   border-radius: 10px;
   letter-spacing: 1px;
 `;
 
 const Wrapper = styled.div`
+  display: flex;
+  margin: 0 auto;
+  padding: 0;
   justify-content: center;
   align-items: center;
+  overflow: scroll;
   height: 100%;
-  display: flex;
+  width: 100%;
+  ${ipad({
+    justifyContent: "flex-start",
+   })}
 `;
 
 const Top = styled.div`
   justify-content: center;
   align-items: center;
   display: flex; 
+  margin: 0;
+  padding: 0;
+  width: 101%;
   color: #fff;
 `;
 
@@ -39,8 +51,7 @@ const InfoContainer = styled.div`
   background-color: rgba(28, 56, 121);
   borderRadius: 3px;
 `;
-
-const Hr = styled.hr`
+const Hr = styled.hr`wq3,,il
     margin: 15px 0;
     background: #000;
     width: 100%;
@@ -70,6 +81,7 @@ const Button = styled.button`
   cursor: pointer;
   height: 30px;
   align-items: center;
+  justify-content: center;
   font-size: ${props => props.priceBtn ? "18px" : "25px"};
   font-weight: 600;
   margin: 0 10px 0 0;
@@ -78,6 +90,22 @@ const Button = styled.button`
   &:hover {
     background-color: #CDDEFF;
   }
+`;
+
+const Title = styled.h2`
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 5px;
+  text-align: center;
+`;
+
+const Desc = styled.p`
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  letter-spacing: 1.5;
+  line-height: 1.5;
 `;
 
 const Price = styled.p`
@@ -89,58 +117,58 @@ const Price = styled.p`
 
 const CoursesList = (props) => {
   const router = useRouter()
+
   return (
     <Container>
     <Top>
-    <Button>{props.title}</Button>
+      <Button>{props.title}</Button>
     </Top>
     
     <Wrapper>
-    {featuredCoures.map((courses) =>(
-    <AnimationOnScroll key={courses.id} animateIn="animate__slideInUp animate__slower">
-    <Card variant="elevation" elevation={10} 
-      sx={{m: 2, ml: 4, mr: 4, padding:0, width: 450, 
-      color: "#fff",borderRadius: 3,
-      ":&hover":{}
-      }}>
-      
-      <AspectRatio minHeight="120px" maxHeight="200px">
-        <img
-          src={courses.img }
-          loading="lazy"
-          alt="Picture of the author"
-        />
-      </AspectRatio>
-      <InfoContainer>
-      <Typography level="h2" fontWeight="800" fontSize="20px" sx={{ mb: 0.5, }}>
-        {courses.title}
-      </Typography>
-      <Typography level="p" fontWeight="300" fontSize="20px" sx={{ mb: 0.5, mt: 1 }}>
-        {courses.desc}
-      </Typography>
-      <Box>
-      <Time>
-        <AccessTimeFilledIcon/>
-        <span style={{margin: "10px"}}>{courses.time}</span>
-      </Time>
-      </Box>
-      <Box>
-      <Time>
-        <PeopleAltIcon/>
-        <span style={{margin: "10px"}}>{courses.student} Students</span>
-      </Time>
-      </Box>
-      <Hr />
-      <Box>
-        <Price>
-          Price: N{courses.price}
-        </Price>
-        <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Enroll</Button>
-      </Box>
-      </InfoContainer>
-    </Card>
-    </AnimationOnScroll>
-    ))}
+      {featuredCoures.map((courses) =>(
+        <AnimationOnScroll key={courses.id} animateIn="animate__slideInUp animate__slower">
+          <Card variant="elevation" elevation={10} 
+            sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, 
+            color: "#fff", borderRadius: 3,
+            ":&hover":{},
+            }}>
+            <AspectRatio minHeight="120px" maxHeight="200px">
+              <img
+                src={courses.img }
+                loading="lazy"
+                alt="Picture of the author"
+              />
+            </AspectRatio>
+            <InfoContainer>
+              <Title>
+                {courses.title}
+              </Title>
+              <Desc>
+                {courses.desc}
+              </Desc>
+              <Box>
+                <Time>
+                  <AccessTimeFilledIcon/>
+                  <span style={{margin: "10px"}}>{courses.time}</span>
+                </Time>
+              </Box>
+              <Box>
+                <Time>
+                  <PeopleAltIcon/>
+                  <span style={{margin: "10px"}}>{courses.student} Students</span>
+                </Time>
+              </Box>
+              <Hr />
+              <Box>
+                <Price>
+                  Price: N{courses.price}
+                </Price>
+                <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Enroll</Button>
+              </Box>
+            </InfoContainer>
+          </Card>
+        </AnimationOnScroll>
+      ))}
     </Wrapper>
     <Top>
     <Button><Link href="/courses" passHref style={{color: '#000'}}>{props.foot}</Link></Button>

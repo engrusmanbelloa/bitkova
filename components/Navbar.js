@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 const Container = styled.div`
   height: 60px;
   margin: 0;
-  padding: 0;
+  padding: 5px 0;
   background: #fff;
   position: -webkit-sticky;
   position: sticky;
@@ -154,7 +154,7 @@ const Toggle = styled.div`
   flex-direction: column;
   text-align: end;
   background: #fff;
-  padding: 5px;
+  padding: 15px 0 0;
   position: absolute;
   right: 0;
   top: 0px;
@@ -214,7 +214,7 @@ const Navbar = () => {
           {/* Mobile navigation menu */}
           <MobileCart>
           <Smenu type="button" onClick={() => router.push("/cart")}>
-            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
+            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 1}}>
               <Badge badgeContent={4}>
                   <ShoppingCartIcon />
               </Badge>
