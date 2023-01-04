@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
-import { mobile } from "../responsive";
+import { mobile, ipad } from "../responsive";
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -12,9 +12,8 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 const Container = styled.div`
   display: flex;
   color: #fff;
-  background: #1A2980;
-  background: linear-gradient(to bottom, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  ${'' /* background: #1A2980; */}
+  background: linear-gradient(to bottom, #1A2980, #CDDEFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   ${mobile({ flexDirection: "column" })}
 `;
 
@@ -25,13 +24,20 @@ const Left = styled.div`
   padding: 20px;
 `;
 
-const Logo = styled.h1``;
+const Logo = styled.h1`
+  margin: 0;
+  padding: 0;
+`;
 
 const Desc = styled.p`
   margin: 15px 0px;
   font-size: 20px;
   line-spacing: 1.5;
   line-height: 1.5;
+  ${ipad({
+    margin: "5px 0",
+    fontSize: "16px",
+  })}
 `;
 
 const SocialContainer = styled.div`
@@ -75,7 +81,9 @@ const ListItem = styled.li`
 const Right = styled.div`
   flex: 1;
   padding: 20px;
-  ${mobile({ backgroundColor: "#fff8f8" })}
+  ${mobile({
+    borderTop: "1px solid #CDDEFF",
+  })}
 `;
 
 const ContactItem = styled.div`

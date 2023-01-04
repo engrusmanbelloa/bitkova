@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import { events } from "../data";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.section`
   margin:40px 0px;
@@ -30,7 +31,29 @@ const Wrapper = styled.div`
     animation: pulse;
     animation-duration: 1s;
   }
+
+  ${ipad({
+    display: "block",
+    margin: "5px",
+    padding: "0px",
+    border: "1px solid #CDDEFF",
+    borderRadius: "5px",
+   })}
+   ${mobile({
+
+   })}
 `;
+
+const EventContainer = styled.div`
+  padding: 0;
+  margin: 0;
+  ${ipad({
+    display: "flex",
+    justifyContent: "flex-start",
+    overflow: "scroll",
+   })}
+`;
+
 const Button = styled.button`
   padding: 10px;
   background: rgba(28, 56, 121);
@@ -44,6 +67,11 @@ const Button = styled.button`
     background-color: #CDDEFF;
     color: rgba(28, 56, 121);
   }
+
+  ${ipad({
+    fontSize: "18px",
+    padding: "2px",
+   })}
 `;
 
 const Box = styled.div`
@@ -57,15 +85,31 @@ const InfoContainer = styled.div`
   margin: 15px;
   text-align: center;
   borderRadius: 3px;
+  ${ipad({
+    textAlign: "justify",
+    margin: '0 auto',
+    padding: "0",
+   })}
 `;
 
-const ImageBox = styled.div`
-  justify-content: center;
-  align-items: center;
+const ImageBox = styled.img`
+  width: 500px;
+  height: 220px;
+
+  ${ipad({
+    width: "350px",
+   })}
+   ${mobile({
+    width: "320px",
+  })}
 `;
+
 
 const Title = styled.h1`
   margin: 2px;
+  ${mobile({
+    fontSize: "20px",
+  })}
 `;
 
 const Detail = styled.div`
@@ -102,11 +146,10 @@ const Events = () => {
         <Title>LATEST EVENTS</Title>
         <Button>See more events</Button>
         </Box>
+        <EventContainer>
         {events.map((event) => (
         <Wrapper key={event.id}>
-            <ImageBox>
-            <Image src={event.img}width={390}height={230} alt="profile"/>
-            </ImageBox>
+            <ImageBox src={event.img} alt="profile"/>
             <InfoContainer>
               <Title>{event.title}</Title>
               <Paragraph>{event.desc}</Paragraph>
@@ -119,6 +162,7 @@ const Events = () => {
           </InfoContainer>
           </Wrapper>
           ))}
+        </EventContainer>
         </Card>
     </Container>
   );

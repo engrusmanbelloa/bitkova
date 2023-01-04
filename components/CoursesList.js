@@ -26,11 +26,11 @@ const Wrapper = styled.div`
   padding: 0;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
   height: 100%;
   width: 100%;
   ${ipad({
     justifyContent: "flex-start",
+    overflow: "scroll",
    })}
 `;
 
@@ -40,7 +40,7 @@ const Top = styled.div`
   display: flex; 
   margin: 0;
   padding: 0;
-  width: 101%;
+  width: 100.5%;
   color: #fff;
 `;
 

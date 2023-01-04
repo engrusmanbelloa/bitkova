@@ -105,6 +105,15 @@ export const sliderItems = [
       student: 30,
       price: "9,999",
     },
+    // {
+    //   id: 4,
+    //   img: "/courses/art.jpg",
+    //   title: "Certified Blockchain Graphics Artist (CBA)",
+    //   desc: "Design stunning arts that won't be willing to leave your pages.",
+    //   time: "6h 40m",
+    //   student: 30,
+    //   price: "9,999",
+    // },
    
   ];
 
@@ -141,7 +150,7 @@ export const sliderItems = [
       desc: " This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like. Add 1 cup of frozen peas along with the mussels,if you",
       date: "May 18 2022",
       time: "4:00 PM Promt",
-      venue: "Zoo road kano"
+      venue: "No: 24 bitkova office Zoo road kano"
     },
     {
       id: 2,
@@ -150,7 +159,7 @@ export const sliderItems = [
       desc: "At one point, the Terra Luna blockchain was valued at $40 billion. Then, it came crashing down. Now, each Luna coin is worth $0. Lets talk about how this happened and whats next for the whole crypto world after",
       date: "July 05 2022",
       time: "7:00 PM Promt",
-      venue: "Gyadi gyadi opposite baballe ila mosque kano"
+      venue: "Gyadigyadi opp baballe ila mosque"
     },
    
   ];

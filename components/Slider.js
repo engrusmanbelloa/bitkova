@@ -94,6 +94,9 @@ const Desc = styled.p`
   ${ipad({
     fontSize: "11px",
    })}
+   ${mobile({
+    fontSize: "14px",
+   })}
 `;
 
 const Button = styled.button`
@@ -110,6 +113,11 @@ const Button = styled.button`
     background-color: rgba(28, 56, 121, 0.9);
     color: #fff;
   }
+  ${mobile({
+    fontSize: "14px",
+    padding: "5px",
+    marginTop: "5px",
+   })}
 `;
 
 const Slider = () => {

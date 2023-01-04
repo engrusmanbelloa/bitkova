@@ -1,6 +1,6 @@
 import SendIcon from '@mui/icons-material/Send';
 import styled from "styled-components";
-import { mobile } from "../responsive";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.div`
   height: 300px;
@@ -14,13 +14,19 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 70px;
   margin: 10px 10px;
+  ${ipad({
+    fontSize: "50px",
+  })}
 `;
 
 const Desc = styled.div`
   font-size: 24px;
   font-weight: 400;
   margin-bottom: 20px;
-  ${mobile({ textAlign: "center" })}
+  ${ipad({ 
+    textAlign: "center",
+    fontSize: "18px",
+    })}
 `;
 
 const InputContainer = styled.div`
@@ -30,7 +36,7 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   border: 1px solid lightgray;
-  ${mobile({ width: "80%" })}
+  ${mobile({ width: "80%",})}
 `;
 
 const Input = styled.input`
@@ -38,6 +44,9 @@ const Input = styled.input`
   flex: 8;
   padding-left: 20px;
   font-size: 20px;
+  ${mobile({
+    paddingLeft: "5px",
+  })}
 `;
 
 const Button = styled.button`

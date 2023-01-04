@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import { newsList } from "../data";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.section`
   margin:40px 0px;
@@ -15,6 +16,7 @@ const Container = styled.section`
   border-radius: 10px;
   letter-spacing: 1px;
   text-align: center;
+
 `;
 
 const Wrapper = styled.div`
@@ -29,7 +31,22 @@ const Wrapper = styled.div`
     animation: pulse;
     animation-duration: 1s;
   }
+  
+  ${ipad({
+    width: '100%',
+   })}
 `;
+
+const NewsContainer = styled.div`
+  padding: 0;
+  margin: 0;
+  ${ipad({
+    display: "flex",
+    justifyContent: "flex-start",
+    overflow: "scroll",
+   })}
+`;
+
 const Button = styled.button`
   padding: 10px;
   background: rgba(28, 56, 121);
@@ -43,6 +60,11 @@ const Button = styled.button`
     background-color: #CDDEFF;
     color: rgba(28, 56, 121);
   }
+
+  ${ipad({
+    fontSize: "18px",
+    padding: "2px",
+   })}
 `;
 
 const Box = styled.div`
@@ -56,14 +78,21 @@ const InfoContainer = styled.div`
   borderRadius: 3px;
 `;
 
-const ImageBox = styled.div`
-  justify-content: center;
-  text-align: center;
+const ImageBox = styled.img`
+  width: 500px;
+  height: 220px;
+
+  ${ipad({
+    width: "350px",
+   })}
 `;
 
 const Title = styled.h1`
   margin: 2px;
   text-align: left;
+  ${mobile({
+    fontSize: "20px",
+  })}
 `;
 
 const Subheader = styled.h5`
@@ -88,26 +117,26 @@ const News = () => {
   return (
     <Container>
         <Card variant="elevation" elevation={20} sx={{m: 2, borderRadius: 2}}>
-        <Box>
-        <Title>LATEST NEWS</Title>
-        <Button>See more news</Button>
-        </Box>
-        {newsList.map((news) => (
-        <Wrapper key={news.id}>
-            <ImageBox>
-            <Image src={news.img} alt="Picture of the author" width={500}height={220}/>
-            </ImageBox>
-            <InfoContainer>
-              <Title>{news.title}</Title>
-              <Subheader>{news.date}</Subheader>
-              <Paragraph>{news.desc}</Paragraph>
-              <Box style={{justifyContent: "center", cursor: "pointer"}}>
-              <FavoriteIcon sx={{m: 1}}/>
-              <ShareIcon sx={{m: 1}} />
-              </Box>
-          </InfoContainer>
-          </Wrapper>
-          ))}
+          <Box>
+            <Title>LATEST NEWS</Title>
+            <Button>See more news</Button>
+          </Box>
+          <NewsContainer>
+            {newsList.map((news) => (
+              <Wrapper key={news.id}>
+                <ImageBox src={news.img} alt="Picture of the author"/>
+                <InfoContainer>
+                  <Title>{news.title}</Title>
+                  <Subheader>{news.date}</Subheader>
+                  <Paragraph>{news.desc}</Paragraph>
+                  <Box style={{justifyContent: "center", cursor: "pointer"}}>
+                  <FavoriteIcon sx={{m: 1}}/>
+                  <ShareIcon sx={{m: 1}} />
+                  </Box>
+                </InfoContainer>
+                </Wrapper>
+              ))}
+          </NewsContainer>
         </Card>
     </Container>
   );

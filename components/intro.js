@@ -53,6 +53,10 @@ const Desc = styled.p`
   font-weight: 400;
   letter-spacing: 1.5;
   line-height: 1.5;
+  ${mobile({
+    fontSize: "16px",
+    textAlign: "left",
+   })}
 `;
 
 const Button = styled.button`

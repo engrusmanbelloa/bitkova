@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Rating from '@mui/material/Rating';
 import styled from 'styled-components';
 import { testimonials } from "../data";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.section`
   margin: 0px 0px 20px;
@@ -21,6 +22,17 @@ const Wrapper = styled.div`
   display: inline-grid;
   border-radius: 10px;
 `;
+
+const TestimonialContainer = styled.div`
+  padding: 0;
+  margin: 0;
+  ${ipad({
+    display: "flex",
+    justifyContent: "flex-start",
+    overflow: "scroll",
+   })}
+`;
+
 
 const Button = styled.button`
   flex:1;
@@ -73,6 +85,7 @@ export const Testimonals = ()=> {
   return (
     <Container>
     <Button>Testimonals</Button>
+    <TestimonialContainer>
     {testimonials.map((review) => (
     <Wrapper key={review.id}>
     <CardBox>
@@ -97,6 +110,7 @@ export const Testimonals = ()=> {
     </CardBox>
     </Wrapper>
     ))}
+    </TestimonialContainer>
     </Container>
   );
 };
