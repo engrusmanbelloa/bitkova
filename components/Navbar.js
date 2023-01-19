@@ -8,7 +8,8 @@ import styled from "styled-components";
 import { mobile, ipad} from "../responsive";
 import Link from "next/link";
 import { useRouter } from 'next/router'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 // ":hover":{color: "white"}
 
@@ -53,6 +54,24 @@ const Logo = styled.img`
   height: 25px;
   margin-right: 10px;
   ${mobile({ width: 110, height: 20, marginRight: 5 })}
+`;
+
+const ProfilePic = styled.img`
+  width: 45px;
+  height: 45px;
+  display: none;
+  margin-right: 10px;
+  border-radius: 50%;
+  ${ipad({display: "inline", width: 40, height: 40, marginRight: 5, borderRadius: "50%" })}
+`;
+
+const LargePic = styled.img`
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  ${ipad({display: "none", width: 20, height: 20, marginRight: 5, borderRadius: "50%" })}
 `;
 
 // middle section of the nav bar
@@ -176,7 +195,9 @@ const Language = styled.span`
 
 const Navbar = () => {
   const router = useRouter()
+  const { data: session } = useSession()
   const [toggleMenu, setToggleMenu] = useState(false)
+  
   return (
     <>
     <Container>
@@ -204,13 +225,24 @@ const Navbar = () => {
                 </Badge>
               </IconButton>
               </MenuItem>
-          <MenuItem primary style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Login</MenuItem>
-          <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/register")}>Sign up</MenuItem>
-          <Link href="#">
-          <MenuItem>
-            <Language><LanguageIcon/></Language>
-          </MenuItem>
-          </Link>
+              
+              { session ? 
+                <>
+                  <LargePic src={session.user.image} referrerPolicy="no-referrer" onClick={() => router.push("/dashboard")}/>
+                  <MenuItem primary onClick={() => signOut()}>Sign out</MenuItem>
+                </> 
+                :
+                <>
+                  <MenuItem primary style={{ width: 100}}type="button" onClick={() => router.push("/login")}>Login</MenuItem>
+                  <MenuItem style={{ width: 100}}type="button" onClick={() => router.push("/register")}>Sign up</MenuItem>
+                  <Link href="#">
+                  <MenuItem>
+                    <Language><LanguageIcon/></Language>
+                  </MenuItem>
+                  </Link>
+                </>
+                }
+          
           {/* Mobile navigation menu */}
           <MobileCart>
           <Smenu type="button" onClick={() => router.push("/cart")}>
@@ -227,8 +259,30 @@ const Navbar = () => {
             : <MenuIcon color="#fff" size={27} onClick={() => setToggleMenu(true)} />}
           {toggleMenu && (
             <div>
-              <Smenu type="button" onClick={() => router.push("/login")}>Login</Smenu>
-              <Smenu type="button" onClick={() => router.push("/register")}>Sign up</Smenu>
+              <>
+                {session ? 
+                <>
+                  <ProfilePic src={session.user.image} referrerPolicy="no-referrer"/>
+                  <span style={{position: "relative", right: 5, top: -15, bottom: 0, marginLeft: 5}}>{session.user.name }</span>
+                  <Smenu onClick={() => signOut()}>Sign out</Smenu>
+                </>
+                  : 
+                <>
+                  <Smenu type="button" onClick={() => {
+                    setToggleMenu(false)
+                    router.push("/login")
+                    }}>
+                    Login
+                    </Smenu>
+                  <Smenu type="button" onClick={() => {
+                    setToggleMenu(false)
+                    router.push("/register")
+                    }}>
+                    Sign up
+                    </Smenu>
+                </>
+                }
+              </>
               <Hr/>
               <Title>Most Popular courses</Title>
               <Smenu type="button" onClick={() => router.push("/login")}>Crypto Market Analytics</Smenu>

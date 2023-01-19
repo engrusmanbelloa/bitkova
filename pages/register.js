@@ -3,18 +3,22 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import { mobile } from "../responsive";
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import {mobile, ipad} from "../responsive"
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
 `;
 
 const Wrapper = styled.div`
   width: 35%;
-  height: 65vh;
+  height: 70vh;
   margin: 30px auto;
   background: linear-gradient(
     rgba(28, 56, 121, 0.5),
@@ -24,6 +28,7 @@ const Wrapper = styled.div`
       center;
   background-size: cover;
   border-radius: 20%;
+  ${ipad({ width: "100%", height: "100%", margin:"10px", borderRadius: "75px"})} 
  
 `;
 
@@ -44,7 +49,7 @@ const Box = styled.div`
   line-height: 1.5;
   line-spacing: 1.5;
   border-radius: 20px;
-  ${mobile({ width: "75%" })}
+  ${mobile({ width: "75%", borderRadius: "30px" })}
 `;
 
 const Title = styled.h1`
@@ -55,8 +60,7 @@ const Title = styled.h1`
 
 const Input = styled.input`
   flex: 1;
-  min-width: 40%;
-  margin: 10px 0;
+  margin: 10px;
   padding: 10px;
   font-size: 16px;
   font-weight: 400;
@@ -99,18 +103,54 @@ const Agreement = styled.span`
 `;
 
 const Register = () => {
+  const [fullname, setFullname] = useState('')
+  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const router = useRouter()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //Validation
+    if (!fullname || !email || !email.includes('@') || !password) {
+        alert('Invalid details');
+        return;
+    }
+    //POST form values
+    const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: fullname,
+            username: username,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword,
+        }),
+    });
+    //Await for data for any desirable next steps
+    const data = await res.json();
+    console.log(data);
+};
+
+
+
   return (
     <Container>
       <Wrapper>
       <Box>
         <Title>CREATE AN ACCOUNT</Title>
-        <Form>
-          <Input placeholder="name" />
-          <Input placeholder="last name" />
-          <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirm password" />
+        <Form method="post" onSubmit={handleSubmit}>
+          <Input placeholder="Fullname" name="name" required value={fullname} onChange={e => setFullname(e.target.value)} />
+          {/* <Input placeholder="Last name" name="name" required value={lastName} onChange={e => setLastName(e.target.value)} /> */}
+          <Input placeholder="username" name="username" required value={username} onChange={e => setUsername(e.target.value)} />
+          <Input placeholder="email" name="email" required value={email} onChange={e => setEmail(e.target.value)} />
+          <Input placeholder="password" type="password" name="password" required  value={password} onChange={e => setPassword(e.target.value)}/>
+          <Input placeholder="confirm password" type="password" name="confirmPassword" required  value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
+          
           <Agreement>
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
@@ -120,9 +160,9 @@ const Register = () => {
         <Title>Sign up with</Title>
         <Social>
           <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-          <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-          <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-          <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+          <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
+          <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
+          <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}}/>
         </Social>
         </Box>
       </Wrapper>

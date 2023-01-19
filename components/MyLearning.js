@@ -1,25 +1,47 @@
 import * as React from 'react';
-// import "rsuite/dist/rsuite.min.css";
 import styled from "styled-components";
 import {Progress} from "rsuite";
 import { useState } from "react";
 import {featuredCoures} from "../data";
+import {mobile, ipad} from "../responsive";
 
 const Container = styled.div`
-  width: 100%;
   margin-top: 0px;
+  ${ipad({
+    marginLeft: 0
+   })}
 `;
 
 const Title = styled.h1`
   margin: 2% 0 0 0;
   line-height: 1.5;
+  font-size: 25px;
+  ${ipad({
+    fontSize: 18,
+   })}
+`;
+
+const Heading = styled.h1`
+  margin: 2% 0 0 0;
+  line-height: 1.5;
+  font-size: 25px;
 `;
 
 const DashBox = styled.div`
   margin: 0 0 0 100px;
   width: 100%;
-  height: 40%;
+  height: 100%;
   display: flex;
+  ${ipad({
+    width:  560,
+    marginLeft: 10,
+    justifyContent: "flex-start",
+    overflow: "scroll",
+   })}
+   ${mobile({
+    width: 315, marginBottom: 30, marginLeft: 0,
+    
+   })}
 `;
 
 const DashItemsBox = styled.div`
@@ -41,12 +63,24 @@ const DashItemsBox = styled.div`
     background-color: #CDDEFF;
     color: rgba(28, 56, 121, 1);
   }
+  ${ipad({
+    left: 0, marginRight: 5,
+    })}
+  ${ipad({
+  left: 0, top: 0, marginRight: 5,
+  })}
+`;
+
+const Learning = styled.div`
+  
 `;
 
 const ImageBox = styled.img`
   width: 100%;
   height: 200px;
-  
+  ${ipad({
+    width: 240
+    })}
 `;
 
 const Box = styled.div`
@@ -89,13 +123,12 @@ const MyLearning = (props) => {
 
   return (
     <Container>
-     <Title>{props.title}</Title>
-     <DashBox style={{height: "100%"}}>
+     <Heading>{props.title}</Heading>
+     <DashBox>
         {featuredCoures.map((course) => (
             <DashItemsBox key={course.id}>
-            <div>
                 <ImageBox src={course.img } alt="Picture of the author"/>
-                <Title style={{fontSize: 25}}>{course.title}</Title>
+                <Title>{course.title}</Title>
                 {props.title === "Wishlist" ? 
                   <div>
                     <Paragraph>Price:&nbsp;&nbsp;N{course.price}</Paragraph>
@@ -110,7 +143,6 @@ const MyLearning = (props) => {
                         /> 
                   </Box>
                     }
-            </div>
             </DashItemsBox>
         ))}
      </DashBox>

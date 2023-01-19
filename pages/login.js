@@ -1,22 +1,27 @@
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
 import styled from "styled-components";
-import { useSession, signIn, signOut } from "next-auth/react"
-import {mobile} from "../responsive";
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import accessToken from "../components/AccessToken"
+import {mobile, ipad} from "../responsive"
+import Loading from '../components/Loading'
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+  
 `;
 
 const Wrapper = styled.div`
   width: 35%;
-  height: 65vh;
+  height: 70vh;
   margin: 30px auto;
   background: linear-gradient(
     rgba(28, 56, 121, 0.5),
@@ -25,8 +30,8 @@ const Wrapper = styled.div`
     url("/intro.jpg")
       center;
   background-size: cover;
-  border-radius: 20%;
- 
+  border-radius: 21%;
+  ${ipad({ width: "100%", height: "100%", margin:"10px", borderRadius: "30px"})}  
 `;
 
 const Box = styled.div`
@@ -92,42 +97,55 @@ const Link = styled.a`
   font-size: 24px;
 `;
 
-const Login = () => {
+const Login = ({ providers, csrfToken }) => {
   const { data: session } = useSession()
-  
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    )
-  }
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
+
   return (
     <Container>
       <Wrapper>
         <Box>
           <Title>SIGN IN</Title>
-            <Form>
-              <Input placeholder="username" />
-              <Input placeholder="password" />
-              <Button>LOGIN</Button>
+            <Form method="post" action="/api/auth/callback/credentials">
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+              <Input placeholder="email" type="email" required value={email} onChange={e => setEmail(e.target.value)}/>
+              <Input placeholder="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
+              <Button type="submit" onClick={(e) => {
+                e.preventDefault();
+                signIn("credentials", {email: email, password: password, callbackUrl: "http://localhost:3000"}
+                
+              )}}>
+                LOGIN
+              </Button>
               <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
               <Link>CREATE A NEW ACCOUNT</Link>
             </Form>
             <Title>Sign in with</Title>
             <Social>
-              <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
-              <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+              <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} 
+                onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
+                />
+              <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
+              <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
+              <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}}/>
             </Social>
         </Box>
-        {/* <accessToken/> */}
       </Wrapper>
     </Container>
   );
 };
+
+export async function getServerSideProps(context) {
+  const providers = await getProviders()
+
+  return {
+    props: { 
+      providers,
+      csrfToken: await getCsrfToken(context)
+    },
+  }}
 
 export default Login;
 

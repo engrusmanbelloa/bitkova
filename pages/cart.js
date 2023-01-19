@@ -1,7 +1,7 @@
 import "animate.css/animate.min.css";
 import styled from "styled-components";
 
-import { mobile } from "../responsive";
+import { mobile, ipad} from "../responsive";
 
 const Container = styled.div``;
 
@@ -9,12 +9,14 @@ const Wrapper = styled.div`
   padding: 20px;
   border: 1px solid #CDDEFF;
   border-radius: 5px;
-  ${mobile({ padding: "10px" })}
+  ${ipad({ padding: "10px" })}
 `;
 
 const Title = styled.h1`
   font-weight: 400;
   text-align: center;
+  ${ipad({ fontSize: "18px" })}
+  ${mobile({ fontSize: "14px" })}
 `;
 
 const Top = styled.div`
@@ -34,10 +36,11 @@ const TopButton = styled.button`
     props.type === "filled" ? "#1C3879" : "transparent"};
   border-radius: 5px;
   color: ${(props) => props.type === "filled" && "white"};
+  ${ipad({ margin: 5 })}
 `;
 
 const TopTexts = styled.div`
-  ${mobile({ display: "none" })}
+  ${ipad({ display: "none" })}
 `;
 const TopText = styled.span`
   text-decoration: underline;
@@ -59,19 +62,23 @@ const Info = styled.div`
 const Course = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
+  ${ipad({  })}
 `;
 
 const CourseDetail = styled.div`
-  flex: 2;
+  flex: ${props => props.ipad ? "1": "2"};
+  justify-content: ${props => props.ipad ? "flex-start": ""};
   display: flex;
   margin: 5px 10px 0 0;
   padding: 0;
+  ${ipad({alignItems: "center", flexDirection: "column" })}
 `;
 
 const Image = styled.img`
   width: 300px;
   height: 200px;
+  ${ipad({ height: "150px", width: "100%" })}
+  ${mobile({height: "100px", width: "100%" })}
 `;
 
 const Details = styled.div`
@@ -80,29 +87,38 @@ const Details = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  ${ipad({padding: "0 5px" })}
 `;
 
 const CourseName = styled.span`
   font-size: 20px;
   font-weight: bold;
   margin: 0;
+  ${ipad({padding: "5px 0" })}
+  ${mobile({fontSize: "16px" })}
 `;
 
-const CourseId = styled.span``;
+const CourseId = styled.span`
+  ${ipad({padding: "5px 0" })}
+`;
 
 
-const Duration = styled.span``;
+const Duration = styled.span`
+  ${ipad({padding: "5px 0" })}
+`;
 
 const ChangeContainer = styled.div`
   margin: 0 20px 0;
+  ${ipad({ margin: 0, padding: 0, position: "relative", top: 50})}
 `;
 
 
 const Price = styled.p`
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 300;
   color: ##CDDEFF;
-  ${mobile({ marginBottom: "20px" })}
+  ${ipad({ fontSize: "18px", margin: "0, auto"})}
+  ${mobile({ fontSize: "17px", margin: "0, auto"})}
 `;
 
 const Hr = styled.hr`
@@ -181,12 +197,12 @@ const Cart = () => {
                   </Duration>
                 </Details>
               </CourseDetail>
-              <CourseDetail style={{flex: 1, justifyContent: "flex-end"}}>
+              <CourseDetail ipad>
+                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; 6,999</Price>
                 <ChangeContainer>
                  <Price>Remove</Price>
                  <Price>Move to Wishlist</Price>
                 </ChangeContainer>
-                <Price style={{fontWeight: 500, color: "#1C3879"}}>&#8358; 6,999</Price>
               </CourseDetail>
             </Course>
             <Hr />
@@ -208,12 +224,12 @@ const Cart = () => {
                   </Duration>
                 </Details>
               </CourseDetail>
-              <CourseDetail style={{flex: 1, justifyContent: "flex-end"}}>
+              <CourseDetail ipad>
+                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; 6,999</Price>
                 <ChangeContainer>
                  <Price>Remove</Price>
                  <Price>Move to Wishlist</Price>
                 </ChangeContainer>
-                <Price style={{fontWeight: 500, color: "#1C3879"}}>&#8358; 6,999</Price>
               </CourseDetail>
             </Course>
           </Info>

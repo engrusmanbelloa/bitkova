@@ -8,7 +8,7 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI
 const options = {}
 
-let client
+let client: MongoClient
 let clientPromise: Promise<MongoClient>
 
 if (process.env.NODE_ENV === "development") {
@@ -19,10 +19,12 @@ if (process.env.NODE_ENV === "development") {
         global._mongoClientPromise = client.connect()
     }
     clientPromise = global._mongoClientPromise
+    console.log("DB connection in development mode")
 } else {
     // In production mode, it's best to not use a global variable.
     client = new MongoClient(uri, options)
     clientPromise = client.connect()
+    console.log("DB connection in production mode")
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a
