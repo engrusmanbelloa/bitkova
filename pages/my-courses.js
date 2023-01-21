@@ -31,8 +31,7 @@ const Box = styled.div`
   text-align: center;
   margin-right: -30px;
   padding: 10px;
-  width: "90%",
-  background:"red"
+  width: 100%;
   ${ipad({ marginRight: "0px", })}
   ${mobile({})}
 `;
@@ -45,7 +44,7 @@ const Title = styled.h1`
 `;
 
 const DashBox = styled.div`
-  margin: 0 0 0 100px;
+  margin: 0 0 0 0px;
   height: 100%;
   display: flex;
   justify-content: center;

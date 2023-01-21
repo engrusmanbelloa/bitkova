@@ -1,12 +1,11 @@
-import styled, { keyframes } from "styled-components";
-import "animate.css/animate.min.css";
-import Image from 'next/image'
-import img from "../public/chd.jpg";
-import CoursesList from "../components/CoursesList";
+import styled, { keyframes } from "styled-components"
+import "animate.css/animate.min.css"
+import CoursesList from "../components/CoursesList"
 import Link from "next/link";
-import Intro from "../components/intro";
-import Testimonals from "../components/Testimonals";
-import Newsletter from "../components/Newsletter";
+import {mobile, ipad} from "../responsive"
+import Intro from "../components/intro"
+import Testimonals from "../components/Testimonals"
+import Newsletter from "../components/Newsletter"
 
 
 const Container = styled.section`
@@ -16,24 +15,35 @@ const Container = styled.section`
 const Wrapper = styled.section`
   display: flex;
   height: 70vh;
-  margin: 20px;
+  margin: 20px 0px 0px 20px;
   align-items: center;
   font-weight: 400;
   justify-content: center;
   letter-spacing: 1px;
+  ${ipad({ display: "block", height: "100%", margin: "0",})}
+  ${mobile({})}
 `;
 
 const ImageContainer = styled.div`
   flex: 1.3;
-  margin-right: 0;
+  margin: 0 auto;
+  padding: 0;
+`;
+
+const Image = styled.img`
+  width: 120vh;
+  height: 60vh;
+  ${ipad({ width: "110vh" })}
+  ${mobile({display: "none"})}
 `;
 
 const InfoContainer = styled.div`
   flex: 1;
   padding: 15px;
-  text-align: center;
+  text-align: justify;
   animation: bounceIn;
   animation-duration: 2s;
+  ${ipad({textAlign: "justify",})}
 `;
 
 const Title = styled.h1`
@@ -69,13 +79,13 @@ const Courses = (href) => {
             <Wrapper>
             <InfoContainer>
                 <Title>Courses</Title>
-                <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
+                <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique  consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus cursus consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
                 <Link href="#courses" passHref legacyBehavior>
                   <Button>View courses</Button>
                 </Link>
             </InfoContainer>
             <ImageContainer>
-              <Image src={img} alt="Picture of the author" width={1000} height={500}/>
+              <Image src="/chd.jpg" alt="Picture of the author"/>
             </ImageContainer>
             </Wrapper>
             <div id="courses">

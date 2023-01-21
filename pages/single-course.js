@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from "styled-components";
 import Card from '@mui/material/Card';
 import Newsletter from "../components/Newsletter"
-import { mobile } from "../responsive";
+import { mobile, ipad } from "../responsive";
 import Iframe from 'react-iframe'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -15,6 +15,7 @@ import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CoursesList from '../components/CoursesList';
 import {featuredCoures} from "../data"
+import { red } from '@mui/material/colors';
 
 
 const Container = styled.div``;
@@ -25,7 +26,7 @@ const Wrapper = styled.div`
   display: flex;
   border-top: 1px solid #CDDEFF;
   border-bottom: 1px solid #CDDEFF;
-  ${mobile({ padding: "10px", flexDirection:"column" })}
+  ${ipad({ padding: "10px", flexDirection:"column" })}
 `;
 
 const InfoContainer = styled.div`
@@ -40,14 +41,16 @@ const InfoContainer = styled.div`
 const Box = styled.div`
   margin: 0 0 20px;
   width: 70%;
-  height: 80vh;
+  height: 90vh;
+  ${ipad({ height: "100%", width: "98%", margin: "20px auto"})}
 `;
 const CheckoutBox = styled.div`
   margin: 0 0 0 10px;
   width: 25%;
   position: absolute;
-  top: 590px;
+  top: 530px;
   right: 70px;
+  ${ipad({ position: "relative", top: "10px", right: "0", width: "100%", margin: "auto",})}
 `;
 
 const ReviewBox = styled.div`
@@ -82,12 +85,18 @@ const Button = styled.button`
 
 const Title = styled.h1`
   margin: 5px 20px;
+  ${ipad({ fontSize: 25, margin: "5px 0"})}
+  ${ipad({ fontSize: 20,})}
+`;
+
+const TabsTitle = styled.h1`
+  margin: 5px 20px;
 `;
 
 const Paragraph = styled.p`
   margin: 15px;
   text-align: left;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: 1.5;
@@ -108,7 +117,7 @@ const LearnItem = styled.li`
   font-weight: 400;
   text-align: left;
   margin: 25px;
-  ${mobile({ fontSize: "12px", marginLeft: "10px" })}
+  ${mobile({ margin: 10, })}
 `;
 
 const Duration = styled.div`
@@ -120,6 +129,7 @@ const Duration = styled.div`
   margin: 20px;
   font-size: 25px;
   font-weight: 500;
+   ${mobile({ margin: 8, })}
 `;
 
 const SingleCourse = () => {
@@ -142,14 +152,24 @@ const SingleCourse = () => {
           </Desc>
           <Button>ENROLL</Button>
         </InfoContainer>
-        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, borderRadius: 7, position: "relative"}}>
+        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, mt: 0, width: 1000, height: 350, borderRadius: 7, position: "relative",
+          '@media screen and (max-width: 768px)': {
+                  ml: 1, width: 720,
+                  },
+                  '@media screen and (max-width: 600px)': {
+                    width: "100%", height: 250, margin: 0, padding : 0,
+                  },
+        }}>
           <Iframe 
               url="https://player.vimeo.com/video/779663884?h=6e8a3f19ea&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
               // src="../trade.png"
-              width="1000px"
-              height="400px"
+              width="100%"
+              height="100%"
               display="block"
               position="relative"
+              margin="auto"
+              top="0"
+              bottom="0"
               />
         </Card>
         </Wrapper>
@@ -240,7 +260,7 @@ const SingleCourse = () => {
           </Tabs>
         </Card>
         <CheckoutBox>
-          <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:500, }}>
+          <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:"100%",}}>
           <Button style={{width: "100%", marginBottom: 40}}>Buy This Course</Button>
           <Duration>
             <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
