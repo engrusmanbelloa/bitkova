@@ -112,11 +112,13 @@ const Login = ({ providers, csrfToken }) => {
               <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
               <Input placeholder="email" type="email" required value={email} onChange={e => setEmail(e.target.value)}/>
               <Input placeholder="password" type="password" required value={password} onChange={e => setPassword(e.target.value)} />
-              <Button type="submit" onClick={(e) => {
-                e.preventDefault();
-                signIn("credentials", {email: email, password: password, callbackUrl: "http://localhost:3000"}
+              <Button type="submit" 
+              // onClick={(e) => {
+              //   e.preventDefault();
+              //   signIn("credentials", {email: email, password: password, callbackUrl: "http://localhost:3000"}
                 
-              )}}>
+              // )}}
+              >
                 LOGIN
               </Button>
               <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
@@ -137,15 +139,15 @@ const Login = ({ providers, csrfToken }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const providers = await getProviders()
+// export async function getServerSideProps(context) {
+//   const providers = await getProviders()
 
-  return {
-    props: { 
-      providers,
-      csrfToken: await getCsrfToken(context)
-    },
-  }}
+//   return {
+//     props: { 
+//       providers,
+//       csrfToken: await getCsrfToken(context)
+//     },
+//   }}
 
 export default Login;
 
