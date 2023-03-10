@@ -102,22 +102,68 @@ const Agreement = styled.span`
   font-weight: 40;
 `;
 
+const ErrorSuccess = styled.div`
+  font-size: 14px;
+  margin: 5px auto;
+  font-weight: 400;
+  color: red;
+
+`;
+
 const Register = () => {
   const [fullname, setFullname] = useState('')
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setLoading(true)
+    const passwordRegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
     //Validation
-    if (!fullname || !email || !email.includes('@') || !password) {
-        alert('Invalid details');
-        return;
+    if (!fullname || !email || !username || !password || !confirmPassword) {
+      setError('error! make each field is required')
+      setTimeout(() => {
+        setError("")
+      }, 3000)
+      setLoading(false)
+        return
+    }
+     //Validate email 
+     if (!email || !email.includes('@') || !email.includes('.')) {
+      setError("Invalid email")
+      setTimeout(() => {
+        setError("")
+      }, 3000)
+      setLoading(false)
+      return
+    }
+    // check if the password is valid
+    if (!passwordRegExp.test(password)){
+      setError("must be atleast 8 char combination of A-Z, a-z, 0-9")
+      setTimeout(() => {
+        setError("")
+      }, 3000)
+      setLoading(false)
+      return
+    }
+    // confirm the password
+    if (password !== confirmPassword) {
+      setError("password and confirm password must match")
+      setTimeout(() => {
+        setError("")
+      }, 3000)
+      setLoading(false)
+      return
     }
     //POST form values
+    try {
     const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -130,13 +176,29 @@ const Register = () => {
             password: password,
             confirmPassword: confirmPassword,
         }),
-    });
-    //Await for data for any desirable next steps
-    const data = await res.json();
-    console.log(data);
-};
+    })
+    if (res.ok ){
+      setSuccess(true)
+       //Await for data for any desirable next steps
+      // const data = await res.json()
+      // console.log(data)
+      router.push('/login')
+    } else if (res.status === 409){
+      setError("*user with same email or username already exists")
+      setTimeout(() => {
+        setError("")
+      }, 3000)
+    }
+  } catch (error) {
+    console.error(error)
+    setError(error)
+  }
+  setLoading(false) 
+}
 
-
+if (session) {
+  return <div>You have account already</div>
+}
 
   return (
     <Container>
@@ -155,11 +217,18 @@ const Register = () => {
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          <Button>CREATE</Button>
+          {error && <ErrorSuccess>{error}</ErrorSuccess>}
+          {success && <ErrorSuccess>Account created successfully</ErrorSuccess>}
+          <Button>
+            {loading ? 'Creating your account...' : 'CREATE'}
+            {/* CREATE */}
+          </Button>
         </Form>
         <Title>Sign up with</Title>
         <Social>
-          <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} onClick={() => signIn()}/>
+          <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} 
+                onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
+                />
           <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
           <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
           <LinkedInIcon sx={{color: "#0000EE", m: 1, cursor: "pointer", fontSize: 35}}/>
@@ -170,4 +239,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register

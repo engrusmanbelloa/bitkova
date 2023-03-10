@@ -262,7 +262,7 @@ const Navbar = () => {
               <>
                 {session ? 
                 <>
-                  <ProfilePic src={session.user.image} referrerPolicy="no-referrer"/>
+                  <ProfilePic src={session.user.image} referrerPolicy="no-referrer" onClick={() => router.push("/dashboard")}/>
                   <span style={{position: "relative", right: 5, top: -15, bottom: 0, marginLeft: 5}}>{session.user.name }</span>
                   <Smenu onClick={() => signOut()}>Sign out</Smenu>
                 </>

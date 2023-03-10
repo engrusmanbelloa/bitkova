@@ -1,267 +1,12 @@
 import NextAuth from "next-auth"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../auth/lib/mongodb"
-import { MongoClient } from 'mongodb';
+import {User, Account, Session} from '../models/UserModel'
+import connectDB from '../../../config/connectDB'
 import bcrypt from 'bcrypt'
-import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { ObjectId } from "mongodb"
-
-// Modules needed to support key generation, token encryption, and HTTP cookie manipulation 
-import { randomUUID } from 'crypto'
-import { setCookie, getCookie } from 'cookies-next';
-import { encode, decode } from 'next-auth/jwt'
-
-
-
-const MONGODB_URI = process.env.MONGODB_URI
-// next auth starts here
-
-// export default async function handler(req, res) {
-//   const adapter = MongoDBAdapter(clientPromise)
-  
-//   let userAccount = null
-//   // Do whatever you want here, before the request is passed down to `NextAuth`
-//   const generate = {}
-//   generate.uuid = function () {
-//     return uuidv4()
-//   }
-
-//   generate.uuidv4 = function () {
-//     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-//         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-//     )
-//   }
-// // Helper functions to generate unique keys and calculate the expiry dates for session cookies
-//   const generateSessionToken = () => {
-//     // Use `randomUUID` if available. (Node 15.6++)
-//     return randomUUID?.() ?? generate.uuid()
-//   }
-
-//   const fromDate = (time, date = Date.now()) => {
-//     return new Date(date + time * 1000)
-//   }
-
-//   //    callbacks for the sessions
-// const callbacks = {
-//   async redirect({ url, baseUrl }) {
-//     // Allows relative callback URLs
-//     if (url.startsWith("/")) return `${baseUrl}${url}`
-//     // Allows callback URLs on the same origin
-//     else if (new URL(url).origin === baseUrl) return url
-//     return baseUrl
-//   },
-//   async signIn({ user, account, profile, email, credentials }) {
-//     console.log("User Signin Start: ", account)
-//     // Check if this sign in callback is being called in the credentials authentication flow. If so, use the next-auth adapter to create a session entry in the database (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
-//     if (req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
-//       if (user) {
-//           const sessionToken =  generateSessionToken()
-//           const sessionMaxAge = 60 * 60 * 24 * 7; //7Days
-//           const sessionExpiry = fromDate(sessionMaxAge)
-
-//           console.log("Session token is: ", sessionToken)
-//           console.log("sessionExpiry: ", sessionExpiry);
-//           console.log("user.id: ", user.id)
-           
-//           const userId = user.id
-//           console.log("userId", userId)
-         
-//           const expires = sessionExpiry
-//           await adapter.createSession({
-//             _id: userId,
-//             sessionToken: sessionToken,
-//             userId: userId,
-//             expires: expires
-//           })
-
-//           // await adapter.createSession({
-//           //     sessionToken,
-//           //     userId,
-//           //     expires
-//           // })
-          
-//           setCookie("next-auth.session-token", sessionToken, {
-//             expires: sessionExpiry,
-//             req: req,
-//             res: res,
-//           })
-//           console.log("user Session: ", await adapter.createSession({
-//             id: userId,
-//             sessionToken: sessionToken,
-//             userId: ObjectId(userId),
-//             expires: expires,
-//         }))
-         
-//       }   
-//   }
-//     return true
-//   },
-
-//   async session({ session, token, user}) {
-
-//     console.log("Session. Got User: ", session, token)
-//     if (user !== null) {
-//       console.log("UserAccount Session Generation: ", user)
-//       session.user = {
-//         name: user.name,
-//         email: user.email,
-//       };
-//     console.log("Session.user: ", session.user)
-//     // return session
-//   }
-//   if (
-//     token && typeof token.user !== typeof undefined && (typeof session.user === typeof undefined ||
-//       (typeof session.user !== typeof undefined && typeof session.user.id === typeof undefined))
-//   ) {
-//     session.user = token.user
-//   }
-//   if (typeof token !== typeof undefined) {
-//     session.token = token
-//   }
-//   console.log("Session: ", session)
-//   return session
-// },
-
-// async jwt({ token, user, account, profile, isNewUser }) {
-//   console.log("JWT callback. Got User: ", user)
-//   if (typeof user !== typeof undefined) {
-//     token.user = user;
-//   }
-//   return token
-// },
-// }
-
-//   const options = {
-//       session: {
-//               strategy: "database",
-//               maxAge: 7 * 24 * 60 * 60,
-//               updateAge: 24 * 60 * 60,
-//               // generateSessionToken: () => {
-//               //   return randomUUID?.() ?? randomBytes(32).toString("hex")
-//               // }    
-//             },
-//       cookies: {
-//               sessionToken: {
-//                 name: "next-auth.session-token",
-//                 options: {
-//                   httpOnly: true,
-//                   sameSite: "lax",
-//                   path: "/",
-//                   secure: process.env.NODE_ENV === "production",
-//                 },
-//               },
-//             },
-//       jwt: {
-//         // Customize the JWT encode and decode functions to overwrite the default behaviour of storing the JWT token in the session cookie when using credentials providers. Instead we will store the session token reference to the session in the database.
-//         encode: async (token, secret, maxAge) => {
-//             if (req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
-//                 // const cookies = new Cookies(req,res)
-
-//                 // const cookie = cookies.get('next-auth.session-token')
-//                 const cookie = getCookie("next-auth.session-token", { req: req });
-
-//                 console.log("pure Cookie: ", cookie);
-
-//                 if(cookie) return cookie
-//                 else return ''
-
-//             }
-//             // Revert to default behaviour when not in the credentials provider callback flow
-//             return encode(token, secret, maxAge)
-//         },
-//         decode: async (token, secret) => {
-//             if (req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
-//                 return null
-//             }
-
-//             // Revert to default behaviour when not in the credentials provider callback flow
-//             return decode(token, secret)
-//         }
-//       },
-//       debug: process.env.NODE_ENV === "development",
-//       adapter,
-//       secret: process.env.NEXTAUTH_SECRET,
-//       providers: [
-
-//         CredentialsProvider({
-//           name: 'Credentials',
-//           async authorize(credentials, req) {
-//             const client = new MongoClient(MONGODB_URI, {},) 
-//             try {
-//                 await client.connect()
-//             } catch (e) {
-//                 console.error(e)
-//             }
-//             const email = credentials.email
-//             const password = credentials.password
-//             //Get all the users
-//             const users = client.db().collection('users')
-//             const sessions = client.db().collection('sessions')
-//             //Find user with the email  
-//             const user = await users.findOne(
-//               {
-//                   $or: [
-//                       { email: email }, { username: email }
-//                   ]
-//               }
-//             )
-
-//           //   //Not found - send error res
-//             if (!user) {
-//                 client.close();
-//                 throw new Error('No user found with this credential')
-//             }
-
-//             console.log("Authorize User Credentials: ", user)
-//             //Check hased password with DB password
-//             const checkPassword = bcrypt.compareSync(password, user.password)
-//             //Incorrect password - send response
-//             if (!checkPassword) {
-//                 client.close();
-//                 throw new Error('Password doesnt match')
-//             }
-//             //Incorrect password - send response
-//             if (!checkPassword) {
-//                 client.close();
-//                 throw new Error('Password doesnt match')
-//             }
-//             //Else send success response
-//             client.close();
-//             return {
-//             id: user._id,
-//             name: user.name,
-//             email: user.email,
-//           }
-//         },
-          
-//         }),
-//         GoogleProvider({
-//         clientId: process.env.GOOGLE_CLIENT_ID,
-//         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//         allowDangerousEmailAccountLinking: true,
-//         }),
-//         FacebookProvider({
-//             clientId: process.env.FACEBOOK_CLIENT_ID,
-//             clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-//         }),
-//       // ...add more providers here
-//     ],
-//     callbacks: callbacks,
-//     pages: {
-//       signIn: '/signin',
-//       signOut: '/signout',
-//       error: '/auth/error', // Error code passed in query string as ?error=
-//       verifyRequest: '/auth/verify-request', // (used for check email message)
-//       // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-//     }, 
-    
-//   }
-
-//   return await NextAuth(req, res, options)
-
-// }
+import GoogleProvider from "next-auth/providers/google"
+import FacebookProvider from "next-auth/providers/facebook"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 
 export const authOptions = {
@@ -270,78 +15,65 @@ export const authOptions = {
     session: {
       strategy: "jwt",
       maxAge: 3000,
-      updateAge: 24 * 60 * 60,
+      // updateAge: 24 * 60 * 60,
       // generateSessionToken: () => {
       //   return randomUUID?.() ?? randomBytes(32).toString("hex")
       // }    
     },
-    // jwt: {
-    //   async encode({ token }) {
-    //     return jwt.sign(token as {}, process.env.JWT_SECRET!);
-    //   },
-    //   async decode({ token }) {
-    //     return jwt.verify(token!, process.env.JWT_SECRET!) as JWT;
-    //   },
-    // },
-    // jwt: {
-    //   async encode({ secret, token }) {
-    //     return jwt.sign(token, secret)
-    //   },
-    //   async decode({ secret, token }) {
-    //     return jwt.verify(token, secret)
-    //   },
-    // },
     providers: [
         CredentialsProvider({
           name: 'Credentials',
-          async authorize(credentials, req) {
-            const client = new MongoClient(MONGODB_URI, {},) 
+          async authorize(credentials, req, res) {
             try {
-                await client.connect()
+              // const client = await clientPromise 
+              // await clientPromise
+              //Connect with database
+              connectDB()
+              const email = credentials.email
+              const password = credentials.password
+              //Find user with the email  or password
+              const user = await  User.findOne(
+                {
+                    $or: [
+                        { email: email }, { username: email }, //{ walletAddress: walletAddress }
+                    ]
+                }
+              )
+              
+              if (!user) {
+                  throw new Error('No user found with the email')
+              }
+              //Check hased password with DB password
+              const checkPassword = bcrypt.compareSync(password, user.password)
+              //Incorrect password - send response
+              if (!checkPassword) {
+                  throw new Error('Password doesnt match')
+              }
+              //Incorrect password - send response
+              if (!checkPassword) {
+                throw new Error('Password doesnt match')
+            }
+            return {
+              id: user.id,
+              name: user.name,
+              walletAddress: user.walletAddress,
+              isAdmin: user.isAdmin,
+              isTutor: user.isTutor,
+              email: user.email,
+              username: user.username, 
+              phone: user.phone,
+              boi: user.bio,
+              image: user.image, 
+              joined: user.createdAt,
+              enrolledCourses: user.enrolledCourses,
+              activeCourse: user.activeCourse,
+              completedCourses: user.completedCourses,
+              wishlsit: user.wishlsit, 
+            }
             } catch (e) {
                 console.error(e)
             }
-            const email = credentials.email
-            const password = credentials.password
-            //Get all the users
-            const users = client.db().collection('users')
-            //Find user with the email  
-            const user = await users.findOne({
-                email: email,
-            });
-            //Not found - send error res
-            if (!user) {
-                client.close();
-                throw new Error('No user found with the email')
-            }
-            //Check hased password with DB password
-            const checkPassword = bcrypt.compareSync(password, user.password)
-            //Incorrect password - send response
-            if (!checkPassword) {
-                client.close();
-                throw new Error('Password doesnt match')
-            }
-          //   //Check jwt token with DB token
-          //   const curentToken = jwt.sign({email, password}, process.env.JWT_SECRET)
-          //   const checkToken = jwt.verify(user.token, process.env.JWT_SECRET)
-          //   if (checkToken === curentToken) {
-          //     client.close();
-          //     throw new Error('you are not allowed')
-          // }
-            //Incorrect password - send response
-            if (!checkPassword) {
-                client.close();
-                throw new Error('Password doesnt match')
-            }
-            //Else send success response
-            client.close();
-            return {
-              name: result.name,
-              email: result.email,
-              // image: result.image, 
-            };
-        },
-          
+        },    
         }),
         GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID,
@@ -354,6 +86,47 @@ export const authOptions = {
         }),
       // ...add more providers here
     ],
+  events: {
+      async signIn(message) {
+        if (message?.isNewUser) {
+          const { email } = message.user
+          console.log("the user is new", message.isNewUser)
+
+          // Add custom fields to user object
+          message.user.username = null
+          message.user.walletAddress = ""
+          message.user.phone = null
+          message.user.isAdmin = false
+          message.user.isTutor = false
+          message.user.enrolledCourses = []
+          message.user.activeCourse = []
+          message.user.completedCourses = []
+          message.user.wishlsit = []
+          message.user.bio = null
+  
+          // Save user object to database
+          try {
+            // Connect to database
+            connectDB()
+            console.log("Connecting to database")
+            // Rest of the code here
+            const existingUser = await User.findOne({email})
+            if (existingUser) {
+              // If user already exists, update the user document with the new data
+              await User.updateOne({email}, {$set: message.user})
+              res.status(202).json({ message: 'successfully added the fields to the user document' })
+              console.log("successfully updated user document")
+            }else {
+              // If user doesn't exist, create a new user document
+              await User.create({email, ...message.user})
+            }
+          } catch (error) {
+            console.log(error)
+            throw new Error('Could not connect to database')
+          }
+        }
+      },
+    },
 
     pages: {
       signIn: '/signin',
@@ -363,31 +136,54 @@ export const authOptions = {
       // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
     },
 
-// SQL or MongoDB database (or leave empty)
-// database: process.env.DATABASE_URL,
-
-
-//    callbacks for the sessions
-callbacks: {
-  async redirect({ url, baseUrl }) {
-    // Allows relative callback URLs
-    if (url.startsWith("/")) return `${baseUrl}${url}`
-    // Allows callback URLs on the same origin
-    else if (new URL(url).origin === baseUrl) return url
-    return baseUrl
-  },
-  async signIn({ user, account, profile, email, credentials }) {
-    return true
-  },
-  async session({ session, token, user }) {
-    return session
-  },
-  async jwt({ token, user, account, profile, isNewUser }) {
-    return token
+  //    callbacks for the sessions
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    },
+    async signIn({ user, account, profile, email, credentials,}) {
+      return true
+    },
+    async session({ session, token, user }) {
+      try {
+        session.user.isAdmin = token.isAdmin
+        session.user.isTutor = token.isTutor
+        session.user.username = token.username
+        session.user.phone = token.phone
+        session.user.bio = token.bio
+        session.user.joined = token.joined
+        session.user.enrolledCourses = token.enrolledCourses
+        session.user.activeCourse = token.activeCourse
+        session.user.completedCourses = token.completedCourses
+        session.user.wishlsit = token.wishlsit
+      } catch (error) {
+        console.error(error)
+      }
+      console.log("session is", session)
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (user) {
+        token.isAdmin = user.isAdmin
+        token.isTutor = user.isTutor
+        token.username = user.username
+        token.phone = user.phone
+        token.bio = user.bio        
+        token.joined = user.createdAt
+        token.enrolledCourses = user.enrolledCourses
+        token.activeCourse = user.activeCourse
+        token.completedCourses = user.completedCourses
+        token.wishlsit = user.wishlsit
+      }
+      console.log("token is", token)
+      return token
+    }
   }
 }
 
+export default NextAuth(authOptions)
 
-
-  }
-export default NextAuth(authOptions);

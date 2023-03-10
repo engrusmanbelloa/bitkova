@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+mongoose.set("strictQuery", false)
 const connectDB = () => {
   if(mongoose.connections[0].readyState){
     console.log('Already connected.')
@@ -12,4 +12,4 @@ const connectDB = () => {
   })
 }
 
-export default connectDB;
+export default connectDB

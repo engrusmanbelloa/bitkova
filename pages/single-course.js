@@ -293,7 +293,7 @@ const SingleCourse = () => {
       <CoursesList title="Related courses"/>
       <Newsletter />
     </Container>
-  );
-};
+  )
+}
 
-export default SingleCourse;
+export default SingleCourse

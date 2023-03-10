@@ -1,21 +1,23 @@
-import * as React from 'react';
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import styled from "styled-components"
 import Newsletter from "../components/Newsletter"
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CastForEducationIcon from '@mui/icons-material/CastForEducation';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MyLearning from '../components/MyLearning';
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import CastForEducationIcon from '@mui/icons-material/CastForEducation'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import MyLearning from '../components/MyLearning'
 import {mobile, ipad} from "../responsive"
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 
 
 const Container = styled.div`
@@ -171,6 +173,20 @@ const ImageBox = styled.img`
   height: 200px;
 `;
 
+const SetUpdate = styled.div`
+  font-size: 18px;
+  margin: 10px auto;
+  font-weight: 400;
+  color: #fff;
+  width: 10%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 0.5px solid;
+  box-shadow: 5px 5px #CDDEFF;
+  text-align: center;
+  background: rgba(28, 56, 121, 1);
+`;
+
 //  dashborad tab pannel 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -202,27 +218,44 @@ const rows = [
 
 
 const Dashboard = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0)
+  const [update, setUpdate] = useState(false)
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(newValue)
+  }
+  useEffect(() =>{
+    if (!session) {
+      router.push("/login")
+    } else if (session.user.phone === undefined || session.user.phone === null){
+      setUpdate(true)
+      setTimeout(() => {
+        router.push("/profile-update")
+      }, 3000)
+    }
+  },[session])
+
+  if (update) {
+    return <SetUpdate>Please complete your profile setup</SetUpdate>
   }
 
   return (
     <Container>
-      <Wrapper> 
+      { session ? <Wrapper> 
         <InfoContainer>
-          <AvatarImg src="/review/usman.jpg" alt="profile picture"/>
+          <AvatarImg src={session.user.image} alt="profile picture"/>
         </InfoContainer>
         <InfoContainer>
-          <Title>Bello Usman</Title>
-          <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          </Desc>
+          <Title>{session.user.name}</Title>
+          <Desc> {session.user.bio}</Desc>
         </InfoContainer>
         <AddCourseBtn>
-          <AddButton ipadBtn>Add new course</AddButton>
+        {session.user.isAdmin || session.user.isTutor ? <AddButton ipadBtn>Add new course</AddButton> : ""}
         </AddCourseBtn>
+        {/* <AddButton  type="button" onClick={() => router.push("/profile-update")}>Edit profile</AddButton> */}
       </Wrapper>
+      : ""}
         <Box>
           <Tabs
             orientation="vertical"
@@ -352,4 +385,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Dashboard
