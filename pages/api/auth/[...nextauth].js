@@ -14,7 +14,7 @@ export const authOptions = {
     adapter: MongoDBAdapter(clientPromise),
     session: {
       strategy: "jwt",
-      maxAge: 3000,
+      maxAge: 60 * 60 * 24,
       // updateAge: 24 * 60 * 60,
       // generateSessionToken: () => {
       //   return randomUUID?.() ?? randomBytes(32).toString("hex")
@@ -160,6 +160,7 @@ export const authOptions = {
         session.user.activeCourse = token.activeCourse
         session.user.completedCourses = token.completedCourses
         session.user.wishlsit = token.wishlsit
+        session.user.access_token = token.access_token
       } catch (error) {
         console.error(error)
       }
@@ -178,6 +179,7 @@ export const authOptions = {
         token.activeCourse = user.activeCourse
         token.completedCourses = user.completedCourses
         token.wishlsit = user.wishlsit
+        token.access_token = account.access_token
       }
       console.log("token is", token)
       return token

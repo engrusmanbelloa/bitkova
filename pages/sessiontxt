@@ -1,9 +1,0 @@
-// update the session
-            const newSession = { ...session }
-            newSession.user = response
-            sessionStorage.setItem("next-auth.session-token", JSON.stringify(newSession))
-            // setFullname(session.user.name)
-            // setUsername(session.user.username)
-            // setPhone(session.user.phone)
-            // setBio(session.user.bio)
-            console.log("updated user data", response)

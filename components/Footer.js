@@ -8,6 +8,7 @@ import Telegram from '@mui/icons-material/Telegram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { useRouter } from 'next/router'
 
 const Container = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ const Desc = styled.p`
   font-size: 20px;
   line-spacing: 1.5;
   line-height: 1.5;
+  text-align: justify;
   ${ipad({
     margin: "5px 0",
     fontSize: "16px",
@@ -54,6 +56,7 @@ const SocialIcon = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 20px;
+  cursor: pointer;
 `;
 
 const Center = styled.div`
@@ -98,6 +101,7 @@ const Payment = styled.img`
 `;
 
 const Footer = () => {
+  const router = useRouter()
   return (
     <>
       <Container>
@@ -110,16 +114,16 @@ const Footer = () => {
          </Desc>
          <SocialContainer>
            <SocialIcon>
-            <FacebookIcon sx={{color: "#fff"}} />
+            <FacebookIcon sx={{color: "#fff"}} onClick={()=> router.push("https://web.facebook.com/AcademyBitkova")} />
            </SocialIcon>
            <SocialIcon>
-             <InstagramIcon sx={{color: "#E4405F"}} />
+             <InstagramIcon sx={{color: "#E4405F"}} onClick={()=> router.push("https://www.instagram.com/bitkovang/")} />
            </SocialIcon>
            <SocialIcon>
-            <TwitterIcon sx={{color: "#55ACEE"}} />
+            <TwitterIcon sx={{color: "#55ACEE"}} onClick={()=> router.push("https://twitter.com/BitkovaNg")} />
            </SocialIcon>
           <SocialIcon>
-             <Telegram sx={{color: "#1c92d2"}} />
+             <Telegram sx={{color: "#1c92d2"}} onClick={()=> router.push("https://t.me/bitkovaacademy")} />
           </SocialIcon>
          </SocialContainer>
         </Left>

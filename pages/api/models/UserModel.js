@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: Number, default: null},
   bio: { type: String, default: null},
   password: {  type: String,},
+  points: { type: Number, default: null},
   isAdmin: { type: Boolean, default: false,},
   isTutor: { type: Boolean, default: false,},
   image: { type: String, default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png' },

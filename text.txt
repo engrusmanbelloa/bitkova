@@ -1,0 +1,10 @@
+// const videoData = await cloudinary.v2.uploader.upload(video._writeStream.path, {
+            //   resource_type: 'video',
+            //   upload_preset: "courses_upload",
+            //   folder: `${courseTitle}/lesson_${i}/videos`,
+            // })
+            // lessonObj.videos.push({
+            //   name: video.originalFilename.slice(0, -4),
+            //   url: videoData.secure_url,
+            //   publicId: videoData.public_id,
+            // })

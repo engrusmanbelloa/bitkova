@@ -33,6 +33,8 @@ const ImageContainer = styled.div`
 const Image = styled.img`
   width: 120vh;
   height: 60vh;
+  animation: pulse;
+  animation-duration: 2s;
   ${ipad({ width: "110vh" })}
   ${mobile({display: "none"})}
 `;
@@ -41,7 +43,7 @@ const InfoContainer = styled.div`
   flex: 1;
   padding: 15px;
   text-align: justify;
-  animation: bounceIn;
+  animation: pulse;
   animation-duration: 2s;
   ${ipad({textAlign: "justify",})}
 `;
@@ -75,26 +77,27 @@ const Button = styled.button`
 `;
 
 const Courses = (href) => {
-  return <Container>
-            <Wrapper>
-            <InfoContainer>
-                <Title>Courses</Title>
-                <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique  consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus cursus consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
-                <Link href="#courses" passHref legacyBehavior>
-                  <Button>View courses</Button>
-                </Link>
-            </InfoContainer>
-            <ImageContainer>
-              <Image src="/chd.jpg" alt="Picture of the author"/>
-            </ImageContainer>
-            </Wrapper>
-            <div id="courses">
-             <CoursesList title="Latest courses"/>
-            </div>
-            <Intro/>
-            <Testimonals/>
-            <Newsletter/>
-         </Container>;
-};
+  return (
+    <Container>
+      <Wrapper>
+      <InfoContainer>
+        <Title>Courses</Title>
+        <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique  consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus cursus consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
+        <Link href="#courses" passHref legacyBehavior>
+          <Button>View courses</Button>
+        </Link>
+      </InfoContainer>
+      <ImageContainer>
+        <Image src="/chd.jpg" alt="Picture of the author"/>
+      </ImageContainer>
+      </Wrapper>
+      <div id="courses">
+        <CoursesList title="Latest courses"/>
+      </div>
+      <Testimonals/>
+      <Newsletter/>
+    </Container>
+  )
+}
 
 export default Courses;

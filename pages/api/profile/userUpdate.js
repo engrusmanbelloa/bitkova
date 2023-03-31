@@ -1,8 +1,8 @@
 import { IncomingForm } from "formidable"
 import { getToken } from 'next-auth/jwt'
-import cloudinary from "../../config/cloudinary"
-import connectDB from "../../config/connectDB"
-import {User} from "../api/models/UserModel"
+import cloudinary from "../../../config/cloudinary"
+import connectDB from "../../../config/connectDB"
+import {User} from "../models/UserModel"
 export const config = {
   api: {
     bodyParser: false
@@ -22,7 +22,6 @@ export default async function handler(req, res) {
   console.log("Receiving")
   // get user's token
   const token = await getToken({ req })
-  // if no token
   if (!token) {
     return res.status(401).json({ error: 'You are not signed in', data: null })
   }
@@ -51,16 +50,10 @@ export default async function handler(req, res) {
       const fullName = fullname.join()
       const userName = username.join()
       const biography = bio.join()
-
-      console.log("user form detail", id, fullName, phoneNumber, userName, biography)
-      // if (!id) {
-      //   return res.status(401).json({ error: 'Not authenticated' })
-      // }
-      
+      // console.log("user form detail", id, fullName, phoneNumber, userName, biography)
+     
       const {image} = files
       const path = image[0].filepath
-      console.log("user image path is", path)
-      // res.status(200).json({ fields, files})
 
       // delete the previous image if it exists in the cloudinary and insert new one
       if (token.picture.includes("cloudinary")) {
@@ -72,10 +65,9 @@ export default async function handler(req, res) {
       // Upload
       console.log("starting img upload...")
 
-      const imgLink = await cloudinary.uploader.upload(path, {
-        // folder: "folders/users",
-        // upload_preset: "user_profile",
-        // allowed_formats: "jpg, png, jpeg",
+      const imgLink = await cloudinary.v2.uploader.upload(path, {
+        folder: "users",
+        upload_preset: "user_profile",
         // transformation: [
         //   {
         //     width: 150,
@@ -85,9 +77,7 @@ export default async function handler(req, res) {
         //   },
         // ],
       })
-      const imageUrl = await imgLink.secure_url
-      console.log("image link folder is", imgLink.folder)
-      console.log("image https url is", imageUrl)
+      const imageUrl = imgLink.secure_url
 
       // Check if the authenticated user is an administrator
       // Connect to the database

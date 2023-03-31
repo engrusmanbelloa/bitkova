@@ -1,12 +1,13 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Rating from '@mui/material/Rating';
-import styled from 'styled-components';
-import { testimonials } from "../data";
-import { mobile, ipad} from "../responsive";
+import React from 'react'
+import Avatar from '@mui/material/Avatar'
+import Card from '@mui/material/Card'
+import CardMedia from '@mui/material/CardMedia'
+import CardContent from '@mui/material/CardContent'
+import Rating from '@mui/material/Rating'
+import styled from 'styled-components'
+import { testimonials } from "../data"
+import { mobile, ipad} from "../responsive"
+import { AnimationOnScroll } from 'react-animation-on-scroll'
 
 const Container = styled.section`
   margin: 0px 0px 20px;
@@ -89,6 +90,7 @@ export const Testimonals = ()=> {
     {testimonials.map((review) => (
     <Wrapper key={review.id}>
     <CardBox>
+    <AnimationOnScroll animateIn="animate__pulse animate__slower">
     <Card variant="elevation" elevation={15} sx={{width: 230,}}>
       <CardMedia
         sx={{width: 250, padding: 10}}
@@ -107,6 +109,7 @@ export const Testimonals = ()=> {
           </Review>
       </CardContent>
     </Card>
+    </AnimationOnScroll>
     </CardBox>
     </Wrapper>
     ))}

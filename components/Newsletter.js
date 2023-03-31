@@ -1,6 +1,7 @@
-import SendIcon from '@mui/icons-material/Send';
-import styled from "styled-components";
-import { mobile, ipad} from "../responsive";
+import SendIcon from '@mui/icons-material/Send'
+import styled from "styled-components"
+import { AnimationOnScroll } from 'react-animation-on-scroll'
+import { mobile, ipad} from "../responsive"
 
 const Container = styled.div`
   height: 300px;
@@ -36,7 +37,9 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   border: 1px solid lightgray;
-  ${mobile({ width: "80%",})}
+  ${mobile({ 
+    width: "97%",
+    })}
 `;
 
 const Input = styled.input`
@@ -44,8 +47,10 @@ const Input = styled.input`
   flex: 8;
   padding-left: 20px;
   font-size: 20px;
+  outline: none;
   ${mobile({
-    paddingLeft: "5px",
+    margin: 0,
+    flex: 7,
   })}
 `;
 
@@ -59,7 +64,9 @@ const Button = styled.button`
 const Newsletter = () => {
   return (
     <Container>
-      <Title>Newsletter</Title>
+      <AnimationOnScroll animateIn="animate__pulse animate__slower">
+        <Title>Newsletter</Title>
+      </AnimationOnScroll>
       <Desc>Get timely updates for new discoveries, discounts and scholarships from bitkova academy</Desc>
       <InputContainer>
         <Input placeholder="Your email" />
@@ -68,7 +75,7 @@ const Newsletter = () => {
         </Button>
       </InputContainer>
     </Container>
-  );
-};
+  )
+}
 
 export default Newsletter;

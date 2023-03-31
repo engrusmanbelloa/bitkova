@@ -97,8 +97,7 @@ const PicUploadIcon = styled.span`
   left: 40px;
 `;
 
-
-export default function IndexPage() {
+const ProfileUpdate = () => {
     const [fullname, setFullname] = useState("")
     const [username, setUsername] = useState("")
     const [phone, setPhone] = useState("")
@@ -128,8 +127,6 @@ export default function IndexPage() {
         setSelectedFile(file)
         const url = URL.createObjectURL(file)
         setCreateObjectURL(url)
-        console.log("createObjectURL is: ", createObjectURL)
-        console.log("file is: ", file)
     }
     const handleSubmit = async (e) => {
       e.preventDefault()
@@ -140,9 +137,8 @@ export default function IndexPage() {
       formData.append("username", username)
       formData.append("phone", phone)
       formData.append("bio", bio)
-      console.log([...formData.entries()])
       try {
-        const response = await fetch("/api/user", {
+        const response = await fetch("/api/profile/userUpdate", {
           method: "PUT",
           body: formData
         }).then(response => {
@@ -152,7 +148,6 @@ export default function IndexPage() {
               signOut()
               router.push("/login")
             }, 3000)
-            console.log("Response data is ", response.json())
           } else {
             setSuccess(false)
           }
@@ -193,3 +188,6 @@ export default function IndexPage() {
     </Container>
   </>
 )}
+
+
+export default ProfileUpdate

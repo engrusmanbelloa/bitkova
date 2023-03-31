@@ -1,15 +1,15 @@
-import AspectRatio from '@mui/joy/AspectRatio';
-import Card from '@mui/material/Card';
-import styled, { keyframes } from "styled-components";
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AspectRatio from '@mui/joy/AspectRatio'
+import Card from '@mui/material/Card'
+import styled, { keyframes } from "styled-components"
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import "animate.css/animate.min.css";
-import { AnimationOnScroll } from 'react-animation-on-scroll';
-import Link from 'next/link';
+import { AnimationOnScroll } from 'react-animation-on-scroll'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from "react";
 import {featuredCoures} from "../data"
-import { mobile, ipad} from "../responsive";
+import { mobile, ipad} from "../responsive"
 
 
 const Container = styled.section`
@@ -97,6 +97,9 @@ const Title = styled.h2`
   font-weight: 800;
   margin-bottom: 5px;
   text-align: center;
+  ${mobile({
+    fontSize: '18px',
+   })}
 `;
 
 const Desc = styled.p`
@@ -126,11 +129,17 @@ const CoursesList = (props) => {
     
     <Wrapper>
       {featuredCoures.map((courses) =>(
-        <AnimationOnScroll key={courses.id} animateIn="animate__slideInUp animate__slower">
+        <AnimationOnScroll key={courses.id} animateIn="animate__pulse animate__slower">
           <Card variant="elevation" elevation={10} 
             sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, 
             color: "#fff", borderRadius: 3,
             ":&hover":{},
+            '@media screen and (max-width: 768px)': {
+              ml: 2, mr: 1,
+                },
+            '@media screen and (max-width: 600px)': {
+              width: "290px", ml: 2, mr: 1,
+            },
             }}>
             <AspectRatio minHeight="120px" maxHeight="200px">
               <img

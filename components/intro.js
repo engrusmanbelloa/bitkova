@@ -54,8 +54,10 @@ const Desc = styled.p`
   letter-spacing: 1.5;
   line-height: 1.5;
   ${mobile({
-    fontSize: "16px",
-    textAlign: "left",
+    fontSize: "18px",
+    textAlign: "justify",
+    fontWeight: 300,
+    margin: "5px"
    })}
 `;
 

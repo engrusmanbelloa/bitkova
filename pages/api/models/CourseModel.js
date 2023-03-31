@@ -1,23 +1,33 @@
 import mongoose from 'mongoose'
 
+const lessonSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  pdfs: [{
+    title: { type: String, required: true },
+    link: { type: String, required: true }
+  }],
+  videos: [{
+    title: { type: String, required: true },
+    link: { type: String, required: true }
+  }]
+})
+
 const coursesSchema = new mongoose.Schema({
   title: { type: String, required: true,},
-  desc: { type: String, required: true,},
-  duration: {hours: number, minutes: number,},
-  price: {  type: number, required: true},
-  onDemandVideos: [{type: String, required: true}],
-  downloadableFiles: [{type: String, required: true}],
-  courseDesc: { type: String, required: true},
+  shortDesc: { type: String, required: true,},
+  duration: {hours: Number, minutes: Number,},
+  price: {  type: Number, required: true},
   about: { type: String, required: true},
-  whatYoullLearn: {type : Array , "default" : []},
-  courseContent: {type: Array, "default" : []},
+  whatYoullLearn: {type : Array, required: true,},
+  courseContent: {type: Array, required: true,},
+  lessons: [lessonSchema],
   reviews: [{
     name: { type: String, required: true },
     comment: { type: String, required: true },
     rating: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now },
   }],
-  image: { type: String, default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png' },
+  image: { type: String},
   meta: {
     votes: Number,
     favs:  Number

@@ -14,7 +14,7 @@ const Container = styled.section`
   position: relative;
   overflow: hidden;
   ${ipad({
-    height: "300px" 
+    height: "370px" 
     })}
  `;
 
