@@ -5,7 +5,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import styled from "styled-components"
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 import {mobile, ipad} from "../responsive"
-import Loading from '../components/Loading'
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -64,6 +63,8 @@ const UploadDiv = styled.div`
   text-align: center;
   padding: 0;
   color: #fff;
+  ${ipad({height: "100px",})}
+  ${mobile({height: "65px",})}
 `;
 
 const Button = styled.button`
@@ -87,6 +88,7 @@ const Img = styled.img`
   padding: 0;
   position: absolute;
   ${ipad({width: "100px", height: "100px",})}
+   ${mobile({width: "65px", height: "65px",})}
 `;
 
 const PicUploadIcon = styled.span`
@@ -95,6 +97,7 @@ const PicUploadIcon = styled.span`
   position: relative;
   top: 60px;
   left: 40px;
+  ${mobile({width: "65px", height: "65px", top: 20, left: 20})}
 `;
 
 const ProfileUpdate = () => {
@@ -108,7 +111,7 @@ const ProfileUpdate = () => {
     const [createObjectURL, setCreateObjectURL] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
     const { data: session, status } = useSession()
-
+    const router = useRouter()
     useEffect(() => {
       // Preload the form with user info
       if (session) {
@@ -119,7 +122,7 @@ const ProfileUpdate = () => {
         setBio(session.user.bio)
       }
     }, [session])
-
+  
     let formData = new FormData()
     const handleChange = (e) => {
         e.preventDefault()
@@ -131,23 +134,23 @@ const ProfileUpdate = () => {
     const handleSubmit = async (e) => {
       e.preventDefault()
       setLoading(true)
-      formData.append('image', selectedFile)
+      selectedFile && formData.append('image', selectedFile)
       formData.append('id', session.user.id)
       formData.append("fullname", fullname)
       formData.append("username", username)
       formData.append("phone", phone)
       formData.append("bio", bio)
       try {
-        const response = await fetch("/api/profile/userUpdate", {
+        await fetch("/api/profile/userUpdate", {
           method: "PUT",
           body: formData
-        }).then(response => {
-          if (response.ok ){
+        }).then( async (res) => {
+          if (res.ok ){
             setSuccess(true)
             setTimeout(() => {
               signOut()
-              router.push("/login")
-            }, 3000)
+            }, 1000)
+            router.push("/login")
           } else {
             setSuccess(false)
           }
@@ -157,9 +160,10 @@ const ProfileUpdate = () => {
         setError(error)
       }
         setLoading(false)
+        // console.log([...formData.entries()])
       }
-     // make sure the user is logged in
-      if (!session && status !== "loading") {
+     // make sure the user is logged in 
+      if (!session) {
         return <div>Not signed in</div>
       }
   return (
@@ -169,25 +173,32 @@ const ProfileUpdate = () => {
       <Title>Profile update</Title>
       <UploadDiv>
         {error && <div>{error.message}</div>}
-        {loading && <div>uploading</div>}
+        {loading && <div>updating</div>}
         {success && <div>Profile updated successfully</div>}
         <Img src={createObjectURL} />
-        <PicUploadIcon><EditIcon sx={{color: "#3b5998", m: 1,
-         cursor: "pointer", position: "relative", fontSize: 30, bgcolor: "#fff", borderRadius: 50}}
-         /></PicUploadIcon>
+        <PicUploadIcon>
+        <EditIcon sx={{
+          color: "#3b5998", 
+          m: 1,
+          cursor: "pointer", 
+          position: "relative", 
+          fontSize: 30, 
+          bgcolor: "#fff", 
+          borderRadius: 50}}
+         />
+         </PicUploadIcon>
         <Upload accept="image/png, image/jpeg, image/jpg" type="file" required onChange={handleChange} />
       </UploadDiv>
         <Form method="post" onSubmit={handleSubmit}>
           <Input type="text" placeholder="Fullname" required value={fullname} onChange={(e) => setFullname(e.target.value)}/>
-          <Input type="text" placeholder="Username" required value={username} onChange={(e) => setUsername(e.target.value)}/>
-          <Input placeholder="Phone" required value={phone} onChange={(e) => setPhone(e.target.value)}/>
-          <Input type="text" placeholder="tell us about you in 1 sentence" required value={bio} onChange={(e) => setBio(e.target.value)}/>
-          <Button type="submit"  disabled={loading}>Update</Button>
+          <Input type="text" placeholder="Username" required value={username || ""} onChange={(e) => setUsername(e.target.value)}/>
+          <Input type="tel"  placeholder="Phone" required value={phone || ""} onChange={(e) => setPhone(e.target.value)}/>
+          <Input type="text" placeholder="tell us about yourself in 1 sentence" required value={bio || ""} onChange={(e) => setBio(e.target.value)}/>
+          <Button type="submit"  disabled={loading}>{loading ? 'Updating...' : 'Update'}</Button>
       </Form>
       </Wrapper>
     </Container>
   </>
 )}
-
 
 export default ProfileUpdate

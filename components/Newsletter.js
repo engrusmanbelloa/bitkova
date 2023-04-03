@@ -15,19 +15,14 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 70px;
   margin: 10px 10px;
-  ${ipad({
-    fontSize: "50px",
-  })}
+  ${ipad({ fontSize: 50,})}
 `;
 
 const Desc = styled.div`
   font-size: 24px;
   font-weight: 400;
   margin-bottom: 20px;
-  ${ipad({ 
-    textAlign: "center",
-    fontSize: "18px",
-    })}
+  ${ipad({ textAlign: "center", fontSize: 18, fontWeight: 300 })}
 `;
 
 const InputContainer = styled.div`
@@ -37,9 +32,7 @@ const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
   border: 1px solid lightgray;
-  ${mobile({ 
-    width: "97%",
-    })}
+  ${mobile({ width: "97%",})}
 `;
 
 const Input = styled.input`
@@ -48,10 +41,7 @@ const Input = styled.input`
   padding-left: 20px;
   font-size: 20px;
   outline: none;
-  ${mobile({
-    margin: 0,
-    flex: 7,
-  })}
+  ${mobile({ margin: 0, flex: 7, width: "90%"})}
 `;
 
 const Button = styled.button`
@@ -78,4 +68,4 @@ const Newsletter = () => {
   )
 }
 
-export default Newsletter;
+export default Newsletter

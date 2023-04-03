@@ -1,9 +1,9 @@
-import * as React from 'react';
-import styled from "styled-components";
-import {Progress} from "rsuite";
-import { useState } from "react";
-import {featuredCoures} from "../data";
-import {mobile, ipad} from "../responsive";
+import * as React from 'react'
+import styled from "styled-components"
+import {Progress} from "rsuite"
+import { useState } from "react"
+import {featuredCoures} from "../data"
+import {mobile, ipad} from "../responsive"
 
 const Container = styled.div`
   margin-top: 0px;
@@ -16,15 +16,14 @@ const Title = styled.h1`
   margin: 2% 0 0 0;
   line-height: 1.5;
   font-size: 25px;
-  ${ipad({
-    fontSize: 18,
-   })}
+  ${ipad({ fontSize: 18, })}
 `;
 
 const Heading = styled.h1`
   margin: 2% 0 0 0;
   line-height: 1.5;
   font-size: 25px;
+  ${mobile({ fontSize: 18, })}
 `;
 
 const DashBox = styled.div`
@@ -32,16 +31,8 @@ const DashBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  ${ipad({
-    width:  560,
-    marginLeft: 10,
-    justifyContent: "flex-start",
-    overflow: "scroll",
-   })}
-   ${mobile({
-    width: 315, marginBottom: 30, marginLeft: 0,
-    
-   })}
+  ${ipad({ width:  560, marginLeft: 10, justifyContent: "flex-start", overflow: "scroll",})}
+  ${mobile({ width: 315, marginBottom: 30, marginLeft: 0,})}
 `;
 
 const DashItemsBox = styled.div`

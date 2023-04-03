@@ -80,13 +80,21 @@ const Button = styled.button`
 
 const Intro = () => {
   return <Container>
-            <ImageContainer>
-              <Image src={img} alt="Picture of the author" width={320} height={320}/>
-            </ImageContainer>
+            <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
+              <ImageContainer>
+                <Image src={img} alt="Picture of the author" width={320} height={320}/>
+              </ImageContainer>
+            </AnimationOnScroll>
             <InfoContainer>
+            <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
               <Title>Why Bitkova</Title>
+            </AnimationOnScroll>
+            <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
               <Desc>To fill the need of individuals seeking in-demand crypto and blcockchain skills to improve their standard of living and attaining financial freedom by providing excellent hands-on training for a wider variety of students by offering alternate solutions to conventional schooling utilizing current internet technologies and proven teaching practices implemented by a team of professionals in blcockchain, e-commerce, forex, cryptocurrency, social media marketing and motion/graphics industries.</Desc>
-              <Button>Learn more</Button>
+            </AnimationOnScroll>
+            <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
+            <Button>Learn more</Button>
+            </AnimationOnScroll>
             </InfoContainer>
          </Container>;
 };

@@ -13,13 +13,15 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false,},
   isTutor: { type: Boolean, default: false,},
   image: { type: String, default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png' },
-  emailVerified: { type: String, default: null },
-  enrolledCourses: [{ type: String, default: null }],
-  activeCourse: [{ type: String, default: null }],
-  completedCourses: [{ type: String, default: null }],
-  wishlsit: [{ type: String, default: null }],
-}, 
-{ timestamps: true }
+  emailVerified: { type: Boolean, default: false },
+  enrolledCourses: [{ type: Array, default: [] }],
+  activeCourse: [{ type: Array, default: [] }],
+  completedCourses: [{ type: Array, default: [] }],
+  ownCourses: [{ type: Array, default: [] }],
+  wishlsit: [{ type: Array, default: [] }],
+  createdAt: { type: Date, default: Date.now()},
+  updatedAt: { type: Date, default: Date.now()},
+},
 )
 let User = mongoose.models.users || mongoose.model('users', userSchema)
 

@@ -1,10 +1,11 @@
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useState } from "react";
-import styled from "styled-components";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import { useState } from "react"
+import styled from "styled-components"
 import { useRouter } from 'next/router'
-import { sliderItems } from "../data";
+import { sliderItems } from "../data"
 import {mobile, ipad} from "../responsive"
+import { AnimationOnScroll } from 'react-animation-on-scroll'
 
 const Container = styled.section`
   width: 100%;
@@ -81,9 +82,9 @@ const InfoContainer = styled.div`
 
 const Title = styled.h1`
   font-size: 25px;
-  ${ipad({
-    fontSize: "16px",
-   })}
+  animation: pulse;
+  animation-duration: 1s;
+  ${ipad({fontSize: "16px"})}
 `;
 
 const Desc = styled.p`
@@ -91,12 +92,10 @@ const Desc = styled.p`
   font-weight: 300;
   letter-spacing: 2px;
   line-height: 1.5;
-  ${ipad({
-    fontSize: "11px",
-   })}
-   ${mobile({
-    fontSize: "14px",
-   })}
+  animation: pulse;
+  animation-duration: 1s;
+  ${ipad({fontSize: "11px" })}
+   ${mobile({ fontSize: "14px" })}
 `;
 
 const Button = styled.button`
@@ -139,11 +138,15 @@ const Slider = () => {
         {sliderItems.map((item) => (
            <Slide key={item.id} src={item.img} alt={"Picture of the author"}> 
             <InfoContainer>
-              <Title>{item.title}</Title>
-              <Desc>{item.desc}</Desc>
+              <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
+                <Title>{item.title}</Title>
+              </AnimationOnScroll>
+              <AnimationOnScroll animateIn="animate__pulse animate__slower" initiallyVisible="true">
+                <Desc>{item.desc}</Desc>
+              </AnimationOnScroll>
                 <Button type="button" onClick={() => router.push('/courses')}>Our courses</Button>
                 <Button type="button" onClick={() => router.push('/')}>About us</Button>
-             </InfoContainer>
+            </InfoContainer>
            </Slide>
          ))}
        </Wrapper>

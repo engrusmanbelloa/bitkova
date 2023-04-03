@@ -129,9 +129,9 @@ const News = () => {
             <Button>See more news</Button>
           </Box>
           <NewsContainer>
-            <AnimationOnScroll animateIn="animate__pulse animate__slower">
               {newsList.map((news) => (
                 <Wrapper key={news.id}>
+                <AnimationOnScroll animateIn="animate__pulse animate__slower">
                   <ImageBox src={news.img} alt="Picture of the author"/>
                   <InfoContainer>
                     <Title>{news.title}</Title>
@@ -142,9 +142,9 @@ const News = () => {
                     <ShareIcon sx={{m: 1}} />
                     </Box>
                   </InfoContainer>
+                </AnimationOnScroll>
                 </Wrapper>
               ))}
-            </AnimationOnScroll>
           </NewsContainer>
         </Card>
     </Container>

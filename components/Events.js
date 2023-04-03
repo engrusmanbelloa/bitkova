@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PlaceIcon from '@mui/icons-material/Place';
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import styled from 'styled-components';
-import "animate.css/animate.min.css";
-import { AnimationOnScroll } from 'react-animation-on-scroll';
-import { events } from "../data";
-import { mobile, ipad} from "../responsive";
+import * as React from 'react'
+import Card from '@mui/material/Card'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import PlaceIcon from '@mui/icons-material/Place'
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled'
+import styled from 'styled-components'
+import "animate.css/animate.min.css"
+import { AnimationOnScroll } from 'react-animation-on-scroll'
+import { events } from "../data"
+import { mobile, ipad} from "../responsive"
 
 const Container = styled.section`
   margin:40px 0px;
@@ -28,25 +28,14 @@ const Wrapper = styled.div`
     animation: pulse;
     animation-duration: 1s;
   }
-  ${ipad({
-    display: "block",
-    margin: "10px",
-    padding: "5px",
-    border: "1px solid #CDDEFF",
-    borderRadius: "5px",
-   })}
-   ${mobile({
-   })}
+  ${ipad({display: "block", margin: "10px", padding: "5px",border: "1px solid #CDDEFF", borderRadius: "5px",})}
+   ${mobile({width: "90%"})}
 `;
 
 const EventContainer = styled.div`
   padding: 0;
   margin: 0;
-  ${ipad({
-    display: "flex",
-    justifyContent: "flex-start",
-    overflow: "scroll",
-   })}
+  ${ipad({display: "flex", justifyContent: "flex-start", overflow: "scroll",})}
 `;
 
 const Button = styled.button`
@@ -62,10 +51,7 @@ const Button = styled.button`
     background-color: #CDDEFF;
     color: rgba(28, 56, 121);
   }
-  ${ipad({
-    fontSize: "18px",
-    padding: "2px",
-   })}
+  ${ipad({fontSize: "18px", padding: "2px",})}
 `;
 
 const Box = styled.div`
@@ -79,30 +65,19 @@ const InfoContainer = styled.div`
   margin: 15px;
   text-align: center;
   borderRadius: 3px;
-  ${ipad({
-    textAlign: "justify",
-    margin: '0 auto',
-    padding: "0",
-   })}
+  ${ipad({textAlign: "justify", margin: '0 auto', padding: "0",})}
 `;
 
 const ImageBox = styled.img`
   width: 700px;
   height: 250px;
-  ${ipad({
-    width: "350px",
-   })}
-   ${mobile({
-    width: "275px",
-  })}
+  ${ipad({width: "350px",})}
+   ${mobile({ width: "275px",})}
 `;
 
 const Title = styled.h1`
   margin: 2px;
-  ${mobile({
-    fontSize: "16px",
-    textAlign: "left"
-  })}
+  ${mobile({fontSize: "16px", textAlign: "left"})}
 `;
 
 const Detail = styled.div`
@@ -113,11 +88,7 @@ const Paragraph = styled.p`
   margin: 5px;
   padding: 20p;
   font-size: 20px;
-  ${mobile({
-    fontSize: "16px",
-    textAlign: "left",
-    fontWeight: "300"
-  })}
+  ${mobile({ fontSize: "16px", textAlign: "left", fontWeight: "300" })}
 `;
 
 const Hr = styled.hr`
@@ -132,11 +103,7 @@ const ScheduleBox = styled.div`
   align-items: center;
   font-size: 16px;
   font-weight: 600;
-  ${mobile({
-    fontSize: "14px",
-    fontWeight: "300",
-    textAlign: "left",
-  })}
+  ${mobile({fontSize: "14px", fontWeight: "300", textAlign: "left",})}
 `;
 
 const Events = () => {
@@ -149,9 +116,9 @@ const Events = () => {
         <Button>See more events</Button>
         </Box>
         <EventContainer>
-          <AnimationOnScroll animateIn="animate__pulse animate__slower">
           {events.map((event) => (
-            <Wrapper key={event.id}>
+            <AnimationOnScroll key={event.id} animateIn="animate__pulse animate__slower">
+            <Wrapper>
                 <ImageBox src={event.img} alt="profile"/>
                 <InfoContainer>
                   <Title>{event.title}</Title>
@@ -164,8 +131,8 @@ const Events = () => {
                   <ScheduleBox><Detail><PlaceIcon/></Detail>{event.venue}</ScheduleBox>
               </InfoContainer>
               </Wrapper>
+            </AnimationOnScroll>
             ))}
-          </AnimationOnScroll>
         </EventContainer>
         </Card>
     </Container>

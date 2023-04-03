@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from "styled-components"
 import {mobile, ipad} from "../responsive"
+import { useRouter } from 'next/router'
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -167,6 +169,30 @@ const Button = styled.button`
   ${mobile({ width: "50%", height: 30})}
 `;
 
+const UploadDiv = styled.div`
+  width: 100%;
+  height: 20%;
+  text-align: center;
+  padding: 0;
+  color: #fff;
+  ${ipad({height: "100px",})}
+  ${mobile({height: "65px",})}
+`;
+
+const SetUpdate = styled.div`
+  font-size: 18px;
+  margin: 10px auto;
+  font-weight: 400;
+  color: #fff;
+  width: 10%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 0.5px solid;
+  box-shadow: 5px 5px #CDDEFF;
+  text-align: center;
+  background: rgba(28, 56, 121, 1);
+`;
+
 const NewCourseForm = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -181,6 +207,9 @@ const NewCourseForm = () => {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [lessons, setLessons] = useState([])
+  const [update, setUpdate] = useState(false)
+  const router = useRouter()
+  const { data: session, status } = useSession()
   
   // lessons handler
   const handleAddLesson = () => {
@@ -293,12 +322,13 @@ const NewCourseForm = () => {
           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
           method: "POST",
           body: formData
-        }).then(response => {
-          if (response.ok ){
+        }).then(res => {
+          if (res.ok ){
             setSuccess(true)
             setTimeout(() => {
+              router.push("/dashboard")
             }, 3000)
-            console.log("Response data is ", response.json())
+            console.log("Response data is ", res.json())
           } else {
             setSuccess(false)
           }
@@ -315,13 +345,42 @@ const NewCourseForm = () => {
       setError(error)
     }
   }
+  useEffect(() =>{
+    setLoading(true);
+    if (!session) {
+      if (status === "loading") {
+        return 
+      }
+      setLoading(false)
+      router.push("/login")
+    } else if (session.user.phone === undefined || session.user.phone === null){
+      setUpdate(true)
+      setTimeout(() => {
+        router.push("/profile-update");
+      }, 3000)
+    } else {
+      setLoading(false); // Session is loaded
+    }
+  },[session, status])
+
+  if (loading) {
+    return <SetUpdate>Loading....</SetUpdate>
+  }
+  if (update) {
+    return <SetUpdate>Please complete your profile setup</SetUpdate>
+  }
+
   return (
     <Container>
-    <Wrapper>
+    { session ? <Wrapper>
       <Title>Course registration form</Title>
-      {error && <div>{error.message}</div>}
-      {loading && <div>uploading</div>}
-      {success && <div>Course registration successful</div>}
+      <UploadDiv>
+        {error && <div>{error.message}</div>}
+        {loading && <div>uploading</div>}
+        {success && <div>Course registration successful</div>}
+      </UploadDiv>
+      {session.user.isAdmin || session.user.isTutor 
+      ?
       <Form onSubmit={handleSubmit} enctype="multipart/form-data">
         <Label htmlFor="title">Title</Label>
         <Input type="text" placeholder="Not more than 5 words" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -374,21 +433,6 @@ const NewCourseForm = () => {
             </div>
           ))}
         </VidDiv>
-
-        {/* <VidDiv>
-          {lessons.map((lesson, lessonIndex) => (
-            <div key={lessonIndex}>
-              <VidLabel htmlFor={`lesson-title-${lessonIndex}`}>Lesson Title</VidLabel>
-              <VidInput type="text" value={lesson.title} onChange={(e) => updateTitle(e, lessonIndex)} /><br />
-
-              <VidLabel htmlFor={`lesson-videos-${lessonIndex}`}>Videos</VidLabel>
-              <VidInput type="file" accept="video/*" multiple onChange={(e) => handleVideoUpload(e, lessonIndex)}/><br />
-              
-              <VidLabel htmlFor={`lesson-pdfs-${lessonIndex}`}>PDF Files</VidLabel>
-              <VidInput type="file" accept="application/pdf" multiple onChange={(e) => handlePDFUpload(e, lessonIndex)}/><br />
-            </div>
-          ))}
-        </VidDiv> */}
         <Button type="button" onClick={handleAddLesson}> Add Lesson</Button>
 
         <Title>Reviews</Title>
@@ -405,9 +449,11 @@ const NewCourseForm = () => {
               <TextArea placeholder="Comment" onChange={handleComment} />
             </div>
         </VidDiv>
-        <CreateButton type="submit">Create Course</CreateButton>
+        <CreateButton type="submit">{loading ? 'Creating...' : 'Create Course'}</CreateButton>
       </Form>
+      : <UploadDiv>You are not authorized</UploadDiv> }
     </Wrapper>
+    : <UploadDiv>You are not authorized</UploadDiv>}
     </Container>
   )
 }

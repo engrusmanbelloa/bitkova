@@ -179,9 +179,6 @@ const Register = () => {
     })
     if (res.ok ){
       setSuccess(true)
-       //Await for data for any desirable next steps
-      // const data = await res.json()
-      // console.log(data)
       router.push('/login')
     } else if (res.status === 409){
       setError("*user with same email or username already exists")
@@ -221,7 +218,6 @@ if (session) {
           {success && <ErrorSuccess>Account created successfully</ErrorSuccess>}
           <Button>
             {loading ? 'Creating your account...' : 'CREATE'}
-            {/* CREATE */}
           </Button>
         </Form>
         <Title>Sign up with</Title>

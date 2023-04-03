@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import User from "../models/UserModel"
 
 const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -28,10 +29,12 @@ const coursesSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
   }],
   image: { type: String},
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
   meta: {
     votes: Number,
     favs:  Number
-  }
+  },
+  tags: {type: Array, default: [] }
 }, 
 { timestamps: true })
 

@@ -62,13 +62,15 @@ export const authOptions = {
               email: user.email,
               username: user.username, 
               phone: user.phone,
-              boi: user.bio,
+              bio: user.bio,
               image: user.image, 
-              joined: user.createdAt,
+              createdAt: user.createdAt,
               enrolledCourses: user.enrolledCourses,
               activeCourse: user.activeCourse,
               completedCourses: user.completedCourses,
               wishlsit: user.wishlsit, 
+              points: user.points,
+              ownCourses: user.ownCourses,
             }
             } catch (e) {
                 console.error(e)
@@ -93,7 +95,7 @@ export const authOptions = {
           console.log("the user is new", message.isNewUser)
 
           // Add custom fields to user object
-          message.user.username = null
+          message.user.username = ""
           message.user.walletAddress = ""
           message.user.phone = null
           message.user.isAdmin = false
@@ -102,19 +104,21 @@ export const authOptions = {
           message.user.activeCourse = []
           message.user.completedCourses = []
           message.user.wishlsit = []
-          message.user.bio = null
-  
+          message.user.bio = ""
+          message.user.createdAt = Date.now()
+          message.user.updatedAt = Date.now()
+          message.user.ownCourses = null
+          message.user.points = null
+
           // Save user object to database
           try {
             // Connect to database
             connectDB()
             console.log("Connecting to database")
-            // Rest of the code here
             const existingUser = await User.findOne({email})
             if (existingUser) {
               // If user already exists, update the user document with the new data
               await User.updateOne({email}, {$set: message.user})
-              res.status(202).json({ message: 'successfully added the fields to the user document' })
               console.log("successfully updated user document")
             }else {
               // If user doesn't exist, create a new user document
@@ -160,11 +164,16 @@ export const authOptions = {
         session.user.activeCourse = token.activeCourse
         session.user.completedCourses = token.completedCourses
         session.user.wishlsit = token.wishlsit
+        session.user.poits = token.points,
+        session.user.activeCourse = token.activeCourse,
+        session.user.completedCourses = token.completedCourses,
+        session.user.ownCourses = token.ownCourses,
+        session.user.enrolledCourses = token.enrolledCourses,
         session.user.access_token = token.access_token
       } catch (error) {
         console.error(error)
       }
-      console.log("session is", session)
+      // console.log("user session", session)
       return session
     },
     async jwt({ token, user, account, profile, isNewUser }) {
@@ -178,14 +187,18 @@ export const authOptions = {
         token.enrolledCourses = user.enrolledCourses
         token.activeCourse = user.activeCourse
         token.completedCourses = user.completedCourses
-        token.wishlsit = user.wishlsit
+        token.wishlsit = user.wishlsit,
+        token.points = user.points,
+        token.activeCourse = user.activeCourse,
+        token.completedCourses = user.completedCourses,
+        token.ownCourses = user.ownCourses,
+        token.enrolledCourses = user.enrolledCourses,
         token.access_token = account.access_token
       }
-      console.log("token is", token)
+      console.log("user token", token)
       return token
     }
   }
 }
-
 export default NextAuth(authOptions)
 

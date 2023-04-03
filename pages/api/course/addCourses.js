@@ -3,7 +3,8 @@ import { getToken } from 'next-auth/jwt'
 import cloudinary from "../../../config/cloudinary"
 import connectDB from "../../../config/connectDB"
 import Courses from "../models/CourseModel"
-const _ = require('lodash')
+import { User } from '../models/UserModel'
+
 
 export const config = {
   api: {
@@ -146,13 +147,19 @@ export default async function handler(req, res) {
             courseContent: processedTopic,
             reviews: {name, rating, comment},
             image: imageUrl,
+            owner: id,
             })
-            console.log("saving the course............")
+          console.log("saving the course............")
           // Save course to database
           await course.save()
+          // Add the course ID to the tutor's ownCourses array
+          const tutor = await User.findById(id)
+          tutor.ownCourses.push(course._id)
+          await tutor.save()
           console.log("course saved!!!!")
+          const { password, ...user } = tutor._doc
           res.status(201).json({ success: true, course })
-          console.log("Created course detail....", course)
+          console.log("Created course detail....", course, user)
         }
         catch(err) {
           res.status(500).json({ message: 'course not created' })

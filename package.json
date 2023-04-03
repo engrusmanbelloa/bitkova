@@ -55,7 +55,8 @@
         "react-youtube": "^10.1.0",
         "rsuite": "^5.23.3",
         "styled-components": "^5.3.6",
-        "validator": "^13.7.0"
+        "validator": "^13.7.0",
+        "zustand": "^4.3.7"
     },
     "devDependencies": {
         "prettier": "2.8.1",

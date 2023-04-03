@@ -7,9 +7,9 @@ import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from "react";
 import {featuredCoures} from "../data"
 import { mobile, ipad} from "../responsive"
+import { useState, useEffect } from "react"
 
 
 const Container = styled.section`
@@ -119,7 +119,26 @@ const Price = styled.p`
 `;
 
 const CoursesList = (props) => {
+  const [courses, setCourses] = useState([])
+  const [count, setCount] = useState(0)
+  const [skip, setSkip] = useState(0)
+  const [limit, setLimit] = useState(5)
   const router = useRouter()
+
+  // useEffect(() => {
+  //   async function fetchCourses() {
+  //     const response = await fetch("/api/course/getCourses")
+  //     const data = await response.json()
+  //     setCourses([...courses, ...data.courses])
+  //     setCount(data.count)
+  //     console.log("courses found: ", courses)
+  //   }
+  //   fetchCourses()
+  // }, [skip])
+
+  // const loadMore = () => {
+  //   setSkip(skip + limit)
+  // }
 
   return (
     <Container>
@@ -186,4 +205,4 @@ const CoursesList = (props) => {
   );
 }
 
-export default CoursesList;
+export default CoursesList

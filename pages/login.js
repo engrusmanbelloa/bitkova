@@ -8,7 +8,6 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import {mobile, ipad} from "../responsive"
-import Loading from '../components/Loading'
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -63,6 +62,7 @@ const Social = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 400;
+  ${mobile({ fontSize: 16, })}
 `;
 
 const Form = styled.form`
@@ -95,6 +95,7 @@ const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
   font-size: 24px;
+  ${mobile({ fontSize: 16, margin: "2px 0" })}
 `;
 
 const Login = ({ providers, csrfToken }) => {
