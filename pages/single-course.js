@@ -1,21 +1,21 @@
-import * as React from 'react';
-import styled from "styled-components";
-import Card from '@mui/material/Card';
+import * as React from 'react'
+import styled from "styled-components"
+import Card from '@mui/material/Card'
 import Newsletter from "../components/Newsletter"
-import { mobile, ipad } from "../responsive";
+import { mobile, ipad } from "../responsive"
 import Iframe from 'react-iframe'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import Rating from '@mui/material/Rating';
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import CoursesList from '../components/CoursesList';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import 'react-tabs/style/react-tabs.css'
+import Rating from '@mui/material/Rating'
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled'
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew'
+import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
+import CoursesList from '../components/CoursesList'
 import {featuredCoures} from "../data"
-import { red } from '@mui/material/colors';
+import { red } from '@mui/material/colors'
 
 
 const Container = styled.div``;

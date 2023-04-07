@@ -30,6 +30,7 @@ const coursesSchema = new mongoose.Schema({
   }],
   image: { type: String},
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true },
+  students: { type: mongoose.Schema.Types.ObjectId, ref: "users"},
   meta: {
     votes: Number,
     favs:  Number

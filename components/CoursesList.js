@@ -102,6 +102,11 @@ const Title = styled.h2`
    })}
 `;
 
+const CourseImg = styled.img`
+    width: 100%;
+    height: 200px;
+`;
+
 const Desc = styled.p`
   font-size: 20px;
   font-weight: 300;
@@ -125,20 +130,21 @@ const CoursesList = (props) => {
   const [limit, setLimit] = useState(5)
   const router = useRouter()
 
-  // useEffect(() => {
-  //   async function fetchCourses() {
-  //     const response = await fetch("/api/course/getCourses")
-  //     const data = await response.json()
-  //     setCourses([...courses, ...data.courses])
-  //     setCount(data.count)
-  //     console.log("courses found: ", courses)
-  //   }
-  //   fetchCourses()
-  // }, [skip])
+  useEffect(() => {
+    async function fetchCourses() {
+      const response = await fetch("/api/course/getCourses")
+      const data = await response.json()
+      setCourses(data)
+      setCount(data.count)
+      console.log("courses found: ", courses)
+      console.log("data found: ", data)
+    }
+    fetchCourses()
+  }, [])
 
-  // const loadMore = () => {
-  //   setSkip(skip + limit)
-  // }
+  const loadMore = () => {
+    setSkip(skip + limit)
+  }
 
   return (
     <Container>
@@ -147,8 +153,9 @@ const CoursesList = (props) => {
     </Top>
     
     <Wrapper>
-      {featuredCoures.map((courses) =>(
-        <AnimationOnScroll key={courses.id} animateIn="animate__pulse animate__slower">
+      {courses.map((course) =>(
+        <div key={course._id}>
+        <AnimationOnScroll animateIn="animate__pulse animate__slower">
           <Card variant="elevation" elevation={10} 
             sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, 
             color: "#fff", borderRadius: 3,
@@ -160,49 +167,50 @@ const CoursesList = (props) => {
               width: "290px", ml: 2, mr: 1,
             },
             }}>
-            <AspectRatio minHeight="120px" maxHeight="200px">
-              <img
-                src={courses.img }
-                loading="lazy"
-                alt="Picture of the author"
-              />
-            </AspectRatio>
+            <CourseImg src={course.image} alt={course.title} />
             <InfoContainer>
               <Title>
-                {courses.title}
+                {course.title}
               </Title>
               <Desc>
-                {courses.desc}
+                {course.shortDesc}
               </Desc>
               <Box>
                 <Time>
                   <AccessTimeFilledIcon/>
-                  <span style={{margin: "10px"}}>{courses.time}</span>
+                  <span style={{margin: "10px"}}>
+                    {
+                      course.duration.hours > 0
+                      ? `${course.duration.hours} hours ${course.duration.minutes} mins`
+                      : `${course.duration.minutes} mins`
+                    }
+                  </span>
                 </Time>
               </Box>
               <Box>
                 <Time>
                   <PeopleAltIcon/>
-                  <span style={{margin: "10px"}}>{courses.student} Students</span>
+                  <span style={{margin: "10px"}}>{course.student} Students</span>
                 </Time>
               </Box>
               <Hr />
               <Box>
                 <Price>
-                  Price: N{courses.price}
+                  Price: N{course.price}
                 </Price>
-                <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Enroll</Button>
+                <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Preview</Button>
               </Box>
             </InfoContainer>
           </Card>
         </AnimationOnScroll>
+        </div>
       ))}
     </Wrapper>
     <Top>
     <Button><Link href="/courses" passHref style={{color: '#000'}}>{props.foot}</Link></Button>
     </Top>
   </Container>
-  );
+  )
 }
 
 export default CoursesList
