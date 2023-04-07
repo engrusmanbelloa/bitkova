@@ -116,7 +116,7 @@ const Desc = styled.p`
   line-height: 1.5;
 `;
 
-const Price = styled.p`
+const Price = styled.div`
   flex: 0.8;
   margin: 0 10px 0 0;
   font-size: 16px;
@@ -132,7 +132,7 @@ const CoursesList = (props) => {
 
   useEffect(() => {
     async function fetchCourses() {
-      const response = await fetch("/api/course/getCourses")
+      const response = await fetch("/api/courses/getCourses")
       const data = await response.json()
       setCourses(data)
       setCount(data.count)
@@ -196,9 +196,9 @@ const CoursesList = (props) => {
               <Hr />
               <Box>
                 <Price>
-                  Price: N{course.price}
+                  {course.price > 0 ? <div>Price: &#8358;{course.price}</div> : "Free"}
                 </Price>
-                <Button priceBtn type="button" onClick={() => router.push("/single-course")}>Preview</Button>
+                <Button priceBtn type="button" onClick={() => router.push(`/course/${course._id}`)}>Preview</Button>
               </Box>
             </InfoContainer>
           </Card>

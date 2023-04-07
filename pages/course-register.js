@@ -318,7 +318,7 @@ const NewCourseForm = () => {
       console.log([...formData.entries()])
 
       try {
-        const response = await fetch("/api/course/addCourses", {
+        const response = await fetch("/api/courses/addCourses", {
           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
           method: "POST",
           body: formData
