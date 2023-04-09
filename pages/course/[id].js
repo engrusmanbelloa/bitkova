@@ -118,7 +118,7 @@ const LearnItem = styled.li`
   text-align: left;
   margin: 25px;
   ${ipad({ fontSize: 20, fontWeight: 300, margin: 15})}
-  ${mobile({ margin: 10, })}
+  ${mobile({ marginLeft: 0 })}
 `;
 
 const Duration = styled.div`
@@ -130,7 +130,8 @@ const Duration = styled.div`
   margin: 20px;
   font-size: 25px;
   font-weight: 500;
-   ${mobile({ margin: 8, })}
+  ${ipad({fontWeight: 500,})}
+  ${mobile({fontWeight: 350,})}
 `;
 
 const SingleCourse = () => {
@@ -182,7 +183,27 @@ const SingleCourse = () => {
   const lessons = course?.lessons // add a null check using the ? operator
   const introUrl = lessons && lessons[0]?.videos[0]?.link // add null checks using the ? operator
   const lessonPdfs = lessons && lessons[1]?.pdfs
-  console.log("intro link: ", introUrl)
+  console.log("lessons: ", lessons)
+
+  let pdfCount = 0
+
+  lessons.forEach((lesson) => {
+    if (lesson.pdfs) {
+      pdfCount += lesson.pdfs.length
+    }
+  })
+
+  console.log(`Number of PDF links: ${pdfCount}`)
+
+  let videosCount = 0
+
+  lessons.forEach((lesson) => {
+    if (lesson.videos) {
+      videosCount += lesson.videos.length
+    }
+  })
+
+  console.log(`Number of video links: ${videosCount}`)
 
   return (
     <Container>
@@ -202,8 +223,7 @@ const SingleCourse = () => {
         }}>
         <iframe width="100%" height="100%" src={introUrl} frameBorder="0" allow="accelerometer; 
           autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowFullScreen>
-
-          </iframe>
+        </iframe>
         {/* <Iframe  url={introUrl} width="100%" height="100%" display="block" position="relative" margin="auto"top="0" bottom="0" /> */}
         </Card>
         </Wrapper>
@@ -249,18 +269,24 @@ const SingleCourse = () => {
         </Card>
         <CheckoutBox>
           <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:"100%",}}>
-          <Button style={{width: "100%", marginBottom: 40}}>Buy This Course</Button>
+          <Button style={{width: "100%",}}>INSIDE THE COURSE</Button>
           <Duration>
             <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Duration: 6H 30min</span>
+            <span style={{margin: "10px"}}>
+              {
+                course.duration.hours > 0
+                ? `${course.duration.hours} hours ${course.duration.minutes} mins`
+                : `${course.duration.minutes} mins`
+              }
+            </span>
           </Duration>
           <Duration>
             <OndemandVideoIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Ondemand videos: 30</span>
+            <span style={{margin: "10px"}}>Ondemand videos: {videosCount}</span>
           </Duration>
           <Duration>
             <CloudDownloadIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Downloadable files: 15</span>
+            <span style={{margin: "10px"}}>Downloadable files: {pdfCount}</span>
           </Duration>
           <Duration>
             <PowerSettingsNewIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
