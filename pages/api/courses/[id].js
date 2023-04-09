@@ -9,7 +9,6 @@ export const config = {
 
 // Set up Next.js API route to handle course creation
 export default async function handler(req, res) {
-  
   // Connect to the database
   connectDB()
 

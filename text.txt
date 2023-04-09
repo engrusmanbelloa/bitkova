@@ -103,3 +103,25 @@ const desc = 'To fill the need of individuals seeking in-demand crypto and blcoc
           <span><Seemore onClick={handleToggle}>See less</Seemore></span>
           )}
         </Desc> */}
+
+
+
+  // fetch the user's purchased courses list on load
+  // useEffect(() => {
+  //   const fetchPurchasedCourses = async () => {
+  //     try {
+  //       const response = await fetch(`/api/courses/${student}`)
+  //       if (response.ok) {
+  //         const data = await response.json()
+  //         setPurchasedCourses(data)
+  //       } else {
+  //         setError("Could not fetch purchased courses")
+  //       }
+  //     } catch (error) {
+  //       setError("Could not fetch purchased courses")
+  //       console.error(error)
+  //     }
+  //   }
+
+  //   fetchPurchasedCourses()
+  // }, [])

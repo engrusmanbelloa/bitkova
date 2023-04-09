@@ -136,8 +136,7 @@ const CoursesList = (props) => {
       const data = await response.json()
       setCourses(data)
       setCount(data.count)
-      console.log("courses found: ", courses)
-      console.log("data found: ", data)
+      // console.log("courses found: ", courses)
     }
     fetchCourses()
   }, [])

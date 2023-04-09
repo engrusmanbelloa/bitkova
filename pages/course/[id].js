@@ -17,7 +17,8 @@ import CoursesList from '../../components/CoursesList'
 import {featuredCoures} from "../../data"
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
+import Link from 'next/link'
 
 const Container = styled.div``;
 
@@ -56,6 +57,10 @@ const CheckoutBox = styled.div`
 `;
 
 const ReviewBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 20px;
   border-bottom: 1px solid #CDDEFF;
 `;
@@ -91,7 +96,7 @@ const Button = styled.button`
 
 const Title = styled.h1`
   margin: 0;
-  text-align: left;
+  ${'' /* text-align: left; */}
   ${ipad({ fontSize: 20, fontWeight: 500,})}
 `;
 
@@ -134,6 +139,48 @@ const Duration = styled.div`
   ${mobile({fontWeight: 350,})}
 `;
 
+const SetUpdate = styled.div`
+  font-size: 18px;
+  margin: 10px auto;
+  font-weight: 400;
+  color: #fff;
+  width: 10%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 0.5px solid;
+  box-shadow: 5px 5px #CDDEFF;
+  text-align: center;
+  background: rgba(28, 56, 121, 1);
+  ${ipad({width: "80%"})}
+  ${mobile({})}
+`;
+
+const LessonContainer = styled.div`
+
+`;
+
+const LessonsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  border-bottom: 1px solid #CDDEFF;
+`;
+
+const PdfLink = styled.div``;
+
+const VideoContainer = styled.div`
+  
+`;
+
+const VideoPlayer = styled.a`
+  font-size: 20px;
+  font-weight: 500;
+  &:link{color: red}
+  &:link{color: red}
+`;
+
 const SingleCourse = () => {
   const router = useRouter()
   const { id } = router.query
@@ -141,13 +188,18 @@ const SingleCourse = () => {
   const [course, setCourse] = useState()
   const [success, setSuccess] = useState()
   const [error, setError] = useState()
-  // const id = router.query.id
+  const [isLoading, setIsLoading] = useState(false)
+  const [update, setUpdate] = useState(false)
+  // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
+  // const [purchasedCourses, setPurchasedCourses] = useState([])
+  const { data: session, status } = useSession()
+
   console.log("the course id", id)
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
-  
+  // const id = router.query.id
+  console.log("the session is", session)
+
+  // fetch the course click by the user based on the course id
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -176,8 +228,30 @@ const SingleCourse = () => {
     }
   }, [id])
 
-  if (!course) {
-    return <div>Loading...</div>
+  useEffect(() =>{
+    setIsLoading(true);
+    if (!session) {
+      if (status === "loading") {
+        return 
+      }
+      setIsLoading(false)
+      router.push("/login")
+    } else if (session.user.phone === undefined || session.user.phone === null){
+      setUpdate(true)
+      setTimeout(() => {
+        router.push("/profile-update");
+      }, 3000)
+    } else {
+      setIsLoading(false); // Session is loaded
+    }
+  },[session, status])
+
+  if (isLoading || !course) {
+    return <SetUpdate>Loading....</SetUpdate>
+  }
+
+  if (update) {
+    return <SetUpdate>Please complete your profile setup</SetUpdate>
   }
 
   const lessons = course?.lessons // add a null check using the ? operator
@@ -204,6 +278,11 @@ const SingleCourse = () => {
   })
 
   console.log(`Number of video links: ${videosCount}`)
+  let purchasedCourses = []
+  purchasedCourses = session.user.enrolledCourses
+  console.log("array of registered courses: ", purchasedCourses)
+
+  const isCoursePurchased = purchasedCourses.includes(id)
 
   return (
     <Container>
@@ -221,7 +300,7 @@ const SingleCourse = () => {
             width: "100%", height: 250, margin: 0, padding : 0,
           },
         }}>
-        <iframe width="100%" height="100%" src={introUrl} frameBorder="0" allow="accelerometer; 
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/viKC9knLQUw" allow="accelerometer; 
           autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowFullScreen>
         </iframe>
         {/* <Iframe  url={introUrl} width="100%" height="100%" display="block" position="relative" margin="auto"top="0" bottom="0" /> */}
@@ -233,7 +312,8 @@ const SingleCourse = () => {
             <TabList style={{background: "#1C3879", color: "#fff", border: "none"}}>
               <Tab><Title>About the course</Title></Tab>
               <Tab><Title>Course content</Title></Tab>
-              <Tab><Title>Review</Title></Tab>
+              {!isCoursePurchased ? <Tab><Title>Review</Title></Tab>: null}
+              {!isCoursePurchased ? <Tab><Title>lessons</Title></Tab>: null}
             </TabList>
             <TabPanel>
               <Title style={{textAlign: "left", margin: 5}}>About the course</Title>
@@ -252,9 +332,10 @@ const SingleCourse = () => {
                   <LearnItem key={index}>{item}</LearnItem>
                 ))}
               </Learn>
-              </TabPanel>
+            </TabPanel>
+            {!isCoursePurchased ? 
             <TabPanel>
-            <Title style={{textAlign: "left", marginLeft: 5}}>Course reviews</Title>
+              <Title style={{textAlign: "left", marginLeft: 5}}>Course reviews</Title>
               <ReviewBox>
               {course.reviews.map((review, index) => (
                 <div key={index}>
@@ -265,44 +346,68 @@ const SingleCourse = () => {
                 ))}
               </ReviewBox>
             </TabPanel>
+            : null}
+
+            {!isCoursePurchased ? 
+            <TabPanel>
+              <Title style={{textAlign: "left", marginLeft: 5}}>lessons</Title>
+              <LessonsBox>
+              {lessons.map((lesson, index) => (
+                <LessonContainer key={index}>
+                  <Title>{lesson.title}</Title>
+                  {/* {lesson.pdfs?.map((pdf, index) => (
+                    <PdfLink href={pdf.link} target="_blank" key={index}>
+                      {pdf.title}
+                    </PdfLink>
+                  ))} */}
+                  {lesson.videos?.map((video, index) => (
+                    <VideoContainer key={index}>
+                      <VideoPlayer href={video.link}>{video.title}</VideoPlayer>
+                    </VideoContainer>
+                  ))}
+                </LessonContainer>
+              ))}
+              </LessonsBox>
+            </TabPanel>
+            : null}
           </Tabs>
         </Card>
         <CheckoutBox>
           <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:"100%",}}>
-          <Button style={{width: "100%",}}>INSIDE THE COURSE</Button>
-          <Duration>
-            <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>
-              {
-                course.duration.hours > 0
-                ? `${course.duration.hours} hours ${course.duration.minutes} mins`
-                : `${course.duration.minutes} mins`
-              }
-            </span>
-          </Duration>
-          <Duration>
-            <OndemandVideoIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Ondemand videos: {videosCount}</span>
-          </Duration>
-          <Duration>
-            <CloudDownloadIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Downloadable files: {pdfCount}</span>
-          </Duration>
-          <Duration>
-            <PowerSettingsNewIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Lifetime Access</span>
-          </Duration>
-          <Duration>
-            <WorkspacePremiumIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Certificate Of Completion</span>
-          </Duration>
-          <Duration>
-            <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
-            <span style={{margin: "10px"}}>Accessable on all devices</span>
-          </Duration>
-          <Button style={{width: "100%"}}>Enroll</Button>
+            <Button style={{width: "100%",}}>INSIDE THE COURSE</Button>
+            <Duration>
+              <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>
+                {
+                  course.duration.hours > 0
+                  ? `${course.duration.hours} hours ${course.duration.minutes} mins`
+                  : `${course.duration.minutes} mins`
+                }
+              </span>
+            </Duration>
+            <Duration>
+              <OndemandVideoIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>Ondemand videos: {videosCount}</span>
+            </Duration>
+            <Duration>
+              <CloudDownloadIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>Downloadable files: {pdfCount}</span>
+            </Duration>
+            <Duration>
+              <PowerSettingsNewIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>Lifetime Access</span>
+            </Duration>
+            <Duration>
+              <WorkspacePremiumIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>Certificate Of Completion</span>
+            </Duration>
+            <Duration>
+              <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
+              <span style={{margin: "10px"}}>Accessable on all devices</span>
+            </Duration>
+            <Button style={{width: "100%"}}>Enroll</Button>
           </Card>
-      </CheckoutBox>
+        </CheckoutBox>
       </Box>
       <CoursesList title="Related courses"/>
       <Newsletter />

@@ -249,6 +249,7 @@ const Dashboard = () => {
   const addCourse = () => {
     router.push("/course-register")
   }
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
@@ -264,10 +265,10 @@ const Dashboard = () => {
     } else if (session.user.phone === undefined || session.user.phone === null){
       setUpdate(true)
       setTimeout(() => {
-        router.push("/profile-update");
+        router.push("/profile-update")
       }, 3000)
     } else {
-      setIsLoading(false); // Session is loaded
+      setIsLoading(false) // Session is loaded
     }
   },[session, status])
 

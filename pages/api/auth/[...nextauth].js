@@ -154,6 +154,7 @@ export const authOptions = {
     },
     async session({ session, token, user }) {
       try {
+        session.user.id = token.sub
         session.user.isAdmin = token.isAdmin
         session.user.isTutor = token.isTutor
         session.user.username = token.username

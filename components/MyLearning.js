@@ -62,10 +62,6 @@ const DashItemsBox = styled.div`
   })}
 `;
 
-const Learning = styled.div`
-  
-`;
-
 const ImageBox = styled.img`
   width: 100%;
   height: 200px;
@@ -101,15 +97,12 @@ const EnrollBtn = styled.button`
 
 `;
 
-
-
-
 const MyLearning = (props) => {
     // course progress bar state change
-  const [percent, setPercent] = useState(0);
+  const [percent, setPercent] = useState(0)
   const increase = () => {
-    const value = Math.min(percent + 10, 100);
-    setPercent(value);
+    const value = Math.min(percent + 10, 100)
+    setPercent(value)
   }
 
   return (
