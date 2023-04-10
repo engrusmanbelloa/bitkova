@@ -201,6 +201,7 @@ const NewCourseForm = () => {
   const [price, setPrice] = useState('')
   const [whatYouWillLearn, setWhatYouWillLearn] = useState([])
   const [content, setContent] = useState([])
+  const [tags, setTags] = useState()
   const [reviews, setReviews] = useState({})
   const [image, setImage] = useState(null)
   const [error, setError] = useState(null)
@@ -293,6 +294,7 @@ const NewCourseForm = () => {
       formData.append('price', price)
       formData.append('whatYouWillLearn', whatYouWillLearn)
       formData.append('content', content)
+      formData.append('tags', tags)
       formData.append('image', image)
       formData.append('reviews', JSON.stringify(reviews))
 
@@ -434,6 +436,9 @@ const NewCourseForm = () => {
           ))}
         </VidDiv>
         <Button type="button" onClick={handleAddLesson}> Add Lesson</Button>
+
+        <VidLabel htmlFor="tags">Tags</VidLabel>
+        <VidInput type="text" onChange={(e) => setTags(e.target.value)}/><br />
 
         <Title>Reviews</Title>
         <VidDiv>

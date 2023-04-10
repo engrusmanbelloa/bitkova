@@ -18,7 +18,12 @@ import {featuredCoures} from "../../data"
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
-import Link from 'next/link'
+import Stepper from '@mui/material/Stepper'
+import Step from '@mui/material/Step'
+import StepLabel from '@mui/material/StepLabel'
+import StepContent from '@mui/material/StepContent'
+import Paper from '@mui/material/Paper'
+import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 
 const Container = styled.div``;
 
@@ -168,17 +173,47 @@ const LessonsBox = styled.div`
   border-bottom: 1px solid #CDDEFF;
 `;
 
-const PdfLink = styled.div``;
+const PdfLink = styled.a`
+  font-size: 20px;
+  font-weight: 500;
+  &:link{color: #1c3879}
+  &:visited{color: #1c3879}
+  &:active{color: #CDDEFF}
+`;
 
 const VideoContainer = styled.div`
-  
+  display: flex;
+  align-items: center;
+  justify-content: justify;
+  margin: 10px;
 `;
 
 const VideoPlayer = styled.a`
   font-size: 20px;
   font-weight: 500;
-  &:link{color: red}
-  &:link{color: red}
+  &:link{color: #1c3879}
+  &:visited{color: #1c3879}
+  &:active{color: #CDDEFF}
+`;
+
+const LessonBtn = styled.button`
+  height: 30px;
+  width: 80px;
+  margin: 3px;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #CDDEFF;
+  color: ##1C3879;
+
+  &:hover {
+    background-color: #1C3879;
+    color: #CDDEFF;
+  }
+  ${'' /* ${ipad({ height: 40, width: 150, fontSize: 18, fontWeight: 400, margin: "5px 0",})} */}
+  ${'' /* ${mobile({width: "100%"})} */}
 `;
 
 const SingleCourse = () => {
@@ -190,10 +225,13 @@ const SingleCourse = () => {
   const [error, setError] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [update, setUpdate] = useState(false)
+  const { data: session, status } = useSession()
+  const [activeStep, setActiveStep] = useState(0)
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0)
+
   // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
   // const [purchasedCourses, setPurchasedCourses] = useState([])
-  const { data: session, status } = useSession()
-
+ 
   console.log("the course id", id)
 
   // const id = router.query.id
@@ -228,6 +266,7 @@ const SingleCourse = () => {
     }
   }, [id])
 
+  // making sure that the user is logedin and he's updated his account
   useEffect(() =>{
     setIsLoading(true);
     if (!session) {
@@ -267,8 +306,6 @@ const SingleCourse = () => {
     }
   })
 
-  console.log(`Number of PDF links: ${pdfCount}`)
-
   let videosCount = 0
 
   lessons.forEach((lesson) => {
@@ -277,12 +314,24 @@ const SingleCourse = () => {
     }
   })
 
-  console.log(`Number of video links: ${videosCount}`)
   let purchasedCourses = []
   purchasedCourses = session.user.enrolledCourses
   console.log("array of registered courses: ", purchasedCourses)
 
   const isCoursePurchased = purchasedCourses.includes(id)
+
+  // Handle lessons 
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  }
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
+
+  const handleCert = () => {
+    setActiveStep(0)
+  }
 
   return (
     <Container>
@@ -292,7 +341,7 @@ const SingleCourse = () => {
           <Desc>{course.about}</Desc>
           <Button>ENROLL</Button>
         </InfoContainer>
-        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, mt: 0, width: 1000, height: 350, borderRadius: 7, position: "relative",
+        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, mt: 0, width: 1000, height: 350, borderRadius: 5, position: "relative",
           '@media screen and (max-width: 768px)': {
             ml: 1, width: 720,
           },
@@ -310,11 +359,15 @@ const SingleCourse = () => {
         <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}>
           <Tabs>
             <TabList style={{background: "#1C3879", color: "#fff", border: "none"}}>
-              <Tab><Title>About the course</Title></Tab>
-              <Tab><Title>Course content</Title></Tab>
-              {!isCoursePurchased ? <Tab><Title>Review</Title></Tab>: null}
-              {!isCoursePurchased ? <Tab><Title>lessons</Title></Tab>: null}
+              {isCoursePurchased ? <Tab style={{margin: "auto 15px",}}><Title>About the course</Title></Tab>: null}
+              <Tab style={{margin: "auto 15px"}}><Title>Course content</Title></Tab>
+              {isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Review</Title></Tab>: null}
+              {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>lessons</Title></Tab>: null}
+              {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Resources</Title></Tab>: null}
             </TabList>
+
+            {/* // about the course */}
+            {isCoursePurchased ? 
             <TabPanel>
               <Title style={{textAlign: "left", margin: 5}}>About the course</Title>
               <Paragraph>{course.about}</Paragraph>
@@ -325,6 +378,9 @@ const SingleCourse = () => {
                 ))}
               </Learn>
             </TabPanel>
+            : null}
+
+            {/* // course outline */}
             <TabPanel>
             <Title style={{textAlign: "left", marginLeft: 5}}>Course outline</Title>
               <Learn style={{display: "flex", flexWrap:"wrap"}}>
@@ -333,7 +389,9 @@ const SingleCourse = () => {
                 ))}
               </Learn>
             </TabPanel>
-            {!isCoursePurchased ? 
+
+             {/* // course reviews */}
+            {isCoursePurchased ? 
             <TabPanel>
               <Title style={{textAlign: "left", marginLeft: 5}}>Course reviews</Title>
               <ReviewBox>
@@ -347,24 +405,61 @@ const SingleCourse = () => {
               </ReviewBox>
             </TabPanel>
             : null}
-
+            
+            {/* // Lessons videos */}
             {!isCoursePurchased ? 
             <TabPanel>
-              <Title style={{textAlign: "left", marginLeft: 5}}>lessons</Title>
+            <Title style={{textAlign: "left", marginLeft: 5}}>lessons</Title>
+            <LessonsBox>
+              <Stepper activeStep={activeStep} orientation="vertical" sx={{width: "100%"}}>
+              {lessons.map((lesson, index) => (
+                <Step key={index}>
+                  <StepLabel onClick={() => setActiveStep(index)}>
+                    <div style={{fontSize: 25, fontWeight: 600}}>{lesson.title}</div>
+                  </StepLabel>
+                  <Card variant="elevation" elevation={10} sx={{borderRadius: 3, zIndex: 99, textAlign: "center",}}>
+                  <StepContent>
+                    {lesson.videos?.map((video, index) => (
+                      <VideoContainer key={index}>
+                        <VideoPlayer href={video.link}><PlayCircleIcon sx={{mb: -0.7, mr: 1}} />{video.title}</VideoPlayer>
+                      </VideoContainer>
+                    ))}
+                      <div>
+                        <LessonBtn disabled={index === 0} onClick={handleBack}>Back</LessonBtn>
+                        <LessonBtn variant="contained" onClick={handleNext}>
+                          {index === lessons.length - 1 ? 'Finish' : 'Next'}
+                        </LessonBtn>
+                      </div>
+                  </StepContent>
+                  </Card>
+                </Step>
+              ))}
+              </Stepper>
+              {activeStep === lessons.length && (
+                <Paper square elevation={10} sx={{ p: 2, borderRadius: 2 }}>
+                  <Paragraph>Course completed! Congratulations</Paragraph>
+                  <LessonBtn style={{width: "100%"}}>Print your Certificate</LessonBtn>
+                </Paper>
+              )}
+            </LessonsBox>
+            </TabPanel>
+            : null}
+
+            {/* // Lessons pdfs */}
+            {!isCoursePurchased ? 
+            <TabPanel>
+              <Title style={{textAlign: "left", marginLeft: 5}}>Resources</Title>
               <LessonsBox>
               {lessons.map((lesson, index) => (
                 <LessonContainer key={index}>
-                  <Title>{lesson.title}</Title>
-                  {/* {lesson.pdfs?.map((pdf, index) => (
-                    <PdfLink href={pdf.link} target="_blank" key={index}>
-                      {pdf.title}
-                    </PdfLink>
-                  ))} */}
-                  {lesson.videos?.map((video, index) => (
-                    <VideoContainer key={index}>
-                      <VideoPlayer href={video.link}>{video.title}</VideoPlayer>
-                    </VideoContainer>
+                  <Card variant="elevation" elevation={10} sx={{borderRadius: 3, m: 1, textAlign: "center", width:"100%",}}>
+                    <Title style={{fontSize: 25, fontWeight: 600}}>{lesson.title}</Title>
+                    {lesson.pdfs?.map((pdf, index) => (
+                      <VideoContainer key={index}>
+                        <PdfLink href={pdf.link} target="_blank" ><CloudDownloadIcon sx={{mr: 1, mb: -0.7}} />{pdf.title}</PdfLink>
+                      </VideoContainer>
                   ))}
+                  </Card>
                 </LessonContainer>
               ))}
               </LessonsBox>
@@ -372,6 +467,8 @@ const SingleCourse = () => {
             : null}
           </Tabs>
         </Card>
+
+         {/* //course add to cart section */}
         <CheckoutBox>
           <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:"100%",}}>
             <Button style={{width: "100%",}}>INSIDE THE COURSE</Button>
@@ -405,7 +502,7 @@ const SingleCourse = () => {
               <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
               <span style={{margin: "10px"}}>Accessable on all devices</span>
             </Duration>
-            <Button style={{width: "100%"}}>Enroll</Button>
+            <Button style={{width: "100%"}}>{!isCoursePurchased ? "Enroll" : null}</Button>
           </Card>
         </CheckoutBox>
       </Box>

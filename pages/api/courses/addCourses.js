@@ -46,7 +46,7 @@ export default async function handler(req, res) {
       // destructuring the form data
       const { fields, files } = await asyncParse(req)
       const { image } = files
-      const {courseTitle, description, about, duration, price, whatYouWillLearn, content, reviews, lessons,} = fields
+      const {courseTitle, description, about, duration, price, whatYouWillLearn, content, reviews, lessons, tags} = fields
 
       let minutes = parseInt(duration)
       const review = JSON.parse(reviews)
@@ -148,6 +148,7 @@ export default async function handler(req, res) {
             reviews: {name, rating, comment},
             image: imageUrl,
             owner: id,
+            tags: tags
             })
           console.log("saving the course............")
           // Save course to database

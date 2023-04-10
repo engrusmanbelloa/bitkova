@@ -125,3 +125,72 @@ const desc = 'To fill the need of individuals seeking in-demand crypto and blcoc
 
   //   fetchPurchasedCourses()
   // }, [])
+
+
+
+  import { useState } from 'react';
+import styled from 'styled-components';
+
+const PlayerContainer = styled.div`
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+`;
+
+const Iframe = styled.iframe`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+const VideoPlayer = ({ href, title, videos, currentIndex, setCurrentIndex }) => {
+  const [showNextPrev, setShowNextPrev] = useState(false);
+
+  const showNextVideo = () => {
+    if (currentIndex + 1 < videos.length) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
+  const showPrevVideo = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  return (
+    <div onMouseEnter={() => setShowNextPrev(true)} onMouseLeave={() => setShowNextPrev(false)}>
+      <PlayerContainer>
+        <Iframe
+          width="100%"
+          height="100%"
+          src={href}
+          title={title}
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </PlayerContainer>
+      {showNextPrev && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}>
+          {currentIndex > 0 && (
+            <button onClick={showPrevVideo} style={{ marginRight: 16 }}>
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path fill="#333" d="M15,5.5V18.5L6,12z" />
+              </svg>
+            </button>
+          )}
+          {currentIndex + 1 < videos.length && (
+            <button onClick={showNextVideo}>
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path fill="#333" d="M9,5.5v13L18,12z" />
+              </svg>
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};

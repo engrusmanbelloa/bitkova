@@ -35,7 +35,7 @@ const coursesSchema = new mongoose.Schema({
     votes: Number,
     favs:  Number
   },
-  tags: {type: Array, default: [] }
+  tags: {type: String, default: "blockchain" }
 }, 
 { timestamps: true })
 
