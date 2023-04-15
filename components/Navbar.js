@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
+import useStore from "../config/store"
 
 // ":hover":{color: "white"}
 
@@ -197,6 +198,9 @@ const Navbar = () => {
   const router = useRouter()
   const { data: session } = useSession()
   const [toggleMenu, setToggleMenu] = useState(false)
+
+  const {cart} = useStore()
+  console.log("cart is :", cart)
   
   return (
     <>
@@ -220,7 +224,7 @@ const Navbar = () => {
           <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
             <MenuItem noborder type="button" onClick={() => router.push("/cart")}>
               <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
-                <Badge badgeContent={4}>
+                <Badge badgeContent={cart.length}>
                     <ShoppingCartIcon />
                 </Badge>
               </IconButton>
@@ -247,7 +251,7 @@ const Navbar = () => {
           <MobileCart>
           <Smenu type="button" onClick={() => router.push("/cart")}>
             <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 1}}>
-              <Badge badgeContent={4}>
+              <Badge badgeContent={cart.length}>
                   <ShoppingCartIcon />
               </Badge>
             </IconButton>

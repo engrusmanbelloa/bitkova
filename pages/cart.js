@@ -1,7 +1,9 @@
-import "animate.css/animate.min.css";
-import styled from "styled-components";
-
-import { mobile, ipad} from "../responsive";
+import "animate.css/animate.min.css"
+import styled from "styled-components"
+import { mobile, ipad} from "../responsive"
+import useStore from "../config/store"
+import { useState, useEffect } from "react"
+import {useRouter} from "next/router"
 
 const Container = styled.div``;
 
@@ -121,6 +123,15 @@ const Price = styled.p`
   ${mobile({ fontSize: "17px", margin: "0, auto"})}
 `;
 
+const Remove = styled.p`
+  font-size: 28px;
+  font-weight: 300;
+  color: ##CDDEFF;
+  cursor: pointer;
+  ${ipad({ fontSize: "18px", margin: "0, auto"})}
+  ${mobile({ fontSize: "17px", margin: "0, auto"})}
+`;
+
 const Hr = styled.hr`
   background-color: #CDDEFF;
   border: none;
@@ -164,87 +175,112 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
+const SetUpdate = styled.div`
+  font-size: 18px;
+  margin: 10px auto;
+  font-weight: 400;
+  color: #fff;
+  width: 10%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 0.5px solid;
+  box-shadow: 5px 5px #CDDEFF;
+  text-align: center;
+  background: rgba(28, 56, 121, 1);
+  ${ipad({width: "80%"})}
+  ${mobile({})}
+`;
+
 const Cart = () => {
+  const {cart, removeFromCart} = useStore()
+  const router = useRouter ()
+
+  // Calculate the total amount
+  const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
+  console.log("Total amount in your cart", totalAmount)
+
+  // remove course from cart
+  const remove = async () => {
+    try {
+      const existingCourse = cart.find((item) => item._id)
+      if (!existingCourse) {
+        // Course already exists in the cart, do nothing
+        return
+      }
+      removeFromCart(existingCourse)
+      console.log(`added course with ${id} to cart`)
+    } catch (err) {
+      console.log(err)
+    } 
+  }
+
+  // hydration function
+  const hasHydrated = useStore(state => state._hasHydrated)
+  if (!hasHydrated) {
+    console.log("i am not hydrated")
+    return <SetUpdate>Loading....</SetUpdate>
+  }
+  
   return (
     <Container>
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
-          <TopButton>BUY MORE COURSES</TopButton>
+          <TopButton onClick={() => router.push("/courses")}>BUY MORE COURSES</TopButton>
           <TopTexts>
-            <TopText>Your Cart (2)</TopText>
+            <TopText>Your Cart ({cart.length})</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
-          <Info>
-            <Course>
+        
+          <Info >
+          {cart.map((course) => (
+            <div key={course._id}>
+            <Course >
               <CourseDetail>
-                <Image src="/courses/mkt.jpeg"/>
+                <Image src={course.image}  alt={course.title}/>
                 <Details>
-                  <CourseName>
-                    Certified CryptoCurrency Market Analyst (CCA)
-                  </CourseName>
-                  <CourseId>
-                    <b>ID:</b> 93813718293
-                  </CourseId>
+                  <CourseName>{course.title}</CourseName>
+                  <CourseId><b>ID: </b>{course._id}</CourseId>
                   <Duration>
-                    <b>6.5</b> Total Hours
+                    <b>Duration: </b> 
+                    {
+                      course.duration.hours > 0
+                      ? `${course.duration.hours} hours ${course.duration.minutes} mins`
+                      : `${course.duration.minutes} mins`
+                    }
                   </Duration>
                   <Duration>
-                    <b>50 </b>Lectures
+                    <b>{course.lessons.length} </b>Lectures
                   </Duration>
                 </Details>
               </CourseDetail>
               <CourseDetail ipad>
-                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; 6,999</Price>
+                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; {course.price}</Price>
                 <ChangeContainer>
-                 <Price>Remove</Price>
-                 <Price>Move to Wishlist</Price>
+                 <Remove onClick={remove}>Remove</Remove>
+                 <Remove>Move to Wishlist</Remove>
                 </ChangeContainer>
               </CourseDetail>
             </Course>
             <Hr />
-            <Course>
-              <CourseDetail>
-                <Image src="/courses/mkt.jpeg"/>
-                <Details>
-                  <CourseName>
-                    Certified CryptoCurrency Market Analyst (CCA)
-                  </CourseName>
-                  <CourseId>
-                    <b>ID:</b> 93813718293
-                  </CourseId>
-                  <Duration>
-                    <b>6.5</b> Total Hours
-                  </Duration>
-                  <Duration>
-                    <b>50 </b>Lectures
-                  </Duration>
-                </Details>
-              </CourseDetail>
-              <CourseDetail ipad>
-                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; 6,999</Price>
-                <ChangeContainer>
-                 <Price>Remove</Price>
-                 <Price>Move to Wishlist</Price>
-                </ChangeContainer>
-              </CourseDetail>
-            </Course>
+            </div>
+            ))}
           </Info>
           <Summary>
             <SummaryTitle>CHECKOUT SUMMARY</SummaryTitle>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>&#8358; 13,999</SummaryItemPrice>
+              <SummaryItemPrice>&#8358; {totalAmount}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>
     </Container>
-  );
-};
+  )
+}
 
-export default Cart;
+export default Cart

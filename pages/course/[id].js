@@ -24,6 +24,8 @@ import StepLabel from '@mui/material/StepLabel'
 import StepContent from '@mui/material/StepContent'
 import Paper from '@mui/material/Paper'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import useStore from "../../config/store"
+
 
 const Container = styled.div``;
 
@@ -227,7 +229,7 @@ const SingleCourse = () => {
   const [update, setUpdate] = useState(false)
   const { data: session, status } = useSession()
   const [activeStep, setActiveStep] = useState(0)
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0)
+  const { enrolledCourses, cart, addToEnrolledCourses, addToCart } = useStore()
 
   // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
   // const [purchasedCourses, setPurchasedCourses] = useState([])
@@ -294,9 +296,11 @@ const SingleCourse = () => {
   }
 
   const lessons = course?.lessons // add a null check using the ? operator
+  const price = course?.price
   const introUrl = lessons && lessons[0]?.videos[0]?.link // add null checks using the ? operator
   const lessonPdfs = lessons && lessons[1]?.pdfs
   console.log("lessons: ", lessons)
+  console.log("price: ", price)
 
   let pdfCount = 0
 
@@ -319,6 +323,25 @@ const SingleCourse = () => {
   console.log("array of registered courses: ", purchasedCourses)
 
   const isCoursePurchased = purchasedCourses.includes(id)
+
+  const handleEnroll = async () => {
+    if (price > 0) {
+      const existingCourse = cart.find((item) => item._id === course._id)
+      if (existingCourse) {
+        // Course already exists in the cart, do nothing
+        console.log(`Course  ${id} already exits in the cart`)
+        return
+      }else{
+        addToCart(course)
+        console.log(`added course with ${id} to cart`)
+      }
+    } else {
+      addToEnrolledCourses(id)
+      purchasedCourses.push(id)
+      console.log(" the purchased courses: ", purchasedCourses)
+      // setIsCoursePurchased(true)
+    }
+  }
 
   // Handle lessons 
   const handleNext = () => {
@@ -359,7 +382,7 @@ const SingleCourse = () => {
         <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}>
           <Tabs>
             <TabList style={{background: "#1C3879", color: "#fff", border: "none"}}>
-              {isCoursePurchased ? <Tab style={{margin: "auto 15px",}}><Title>About the course</Title></Tab>: null}
+              {isCoursePurchased ? <Tab style={{margin: "auto 15px",}}><Title>About</Title></Tab>: null}
               <Tab style={{margin: "auto 15px"}}><Title>Course content</Title></Tab>
               {isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Review</Title></Tab>: null}
               {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>lessons</Title></Tab>: null}
@@ -444,7 +467,6 @@ const SingleCourse = () => {
             </LessonsBox>
             </TabPanel>
             : null}
-
             {/* // Lessons pdfs */}
             {!isCoursePurchased ? 
             <TabPanel>
@@ -502,7 +524,7 @@ const SingleCourse = () => {
               <ImportantDevicesIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
               <span style={{margin: "10px"}}>Accessable on all devices</span>
             </Duration>
-            <Button style={{width: "100%"}}>{!isCoursePurchased ? "Enroll" : null}</Button>
+            <Button onClick={handleEnroll} style={{width: "100%"}}>{!isCoursePurchased ? "Enroll" : null}</Button>
           </Card>
         </CheckoutBox>
       </Box>
