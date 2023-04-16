@@ -130,9 +130,9 @@ const Payment = () => {
       }
 
     const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
-    const email = session.user.email
-    const name = session.user.name
-    const phone = session.user.phone
+    const email = session?.user.email
+    const name = session?.user.name
+    const phone = session?.user.phone
     const amount = totalAmount * 100
     
     const componentProps = {
@@ -142,7 +142,7 @@ const Payment = () => {
         name,
         phone,
         },
-        publicKey: "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550",
+        publicKey: "pk_test_",
         text: "Pay Now",
         onSuccess: () =>
         alert("Thanks for doing business with us! Come back soon!!"),
@@ -175,7 +175,7 @@ const Payment = () => {
           <PayButton {...componentProps} />
         </div>
       </Wrapper>
-      : ""}
+      : <SetUpdate>Unauthorized</SetUpdate>}
     </Container>
   )
 }

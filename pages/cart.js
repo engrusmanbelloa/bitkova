@@ -117,9 +117,9 @@ const ChangeContainer = styled.div`
 
 
 const Price = styled.p`
-  font-size: 28px;
-  font-weight: 300;
-  color: ##CDDEFF;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1C3879;
   ${ipad({ fontSize: "18px", margin: "0, auto"})}
   ${mobile({ fontSize: "17px", margin: "0, auto"})}
 `;
@@ -264,7 +264,7 @@ const Cart = () => {
                 </Details>
               </CourseDetail>
               <CourseDetail ipad>
-                <Price style={{fontWeight: 700,  color: "#1C3879"}}>Price: &#8358; {course.price}</Price>
+                <Price>Price: &#8358; {course.price.toFixed(2)}</Price>
                 <ChangeContainer>
                  <Remove onClick={remove}>Remove</Remove>
                  <Remove>Move to Wishlist</Remove>
