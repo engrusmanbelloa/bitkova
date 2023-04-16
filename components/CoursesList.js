@@ -195,7 +195,7 @@ const CoursesList = (props) => {
               <Hr />
               <Box>
                 <Price>
-                  {course.price > 0 ? <div>Price: &#8358;{course.price}</div> : "Free"}
+                  {course.price > 0 ? <div>Price: &#8358;{course.price.toFixed(2)}</div> : "Free"}
                 </Price>
                 <Button priceBtn type="button" onClick={() => router.push(`/course/${course._id}`)}>Preview</Button>
               </Box>

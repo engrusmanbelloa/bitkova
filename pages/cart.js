@@ -4,6 +4,7 @@ import { mobile, ipad} from "../responsive"
 import useStore from "../config/store"
 import { useState, useEffect } from "react"
 import {useRouter} from "next/router"
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 
 const Container = styled.div``;
 
@@ -170,6 +171,7 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   background-color: #1C3879;
+  cursor: pointer;
   color: white;
   font-size: 20px;
   font-weight: 600;
@@ -194,6 +196,18 @@ const SetUpdate = styled.div`
 const Cart = () => {
   const {cart, removeFromCart} = useStore()
   const router = useRouter ()
+  const [success, setSuccess] = useState()
+  const [error, setError] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const [update, setUpdate] = useState(false)
+  const { data: session, status } = useSession()
+
+  // hydration function
+  const hasHydrated = useStore(state => state._hasHydrated)
+  if (!hasHydrated) {
+    console.log("i am not hydrated")
+    return <SetUpdate>Loading....</SetUpdate>
+  }
 
   // Calculate the total amount
   const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
@@ -213,16 +227,9 @@ const Cart = () => {
       console.log(err)
     } 
   }
-
-  // hydration function
-  const hasHydrated = useStore(state => state._hasHydrated)
-  if (!hasHydrated) {
-    console.log("i am not hydrated")
-    return <SetUpdate>Loading....</SetUpdate>
-  }
-  
   return (
-    <Container>
+      <Container>
+      {session ?
       <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
@@ -231,10 +238,9 @@ const Cart = () => {
             <TopText>Your Cart ({cart.length})</TopText>
             <TopText>Your Wishlist (0)</TopText>
           </TopTexts>
-          <TopButton type="filled">CHECKOUT NOW</TopButton>
+          <TopButton type="filled" onClick={() => router.push("/payment")}>CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
-        
           <Info >
           {cart.map((course) => (
             <div key={course._id}>
@@ -275,10 +281,11 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>&#8358; {totalAmount}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <Button onClick={() => router.push("/payment")}>CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>
+      : <SetUpdate>Please login or update your profile</SetUpdate>}
     </Container>
   )
 }

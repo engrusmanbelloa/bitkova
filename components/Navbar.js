@@ -223,9 +223,9 @@ const Navbar = () => {
         <Right>
           <MenuItem noborder style={{ width: 120}}type="button" onClick={() => router.push("/my-courses")}>My learning</MenuItem>
             <MenuItem noborder type="button" onClick={() => router.push("/cart")}>
-              <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 0}}>
-                <Badge badgeContent={cart.length}>
-                    <ShoppingCartIcon />
+              <IconButton aria-label="cart" sx={{paddingTop: 0}}>
+                <Badge sx={{color: "red"}} badgeContent={cart.length}>
+                    <ShoppingCartIcon sx={{color: "rgba(28, 56, 121, 0.9)"}} />
                 </Badge>
               </IconButton>
               </MenuItem>
