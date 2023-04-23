@@ -231,6 +231,22 @@ const SingleCourse = () => {
   const [activeStep, setActiveStep] = useState(0)
   const { enrolledCourses, cart, addToEnrolledCourses, addToCart } = useStore()
 
+  const [courses, setCourses] = useState([])
+  const [count, setCount] = useState(0)
+  const [skip, setSkip] = useState(0)
+
+  useEffect(() => {
+    async function fetchCourses() {
+      const response = await fetch("/api/courses/getCourses")
+      const data = await response.json()
+      setCourses(data)
+      setCount(data.count)
+      console.log("courses found: ", courses)
+    }
+    fetchCourses()
+  }, [])
+  const limit = 8
+
   // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
   // const [purchasedCourses, setPurchasedCourses] = useState([])
  
@@ -336,12 +352,12 @@ const SingleCourse = () => {
         console.log(`added course with ${id} to cart`)
       }
     } else {
-      const response = await fetch(`/api/course/$[id]`, {
+      const response = await fetch(`/api/courses/$[id]`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: { courseId: id },
+        // headers: {
+        //   "Content-Type": "application/json",
+        // },
+        // body: { courseId: id },
       })
       if (response.ok) {
         addToEnrolledCourses(course)
@@ -537,7 +553,7 @@ const SingleCourse = () => {
           </Card>
         </CheckoutBox>
       </Box>
-      <CoursesList title="Related courses"/>
+      <CoursesList title="Related courses" courses={courses} limit={limit}/>
       <Newsletter />
     </Container>
   )

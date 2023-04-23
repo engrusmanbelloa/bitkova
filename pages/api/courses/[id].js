@@ -22,7 +22,6 @@ export default async function handler(req, res) {
   }
 
   const userId = token.sub
-
   const { id } = req.query
 
 
@@ -48,10 +47,9 @@ export default async function handler(req, res) {
     // Find the user in the database and update their purchased courses
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { $addToSet: { purchasedCourses: id } },
+      { $addToSet: { enrolledCourses: id } },
       { new: true }
     )
-
     // Return the updated user object
     res.status(200).json(updatedUser);
     } catch (error) {

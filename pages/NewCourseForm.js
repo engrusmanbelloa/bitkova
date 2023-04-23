@@ -208,6 +208,7 @@ const NewCourseForm = () => {
   const [image, setImage] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [creating, setCreating] = useState(false)
   const [success, setSuccess] = useState(false)
   const [lessons, setLessons] = useState([])
   const [update, setUpdate] = useState(false)
@@ -225,16 +226,16 @@ const NewCourseForm = () => {
     setLessons(updatedLessons)
   }
 
-  const handleVideoUpload = (e, lessonIndex) => {
-    const selectedFiles = e.target.files
-    const lesson = lessons[lessonIndex]
-    const updatedLesson = {
-      ...lesson,
-      videos: [...selectedFiles],
-    }
-    const updatedLessons = [    ...lessons.slice(0, lessonIndex),    updatedLesson,    ...lessons.slice(lessonIndex + 1),  ]
-    setLessons(updatedLessons)
-  }
+  // const handleVideoUpload = (e, lessonIndex) => {
+  //   const selectedFiles = e.target.files
+  //   const lesson = lessons[lessonIndex]
+  //   const updatedLesson = {
+  //     ...lesson,
+  //     videos: [...selectedFiles],
+  //   }
+  //   const updatedLessons = [    ...lessons.slice(0, lessonIndex),    updatedLesson,    ...lessons.slice(lessonIndex + 1),  ]
+  //   setLessons(updatedLessons)
+  // }
 
   const updateVideoTitle = (event, lessonIndex, videoIndex) => {
     const newLessons = [...lessons];
@@ -286,7 +287,7 @@ const NewCourseForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setLoading(true)
+    setCreating(true)
     try {
       const formData = new FormData()
       formData.append('courseTitle', title)
@@ -322,7 +323,7 @@ const NewCourseForm = () => {
       console.log([...formData.entries()])
 
       try {
-        const response = await fetch("/api/courses/addCourses", {
+        await fetch("/api/courses/addCourses", {
           'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
           method: "POST",
           body: formData
@@ -341,7 +342,7 @@ const NewCourseForm = () => {
         console.error(error)
         setError(error)
       }
-      setLoading(false)
+      setCreating(false)
       // console.log(response.data)
       // Handle successful response
     } catch (error) {

@@ -33,23 +33,34 @@ const useStore = create(
       removeFromCart: (course) => set((state) => ({
           cart: state.cart.filter((c) => c._id !== course._id),
         })),
+      
+      // fetchPurchasedCourses: async () => {
+      //   const response = await fetch("/api/courses/", {
+      //     method: "POST",
+      //   })
+      //   if (response.ok) {
+      //     const data = await response.json();
+      //     set({ purchasedCourses: data.purchasedCourses });
+      //   } else {
+      //     // Handle error
+      //   }
+      // },
       // Hydration setup
       _hasHydrated: false,
       setHasHydrated: (state) => {
-        set({ _hasHydrated: state})
+      set({ _hasHydrated: state})
       },
     }),
     {
-      onRehydrateStorage: () => (state) => {
-        state.setHasHydrated(true)
-      },
       // state storage goes here
       name: 'course-storage', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => (localforage)),
       ssr: true,
     },
     {
-      
+      onRehydrateStorage: () => (state) => {
+      state.setHasHydrated(true)
+      }, 
     },
   )
 )

@@ -40,6 +40,7 @@ const TopButton = styled.button`
   border-radius: 5px;
   color: ${(props) => props.type === "filled" && "white"};
   ${ipad({ margin: 5 })}
+  ${mobile({fontSize: 15})}
 `;
 
 const TopTexts = styled.div`
@@ -175,6 +176,7 @@ const Button = styled.button`
   color: white;
   font-size: 20px;
   font-weight: 600;
+  ${mobile({fontSize: 15})}
 `;
 
 const SetUpdate = styled.div`

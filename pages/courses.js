@@ -3,9 +3,9 @@ import "animate.css/animate.min.css"
 import CoursesList from "../components/CoursesList"
 import Link from "next/link";
 import {mobile, ipad} from "../responsive"
-import Intro from "../components/intro"
 import Testimonals from "../components/Testimonals"
 import Newsletter from "../components/Newsletter"
+import { useState, useEffect } from "react"
 
 
 const Container = styled.section`
@@ -35,7 +35,7 @@ const Image = styled.img`
   height: 60vh;
   animation: pulse;
   animation-duration: 2s;
-  ${ipad({ width: "110vh" })}
+  ${ipad({ width: "145vh", margin: "auto" })}
   ${mobile({display: "none"})}
 `;
 
@@ -77,6 +77,22 @@ const Button = styled.button`
 `;
 
 const Courses = (href) => {
+  const [courses, setCourses] = useState([])
+  const [count, setCount] = useState(0)
+  const [skip, setSkip] = useState(0)
+
+  useEffect(() => {
+    async function fetchCourses() {
+      const response = await fetch("/api/courses/getCourses")
+      const data = await response.json()
+      setCourses(data)
+      setCount(data.count)
+      console.log("courses found: ", courses)
+    }
+    fetchCourses()
+  }, [])
+  const limit = 8
+
   return (
     <Container>
       <Wrapper>
@@ -92,7 +108,7 @@ const Courses = (href) => {
       </ImageContainer>
       </Wrapper>
       <div id="courses">
-        <CoursesList title="Latest courses"/>
+        <CoursesList display="grid" title="Latest courses" courses={courses} limit={limit}/>
       </div>
       <Testimonals/>
       <Newsletter/>

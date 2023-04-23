@@ -21,7 +21,9 @@ const Container = styled.section`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
+  display: ${props => props.display === 'grid' ? 'grid' : 'flex'};
+  grid-template-columns: auto auto auto auto;
+  gap: 10px;
   margin: 0 auto;
   padding: 0;
   justify-content: center;
@@ -133,35 +135,31 @@ const Price = styled.div`
 `;
 
 const CoursesList = (props) => {
-  const [courses, setCourses] = useState([])
-  const [count, setCount] = useState(0)
-  const [skip, setSkip] = useState(0)
-  const [limit, setLimit] = useState(5)
   const router = useRouter()
+  const { courses, limit, title, foot, display } = props
+  const [coursesToDisplay, setCoursesToDisplay] = useState([])
 
   useEffect(() => {
-    async function fetchCourses() {
-      const response = await fetch("/api/courses/getCourses")
-      const data = await response.json()
-      setCourses(data)
-      setCount(data.count)
-      // console.log("courses found: ", courses)
+    const fetchData = async () => {
+      const coursesData = await courses
+      setCoursesToDisplay(coursesData.slice(0, limit))
     }
-    fetchCourses()
-  }, [])
 
-  const loadMore = () => {
-    setSkip(skip + limit)
-  }
+    fetchData()
+  }, [courses, limit])
+
+  // const loadMore = () => {
+  //   setSkip(skip + limit)
+  // }
 
   return (
     <Container>
     <Top>
-      <Button>{props.title}</Button>
+      <Button>{title}</Button>
     </Top>
     
-    <Wrapper>
-      {courses.map((course) =>(
+    <Wrapper display={display}>
+      {coursesToDisplay && coursesToDisplay.map((course) =>(
         <div key={course._id}>
         <AnimationOnScroll animateIn="animate__pulse animate__slower">
           <Card variant="elevation" elevation={10} 
@@ -215,7 +213,7 @@ const CoursesList = (props) => {
       ))}
     </Wrapper>
     <Top>
-    <Button><Link href="/courses" passHref style={{color: '#000'}}>{props.foot}</Link></Button>
+    <Button><Link href="/courses" passHref style={{color: '#000'}}>{foot}</Link></Button>
     </Top>
   </Container>
   )

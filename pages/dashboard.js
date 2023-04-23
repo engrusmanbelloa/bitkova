@@ -247,7 +247,7 @@ const Dashboard = () => {
   const { data: session, status } = useSession()
 
   const addCourse = () => {
-    router.push("/course-register")
+    router.push("/NewCourseForm")
   }
 
   const handleChange = (event, newValue) => {
