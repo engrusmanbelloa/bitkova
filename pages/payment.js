@@ -142,10 +142,11 @@ const Payment = () => {
         name,
         phone,
         },
-        publicKey: "pk_test_",
+        publicKey: "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550",
         text: "Pay Now",
-        onSuccess: () =>
-        alert("Thanks for doing business with us! Come back soon!!"),
+        onSuccess: () =>{
+          alert("Thanks for doing business with us! Come back soon!!")
+        },
         onClose: () => alert("Wait! Don't leave :("),
     }
 

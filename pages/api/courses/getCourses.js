@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   connectDB()
 
   if (req.method === 'GET') {
-    const limit = 10 
+    const limit = 4 
     const skip = 0 
     try {
       const courses = await Courses.find()

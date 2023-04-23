@@ -250,9 +250,9 @@ const Navbar = () => {
           {/* Mobile navigation menu */}
           <MobileCart>
           <Smenu type="button" onClick={() => router.push("/cart")}>
-            <IconButton aria-label="cart" sx={{color: "rgba(28, 56, 121, 0.9)", paddingTop: 1}}>
-              <Badge badgeContent={cart.length}>
-                  <ShoppingCartIcon />
+            <IconButton aria-label="cart" sx={{paddingTop: 1}}>
+              <Badge sx={{color: "red"}}  badgeContent={cart.length}>
+                  <ShoppingCartIcon sx={{color: "rgba(28, 56, 121, 0.9)"}} />
               </Badge>
             </IconButton>
             </Smenu>

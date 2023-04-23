@@ -336,10 +336,19 @@ const SingleCourse = () => {
         console.log(`added course with ${id} to cart`)
       }
     } else {
-      addToEnrolledCourses(id)
-      purchasedCourses.push(id)
-      console.log(" the purchased courses: ", purchasedCourses)
-      // setIsCoursePurchased(true)
+      const response = await fetch(`/api/course/$[id]`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: { courseId: id },
+      })
+      if (response.ok) {
+        addToEnrolledCourses(course)
+        purchasedCourses.push(id)
+        console.log(" the purchased courses: ", purchasedCourses)
+        // setIsCoursePurchased(true)
+      }  
     }
   }
 

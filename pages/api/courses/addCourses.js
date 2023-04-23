@@ -128,7 +128,13 @@ export default async function handler(req, res) {
       
       // Connect to the database
       connectDB()
-
+      // try {
+      //   // await Courses.updateMany({}, { $set: { students: [] } })
+      //   await User.updateOne({_id: id}, { $set: { ownCourses: [] } })
+      //   console.log('Schema updated successfully')
+      // } catch (error) {
+      //   console.error(error)
+      // }
       // check if the course is already exists
       const courseExist = await Courses.findOne({ title: courseTitle })
       if (!courseExist) {
@@ -137,26 +143,28 @@ export default async function handler(req, res) {
           // Create course object with uploaded file URLs
           console.log("creating the course............")
           const course = new Courses({
-            title: courseTitle,
-            shortDesc: description,
-            about: about,
+            title: courseTitle?.courseTitle,
+            shortDesc: description?.description,
+            about: about?.about,
             duration: {hours,minutes},
-            price: price,
-            lessons: lessonsArr,
-            whatYoullLearn: processedWhatToLearn,
-            courseContent: processedTopic,
+            price: price?.price,
+            lessons: lessonsArr?.lessonsArr,
+            whatYoullLearn: processedWhatToLearn?.processedWhatToLearn,
+            courseContent: processedTopic?.processedTopic,
             reviews: {name, rating, comment},
-            image: imageUrl,
+            image: imageUrl?.imageUrl,
             owner: id,
-            tags: tags
+            tags: tags?.tags,
             })
           console.log("saving the course............")
           // Save course to database
           await course.save()
           // Add the course ID to the tutor's ownCourses array
-          const tutor = await User.findById(id)
-          tutor.ownCourses.push(course._id)
-          await tutor.save()
+          const tutor = await User.findOneAndUpdate(
+            { _id: id },
+            { $addToSet: { ownCourses: course._id } },
+            { new: true }
+          )
           console.log("course saved!!!!")
           const { password, ...user } = tutor._doc
           res.status(201).json({ success: true, course })

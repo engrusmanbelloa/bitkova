@@ -1,6 +1,4 @@
-import { IncomingForm } from "formidable"
 import { getToken } from 'next-auth/jwt'
-import cloudinary from "../../../config/cloudinary"
 import connectDB from "../../../config/connectDB"
 import Courses from "../models/CourseModel"
 const _ = require('lodash')
@@ -34,8 +32,8 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const courses = await Courses.find({ owner: id }).populate('owner')
-      res.status(200).json(courses)
+      const students = await Courses.find({ students: id }).populate("students")
+      res.status(200).json(students)
     }catch (error) {
       res.status(500).json({ error: 'Error getting courses' })
     }

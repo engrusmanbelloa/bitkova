@@ -191,6 +191,8 @@ const SetUpdate = styled.div`
   box-shadow: 5px 5px #CDDEFF;
   text-align: center;
   background: rgba(28, 56, 121, 1);
+  ${ipad({width: "50%",})}
+  ${'' /* ${mobile({height: "65px",})} */}
 `;
 
 const NewCourseForm = () => {

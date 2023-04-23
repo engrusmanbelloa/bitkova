@@ -7,6 +7,12 @@ const localforageInstance = localforage.createInstance({
   name: 'bitkova', // Set a unique name for your app
 })
 
+// // Add the purchased course to the user's record in the database
+// await db.collection('users').updateOne(
+//   { _id: req.session.userId },
+//   { $addToSet: { purchasedCourses: courseId } }
+// )
+
 const useStore = create(
   persist(
     (set, get) => ({

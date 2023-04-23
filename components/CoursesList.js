@@ -46,6 +46,7 @@ const Top = styled.div`
 
 const InfoContainer = styled.div`
   padding: 7px;
+  height: 100%;
   color: white;
   text-align: center;
   background-color: rgba(28, 56, 121);
@@ -67,6 +68,14 @@ const Time = styled.div`
 `;
 
 const Box = styled.div`
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const PriceBox = styled.div`
   display: flex;
   justify-content: center; 
   align-items: center;
@@ -156,7 +165,7 @@ const CoursesList = (props) => {
         <div key={course._id}>
         <AnimationOnScroll animateIn="animate__pulse animate__slower">
           <Card variant="elevation" elevation={10} 
-            sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, 
+            sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, height: 510, 
             color: "#fff", borderRadius: 3,
             ":&hover":{},
             '@media screen and (max-width: 768px)': {
