@@ -40,7 +40,7 @@ const useStore = create(
       //   })
       //   if (response.ok) {
       //     const data = await response.json();
-      //     set({ purchasedCourses: data.purchasedCourses });
+      //     set({ enrolledCourses: data.purchasedCourses })
       //   } else {
       //     // Handle error
       //   }
