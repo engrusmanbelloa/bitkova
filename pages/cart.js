@@ -162,9 +162,15 @@ const SummaryItem = styled.div`
   font-size: ${(props) => props.type === "total" && "24px"};
 `;
 
-const SummaryItemText = styled.span``;
+const SummaryItemText = styled.span`
+  ${ipad({fontSize: 20})}
+  ${mobile({fontSize: 30})}
+`;
 
-const SummaryItemPrice = styled.span``;
+const SummaryItemPrice = styled.span`
+  ${ipad({fontSize: 20})}
+  ${mobile({fontSize: 30})}
+`;
 
 const Button = styled.button`
   width: 100%;
@@ -224,7 +230,6 @@ const Cart = () => {
         return
       }
       removeFromCart(existingCourse)
-      console.log(`added course with ${id} to cart`)
     } catch (err) {
       console.log(err)
     } 

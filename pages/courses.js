@@ -35,7 +35,7 @@ const Image = styled.img`
   height: 60vh;
   animation: pulse;
   animation-duration: 2s;
-  ${ipad({ width: "145vh", margin: "auto" })}
+  ${ipad({ width: "175vh", margin: "0 20px" })}
   ${mobile({display: "none"})}
 `;
 

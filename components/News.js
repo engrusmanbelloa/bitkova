@@ -126,7 +126,7 @@ const News = () => {
         <Card variant="elevation" elevation={20} sx={{m: 2, borderRadius: 2}}>
           <Box>
             <Title>LATEST NEWS</Title>
-            <Button>See more news</Button>
+            <Button>See more</Button>
           </Box>
           <NewsContainer>
               {newsList.map((news) => (

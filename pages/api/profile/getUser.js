@@ -1,6 +1,6 @@
 import { getToken } from 'next-auth/jwt'
 import connectDB from "../../../config/connectDB"
-import User from "../models/UserModel"
+import {User} from "../models/UserModel"
 
 export const config = {
   api: {
@@ -10,7 +10,7 @@ export const config = {
 
 // Set up Next.js API route to handle get usser
 export default async function handler(req, res) {
-  console.log("Getting courses...")
+  console.log("Getting user...")
   // get user's token
   const token = await getToken({ req })
 
@@ -20,12 +20,11 @@ export default async function handler(req, res) {
   }
 
   //Check if the authenticated user is an administrator
-  if (!token.isAdmin){
-    return res.status(401).json({ error: 'You are not authorized to perform this action', data: null })
-  }
+  // if (!token.isAdmin){
+  //   return res.status(401).json({ error: 'You are not authorized to perform this action', data: null })
+  // }
 
   const id = token.sub
-  const name = token.name
   
   // Connect to the database
   connectDB()
@@ -36,7 +35,7 @@ export default async function handler(req, res) {
         const { password, ...others } = user._doc
         res.status(200).json(others)
       }catch (error) {
-        res.status(500).json({ error: 'Error getting courses' })
+        res.status(500).json({error: 'Error getting user'})
       }
     }
 }

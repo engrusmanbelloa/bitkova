@@ -134,6 +134,17 @@ const Price = styled.div`
   font-weight: 600;
 `;
 
+const StyledCard = styled(Card)`
+  margin: 10px 20px;
+  padding:0; 
+  width: 360px;
+  height: 100%; 
+  color: #fff; 
+  border-radius: 5px
+  ${ipad({margin: 5})}
+  ${mobile({width: 300, margin: 5 })}
+`;
+
 const CoursesList = (props) => {
   const router = useRouter()
   const { courses, limit, title, foot, display } = props
@@ -144,13 +155,8 @@ const CoursesList = (props) => {
       const coursesData = await courses
       setCoursesToDisplay(coursesData.slice(0, limit))
     }
-
     fetchData()
   }, [courses, limit])
-
-  // const loadMore = () => {
-  //   setSkip(skip + limit)
-  // }
 
   return (
     <Container>
@@ -162,17 +168,7 @@ const CoursesList = (props) => {
       {coursesToDisplay && coursesToDisplay.map((course) =>(
         <div key={course._id}>
         <AnimationOnScroll animateIn="animate__pulse animate__slower">
-          <Card variant="elevation" elevation={10} 
-            sx={{m: 1, ml: 4, mr: 2, padding:0, width: 365, height: 510, 
-            color: "#fff", borderRadius: 3,
-            ":&hover":{},
-            '@media screen and (max-width: 768px)': {
-              ml: 2, mr: 1,
-                },
-            '@media screen and (max-width: 600px)': {
-              width: "290px", ml: 2, mr: 1,
-            },
-            }}>
+          <StyledCard variant="elevation" elevation={10}>
             <CourseImg src={course.image} alt={course.title} />
             <InfoContainer>
               <Title>
@@ -207,7 +203,7 @@ const CoursesList = (props) => {
                 <Button priceBtn type="button" onClick={() => router.push(`/course/${course._id}`)}>Preview</Button>
               </Box>
             </InfoContainer>
-          </Card>
+          </StyledCard>
         </AnimationOnScroll>
         </div>
       ))}

@@ -14,7 +14,6 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew'
 import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices'
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import CoursesList from '../../components/CoursesList'
-import {featuredCoures} from "../../data"
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
@@ -218,6 +217,35 @@ const LessonBtn = styled.button`
   ${'' /* ${mobile({width: "100%"})} */}
 `;
 
+const StyledCard = styled(Card)`
+  margin: 10px 20px;
+  padding:0; 
+  position: relative;
+  width: 50%;
+  height: 350px; 
+  color: #fff; 
+  border-radius: 10px;
+  ${ipad({marginLeft: 5, width: 720, height: 300})}
+  ${mobile({ width: "100%", height: 250, margin: 0, padding : 0})}
+`;
+
+const LessonCard = styled(Card)`
+  border-radius: 10px;
+  text-align: center;
+  ${'' /* ${ipad({marginLeft: 5, width: 720})}
+  ${mobile({ width: "100%", height: 250, margin: 0, padding : 0})} */}
+`;
+
+const LessonInnerCard = styled(Card)`
+  border-radius: 10px;
+  text-align: center;
+  margin: 3px;
+  width: 100%;
+  z-index: 99;
+  ${'' /* ${ipad({marginLeft: 5, width: 720})}
+  ${mobile({ width: "100%", height: 250, margin: 0, padding : 0})} */}
+`;
+
 const SingleCourse = () => {
   const router = useRouter()
   const { id } = router.query
@@ -229,7 +257,25 @@ const SingleCourse = () => {
   const [update, setUpdate] = useState(false)
   const { data: session, status } = useSession()
   const [activeStep, setActiveStep] = useState(0)
-  const { enrolledCourses, cart, addToEnrolledCourses, addToCart } = useStore()
+  const { 
+    serverState,
+    enrolledCourses,
+    cart,
+    activeCourse,
+    completedCourses,
+    wishlist,
+    ownCourses,
+    points,
+    lessonSteps,
+    addToEnrolledCourses, 
+    addToActiveCourse, 
+    addToCompletedCourses, 
+    addToWishlist, 
+    addToOwnCourses, 
+    addToCart,
+    removeFromCart,
+    clearCart
+  } = useStore()
 
   const [courses, setCourses] = useState([])
   const [count, setCount] = useState(0)
@@ -241,7 +287,6 @@ const SingleCourse = () => {
       const data = await response.json()
       setCourses(data)
       setCount(data.count)
-      console.log("courses found: ", courses)
     }
     fetchCourses()
   }, [])
@@ -249,11 +294,9 @@ const SingleCourse = () => {
 
   // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
   // const [purchasedCourses, setPurchasedCourses] = useState([])
- 
-  console.log("the course id", id)
+
 
   // const id = router.query.id
-  console.log("the session is", session)
 
   // fetch the course click by the user based on the course id
   useEffect(() => {
@@ -266,7 +309,6 @@ const SingleCourse = () => {
             setSuccess(true)
             const data = await res.json()
             setCourse(data)
-            console.log("course data is: ", course)
           } else {
             setSuccess(false)
             setError("course course not available")
@@ -282,6 +324,7 @@ const SingleCourse = () => {
     } else {
       return
     }
+    serverState()
   }, [id])
 
   // making sure that the user is logedin and he's updated his account
@@ -315,8 +358,6 @@ const SingleCourse = () => {
   const price = course?.price
   const introUrl = lessons && lessons[0]?.videos[0]?.link // add null checks using the ? operator
   const lessonPdfs = lessons && lessons[1]?.pdfs
-  console.log("lessons: ", lessons)
-  console.log("price: ", price)
 
   let pdfCount = 0
 
@@ -334,40 +375,33 @@ const SingleCourse = () => {
     }
   })
 
-  let purchasedCourses = []
-  purchasedCourses = session.user.enrolledCourses
-  console.log("array of registered courses: ", purchasedCourses)
-
-  const isCoursePurchased = purchasedCourses.includes(id)
+  // check if the course is purchased
+  const isCoursePurchased = enrolledCourses.some(course => course.includes(String(id)))
+  console.log(" the purchased courses: ", enrolledCourses)
 
   const handleEnroll = async () => {
     if (price > 0) {
       const existingCourse = cart.find((item) => item._id === course._id)
       if (existingCourse) {
         // Course already exists in the cart, do nothing
-        console.log(`Course  ${id} already exits in the cart`)
         return
       }else{
         addToCart(course)
-        console.log(`added course with ${id} to cart`)
       }
     } else {
-      const response = await fetch(`/api/courses/$[id]`, {
+      const response = await fetch(`/api/courses/${id}`, {
         method: "POST",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        // body: { courseId: id },
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
       if (response.ok) {
-        addToEnrolledCourses(course)
-        purchasedCourses.push(id)
-        console.log(" the purchased courses: ", purchasedCourses)
-        // setIsCoursePurchased(true)
+        addToEnrolledCourses(id)
+        addToActiveCourse(id)
+        // console.log(" the purchased courses: ", enrolledCourses)
       }  
     }
   }
-
   // Handle lessons 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -381,41 +415,36 @@ const SingleCourse = () => {
     setActiveStep(0)
   }
 
+  console.log('isCoursePurchased: ', isCoursePurchased)
+
   return (
     <Container>
       <Wrapper> 
       <InfoContainer>
           <Title>{course.title}</Title>
           <Desc>{course.about}</Desc>
-          <Button>ENROLL</Button>
+          {!isCoursePurchased ? <Button>ENROLL</Button> : null}
         </InfoContainer>
-        <Card variant="elevation" elevation={20} sx={{mb: 2, ml: 2, mt: 0, width: 1000, height: 350, borderRadius: 5, position: "relative",
-          '@media screen and (max-width: 768px)': {
-            ml: 1, width: 720,
-          },
-          '@media screen and (max-width: 600px)': {
-            width: "100%", height: 250, margin: 0, padding : 0,
-          },
-        }}>
+        <StyledCard variant="elevation" elevation={20}>
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/viKC9knLQUw" allow="accelerometer; 
           autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;" allowFullScreen>
         </iframe>
         {/* <Iframe  url={introUrl} width="100%" height="100%" display="block" position="relative" margin="auto"top="0" bottom="0" /> */}
-        </Card>
+        </StyledCard>
         </Wrapper>
         <Box>
-        <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center",}}>
+        <LessonCard variant="elevation" elevation={20}>
           <Tabs>
             <TabList style={{background: "#1C3879", color: "#fff", border: "none"}}>
-              {isCoursePurchased ? <Tab style={{margin: "auto 15px",}}><Title>About</Title></Tab>: null}
+              {!isCoursePurchased ? <Tab style={{margin: "auto 15px",}}><Title>About</Title></Tab>: null}
               <Tab style={{margin: "auto 15px"}}><Title>Course content</Title></Tab>
-              {isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Review</Title></Tab>: null}
-              {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>lessons</Title></Tab>: null}
-              {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Resources</Title></Tab>: null}
+              {!isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Review</Title></Tab>: null}
+              {isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>lessons</Title></Tab>: null}
+              {isCoursePurchased ? <Tab style={{margin: "auto 15px"}}><Title>Resources</Title></Tab>: null}
             </TabList>
 
             {/* // about the course */}
-            {isCoursePurchased ? 
+            {!isCoursePurchased ? 
             <TabPanel>
               <Title style={{textAlign: "left", margin: 5}}>About the course</Title>
               <Paragraph>{course.about}</Paragraph>
@@ -439,7 +468,7 @@ const SingleCourse = () => {
             </TabPanel>
 
              {/* // course reviews */}
-            {isCoursePurchased ? 
+            {!isCoursePurchased ? 
             <TabPanel>
               <Title style={{textAlign: "left", marginLeft: 5}}>Course reviews</Title>
               <ReviewBox>
@@ -455,7 +484,7 @@ const SingleCourse = () => {
             : null}
             
             {/* // Lessons videos */}
-            {!isCoursePurchased ? 
+            {isCoursePurchased ? 
             <TabPanel>
             <Title style={{textAlign: "left", marginLeft: 5}}>lessons</Title>
             <LessonsBox>
@@ -465,7 +494,7 @@ const SingleCourse = () => {
                   <StepLabel onClick={() => setActiveStep(index)}>
                     <div style={{fontSize: 25, fontWeight: 600}}>{lesson.title}</div>
                   </StepLabel>
-                  <Card variant="elevation" elevation={10} sx={{borderRadius: 3, zIndex: 99, textAlign: "center",}}>
+                  <LessonInnerCard variant="elevation" elevation={10}>
                   <StepContent>
                     {lesson.videos?.map((video, index) => (
                       <VideoContainer key={index}>
@@ -479,7 +508,7 @@ const SingleCourse = () => {
                         </LessonBtn>
                       </div>
                   </StepContent>
-                  </Card>
+                  </LessonInnerCard>
                 </Step>
               ))}
               </Stepper>
@@ -493,31 +522,31 @@ const SingleCourse = () => {
             </TabPanel>
             : null}
             {/* // Lessons pdfs */}
-            {!isCoursePurchased ? 
+            {isCoursePurchased ? 
             <TabPanel>
               <Title style={{textAlign: "left", marginLeft: 5}}>Resources</Title>
               <LessonsBox>
               {lessons.map((lesson, index) => (
                 <LessonContainer key={index}>
-                  <Card variant="elevation" elevation={10} sx={{borderRadius: 3, m: 1, textAlign: "center", width:"100%",}}>
+                  <LessonInnerCard variant="elevation" elevation={10}>
                     <Title style={{fontSize: 25, fontWeight: 600}}>{lesson.title}</Title>
                     {lesson.pdfs?.map((pdf, index) => (
                       <VideoContainer key={index}>
                         <PdfLink href={pdf.link} target="_blank" ><CloudDownloadIcon sx={{mr: 1, mb: -0.7}} />{pdf.title}</PdfLink>
                       </VideoContainer>
                   ))}
-                  </Card>
+                  </LessonInnerCard>
                 </LessonContainer>
               ))}
               </LessonsBox>
             </TabPanel>
             : null}
           </Tabs>
-        </Card>
+        </LessonCard>
 
          {/* //course add to cart section */}
         <CheckoutBox>
-          <Card variant="elevation" elevation={20} sx={{borderRadius: 3, textAlign: "center", width:"100%",}}>
+          <LessonInnerCard variant="elevation" elevation={20}>
             <Button style={{width: "100%",}}>INSIDE THE COURSE</Button>
             <Duration>
               <AccessTimeFilledIcon style={{margin: "10px", fontSize: 50, color: "#1C3879"}}/>
@@ -550,7 +579,7 @@ const SingleCourse = () => {
               <span style={{margin: "10px"}}>Accessable on all devices</span>
             </Duration>
             <Button onClick={handleEnroll} style={{width: "100%"}}>{!isCoursePurchased ? "Enroll" : null}</Button>
-          </Card>
+          </LessonInnerCard>
         </CheckoutBox>
       </Box>
       <CoursesList title="Related courses" courses={courses} limit={limit}/>

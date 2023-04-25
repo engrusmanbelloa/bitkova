@@ -1,5 +1,6 @@
 import connectDB from "../../../config/connectDB"
 import Courses from "../models/CourseModel"
+import {User} from "../models/UserModel"
 import { getToken } from 'next-auth/jwt'
 
 export const config = {
@@ -22,7 +23,10 @@ export default async function handler(req, res) {
   }
 
   const userId = token.sub
+  const name = token.name
+
   const { id } = req.query
+  console.log("course ids: ", id)
 
 
   if (req.method === 'GET') {
@@ -47,14 +51,21 @@ export default async function handler(req, res) {
     // Find the user in the database and update their purchased courses
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
-      { $addToSet: { enrolledCourses: id } },
+      { $addToSet: { enrolledCourses: id, activeCourse: id } },
+      { new: true }
+
+      // { $addToSet: { enrolledCourses: { $each: courseIds } } },
+    )
+    const addStudent = await Courses.findOneAndUpdate(
+      { _id: id },
+      { $addToSet: { students: userId} },
       { new: true }
     )
     // Return the updated user object
-    res.status(200).json(updatedUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Something went wrong" });
-    }
+    res.status(200).json(updatedUser, addStudent)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: "Something went wrong" })
+  }
   }
 }

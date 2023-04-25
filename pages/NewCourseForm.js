@@ -351,7 +351,7 @@ const NewCourseForm = () => {
     }
   }
   useEffect(() =>{
-    setLoading(true);
+    setLoading(true)
     if (!session) {
       if (status === "loading") {
         return 
@@ -361,7 +361,7 @@ const NewCourseForm = () => {
     } else if (session.user.phone === undefined || session.user.phone === null){
       setUpdate(true)
       setTimeout(() => {
-        router.push("/profile-update");
+        router.push("/profile-update")
       }, 3000)
     } else {
       setLoading(false); // Session is loaded
@@ -457,7 +457,7 @@ const NewCourseForm = () => {
               <TextArea placeholder="Comment" onChange={handleComment} />
             </div>
         </VidDiv>
-        <CreateButton type="submit">{loading ? 'Creating...' : 'Create Course'}</CreateButton>
+        <CreateButton type="submit">{creating ? 'Creating...' : 'Create Course'}</CreateButton>
       </Form>
       : <UploadDiv>You are not authorized</UploadDiv> }
     </Wrapper>

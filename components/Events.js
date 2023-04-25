@@ -113,7 +113,7 @@ const Events = () => {
         <Card variant="elevation" elevation={15} sx={{m: 2, borderRadius: 2}}>
         <Box>
         <Title>LATEST EVENTS</Title>
-        <Button>See more events</Button>
+        <Button>See more</Button>
         </Box>
         <EventContainer>
           {events.map((event) => (

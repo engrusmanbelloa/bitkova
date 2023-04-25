@@ -200,7 +200,6 @@ const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false)
 
   const {cart} = useStore()
-  console.log("cart is :", cart)
   
   return (
     <>

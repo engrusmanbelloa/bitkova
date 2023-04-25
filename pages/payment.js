@@ -113,8 +113,28 @@ const PayButton = styled(PaystackButton)`
 const Payment = () => {
     // hydration function
     const hasHydrated = useStore(state => state._hasHydrated)
-    const {cart, removeFromCart} = useStore()
+    const { 
+      enrolledCourses,
+      cart,
+      activeCourse,
+      completedCourses,
+      wishlist,
+      ownCourses,
+      points,
+      lessonSteps,
+      addToEnrolledCourses, 
+      addToActiveCourse, 
+      addToCompletedCourses, 
+      addToWishlist, 
+      addToOwnCourses, 
+      addToCart,
+      removeFromCart,
+      clearCart
+    } = useStore()
     const { data: session, status } = useSession()
+
+    const courseIds = cart.map(course => course._id)
+    console.log("cart ids: ", courseIds)
 
     const publicKey = process.env.PAYSTACK_PUBLIC_KEY
     console.log("PAYSTACK_PUBLIC_KEY: ", process.env.PAYSTACK_PUBLIC_KEY)
@@ -123,11 +143,6 @@ const Payment = () => {
     console.log("i am not hydrated")
     return <SetUpdate>Loading....</SetUpdate>
     }
-
-    if (!hasHydrated) {
-      console.log("i am not hydrated")
-      return <SetUpdate>Loading....</SetUpdate>
-      }
 
     const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
     const email = session?.user.email
@@ -144,9 +159,29 @@ const Payment = () => {
         },
         publicKey: "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550",
         text: "Pay Now",
-        onSuccess: () =>{
-          alert("Thanks for doing business with us! Come back soon!!")
-        },
+        onSuccess: () => {
+          alert("thank you for shopping with us :(")
+          const success = async () => {
+          const response = Promise.all(cartIds.map(id => fetch(`/api/courses/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // body: JSON.stringify({ courseId: id }),
+          })))
+          if (response.every(res => res.ok)) {
+
+            addToEnrolledCourses([...enrolledCourses, ...cart._id])
+            addToActiveCourse([...enrolledCourses, ...cart._id])
+            clearCart()
+            setTimeout(() => {
+              router.push("/success")
+            }, 3000)
+            console.log(" the purchased courses: ", enrolledCourses)
+          } else {
+            alert("Error adding courses to enrolledCourses")
+          }
+        }},
         onClose: () => alert("Wait! Don't leave :("),
     }
 
