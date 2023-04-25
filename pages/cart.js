@@ -56,7 +56,7 @@ const TopText = styled.span`
 const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
-  ${mobile({ flexDirection: "column" })}
+  ${ipad({ flexDirection: "column" })}
 `;
 
 const Info = styled.div`
@@ -121,8 +121,8 @@ const Price = styled.p`
   font-size: 20px;
   font-weight: 700;
   color: #1C3879;
-  ${ipad({ fontSize: "18px", margin: "0, auto"})}
-  ${mobile({ fontSize: "17px", margin: "0, auto"})}
+  ${ipad({ fontSize: "18px", margin: "0 auto"})}
+  ${mobile({ fontSize: "17px", margin: "0 auto"})}
 `;
 
 const Remove = styled.p`

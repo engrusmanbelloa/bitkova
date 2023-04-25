@@ -257,6 +257,9 @@ const SingleCourse = () => {
   const [update, setUpdate] = useState(false)
   const { data: session, status } = useSession()
   const [activeStep, setActiveStep] = useState(0)
+  const [courses, setCourses] = useState([])
+  const [count, setCount] = useState(0)
+  const [skip, setSkip] = useState(0)
   const { 
     serverState,
     enrolledCourses,
@@ -276,10 +279,6 @@ const SingleCourse = () => {
     removeFromCart,
     clearCart
   } = useStore()
-
-  const [courses, setCourses] = useState([])
-  const [count, setCount] = useState(0)
-  const [skip, setSkip] = useState(0)
 
   useEffect(() => {
     async function fetchCourses() {
@@ -423,7 +422,7 @@ const SingleCourse = () => {
       <InfoContainer>
           <Title>{course.title}</Title>
           <Desc>{course.about}</Desc>
-          {!isCoursePurchased ? <Button>ENROLL</Button> : null}
+          {!isCoursePurchased ? <Button onClick={handleEnroll}>ENROLL</Button> : null}
         </InfoContainer>
         <StyledCard variant="elevation" elevation={20}>
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/viKC9knLQUw" allow="accelerometer; 

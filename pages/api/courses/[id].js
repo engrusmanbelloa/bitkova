@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   const name = token.name
 
   const { id } = req.query
-  console.log("course ids: ", id)
+  console.log("courses ids in the server side: ", id)
 
 
   if (req.method === 'GET') {

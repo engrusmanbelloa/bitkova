@@ -43,7 +43,7 @@ const Image = styled.img`
   height: 100px;
   margin: auto;
   border-radius: 50%;
-  ${ipad({width: "100%", borderRadius: 5 })}
+  ${ipad({width: "100%", height: 150, borderRadius: 5 })}
   ${mobile({width: "100%" })}
 `;
 
@@ -113,6 +113,7 @@ const PayButton = styled(PaystackButton)`
 const Payment = () => {
     // hydration function
     const hasHydrated = useStore(state => state._hasHydrated)
+    const router = useRouter ()
     const { 
       enrolledCourses,
       cart,
@@ -132,9 +133,6 @@ const Payment = () => {
       clearCart
     } = useStore()
     const { data: session, status } = useSession()
-
-    const courseIds = cart.map(course => course._id)
-    console.log("cart ids: ", courseIds)
 
     const publicKey = process.env.PAYSTACK_PUBLIC_KEY
     console.log("PAYSTACK_PUBLIC_KEY: ", process.env.PAYSTACK_PUBLIC_KEY)
@@ -162,26 +160,35 @@ const Payment = () => {
         onSuccess: () => {
           alert("thank you for shopping with us :(")
           const success = async () => {
-          const response = Promise.all(cartIds.map(id => fetch(`/api/courses/${id}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            // body: JSON.stringify({ courseId: id }),
-          })))
-          if (response.every(res => res.ok)) {
-
-            addToEnrolledCourses([...enrolledCourses, ...cart._id])
-            addToActiveCourse([...enrolledCourses, ...cart._id])
-            clearCart()
-            setTimeout(() => {
-              router.push("/success")
-            }, 3000)
-            console.log(" the purchased courses: ", enrolledCourses)
-          } else {
+          console.log("ids call starts here")
+          try {
+            console.log("inside try block")
+            const courseIds = cart.map(course => course._id)
+            console.log("courses ids in cart: ", courseIds)
+            const response = await Promise.all(courseIds.map(id => fetch(`/api/courses/${id}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              // body: JSON.stringify({ courseId: id }),
+            })))
+            if (response.every(async (res) => res.ok)) {
+              console.log("ids posts are successful")
+              await addToEnrolledCourses(courseIds)
+              await addToActiveCourse(courseIds)
+              await clearCart()
+              setTimeout(() => {
+                router.push("/success")
+              }, 3000)
+              console.log(" the purchased courses: ", enrolledCourses)
+            }
+          } catch (error) {
+            console.error("Error adding courses to enrolledCourses: ", error)
             alert("Error adding courses to enrolledCourses")
           }
-        }},
+        }
+        success()
+      },
         onClose: () => alert("Wait! Don't leave :("),
     }
 
@@ -189,7 +196,7 @@ const Payment = () => {
     <Container>
     {session ? 
       <Wrapper>
-      <Info >
+      <Info>
           {cart.map((course) => (
             <div key={course._id}>
             <Course >
