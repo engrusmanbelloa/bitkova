@@ -7,11 +7,7 @@ const localforageInstance = localforage.createInstance({
   name: 'bitkova', // Set a unique name for your app
 })
 
-// // Add the purchased course to the user's record in the database
-// await db.collection('users').updateOne(
-//   { _id: req.session.userId },
-//   { $addToSet: { purchasedCourses: courseId } }
-// )
+
 
 const useStore = create(
   persist(
@@ -23,24 +19,10 @@ const useStore = create(
       completedCourses: [],
       wishlist: [],
       ownCourses: [],
-      points: null,
+      points: 0,
       lessonSteps: null,
-      // add  to cart function
-      addToCart: (course) => set((state) => ({ cart: [...state.cart, course] })),
-      // add  to enrolled courses function
-      addToEnrolledCourses: (courseId) => set((state) => ({ enrolledCourses: [...state.enrolledCourses, courseId] })),
-      addToActiveCourse: (courseId) => set((state) => ({ activeCourse: [...state.activeCourse, courseId] })),
-      addToCompletedCourses: (courseId) => set((state) => ({ completedCourses: [...state.completedCourses, courseId] })),
-      addToWishlist: (courseId) => set((state) => ({ wishlist: [...state.wishlist, courseId] })),
-      addToOwnCourses: (courseId) => set((state) => ({ ownCourses: [...state.ownCourses, courseId] })),
-      // addToPoints: (courseId) => set((state) => ({ points: [...state.points, courseId] })),
-      // remove from cart function
-      removeFromCart: (course) => set((state) => ({
-          cart: state.cart.filter((c) => c._id !== course._id),
-        })),
-
-      clearCart: () =>  set({ cart: [] }),
       
+      // set state of system functions
       serverState: async () => {
         try {
           const response = await fetch("/api/profile/getUser", {
@@ -61,6 +43,31 @@ const useStore = create(
           console.log(error)
         }
       },
+      
+      addToCart: (course) => set((state) => ({ cart: [...state.cart, course] })),
+      addToEnrolledCourses: (courseId) => set((state) => ({ enrolledCourses: [...state.enrolledCourses, courseId] })),
+      addToActiveCourse: (courseId) => set((state) => ({ activeCourse: [...state.activeCourse, courseId] })),
+      addToWishlist: (courseId) => set((state) => ({ wishlist: [...state.wishlist, courseId] })),
+      addToOwnCourses: (courseId) => set((state) => ({ ownCourses: [...state.ownCourses, courseId] })),
+
+      addToCompletedCourses: (courseId) => {
+        const completedCourses = get().completedCourses
+        if (!completedCourses.includes(courseId)) {
+          // If this is the first course completed by the user
+          set((state) => ({
+            points: (state.points || 0) + 10,
+            activeCourse: state.activeCourse.filter((c) => c !== courseId),
+            completedCourses: [...state.completedCourses, courseId],
+          }))
+        }
+      },
+      // remove from cart function
+      removeFromCart: (course) => set((state) => ({
+          cart: state.cart.filter((c) => c._id !== course._id),
+        })),
+
+      clearCart: () =>  set({ cart: [] }),
+      
       // Hydration setup
       _hasHydrated: false,
       setHasHydrated: (state) => {

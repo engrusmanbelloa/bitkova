@@ -116,7 +116,6 @@ const ChangeContainer = styled.div`
   ${ipad({ margin: 0, padding: 0, position: "relative", top: 50})}
 `;
 
-
 const Price = styled.p`
   font-size: 20px;
   font-weight: 700;

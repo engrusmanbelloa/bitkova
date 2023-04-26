@@ -269,6 +269,7 @@ const SingleCourse = () => {
     wishlist,
     ownCourses,
     points,
+    incrementPoints,
     lessonSteps,
     addToEnrolledCourses, 
     addToActiveCourse, 
@@ -291,11 +292,6 @@ const SingleCourse = () => {
   }, [])
   const limit = 8
 
-  // const [isCoursePurchased, setIsCoursePurchased] = useState(false)
-  // const [purchasedCourses, setPurchasedCourses] = useState([])
-
-
-  // const id = router.query.id
 
   // fetch the course click by the user based on the course id
   useEffect(() => {
@@ -402,12 +398,27 @@ const SingleCourse = () => {
     }
   }
   // Handle lessons 
-  const handleNext = () => {
+  const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    // check if the user comleted the course
+    if (activeStep === lessons.length - 1) {
+      addToCompletedCourses(id)
+      // make a request to update the server
+      try { 
+        const response = await fetch(`/api/courses/${id}`, {
+          method: "PUT",
+        })
+        if (response.ok) {
+          console.log(`Course ${id} completed`)
+        }
+      } catch(error) {
+        console.error(`Failed to mark course ${id} as completed:`, error)
+      }
+    }
   }
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
   const handleCert = () => {
@@ -527,14 +538,14 @@ const SingleCourse = () => {
               <LessonsBox>
               {lessons.map((lesson, index) => (
                 <LessonContainer key={index}>
-                  <LessonInnerCard variant="elevation" elevation={10}>
+                  <Card variant="elevation" elevation={10}>
                     <Title style={{fontSize: 25, fontWeight: 600}}>{lesson.title}</Title>
                     {lesson.pdfs?.map((pdf, index) => (
                       <VideoContainer key={index}>
                         <PdfLink href={pdf.link} target="_blank" ><CloudDownloadIcon sx={{mr: 1, mb: -0.7}} />{pdf.title}</PdfLink>
                       </VideoContainer>
                   ))}
-                  </LessonInnerCard>
+                  </Card>
                 </LessonContainer>
               ))}
               </LessonsBox>

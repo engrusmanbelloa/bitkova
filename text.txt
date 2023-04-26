@@ -194,3 +194,26 @@ const VideoPlayer = ({ href, title, videos, currentIndex, setCurrentIndex }) => 
     </div>
   );
 };
+
+
+payWithPaystack = () => {
+  const handler = window.PaystackPop.setup({
+    key: 'your_public_key_here',
+    email: 'customer@example.com',
+    amount: 10000,
+    currency: 'NGN',
+    callback: (response) => {
+      console.log(response);
+      if(response.status === false) {
+        alert("Payment failed");
+      } else {
+        alert("Payment successful");
+        // add the item id to enrolledCourses
+      }
+    },
+    onClose: () => {
+      alert('Transaction cancelled');
+    },
+  });
+  handler.openIframe();
+}

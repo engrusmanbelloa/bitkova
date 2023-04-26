@@ -192,7 +192,7 @@ const CoursesList = (props) => {
               <Box>
                 <Time>
                   <PeopleAltIcon/>
-                  <span style={{margin: "10px"}}>{course.student} Students</span>
+                  <span style={{margin: "10px"}}>{course.students.length} Students</span>
                 </Time>
               </Box>
               <Hr />

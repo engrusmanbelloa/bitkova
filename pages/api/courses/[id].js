@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   const { id } = req.query
   console.log("courses ids in the server side: ", id)
 
-
+  // get course by id and send it to client
   if (req.method === 'GET') {
     console.log("Getting course by its id...")
     try {
@@ -46,15 +46,15 @@ export default async function handler(req, res) {
     }
   }
 
+  // post newly bought courses to the db against the user and student doc in the course collection
   if (req.method === "POST"){
+
     try {
     // Find the user in the database and update their purchased courses
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
       { $addToSet: { enrolledCourses: id, activeCourse: id } },
       { new: true }
-
-      // { $addToSet: { enrolledCourses: { $each: courseIds } } },
     )
     const addStudent = await Courses.findOneAndUpdate(
       { _id: id },
@@ -68,4 +68,23 @@ export default async function handler(req, res) {
     res.status(500).json({ message: "Something went wrong" })
   }
   }
+
+  if (req.method === 'PUT') {
+    try {
+      const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { 
+        $pull: { activeCourse: id },
+        $addToSet: { completedCourses: id },
+        $inc: { points: 10 },
+      },
+      { new: true }
+    )
+      res.status(200).json({ message: 'Course completed' })
+      console.log(`course ${id} completed`)
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' })
+    }
+  } 
 }

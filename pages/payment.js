@@ -158,19 +158,14 @@ const Payment = () => {
         publicKey: "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550",
         text: "Pay Now",
         onSuccess: () => {
-          alert("thank you for shopping with us :(")
           const success = async () => {
-          console.log("ids call starts here")
           try {
-            console.log("inside try block")
             const courseIds = cart.map(course => course._id)
-            console.log("courses ids in cart: ", courseIds)
             const response = await Promise.all(courseIds.map(id => fetch(`/api/courses/${id}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              // body: JSON.stringify({ courseId: id }),
             })))
             if (response.every(async (res) => res.ok)) {
               console.log("ids posts are successful")
@@ -179,7 +174,7 @@ const Payment = () => {
               await clearCart()
               setTimeout(() => {
                 router.push("/success")
-              }, 3000)
+              }, 1000)
               console.log(" the purchased courses: ", enrolledCourses)
             }
           } catch (error) {
