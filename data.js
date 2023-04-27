@@ -105,16 +105,45 @@ export const sliderItems = [
       student: 30,
       price: "9,999",
     },
-    // {
-    //   id: 4,
-    //   img: "/courses/art.jpg",
-    //   title: "Certified Blockchain Graphics Artist (CBA)",
-    //   desc: "Design stunning arts that won't be willing to leave your pages.",
-    //   time: "6h 40m",
-    //   student: 30,
-    //   price: "9,999",
-    // },
+    {
+      id: 4,
+      img: "/courses/art.jpg",
+      title: "Certified Blockchain Graphics Artist (CBA)",
+      desc: "Design stunning arts that won't be willing to leave your pages.",
+      time: "6h 40m",
+      student: 30,
+      price: "9,999",
+    },
    
+    {
+      id: 5,
+      img: "/courses/art.jpg",
+      title: "Certified Blockchain Graphics Artist (CBA)",
+      desc: "Design stunning arts that won't be willing to leave your pages.",
+      time: "6h 40m",
+      student: 30,
+      price: "9,999",
+    },
+
+    {
+      id: 6,
+      img: "/courses/art.jpg",
+      title: "Certified Blockchain Graphics Artist (CBA)",
+      desc: "Design stunning arts that won't be willing to leave your pages.",
+      time: "6h 40m",
+      student: 30,
+      price: "9,999",
+    },
+
+    // // {
+    // //   id: 7,
+    // //   img: "/courses/art.jpg",
+    // //   title: "Certified Blockchain Graphics Artist (CBA)",
+    // //   desc: "Design stunning arts that won't be willing to leave your pages.",
+    // //   time: "6h 40m",
+    // //   student: 30,
+    // //   price: "9,999",
+    // // },
   ];
 
   export const newsList = [

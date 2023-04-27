@@ -19,6 +19,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MyLearning from '../components/MyLearning'
 import {mobile, ipad} from "../responsive"
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
+import {featuredCoures} from "../data"
 
 
 const Container = styled.div`
@@ -59,10 +60,10 @@ const AddCourseBtn = styled.div`
 const Box = styled.div`
   margin: 0 0 5px 20px;
   display: flex;
-  height: 100%;
+  height: 60vh;
   ${'' /* background-color: red; */}
-  ${ipad({height: "77vh", marginLeft: 10, marginBottom: "-20px", paddingBottom: 0})}
-  ${ipad({marginBottom: "-35px",})}
+  ${ipad({height: "67vh", marginLeft: 10, marginBottom: "0px", paddingBottom: 0})}
+  ${mobile({height: "65vh",})}
 `;
 
 const DashBox = styled.div`
@@ -94,9 +95,12 @@ const DashItemsBox = styled.div`
   border: 1px solid #CDDEFF;
   height: 70%;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   position: relative;
   top: 10px;
-  text-align: center;
   border-radius: 5px;
   cursor: pointer;
   background: rgba(28, 56, 121, 1);
@@ -122,8 +126,7 @@ const Button = styled.button`
   height: 50px;
   position: relative;
   bottom: 20px;
-  width: 97%;
-  right: 1.5%;
+  width: 99%;
   top: ${props => props.ipadBtn ? "140" : "100"};
   margin-top: 50px;
   font-size: 20px;
@@ -137,8 +140,8 @@ const Button = styled.button`
     background-color: #CDDEFF;
     color: rgba(28, 56, 121, 1);
   }
-  ${ipad({top: -45, bottom: "30px", left: 0, right: 0})}
-  ${mobile({margin: "5px auto", top: -30})}
+  ${ipad({top: -45, left: 4, right: 0, height: 35, fontSize: 16})}
+  ${mobile({margin: "5px auto", top: 0, width: "100%", left: 0,})}
 `;
 
 const AddButton = styled.button`
@@ -245,6 +248,23 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { data: session, status } = useSession()
+  const [courses, setCourses] = useState([])
+
+  useEffect(() => {
+    setIsLoading(true)
+    async function fetchCourses() {
+
+      // const response = await fetch("/api/courses/getCourses")
+      // const data = await response.json()
+      const data = featuredCoures
+      console.log("featured courses", data)
+      setCourses(data)
+      setIsLoading(false)
+      console.log("courses found: ", courses)
+    }
+    fetchCourses()
+  }, [])
+  const limit = 4
 
   const addCourse = () => {
     router.push("/NewCourseForm")
@@ -308,7 +328,7 @@ const Dashboard = () => {
             sx={{height: 520, ml: 20, mr: 10, mb: 1,
               // ipad media queries
               '@media screen and (max-width: 768px)': {
-                ml: 0, mr: 1, padding: 0, width: "20%", height: "80%",
+                ml: 0, mr: 1, padding: 0, width: "20%", height: "99%",
               },
               // moblie media queries
               '@media screen and (max-width: 600px)': {
@@ -463,13 +483,13 @@ const Dashboard = () => {
         </TabPanel>
         <TabPanel value={value} index={2} sx={{ }}>
           <LearnDashBox>
-            <MyLearning title="My Learning"/>
+            <MyLearning courses={courses} limit={limit} title="My Learning"/>
             <Button> View all</Button>
           </LearnDashBox>
         </TabPanel>
         <TabPanel value={value} index={3} sx={{ }}>
           <LearnDashBox>
-            <MyLearning title="Wishlist"/>
+            <MyLearning courses={courses} limit={limit} title="Wishlist"/>
             <Button> View all</Button>
           </LearnDashBox>
         </TabPanel>

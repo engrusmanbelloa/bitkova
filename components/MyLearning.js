@@ -1,15 +1,13 @@
 import * as React from 'react'
 import styled from "styled-components"
 import {Progress} from "rsuite"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {featuredCoures} from "../data"
 import {mobile, ipad} from "../responsive"
 
 const Container = styled.div`
   margin-top: 0px;
-  ${ipad({
-    marginLeft: 0
-   })}
+  ${ipad({ marginLeft: 0 })}
 `;
 
 const Title = styled.h1`
@@ -27,18 +25,33 @@ const Heading = styled.h1`
 `;
 
 const DashBox = styled.div`
-  margin: 0 0 0 100px;
+  ${'' /* margin: 0 0 0 100px; */}
+  margin: ${props => props.display === 'grid' ? '0 100px' : '0 0 0 100px'};
+  display: ${props => props.display === 'grid' ? 'grid' : 'flex'};
+  grid-template-columns: auto auto auto auto;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   height: 100%;
-  display: flex;
-  ${ipad({ width:  560, marginLeft: 10, justifyContent: "flex-start", overflow: "scroll",})}
-  ${mobile({ width: 315, marginBottom: 30, marginLeft: 0,})}
+  ${ipad({ 
+    gridTemplateColumns: props => props.display === 'grid' ? 'auto auto' : 'none',
+    width:  560,
+    marginLeft: 10,
+    justifyContent: "flex-start",
+    overflow: props => props.display === 'grid' ? 'none' : 'scroll',
+  })}
+  ${mobile({ 
+    width: 300,
+    margin: props => props.display === 'grid' ? 'auto' : '0px',
+    gridTemplateColumns: props => props.display === 'grid' ? 'auto' : 'none',
+    })}
 `;
 
 const DashItemsBox = styled.div`
-  margin-right: 30px;
+  margin-right: 10px;
   border: 1px solid #CDDEFF;
-  height: 70%;
+  height: 100%;
   width: 300px;
   flex: 1;
   position: relative;
@@ -49,30 +62,22 @@ const DashItemsBox = styled.div`
   cursor: pointer;
   background: rgba(28, 56, 121, 1);
   color: #fff;
-
   &:hover {
     background-color: #CDDEFF;
     color: rgba(28, 56, 121, 1);
   }
-  ${ipad({
-    left: 0, marginRight: 5,
-    })}
-  ${ipad({
-  left: 0, top: 0, marginRight: 5,
-  })}
+  ${ipad({ left: 0, marginRight: 5, })}
+  ${ipad({ left: 0, top: 0, marginRight: 5, })}
 `;
 
 const ImageBox = styled.img`
   width: 100%;
   height: 200px;
-  ${ipad({
-    width: 240
-    })}
+  ${ipad({ width: props => props.display === 'grid' ? '100%' : "240px", })}
 `;
 
 const Box = styled.div`
   margin-bottom: 10px;
-  
 `;
 
 const Paragraph = styled.p`
@@ -94,11 +99,23 @@ const EnrollBtn = styled.button`
   cursor: pointer;
   background: #CDDEFF;
   color: rgba(28, 56, 121, 1);
+  ${ipad({ fontSize: 18, fontWeight: 400})}
 
 `;
 
 const MyLearning = (props) => {
-    // course progress bar state change
+  const {title, display, limit, courses} = props
+  const [coursesToDisplay, setCoursesToDisplay] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const coursesData = await courses
+      setCoursesToDisplay(coursesData.slice(0, limit))
+    }
+    fetchData()
+  }, [courses, limit])
+
+  // course progress bar state change
   const [percent, setPercent] = useState(0)
   const increase = () => {
     const value = Math.min(percent + 10, 100)
@@ -107,26 +124,27 @@ const MyLearning = (props) => {
 
   return (
     <Container>
-     <Heading>{props.title}</Heading>
-     <DashBox>
-        {featuredCoures.map((course) => (
+     <Heading>{title}</Heading>
+     <DashBox display={display}>
+        {coursesToDisplay && coursesToDisplay.map((course) => (
             <DashItemsBox key={course.id}>
-                <ImageBox src={course.img } alt="Picture of the author"/>
-                <Title>{course.title}</Title>
-                {props.title === "Wishlist" ? 
-                  <div>
-                    <Paragraph>Price:&nbsp;&nbsp;N{course.price}</Paragraph>
-                    <EnrollBtn>Enroll</EnrollBtn>
-                  </div> : 
-                  <Box> 
-                      <Paragraph>{percent}% Completed</Paragraph> 
-                      <Progress.Line style={{height: 5,  
-                        borderRadius: 5, margin: 10, padding: 5, display: "flex", 
-                        justifyContent: "flex-end", alignItems: "center", 
-                        background: "#97D2EC"}} percent={percent}
-                        /> 
-                  </Box>
-                    }
+              <ImageBox src={course.img } alt="Picture of the author"/>
+              <Title>{course.title}</Title>
+              {title === "Wishlist" ? 
+                <div>
+                  <Paragraph>Price:&nbsp;&nbsp;N{course.price}</Paragraph>
+                  <EnrollBtn>Enroll</EnrollBtn>
+                </div> : 
+                <Box> 
+                  <Paragraph>{percent}% Completed</Paragraph> 
+                  <Progress.Line style={{
+                    height: 5,  
+                    borderRadius: 5, margin: 10, padding: 5, display: "flex", 
+                    justifyContent: "flex-end", alignItems: "center", 
+                    background: "#97D2EC"}} percent={percent}
+                    /> 
+                </Box>
+              }
             </DashItemsBox>
         ))}
      </DashBox>

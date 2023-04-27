@@ -118,24 +118,24 @@ const Courses = (href) => {
   return (
     <Container>
       <Wrapper>
-      <InfoContainer>
-        <Title>Courses</Title>
-        <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique  consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus cursus consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
-        <Link href="#courses" passHref legacyBehavior>
-          <Button>View courses</Button>
-        </Link>
-      </InfoContainer>
-      <ImageContainer>
-        <Image src="/chd.jpg" alt="Picture of the author"/>
-      </ImageContainer>
-      </Wrapper>
-      <div id="courses">
-        <CoursesList display="grid" title="Latest courses" courses={courses} limit={limit}/>
-      </div>
-      <Testimonals/>
-      <Newsletter/>
+        <InfoContainer>
+          <Title>Courses</Title>
+            <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique  consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus cursus consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique laoreet ut elementum cras cursus Morbi morbi at diam.</Desc>
+          <Link href="#courses" passHref legacyBehavior>
+            <Button>View courses</Button>
+          </Link>
+        </InfoContainer>
+        <ImageContainer>
+          <Image src="/chd.jpg" alt="Picture of the author"/>
+        </ImageContainer>
+        </Wrapper>
+          <div id="courses">
+            <CoursesList display="grid" title="Latest courses" courses={courses} limit={limit}/>
+          </div>
+        <Testimonals/>
+        <Newsletter/>
     </Container>
   )
 }
 
-export default Courses;
+export default Courses
