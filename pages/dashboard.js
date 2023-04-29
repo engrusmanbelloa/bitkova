@@ -4,13 +4,6 @@ import styled from "styled-components"
 import Newsletter from "../components/Newsletter"
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableRow from '@mui/material/TableRow'
-import TableHead from '@mui/material/TableHead'
-import Paper from '@mui/material/Paper'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import CastForEducationIcon from '@mui/icons-material/CastForEducation'
@@ -20,6 +13,7 @@ import MyLearning from '../components/MyLearning'
 import {mobile, ipad} from "../responsive"
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 import AddModal from '../components/AddModal'
+import DashboardTable from '../components/DashboardTable'
 
 const Container = styled.div`
   margin: 0;
@@ -199,28 +193,6 @@ const Points = styled.p`
   ${mobile({top: 0, left: 80, fontSize: 17,})}
 `;
 
-const StyledTableHeader = styled(TableHead)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const VerticalTableHeadRow = styled(TableRow)`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-`;
-
-const VerticalTableCell = styled(TableCell)`
-  
-`;
-
-const StyledTableCell = styled(TableCell)`
- && {
-    writing-mode: vertical-rl;
-    transform: rotate(-180deg);
-    padding: 5px 0;
-  }
-`;
 
 const SetUpdate = styled.div`
   font-size: 18px;
@@ -254,7 +226,6 @@ function TabPanel(props) {
 const head = [ "Joined", "Name", "Username", "Email", "Phone", "Bio"]
 
 const Dashboard = (props) => {
-  const {table} = props
   const [value, setValue] = useState(0)
   const [update, setUpdate] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -503,32 +474,7 @@ const Dashboard = (props) => {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Title>Profile</Title>
-            <TableContainer  component={Paper} sx={{ width: "200%", height: "90%", background: "#1C3879",
-              '@media screen and (max-width: 768px)': {
-                fontSize: "18px", width: "100%",
-                },
-                '@media screen and (max-width: 600px)': {
-                  fontSize: "16px", fontWeight: 300, width: "275px",
-                },
-            }}>
-              <Table aria-label="simple table">
-              <StyledTableHeader>
-                <VerticalTableHeadRow>
-                  <TableCell align="left">Dessert</TableCell>
-                  <TableCell align="left">Calories</TableCell>
-                  <TableCell align="left">Fat&nbsp;(g)</TableCell>
-                  <TableCell align="left">Carbs&nbsp;(g)</TableCell>
-                  <TableCell align="left">Protein&nbsp;(g)</TableCell>
-                </VerticalTableHeadRow>
-              </StyledTableHeader>
-                <TableBody>
-                    <TableRow >
-                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1}} component="th" scope="row"></TableCell>
-                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1.6}} align="left"></TableCell>
-                    </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+          <DashboardTable user={user} head={head} />
         </TabPanel>
         <TabPanel value={value} index={2} sx={{ }}>
           <LearnDashBox>
