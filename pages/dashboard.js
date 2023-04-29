@@ -241,24 +241,27 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     setIsFetching(true)
-    console.log("Fech course useEffect started")
+    // console.log("Fech course useEffect started")
     async function fetchCourses() {
       try {
         const response = await fetch("/api/courses/getCourses")
         const data = await response.json()
-        setCourses(data)
+        const filteredCourses = user ? data.filter(course => course.students.includes(user._id)) : null
+        setCourses(filteredCourses)
         setIsFetching(false)
       } catch (error) {
         setError("Could not fetch the courses detail.")
         console.log(error)
       }
     }
-    fetchCourses()
-  }, [])
+    if (user) { // add a check to see if the user state is defined
+      fetchCourses()
+    }
+  }, [user])
   
   useEffect(() => {
     setIsFetchingUser(true)
-    console.log("Fech user useEffect started")
+    // console.log("Fech user useEffect started")
     async function fetchUser() {
       try {
         const response = await fetch("/api/profile/getUser", {
