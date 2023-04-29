@@ -32,7 +32,6 @@ const Wrapper = styled.div`
   ${mobile({ padding: "0", flexDirection:"column",})}
 `;
 
-
 const InfoContainer = styled.div`
   padding: 10px;
   animation: pulse;
@@ -108,7 +107,7 @@ const DashItemsBox = styled.div`
   ${mobile({width: "255px", left: 0, marginBottom: 10})}
 `;
 
-const Desc = styled.p`
+const Desc = styled.div`
   font-size: 20px;
   font-weight: 400;
   letter-spacing: 2px;
@@ -137,25 +136,6 @@ const Button = styled.button`
   }
   ${ipad({top: -45, left: 4, right: 0, height: 35, fontSize: 16})}
   ${mobile({margin: "5px auto", top: 0, width: "100%", left: 0,})}
-`;
-
-const AddButton = styled.button`
-  height: 50px;
-  position: relative;
-  top: 50px;
-  font-size: 20px;
-  font-weight: 600;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background: rgba(28, 56, 121, 1);
-  color: #fff;
-  &:hover {
-    background-color: #CDDEFF;
-    color: rgba(28, 56, 121, 1);
-  }
-  ${ipad({width: "90%%", bottom: "30px", left: 10})}
-  ${mobile({top: 0, left: "60%", fontSize: 15, width: "90%", height: 30, fontWeight: 300})}
 `;
 
 const Title = styled.h1`
@@ -223,7 +203,7 @@ function TabPanel(props) {
   )
 }
 
-const head = [ "Joined", "Name", "Username", "Email", "Phone", "Bio"]
+const head = ["Joined", "Name", "Username", "Email", "Phone", "Bio"]
 
 const Dashboard = (props) => {
   const [value, setValue] = useState(0)
@@ -283,7 +263,7 @@ const Dashboard = (props) => {
 
   useEffect(() =>{
     setIsLoading(true)
-    console.log("Fech session useEffect started")
+    // console.log("Fech session useEffect started")
     if (!session) {
       if (status === "loading") {
         return 
@@ -315,20 +295,28 @@ const Dashboard = (props) => {
   const numActiveCourses = user?.activeCourse?.length || 0
   const numCompletedCourses = user?.completedCourses?.length || 0
   console.log("numCompletedCourses", numCompletedCourses)
-  
+
+  if (isLoading || isFetching || isFetchingUser) { 
+    return <SetUpdate>Loading....</SetUpdate>
+  }
+
+  if (update) { 
+    return <SetUpdate>Please complete your profile setup</SetUpdate>
+  }
+
+  if (update) { 
+    return <SetUpdate>{error}</SetUpdate>
+  }
 
   return (
     <Container>
-    {update && <setUpdate>Please complete your profile setup</setUpdate>}
-    {isLoading || isFetching || isFetchingUser && <SetUpdate>Loading....</SetUpdate>}
-    {error && <div>{error}</div>}
       { session ? <Wrapper> 
         <InfoContainer>
           <AvatarImg src={user.image} alt="profile picture"/>
         </InfoContainer>
         <InfoContainer>
           <Title>{user.name}</Title>
-          <Desc> {user.bio}</Desc>
+          <Desc>{user.bio}</Desc>
         </InfoContainer>
         <AddCourseBtn>
         {user.isAdmin || user.isTutor 

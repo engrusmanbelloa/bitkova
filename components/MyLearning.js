@@ -72,14 +72,14 @@ const DashItemsBox = styled.div`
 const ImageBox = styled.img`
   width: 100%;
   height: 200px;
-  ${ipad({ width: props => props.display === 'grid' ? '100%' : "240px", })}
+  ${ipad({ width: props => props.display === 'grid' ? "100%" : "240px",})}
 `;
 
 const Box = styled.div`
   margin-bottom: 10px;
 `;
 
-const Paragraph = styled.p`
+const Paragraph = styled.div`
   margin: 10px;
   font-size: 20px;
   font-weight: 400;
