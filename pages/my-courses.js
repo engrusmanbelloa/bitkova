@@ -9,6 +9,7 @@ import {Progress} from "rsuite";
 import {mobile, ipad} from "../responsive"
 import { featuredCoures } from '../data';
 import { useState } from "react"
+import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -40,12 +41,12 @@ const Title = styled.h1`
   ${mobile({ fontSize: 16, margin: "5px 10px" })}
 `;
 
-
 const MyCourses = (props) => {
   const [value, setValue] = useState(0)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
+
   // course progress bar state change
   const [percent, setPercent] = useState(0)
   const increase = () => {

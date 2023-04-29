@@ -2,7 +2,6 @@ import * as React from 'react'
 import styled from "styled-components"
 import {Progress} from "rsuite"
 import { useState, useEffect } from "react"
-import {featuredCoures} from "../data"
 import {mobile, ipad} from "../responsive"
 
 const Container = styled.div`
@@ -127,12 +126,12 @@ const MyLearning = (props) => {
      <Heading>{title}</Heading>
      <DashBox display={display}>
         {coursesToDisplay && coursesToDisplay.map((course) => (
-            <DashItemsBox key={course.id}>
-              <ImageBox src={course.img } alt="Picture of the author"/>
+            <DashItemsBox key={course._id}>
+              <ImageBox src={course.image} alt="Picture of the author"/>
               <Title>{course.title}</Title>
               {title === "Wishlist" ? 
                 <div>
-                  <Paragraph>Price:&nbsp;&nbsp;N{course.price}</Paragraph>
+                  <Paragraph>{course.price > 0 ? <div>Price: &nbsp; &#8358;{course.price.toFixed(2)}</div> : "Free"}</Paragraph>
                   <EnrollBtn>Enroll</EnrollBtn>
                 </div> : 
                 <Box> 

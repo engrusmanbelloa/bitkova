@@ -19,8 +19,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import MyLearning from '../components/MyLearning'
 import {mobile, ipad} from "../responsive"
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
-import {featuredCoures} from "../data"
-
+import AddModal from '../components/AddModal'
 
 const Container = styled.div`
   margin: 0;
@@ -92,8 +91,10 @@ const LearnDashBox = styled.div`
 
 const DashItemsBox = styled.div`
   margin-right: 30px;
+  padding: 10px;
   border: 1px solid #CDDEFF;
-  height: 70%;
+  ${'' /* height: 70%; */}
+  height: ${props => props.height === "table" ? '500px' : "70%"};
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -110,7 +111,7 @@ const DashItemsBox = styled.div`
     color: rgba(28, 56, 121, 1);
   }
   ${ipad({left: 0,})}
-  ${mobile({width: "270px", left: 0, marginBottom: 10})}
+  ${mobile({width: "255px", left: 0, marginBottom: 10})}
 `;
 
 const Desc = styled.p`
@@ -198,12 +199,35 @@ const Points = styled.p`
   ${mobile({top: 0, left: 80, fontSize: 17,})}
 `;
 
+const StyledTableHeader = styled(TableHead)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const VerticalTableHeadRow = styled(TableRow)`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+`;
+
+const VerticalTableCell = styled(TableCell)`
+  
+`;
+
+const StyledTableCell = styled(TableCell)`
+ && {
+    writing-mode: vertical-rl;
+    transform: rotate(-180deg);
+    padding: 5px 0;
+  }
+`;
+
 const SetUpdate = styled.div`
   font-size: 18px;
   margin: 10px auto;
   font-weight: 400;
   color: #fff;
-  width: 10%;
+  width: 25%;
   padding: 10px;
   border-radius: 5px;
   border: 0.5px solid;
@@ -227,55 +251,65 @@ function TabPanel(props) {
   )
 }
 
-//  create the user table data structure
-function createData(regDate, fullName, username, email,  phone, bio) {
-  return { regDate, fullName, username, email, phone, bio };
-}
+const head = [ "Joined", "Name", "Username", "Email", "Phone", "Bio"]
 
-const rows = [
-  {Joined: "Dec 12, 2022"},
-  {Name: "Bello Usman A"},
-  {Username: "Bello1234"},
-  {Email: "bello@gmail.com"},
-  {Phone: "1234567890"},
-  {Bio: "lorem ipsum dolor sit amet, consectetur adipiscing elit"},
-]
-
-
-const Dashboard = () => {
+const Dashboard = (props) => {
+  const {table} = props
   const [value, setValue] = useState(0)
   const [update, setUpdate] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+  const [isFetchingUser, setIsFetchingUser] = useState(false)
+  const [error, setError] = useState()
   const router = useRouter()
   const { data: session, status } = useSession()
   const [courses, setCourses] = useState([])
+  const [user, setUser] = useState([])
+  const modalOptions = ["Add course", "Add post", "Add event", "Add Team"]
+  const limit = 4
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsFetching(true)
+    console.log("Fech course useEffect started")
     async function fetchCourses() {
-
-      // const response = await fetch("/api/courses/getCourses")
-      // const data = await response.json()
-      const data = featuredCoures
-      console.log("featured courses", data)
-      setCourses(data)
-      setIsLoading(false)
-      console.log("courses found: ", courses)
+      try {
+        const response = await fetch("/api/courses/getCourses")
+        const data = await response.json()
+        setCourses(data)
+        setIsFetching(false)
+      } catch (error) {
+        setError("Could not fetch the courses detail.")
+        console.log(error)
+      }
     }
     fetchCourses()
   }, [])
-  const limit = 4
-
-  const addCourse = () => {
-    router.push("/NewCourseForm")
-  }
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
+  
+  useEffect(() => {
+    setIsFetchingUser(true)
+    console.log("Fech user useEffect started")
+    async function fetchUser() {
+      try {
+        const response = await fetch("/api/profile/getUser", {
+          method: "GET",
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data)
+          setIsFetchingUser(false)
+          console.log("The logged user detail: ", data)
+        }
+      } catch (error) {
+        setError("Could not fetch the user detail.")
+        console.log("something is wrong with the user" ,error)
+      }
+    }
+    fetchUser()
+  }, [])
 
   useEffect(() =>{
-    setIsLoading(true);
+    setIsLoading(true)
+    console.log("Fech session useEffect started")
     if (!session) {
       if (status === "loading") {
         return 
@@ -292,29 +326,52 @@ const Dashboard = () => {
     }
   },[session, status])
 
-  if (isLoading) {
-    return <SetUpdate>Loading....</SetUpdate>
+
+
+  const addCourse = () => {
+    router.push("/NewCourseForm")
   }
-  if (update) {
-    return <SetUpdate>Please complete your profile setup</SetUpdate>
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
   }
+
+  const isAdmin = user?.isAdmin
+  const numEnrolledCourses = user?.enrolledCourses?.length || 0
+  const numActiveCourses = user?.activeCourse?.length || 0
+  const numCompletedCourses = user?.completedCourses?.length || 0
+  console.log("numCompletedCourses", numCompletedCourses)
+  
 
   return (
     <Container>
+    {update && <setUpdate>Please complete your profile setup</setUpdate>}
+    {isLoading || isFetching || isFetchingUser && <SetUpdate>Loading....</SetUpdate>}
+    {error && <div>{error}</div>}
       { session ? <Wrapper> 
         <InfoContainer>
-          <AvatarImg src={session.user.image} alt="profile picture"/>
+          <AvatarImg src={user.image} alt="profile picture"/>
         </InfoContainer>
         <InfoContainer>
-          <Title>{session.user.name}</Title>
-          <Desc> {session.user.bio}</Desc>
+          <Title>{user.name}</Title>
+          <Desc> {user.bio}</Desc>
         </InfoContainer>
         <AddCourseBtn>
-        {session.user.isAdmin || session.user.isTutor 
+        {user.isAdmin || user.isTutor 
           ? 
-          <AddButton ipadBtn onClick={addCourse}>Add new course</AddButton> 
+          <AddModal modalOptions={modalOptions} isAdmin={isAdmin} onOptionClick={(option) => {
+            if (option === "Add course") {
+              addCourse()
+            } else if (option === "Add post" ) {
+              return
+            } else if (option === "Add event") {
+              return
+            } else if (option === "Add Team" && isAdmin) {
+              return
+            }
+          }} />
           : 
-          <Points>Points: {session.user.points}</Points>}
+          <Points>Points: {user.points}</Points>}
         </AddCourseBtn>
       </Wrapper>
       : ""}
@@ -432,54 +489,46 @@ const Dashboard = () => {
           <DashBox>
             <DashItemsBox>
               <Paragraph>Enlrolled courses</Paragraph>
-              <Title>5</Title>
+              <Title>{numEnrolledCourses}</Title>
             </DashItemsBox>
             <DashItemsBox>
               <Paragraph>Active courses</Paragraph>
-              <Title>4</Title>
+              <Title>{numActiveCourses}</Title>
             </DashItemsBox>
             <DashItemsBox>
               <Paragraph>Completed courses</Paragraph>
-              <Title>3</Title>
+              <Title>{numCompletedCourses}</Title>
             </DashItemsBox>
           </DashBox>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Title>Profile</Title>
-          <DashBox>
-          <DashItemsBox>
-            <TableContainer  component={Paper} sx={{ width: "100%", background: "#1C3879",
+            <TableContainer  component={Paper} sx={{ width: "200%", height: "90%", background: "#1C3879",
               '@media screen and (max-width: 768px)': {
-                fontSize: "18px",
+                fontSize: "18px", width: "100%",
                 },
                 '@media screen and (max-width: 600px)': {
-                  fontSize: "16px", fontWeight: 300, width: "270px",
+                  fontSize: "16px", fontWeight: 300, width: "275px",
                 },
             }}>
               <Table aria-label="simple table">
-              {/* <TableHead>
-                <TableRow>
-                  <TableCell>Dessert (100g serving)</TableCell>
-                  <TableCell align="right">Calories</TableCell>
-                  <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                  <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                  <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                </TableRow>
-              </TableHead> */}
+              <StyledTableHeader>
+                <VerticalTableHeadRow>
+                  <TableCell align="left">Dessert</TableCell>
+                  <TableCell align="left">Calories</TableCell>
+                  <TableCell align="left">Fat&nbsp;(g)</TableCell>
+                  <TableCell align="left">Carbs&nbsp;(g)</TableCell>
+                  <TableCell align="left">Protein&nbsp;(g)</TableCell>
+                </VerticalTableHeadRow>
+              </StyledTableHeader>
                 <TableBody>
-                  {rows.map((row) => (
-                    <div key={row.Email}>
                     <TableRow >
-                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1}} component="th" scope="row">{row.regDate}</TableCell>
-                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1.6}} align="left">{row.fullName}</TableCell>
+                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1}} component="th" scope="row"></TableCell>
+                      <TableCell sx={{ border: 0, fontSize: 20, color: "#fff", padding: 1.6}} align="left"></TableCell>
                     </TableRow>
-                    </div>
-                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
-          </DashItemsBox>
-          </DashBox>
         </TabPanel>
         <TabPanel value={value} index={2} sx={{ }}>
           <LearnDashBox>
