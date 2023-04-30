@@ -1,12 +1,12 @@
 import Badge from "@mui/material/Badge"
-import IconButton from '@mui/material/IconButton';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SearchIcon from '@mui/icons-material/Search';
-import LanguageIcon from '@mui/icons-material/Language';
-import MenuIcon from '@mui/icons-material/Menu';
-import styled from "styled-components";
-import { mobile, ipad} from "../responsive";
-import Link from "next/link";
+import IconButton from '@mui/material/IconButton'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import SearchIcon from '@mui/icons-material/Search'
+import LanguageIcon from '@mui/icons-material/Language'
+import MenuIcon from '@mui/icons-material/Menu'
+import styled from "styled-components"
+import { mobile, ipad} from "../responsive"
+import Link from "next/link"
 import { useRouter } from 'next/router'
 import React, { useState, useEffect } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
@@ -232,7 +232,10 @@ const Navbar = () => {
               { session ? 
                 <>
                   <LargePic src={session.user.image} referrerPolicy="no-referrer" onClick={() => router.push("/dashboard")}/>
-                  <MenuItem primary onClick={() => signOut()}>Sign out</MenuItem>
+                  <MenuItem primary onClick={() => {
+                    router.push("/")
+                    signOut()
+                  }}>Sign out</MenuItem>
                 </> 
                 :
                 <>
@@ -265,9 +268,15 @@ const Navbar = () => {
               <>
                 {session ? 
                 <>
-                  <ProfilePic src={session.user.image} referrerPolicy="no-referrer" onClick={() => router.push("/dashboard")}/>
+                  <ProfilePic src={session.user.image} referrerPolicy="no-referrer" onClick={() => {
+                    setToggleMenu(false)
+                    router.push("/dashboard")
+                    }}/>
                   <span style={{position: "relative", right: 5, top: -15, bottom: 0, marginLeft: 5}}>{session.user.name }</span>
-                  <Smenu onClick={() => signOut()}>Sign out</Smenu>
+                  <Smenu onClick={() => {
+                    setToggleMenu(false)
+                    signOut()
+                  }}>Sign out</Smenu>
                 </>
                   : 
                 <>
@@ -302,7 +311,7 @@ const Navbar = () => {
      </Container>
      
      </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
