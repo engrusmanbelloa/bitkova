@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import styled from "styled-components";
+import styled from "styled-components"
 import { getProviders, useSession, signIn, signOut, getCsrfToken, getSession } from "next-auth/react"
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GoogleIcon from '@mui/icons-material/Google'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import {mobile, ipad} from "../responsive"
 
 const Container = styled.div`
@@ -146,7 +146,7 @@ const Login = ({ providers, csrfToken }) => {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getInitialProps(context) {
   const providers = await getProviders()
 
   return {
