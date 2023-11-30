@@ -146,9 +146,8 @@ const Login = ({ providers, csrfToken }) => {
   )
 }
 
-export async function getInitialProps(context) {
+export async function getServerSideProps(context) {
   const providers = await getProviders()
-
   return {
     props: { 
       providers,
