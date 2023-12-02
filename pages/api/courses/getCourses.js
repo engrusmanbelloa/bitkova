@@ -24,7 +24,8 @@ export default async function handler(req, res) {
       res.status(200).json(courses)
       // console.log(courses)
     }catch (error) {
-      res.status(500).json({ error: 'Error getting courses' })
+      res.status(500).json({ error: 'Error getting courses', details: error.message })
     }
   }
 }
+
