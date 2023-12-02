@@ -124,7 +124,8 @@ const Login = ({ providers, csrfToken }) => {
                 setLoading(true)
                 // signIn("credentials", {email: email, password: password, callbackUrl: "http://localhost:3000"}
                 // signIn("credentials", {email: email, password: password, callbackUrl: "https://bitkova.com/api/auth/callback/google"}
-                signIn("credentials", {email: email, password: password, callbackUrl: "https://bitkova.vercel.app/api/auth/callback/google"}
+                signIn("credentials", {email: email, password: password,}
+                // callbackUrl: "https://bitkova.vercel.app/api/auth/callback/google"
               )}}
               disabled={loading}
               >
