@@ -138,7 +138,8 @@ const Login = ({ providers, csrfToken }) => {
               <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} 
                 // onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
                 // onClick={() => signIn("google", { callbackUrl: "https://bitkova.com/api/auth/callback/google"})}
-                onClick={() => signIn("google", { callbackUrl: "https://bitkova.vercel.app/api/auth/callback/google"})}
+                onClick={() => signIn("google",)}
+                // { callbackUrl: "https://bitkova.vercel.app/api/auth/callback/google"}
                 />
               <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
               <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
