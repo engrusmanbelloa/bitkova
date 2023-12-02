@@ -122,7 +122,7 @@ const Login = ({ providers, csrfToken }) => {
               onClick={(e) => {
                 e.preventDefault()
                 setLoading(true)
-                signIn("credentials", {email: email, password: password, callbackUrl: "http://localhost:3000"}
+                signIn("credentials", {email: email, password: password, callbackUrl: "https://bitkova.com/api/auth/callback/google"}
               )}}
               disabled={loading}
               >
@@ -134,7 +134,7 @@ const Login = ({ providers, csrfToken }) => {
             <Title>Sign in with</Title>
             <Social>
               <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} 
-                onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
+                onClick={() => signIn("google", { callbackUrl: "https://bitkova.com/api/auth/callback/google"})}
                 />
               <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
               <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
