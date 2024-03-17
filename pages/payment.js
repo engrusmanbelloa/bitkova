@@ -134,13 +134,14 @@ const Payment = () => {
     } = useStore()
     const { data: session, status } = useSession()
 
-    const publicKey = process.env.PAYSTACK_PUBLIC_KEY
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY
+    // "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550"
     console.log("PAYSTACK_PUBLIC_KEY: ", process.env.PAYSTACK_PUBLIC_KEY)
 
-    if (!hasHydrated || status === "loading") {
-    console.log("i am not hydrated")
-    return <SetUpdate>Loading....</SetUpdate>
-    }
+    // if (!hasHydrated || status === "loading") {
+    // console.log("i am not hydrated")
+    // return <SetUpdate>Loading....</SetUpdate>
+    // }
 
     const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
     const email = session?.user.email
@@ -155,7 +156,7 @@ const Payment = () => {
         name,
         phone,
         },
-        publicKey: "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550",
+        publicKey: publicKey,
         text: "Pay Now",
         onSuccess: () => {
           const success = async () => {

@@ -209,12 +209,12 @@ const Cart = () => {
   const [update, setUpdate] = useState(false)
   const { data: session, status } = useSession()
 
-  // hydration function
-  const hasHydrated = useStore(state => state._hasHydrated)
-  if (!hasHydrated) {
-    console.log("i am not hydrated")
-    return <SetUpdate>Loading....</SetUpdate>
-  }
+  // // hydration function
+  // const hasHydrated = useStore(state => state._hasHydrated)
+  // if (!hasHydrated) {
+  //   console.log("i am not hydrated")
+  //   return <SetUpdate>Loading....</SetUpdate>
+  // }
 
   // Calculate the total amount
   const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
