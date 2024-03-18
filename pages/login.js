@@ -105,12 +105,9 @@ const Login = ({ providers, csrfToken }) => {
   const [password, setPassword] = useState('')
   const router = useRouter()
 
-  if (session) {
-    return <div>You are signed in already</div>
-  }
-
   return (
     <Container>
+    {status === "unauthenticated" ? 
       <Wrapper>
         <Box>
           <Title>SIGN IN</Title>
@@ -137,10 +134,8 @@ const Login = ({ providers, csrfToken }) => {
             <Title>Sign in with</Title>
             <Social>
               <GoogleIcon sx={{color: "#db3236", m: 1, cursor: "pointer", fontSize: 35}} 
-                // onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
-                // onClick={() => signIn("google", { callbackUrl: "https://bitkova.com/api/auth/callback/google"})}
-                onClick={() => signIn("google",)}
-                // { callbackUrl: "https://bitkova.vercel.app/api/auth/callback/google"}
+                onClick={() => signIn("google", { callbackUrl: "http://localhost:3000"})}
+                // onClick={() => signIn("google", { callbackUrl: "https://bitkova.com/api/auth/callback/google"})}}
                 />
               <FacebookIcon sx={{color: "#3b5998", m: 1, cursor: "pointer", fontSize: 35}}/>
               <TwitterIcon sx={{color: "#00acee", m: 1, cursor: "pointer", fontSize: 35}}/>
@@ -148,6 +143,8 @@ const Login = ({ providers, csrfToken }) => {
             </Social>
         </Box>
       </Wrapper>
+      :
+      <div>You are signed in already</div>}
     </Container>
   )
 }
