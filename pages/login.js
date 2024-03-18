@@ -8,6 +8,7 @@ import FacebookIcon from '@mui/icons-material/Facebook'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import {mobile, ipad} from "../responsive"
+import IsLoading from '../components/IsLoading'
 
 const Container = styled.div`
   border-top: 1px solid #CDDEFF;
@@ -104,6 +105,10 @@ const Login = ({ providers, csrfToken }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
+
+  if (status === "loading") {
+      return <IsLoading />
+  }
 
   return (
     <Container>
