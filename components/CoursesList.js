@@ -6,7 +6,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import {featuredCoures} from "../data"
 import { mobile, ipad} from "../responsive"
 import { useState, useEffect } from "react"
