@@ -10,7 +10,9 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/config/*": ["config/*"],
-      "@/models/*": ["app/api/models/*"]
+      "@/models/*": ["app/api/models/*"],
+      "@/lib/*": ["app/api/auth/lib/*"],
+      "@/*": ["./*"]
     },
     "allowJs": true,
     "skipLibCheck": true,

@@ -1,11 +1,11 @@
 import connectDB from "@/config/connectDB"
 import Courses from "@/models/CourseModel"
 
-export const config = {
-  api: {
-    bodyParser: false
-  }
-}
+// export const config = {
+//   api: {
+//     bodyParser: false
+//   }
+// }
 
 // Set up Next.js API route to handle course creation
 export async function GET() {
@@ -21,7 +21,7 @@ export async function GET() {
     .sort({ _id: -1 })
     .skip(skip)
     .limit(limit)
-    console.log(courses)
+    // console.log(courses)
     return Response.json({ courses })
     
   }catch (error) {
