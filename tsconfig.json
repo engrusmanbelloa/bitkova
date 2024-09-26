@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
+      "@/styles/*": ["styles/*"],
       "@/config/*": ["config/*"],
       "@/models/*": ["app/api/models/*"],
       "@/lib/*": ["app/api/auth/lib/*"],

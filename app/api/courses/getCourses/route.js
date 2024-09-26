@@ -1,12 +1,6 @@
 import connectDB from "@/config/connectDB"
 import Courses from "@/models/CourseModel"
 
-// export const config = {
-//   api: {
-//     bodyParser: false
-//   }
-// }
-
 // Set up Next.js API route to handle course creation
 export async function GET() {
 // export default async function handler(req, res) {

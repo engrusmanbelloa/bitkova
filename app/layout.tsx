@@ -1,13 +1,11 @@
-// 'use client'
-import { auth } from "@/auth"
+'use client'
+import { useEffect, useState } from "react"
+// import { auth } from "@/auth"
+// import { SessionProvider } from "next-auth/react"
 import StyledComponentsRegistry from '@/lib/registry'
 import Layout from "../components/Layout"
 import dynamic from 'next/dynamic'
-import '../styles/global.css'
-import { SessionProvider } from "next-auth/react"
-// import { useEffect, useState } from "react"
-
-
+import {GlobalStyle, theme} from "@/styles/theme"
 
 // export default function RootLayout({ Component, pageProps: { session, ...pageProps } }) {
   
@@ -22,19 +20,23 @@ import { SessionProvider } from "next-auth/react"
 
 // export default RootLayout
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const session = await auth()
+  // const session = await auth()
 
   return (
     <html lang="en">
+    <GlobalStyle />
       <body>
         {/* Layout UI */}
-        {/* <main>{children}</main> */}
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          {/* <ThemeProvider theme={theme}> */}
+            {children}
+          {/* </ThemeProvider> */}
+        </StyledComponentsRegistry>
       </body>
     </html>
   )

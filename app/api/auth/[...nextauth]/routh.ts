@@ -2,9 +2,9 @@ import { handlers } from "@/auth"
 import NextAuth from "next-auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
-import clientPromise from "../../auth/lib/mongodb"
-import {User, Account, Session} from '../../models/UserModel'
-import connectDB from '../../../../config/connectDB'
+import clientPromise from "@/lib/mongodb"
+import {User, Account, Session} from '@/models/UserModel'
+import connectDB from '@/config/connectDB'
 import bcrypt from 'bcrypt'
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
@@ -151,4 +151,4 @@ import CredentialsProvider from "next-auth/providers/credentials"
 // export { handler as GET, handler as POST }
 
 
-export const { GET, POST } = handlers
+// export const { GET, POST } = handlers
