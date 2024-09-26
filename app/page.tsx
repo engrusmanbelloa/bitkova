@@ -57,6 +57,9 @@ export default function Home() {
       <Testimonals/>
       <Newsletter/> */}
       <p>Hello bitkova</p>
+      <Button onClick={() => setCount(count + 1)}>
+        Click me {count} times
+      </Button>
     </>
   )
 }

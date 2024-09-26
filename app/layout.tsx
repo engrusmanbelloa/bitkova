@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 // import { auth } from "@/auth"
 // import { SessionProvider } from "next-auth/react"
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import StyledComponentsRegistry from '@/lib/registry'
 import Layout from "../components/Layout"
 import dynamic from 'next/dynamic'
@@ -33,9 +34,9 @@ export default function RootLayout({
       <body>
         {/* Layout UI */}
         <StyledComponentsRegistry>
-          {/* <ThemeProvider theme={theme}> */}
+          <ThemeProvider theme={theme}>
             {children}
-          {/* </ThemeProvider> */}
+          </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>
