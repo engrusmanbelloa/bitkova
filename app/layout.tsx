@@ -10,26 +10,22 @@ import Announcement from "@/components/Announcement"
 import Meta from "@/components/Meta"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
-import { ipad } from "../responsive";
+import { ipad, mobile } from "@/responsive";
 
 const Container = styled.div`
   width: 1440px;
   margin: 0 auto;
   padding: 0;
-  background-color: ${props =>  props.theme.white};
-  ${ipad({ width: "748px",
-  })}
-  ${ipad({ width: "360px",
-  })}
+  background-color: ${props =>  props.theme.navHover};
+  ${ipad({ width: "768px", })}
+  ${mobile({ width: "380px", })}
 `;
 const Wrapper = styled.div`
   width: 1130px;
   margin: 0 auto;
   padding: 0 10px;
-  ${ipad({ width: "748px",
-  })}
-  ${ipad({ width: "360px",
-  })}
+  ${ipad({ width: "665px", })}
+  ${mobile({ width: "360px"})}
 `;
 
 // export default function RootLayout({ Component, pageProps: { session, ...pageProps } }) {
@@ -57,11 +53,10 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
             <Container>
-              <Wrapper>
                 <Announcement />
                 <Navbar />
                 {children}
-              </Wrapper>
+                {/* <Footer /> */}
             </Container>
           </ThemeProvider>
         </StyledComponentsRegistry>

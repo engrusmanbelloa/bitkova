@@ -16,13 +16,13 @@ import useStore from "@/config/store"
 // containers section
 const Container = styled.div`
   height: 50px;
-  margin: 0;
-  padding: 5px 0;
-  position: -webkit-sticky;
+  width: 78%;
+  margin: 0 auto;
+  padding: 5px 10px;
   position: sticky;
   top: 0;
-  z-index: 99;
-  ${ipad({ height: "45px" })}
+  ${ipad({ width: "665px", height: "30px", padding: "5px 0"})}
+  ${mobile({ width: "360px"})}
 `;
 const Wrapper = styled.nav`
   padding: 0;
@@ -69,7 +69,6 @@ const Center = styled.ul`
   height: 40px;
   padding: 10px;
   gap: 10px;
-  ${ipad({ flex: 2, height: "70%" })}
 `;
 const Menu = styled.li`
   font-size: 16px;
@@ -92,7 +91,7 @@ const Menu = styled.li`
     background-color: ${props => props.theme.main};
   }
   color: ${props => props.theme.black};
-  ${ipad({ height: 18, width: 300 })}
+  ${ipad({ fontSize: 12, lineHeigh: 14, padding: "5px 10px" })}
   ${mobile({ height: 16, width: "90%" })}
 `;
 // right section of the nav bar
@@ -106,7 +105,7 @@ const NavBtn = styled.button`
   height: 50px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 5px;
   background-color: ${props =>  props.theme.main};
   color: ${props => props.theme.offWhite};
     &:hover {
@@ -115,9 +114,7 @@ const NavBtn = styled.button`
       background-color: ${props => props.theme.navHover};
       color: ${props => props.theme.main};
   }
-  ${ipad({ 
-    flex: 1,
-    })}
+  ${ipad({ width: 114, height: 30, fontSize: "12px"})}
 `;
 
 const Navbar = () => {

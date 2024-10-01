@@ -1,16 +1,25 @@
 'use client'
-import Intro from "../components/intro"
-import Slider from "../components/Slider"
-import CoursesList from "../components/CoursesList"
+import Intro from "@/components/intro"
+import Slider from "@/components/Slider"
+import CoursesList from "@/components/CoursesList"
 import News from "@/components/News"
-import Events from "../components/Events"
-import Testimonals from "../components/Testimonals"
-import Newsletter from "../components/Newsletter"
+import Events from "@/components/Events"
+import Testimonals from "@/components/Testimonals"
+import Newsletter from "@/components/Newsletter"
 import Head from "next/head"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
-import { mobile, ipad } from "../responsive"
-import IsLoading from "../components/IsLoading"
+import { mobile, ipad } from "@/responsive"
+import IsLoading from "@/components/IsLoading"
+
+const Container = styled.div`
+  margin: 0;
+  padding: 5px 0;
+  top: 0;
+  z-index: 99;
+  background-color: #566;
+  ${ipad({ width: "665px" })}
+`;
 
 const Button = styled.button`
   font-size: 1em;
@@ -56,10 +65,12 @@ export default function Home() {
       <Events/>
       <Testimonals/>
       <Newsletter/> */}
+      <Container>
       <p>Hello bitkova</p>
       <Button onClick={() => setCount(count + 1)}>
         Click me {count} times
       </Button>
+      </Container>
     </>
   )
 }

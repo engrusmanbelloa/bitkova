@@ -29,4 +29,18 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 900;
     line-height: 30px;
   }
+
+  @media (max-width: 768px) {
+    h2 {
+      font-size: 14px;
+      line-height: 17px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 14px;
+      line-height: 17px;
+    }
+}
 `

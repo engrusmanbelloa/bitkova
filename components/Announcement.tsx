@@ -14,6 +14,7 @@ const Container = styled.div`
   justify-content: center;
   font-size: 20px;
   letter-spacing: 1.5;
+  ${mobile({height:25})}
   ${mobile({fontSize: "12px", height: "30px", textAlign: "center"})}
 `;
 
