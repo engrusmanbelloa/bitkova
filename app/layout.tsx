@@ -49,7 +49,7 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
                 <Announcement />
                 <Navbar />
                 {children}
-                {/* <Footer /> */}
+                <Footer />
             </Container>
           </ThemeProvider>
         </StyledComponentsRegistry>

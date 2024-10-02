@@ -13,11 +13,12 @@ import { useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 import useStore from "@/config/store"
+import Logo from "@/components/Logo"
 
 // containers section
 const Container = styled.div`
   height: 50px;
-  width: 78%;
+  width: ${props => props.theme.dsktopWidth};
   margin: 0 auto;
   padding: 5px 0;
   position: sticky;
@@ -47,18 +48,6 @@ const Left = styled.ul`
 const LogoContainer = styled.li`
   margin: 0;
   padding: 0;
-`;
-const Logo = styled.h2`
-  position: relative;
-  &:hover {
-    animation: pulse;
-    animation-duration: 1s;
-  }
-  &::first-letter {
-      text-transform: uppercase;
-  }
-  color: ${props => props.theme.main};
-  ${mobile({})}
 `;
 // middle section of the nav bar
 const Center = styled.ul`
@@ -137,7 +126,7 @@ const Toggle = styled.div`
   ${mobile({ display: "block",})}
 `;
 
-const Navbar = () => {
+export default function Navbar(){
   const router = useRouter()
   const { data: session } = useSession()
   const [toggleMenu, setToggleMenu] = useState(false)
@@ -176,7 +165,7 @@ const Navbar = () => {
         <Left>
            <LogoContainer>
             <Link href="/#">
-              <Logo>Bitkova</Logo>
+              <Logo main={true} />
             </Link>
            </LogoContainer>
         </Left>
@@ -194,20 +183,19 @@ const Navbar = () => {
           <Toggle>
             {!toggleMenu
             ? <MenuIcon sx={{p: 0, m:0, fontSize: 30}} onClick={() => {
-              setToggleMenu(true)
-              console.log("Toggle state changed to " + toggleMenu)
-            }}/>
-            : <CloseIcon sx={{p: 0, m:0, fontSize: 30}} onClick={() => setToggleMenu(false)} />}
+                setToggleMenu(true)
+              // console.log("Toggle state changed to " + toggleMenu)
+              }}/>
+            : <CloseIcon sx={{p: 0, m:0, fontSize: 30}} onClick={() => { 
+                setToggleMenu(false)
+              }}/>}
           {/* {toggleMenu && (
             
           )} */}
           </Toggle>
         </Right>
       </Wrapper>
-     </Container>
-     
+     </Container> 
      </>
   )
 }
-
-export default Navbar

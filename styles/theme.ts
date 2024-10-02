@@ -7,6 +7,7 @@ export const theme = {
     offWhite: "#C0DCF2",
     navHover: "rgb(53, 109, 241, 0.3)",
     mobileNavBg: "#EAF3FB",
+    dsktopWidth: "78%"
   }
 
 export const GlobalStyle = createGlobalStyle`
@@ -29,6 +30,18 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 24px;
     font-weight: 900;
     line-height: 30px;
+  }
+
+  h4 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 25px;
+  }
+  
+  p {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
   }
 
   @media (max-width: 768px) {
