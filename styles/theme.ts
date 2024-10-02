@@ -5,7 +5,8 @@ export const theme = {
     black: "#000000B2",
     white: "#ffffff",
     offWhite: "#C0DCF2",
-    navHover: "rgb(53, 109, 241, 0.3)"
+    navHover: "rgb(53, 109, 241, 0.3)",
+    mobileNavBg: "#EAF3FB",
   }
 
 export const GlobalStyle = createGlobalStyle`
@@ -32,14 +33,14 @@ export const GlobalStyle = createGlobalStyle`
 
   @media (max-width: 768px) {
     h2 {
-      font-size: 14px;
+      font-size: 20px;
       line-height: 17px;
     }
   }
 
   @media (max-width: 480px) {
     h2 {
-      font-size: 14px;
+      font-size: 20px;
       line-height: 17px;
     }
 }

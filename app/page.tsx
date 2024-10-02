@@ -19,6 +19,7 @@ const Container = styled.div`
   z-index: 99;
   background-color: #566;
   ${ipad({ width: "665px" })}
+  ${mobile({ width: "360px" })}
 `;
 
 const Button = styled.button`

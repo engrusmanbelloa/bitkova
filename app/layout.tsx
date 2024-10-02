@@ -18,14 +18,7 @@ const Container = styled.div`
   padding: 0;
   background-color: ${props =>  props.theme.navHover};
   ${ipad({ width: "768px", })}
-  ${mobile({ width: "380px", })}
-`;
-const Wrapper = styled.div`
-  width: 1130px;
-  margin: 0 auto;
-  padding: 0 10px;
-  ${ipad({ width: "665px", })}
-  ${mobile({ width: "360px"})}
+  ${mobile({ width: "360px", })}
 `;
 
 // export default function RootLayout({ Component, pageProps: { session, ...pageProps } }) {

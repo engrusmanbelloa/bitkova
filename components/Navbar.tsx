@@ -5,6 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SearchIcon from '@mui/icons-material/Search'
 import LanguageIcon from '@mui/icons-material/Language'
 import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close';
 import styled from "styled-components"
 import { mobile, ipad} from "@/responsive"
 import Link from "next/link"
@@ -18,11 +19,12 @@ const Container = styled.div`
   height: 50px;
   width: 78%;
   margin: 0 auto;
-  padding: 5px 10px;
+  padding: 5px 0;
   position: sticky;
   top: 0;
+  background-color: ${props => props.theme.white};
   ${ipad({ width: "665px", height: "30px", padding: "5px 0"})}
-  ${mobile({ width: "360px"})}
+  ${mobile({ width: "91.5%", height: "40px", background: "#EAF3FB", padding: "5px 15px" })}
 `;
 const Wrapper = styled.nav`
   padding: 0;
@@ -56,7 +58,7 @@ const Logo = styled.h2`
       text-transform: uppercase;
   }
   color: ${props => props.theme.main};
-  ${mobile({ width: 110, height: 20, marginRight: 5 })}
+  ${mobile({})}
 `;
 // middle section of the nav bar
 const Center = styled.ul`
@@ -69,6 +71,7 @@ const Center = styled.ul`
   height: 40px;
   padding: 10px;
   gap: 10px;
+  ${mobile({display: "none"})}
 `;
 const Menu = styled.li`
   font-size: 16px;
@@ -99,6 +102,7 @@ const Right = styled.div`
   flex: 1;
   display: flex;
   justify-content: flex-end;
+    ${mobile({ justifyContent: "center", alignItems: "center"})}
 `;
 const NavBtn = styled.button`
   width: 198px;
@@ -114,7 +118,23 @@ const NavBtn = styled.button`
       background-color: ${props => props.theme.navHover};
       color: ${props => props.theme.main};
   }
-  ${ipad({ width: 114, height: 30, fontSize: "12px"})}
+  ${ipad({ width: 114, height: 30, fontSize: "12px"})};
+  ${mobile({display: "none"})};
+`;
+const Toggle = styled.div`
+  display: none;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+  text-align: end;
+  padding: 0px;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  margin: auto 0;
+  border-radius: 5px;
+  z-index: 99;
+  ${mobile({ display: "block",})}
 `;
 
 const Navbar = () => {
@@ -171,6 +191,17 @@ const Navbar = () => {
         {/* nav right items container  */}
         <Right>
           <NavBtn>Browse Courses</NavBtn>
+          <Toggle>
+            {!toggleMenu
+            ? <MenuIcon sx={{p: 0, m:0, fontSize: 30}} onClick={() => {
+              setToggleMenu(true)
+              console.log("Toggle state changed to " + toggleMenu)
+            }}/>
+            : <CloseIcon sx={{p: 0, m:0, fontSize: 30}} onClick={() => setToggleMenu(false)} />}
+          {/* {toggleMenu && (
+            
+          )} */}
+          </Toggle>
         </Right>
       </Wrapper>
      </Container>
