@@ -49,6 +49,10 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 20px;
       line-height: 17px;
     }
+    p {
+      font-size: 14px;
+      font-weight: 400;
+    }
   }
 
   @media (max-width: 480px) {

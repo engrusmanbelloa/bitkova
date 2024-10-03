@@ -70,13 +70,13 @@ const Menu = styled.li`
   padding: 10px 25px;
   border-radius: 5px;
   color: ${props => props.theme.black};
-    &:hover {
+  &:hover {
       animation: pulse;
       animation-duration: 1s;
       background-color: ${props => props.theme.navHover};
       color: ${props => props.theme.main};
   }
-    &::first-letter {
+  &::first-letter {
       text-transform: uppercase;
   }
     &:focus{
@@ -130,6 +130,7 @@ export default function Navbar(){
   const router = useRouter()
   const { data: session } = useSession()
   const [toggleMenu, setToggleMenu] = useState(false)
+  const main = "true"
 
   const menuList = [
 
@@ -165,7 +166,7 @@ export default function Navbar(){
         <Left>
            <LogoContainer>
             <Link href="/#">
-              <Logo main={true} />
+              <Logo $main={main} />
             </Link>
            </LogoContainer>
         </Left>

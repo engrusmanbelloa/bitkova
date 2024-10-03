@@ -8,12 +8,17 @@ import Link from "next/link"
 import Logo from "@/components/Logo"
 
 const Container = styled.div`
-  display: flex;
   color: ${props => props.theme.black};
   background: ${props =>  props.theme.white};
   width: ${props => props.theme.dsktopWidth};
   margin: 0 auto 10px;
-  ${mobile({ flexDirection: "column" })};
+  ${ipad({ width: "665px", })};
+  ${mobile({ width: "360px", flexDirection: "column" })};
+`;
+const Wrapper = styled.div`
+  display: flex;
+  ${ipad({})};
+  ${mobile({flexDirection: "column" })};
 `;
 const Left = styled.div`
   flex: 1;
@@ -21,14 +26,12 @@ const Left = styled.div`
   flex-direction: column;
   padding: 10px 0px;
   margin: 0;
+  ${ipad({})}
 `;
 const Desc = styled.p`
   margin: 0px;
   text-align: justify;
-  ${ipad({
-    margin: "5px 0",
-    fontSize: "16px",
-  })}
+  ${ipad({})}
 `;
 const SocialContainer = styled.div`
   display: flex;
@@ -43,15 +46,24 @@ const SocialIcon = styled.div`
   justify-content: center;
   margin-right: 20px;
   cursor: pointer;
+  &:hover {
+    animation: pulse;
+    animation-duration: 1s;
+    background-color: ${props => props.theme.navHover};
+    color: ${props => props.theme.main};
+  }
+   ${ipad({ marginRight: 5})}
 `;
 const Center = styled.div`
   flex: 1.5;
   padding: 10px 0px;
   margin: 0 40px;
+  ${ipad({ flex: 2, margin: "0 30px"})}
   ${mobile({ display: "none" })}
 `;
 const Title = styled.h4`
   margin-bottom: 18px;
+  ${ipad({marginBottom: "10px", marginTop: 12})}
 `;
 const List = styled.ul`
   margin: 0;
@@ -66,6 +78,7 @@ const ListItem = styled.li`
   &::first-letter {
     text-transform: uppercase;
   };
+  ${ipad({fontWeight: "400"})}
 `;
 const LinkItem = styled(Link)`
   color: ${props => props.theme.black};
@@ -73,12 +86,14 @@ const LinkItem = styled(Link)`
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  &:hover {color: ${props => props.theme.navHover};
+  ${ipad({fontWeight: 400,})};
+  &:hover {color: ${props => props.theme.main};
 `;
 const Right = styled.div`
   flex: 1.5;
   padding: 10px 0px;
   margin: 0;
+  ${ipad({ flex: 2,})}
   ${mobile({
     borderTop: "1px solid #CDDEFF",
   })}
@@ -98,10 +113,15 @@ const IconsData = styled.p`
   margin: 5px;
 `;
 const Payment = styled.img`
-    width: 50%;
+    width: 60%;
+    ${ipad({ width: "90%" })}
+`;
+const Alrights = styled.p`
+  margin: 30px auto;
+  width: 100%;
+  text-align: center;
 `;
 export default function Footer(){
-// const Footer = () => {
   const socialIconsData = [
     {
       icon: Facebook,
@@ -124,7 +144,6 @@ export default function Footer(){
       color: "#1c92d2",
     },
   ]
-
   const footerMenuList = [
 
     {
@@ -158,7 +177,6 @@ export default function Footer(){
       title: "Frequent Questions"
     },
   ]
-
   const contactItemsData = [
     {
       icon: WhatsApp,
@@ -177,31 +195,33 @@ export default function Footer(){
     }
   ]
   const router = useRouter()
+  const currentYear = new Date().getFullYear()
   return (
     <>
       <Container>
-        <Left>
-          <Logo />
-          <Desc>
-            At Bitkova, our primary aim is to equip you with core digital skills  needed to  navigate 
-            through the job market and advance in your career.
-          </Desc>
-          <SocialContainer>
-            {socialIconsData.map((iconData, index) => (
-              <SocialIcon key={index}><iconData.icon sx={{color: iconData.color}} onClick={iconData.onClick} /></SocialIcon>
-            ))}
-          </SocialContainer>
-        </Left>
-        <Center>
-          <Title>Useful Links</Title>
-          <List>
-            {footerMenuList.map((menu, index) => (
-              <ListItem key={index}>
-                <LinkItem href={menu.href} onClick={() => router.push(menu.href)}>{menu.title}</LinkItem>
-              </ListItem>
-            ))}
-          </List>
-        </Center>
+        <Wrapper>
+          <Left>
+            <Logo />
+            <Desc>
+              At Bitkova, our primary aim is to equip you with core digital skills  needed to  navigate 
+              through the job market and advance in your career.
+            </Desc>
+            <SocialContainer>
+              {socialIconsData.map((iconData, index) => (
+                <SocialIcon key={index}><iconData.icon sx={{color: iconData.color}} onClick={iconData.onClick} /></SocialIcon>
+              ))}
+            </SocialContainer>
+          </Left>
+          <Center>
+            <Title>Useful Links</Title>
+            <List>
+              {footerMenuList.map((menu, index) => (
+                <ListItem key={index}>
+                  <LinkItem href={menu.href} onClick={() => router.push(menu.href)}>{menu.title}</LinkItem>
+                </ListItem>
+              ))}
+            </List>
+          </Center>
           <Right>
           <Title>Contact</Title>
           <ContactItem>
@@ -213,7 +233,11 @@ export default function Footer(){
             ))}
           </ContactItem>
           <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" alt="Picture of the author" />
-        </Right>
+          </Right>
+        </Wrapper>
+        <Alrights>
+          © {currentYear} Bitkova Academy. All rights reserved.
+        </Alrights>
       </Container>
     </>
   )
