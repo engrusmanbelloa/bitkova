@@ -11,12 +11,13 @@ import Meta from "@/components/Meta"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { ipad, mobile } from "@/responsive";
+import CarrierCard from "@/components/CarrierCard"
 
 const Container = styled.div`
   width: 1440px;
   margin: 0 auto;
   padding: 0;
-  background-color: ${props =>  props.theme.navHover};
+  background-color: ${props =>  props.theme.white};
   ${ipad({ width: "768px", })}
   ${mobile({ width: "360px", })}
 `;
@@ -49,6 +50,7 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
                 <Announcement />
                 <Navbar />
                 {children}
+                <CarrierCard />
                 <Footer />
             </Container>
           </ThemeProvider>

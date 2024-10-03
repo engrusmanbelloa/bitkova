@@ -20,12 +20,12 @@ const Container = styled.div`
   height: 50px;
   width: ${props => props.theme.dsktopWidth};
   margin: 0 auto;
-  padding: 5px 0;
+  padding: 5px 15px;
   position: sticky;
   top: 0;
   background-color: ${props => props.theme.white};
   ${ipad({ width: "665px", height: "30px", padding: "5px 0"})}
-  ${mobile({ width: "91.5%", height: "40px", background: "#EAF3FB", padding: "5px 15px" })}
+  ${mobile({ width: "91.5%", height: "40px", background: "#EAF3FB", padding: "5px 15px", boxShadow: "0px 4px 4px 0px #00000033"})}
 `;
 const Wrapper = styled.nav`
   padding: 0;
