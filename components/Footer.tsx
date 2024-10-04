@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import Link from "next/link"
 import Logo from "@/components/Logo"
 
-const Container = styled.div`
+const Container = styled.section`
   color: ${props => props.theme.black};
   background: ${props =>  props.theme.white};
   width: ${props => props.theme.dsktopWidth};
@@ -86,11 +86,11 @@ const LinkItem = styled(Link)`
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  ${ipad({fontWeight: 400,})};
+  ${ipad({})};
   &:hover {color: ${props => props.theme.main};
 `;
 const Right = styled.div`
-  flex: 1.5;
+  flex: 2;
   padding: 10px 0px;
   margin: 0;
   ${ipad({ flex: 2,})}
@@ -154,12 +154,12 @@ export default function Footer(){
     {
       id: 2,
       href: "#",
-      title: "Courses",
+      title: "Terms"
     },
     {
       id: 3,
       href: "#",
-      title: "Our Hub"
+      title: "Courses",
     },
     {
       id: 4,
@@ -169,7 +169,7 @@ export default function Footer(){
     {
       id: 5,
       href: "#",
-      title: "Terms"
+      title: "Our Hub"
     },
     {
       id: 6,

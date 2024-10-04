@@ -1,29 +1,26 @@
 'use client'
-import Badge from "@mui/material/Badge"
-import IconButton from '@mui/material/IconButton'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import SearchIcon from '@mui/icons-material/Search'
-import LanguageIcon from '@mui/icons-material/Language'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect } from 'react'
 import styled from "styled-components"
-import { mobile, ipad} from "@/responsive"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-import React, { useState, useEffect } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
+import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close';
 import useStore from "@/config/store"
 import Logo from "@/components/Logo"
+import { mobile, ipad} from "@/responsive"
 
 // containers section
-const Container = styled.div`
+const Container = styled.section`
   height: 50px;
   width: ${props => props.theme.dsktopWidth};
   margin: 0 auto;
-  padding: 5px 15px;
+  padding: ${props => props.theme.pagePadding};
   position: sticky;
   top: 0;
-  background-color: ${props => props.theme.white};
+  box-shadow: 0px 4px 4px 0px #00000033;
+  border-radius: 5px;
+  background-color: ${props => props.theme.main};
   ${ipad({ width: "665px", height: "30px", padding: "5px 0"})}
   ${mobile({ width: "91.5%", height: "40px", background: "#EAF3FB", padding: "5px 15px", boxShadow: "0px 4px 4px 0px #00000033"})}
 `;
@@ -98,7 +95,7 @@ const NavBtn = styled.button`
   height: 50px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 5px;
+  border-radius: 8px;
   background-color: ${props =>  props.theme.main};
   color: ${props => props.theme.offWhite};
     &:hover {

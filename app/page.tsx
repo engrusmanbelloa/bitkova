@@ -11,15 +11,14 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
+import HomeHero from "@/components/HomeHero"
 
 const Container = styled.div`
-  margin: 0;
-  padding: 5px 0;
-  top: 0;
-  z-index: 99;
-  background-color: #566;
-  ${ipad({ width: "665px" })}
-  ${mobile({ width: "360px" })}
+  width: ${props => props.theme.dsktopWidth};
+  margin: 0 auto;
+  padding: ${props => props.theme.pagePadding};
+  ${ipad({ width: "665px", padding: "5px 0" })}
+  ${mobile({ width: "360px", padding: 0})}
 `;
 
 const Button = styled.button`
@@ -59,18 +58,11 @@ export default function Home() {
 
   return (
     <>
-      {/* <Slider/>
-      <Intro/>
-      <CoursesList title="Featured courses" foot="See more" courses={courses} limit={limit}/>
-      <News/>
-      <Events/>
-      <Testimonals/>
-      <Newsletter/> */}
       <Container>
-      <p>Hello bitkova</p>
-      <Button onClick={() => setCount(count + 1)}>
+        <HomeHero />
+        <Button onClick={() => setCount(count + 1)}>
         Click me {count} times
-      </Button>
+        </Button>   
       </Container>
     </>
   )

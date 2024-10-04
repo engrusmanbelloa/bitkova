@@ -49,7 +49,7 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
             <Container>
                 <Announcement />
                 <Navbar />
-                {children}
+                  {children}
                 <CarrierCard />
                 <Footer />
             </Container>

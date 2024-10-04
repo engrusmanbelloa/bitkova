@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { mobile, ipad} from "../responsive";
 
 const Container = styled.div`
-  height: 30px;
+  height: 40px;
   width: 100%;
   margin: 0;
   padding: 0;

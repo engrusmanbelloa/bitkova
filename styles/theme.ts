@@ -7,7 +7,9 @@ export const theme = {
     offWhite: "#C0DCF2",
     navHover: "rgb(53, 109, 241, 0.3)",
     mobileNavBg: "#EAF3FB",
-    dsktopWidth: "78%"
+    dsktopWidth: "1140px",
+    heroWidth: "1100px",
+    pagePadding: "5px 15px",
   }
 
 export const GlobalStyle = createGlobalStyle`
@@ -26,6 +28,11 @@ export const GlobalStyle = createGlobalStyle`
   a::first-letter {
       text-transform: uppercase;
   }
+  h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 60px;
+  }
   h2 {
     font-size: 24px;
     font-weight: 900;
@@ -40,11 +47,15 @@ export const GlobalStyle = createGlobalStyle`
   
   p {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 25px;
   }
 
   @media (max-width: 768px) {
+    h1 {
+      font-size: 36px;
+      line-height: 43px;
+    }
     h2 {
       font-size: 20px;
       line-height: 17px;
@@ -55,7 +66,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     h2 {
       font-size: 20px;
       line-height: 17px;
