@@ -16,6 +16,7 @@ import HomeHero from "@/components/HomeHero"
 const Container = styled.div`
   width: ${props => props.theme.dsktopWidth};
   margin: 0 auto;
+  z-index: 1; 
   padding: ${props => props.theme.pagePadding};
   ${ipad({ width: "665px", padding: "5px 0" })}
   ${mobile({ width: "360px", padding: 0})}

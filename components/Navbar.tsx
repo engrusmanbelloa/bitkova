@@ -20,7 +20,8 @@ const Container = styled.section`
   top: 0;
   box-shadow: 0px 4px 4px 0px #00000033;
   border-radius: 5px;
-  background-color: ${props => props.theme.main};
+  z-index: 1; 
+  background-color: ${props => props.theme.white};
   ${ipad({ width: "665px", height: "30px", padding: "5px 0"})}
   ${mobile({ width: "91.5%", height: "40px", background: "#EAF3FB", padding: "5px 15px", boxShadow: "0px 4px 4px 0px #00000033"})}
 `;

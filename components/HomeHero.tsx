@@ -45,6 +45,7 @@ const HeroImg = styled(Image)`
     height: 450px;
     border-radius: 12px 0px 0px;
     margin: 0;
+    padding: 0;
     ${ipad({ width: "220px", height: "276px", marginLeft: 60})};
     ${mobile({ width: "300px", height: 340, margin: "0 0 0 20px"})}
 `;
@@ -52,24 +53,24 @@ const GreenSquare = styled.div`
     width: 145px;
     height: 145px;
     background: #00D085;
-    position: absolute;
-    bottom: 400px;
-    right: 220px;
+    position: relative;
+    bottom: 250px;
+    left: 315px;
     border-radius: 25px;
     opacity: 0.7;
-    ${ipad({ width: "85px", height: "85px", right: 45, borderRadius: 15, opacity: 0.3})};
-    ${mobile({ width: 110, height: 110, right: 95, bottom: 60 })}
+    ${ipad({ width: "85px", height: "85px", left: 230, bottom: 150, borderRadius: 15, opacity: 0.3})};
+    ${mobile({ width: 110, height: 110, left: 250, bottom: 200 })}
 `;
 const BlueSquare = styled.div`
     width: 70px;
     height: 70px;
     background: #356CF4;
-    position: absolute;
-    top: 155px;
-    right: 610px;
+    position: relative;
+    bottom: 400px;
+    right: 0px;
     border-radius: 12px;
-    ${ipad({ width: "45px", height: "45px", right: 250, borderRadius: 7, opacity: 0.3})};
-     ${mobile({ width: 55, height: 55, right: 400, top: 450 })}
+    ${ipad({ width: "45px", height: "45px", left: 50, bottom: 250, borderRadius: 7, opacity: 0.3})};
+    ${mobile({ width: 55, height: 55, left: 0, bottom: 300 })}
 `;
 export default function HomeHero() {
     const main = true
@@ -85,9 +86,9 @@ export default function HomeHero() {
             <Button $main={main} title='Browse courses' />
         </Left>
         <Right>
-            <GreenSquare />
             <HeroImg src="/hero.png" width={500} height={500} alt="Hero image" priority={true} />
             <BlueSquare />
+            <GreenSquare />
         </Right>
     </Container>
   )
