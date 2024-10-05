@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import styled from "styled-components";
 import { mobile, ipad } from "../responsive";
@@ -8,7 +9,7 @@ import Telegram from '@mui/icons-material/Telegram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 const Container = styled.div`
   display: flex;

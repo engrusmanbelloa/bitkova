@@ -1,3 +1,4 @@
+'use client'
 import Announcement from "./Announcement"
 import Meta from "./Meta"
 import Navbar from "./Navbar"

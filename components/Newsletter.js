@@ -1,3 +1,4 @@
+'use client'
 import SendIcon from '@mui/icons-material/Send'
 import styled from "styled-components"
 import { AnimationOnScroll } from 'react-animation-on-scroll'
