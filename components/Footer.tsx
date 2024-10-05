@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import styled from "styled-components";
-import { mobile, ipad } from "@/responsive";
-import {Facebook, Twitter, Instagram, Telegram, WhatsApp, LocationOn, MailOutline} from '@mui/icons-material';
+import styled from "styled-components"
+import { mobile, ipad } from "@/responsive"
+import {Facebook, Twitter, Instagram, Telegram, WhatsApp, LocationOn, MailOutline} from '@mui/icons-material'
 import { useRouter } from 'next/navigation'
 import Link from "next/link"
 import Logo from "@/components/Logo"

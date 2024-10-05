@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { SessionProvider } from "next-auth/react"
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
 import StyledComponentsRegistry from '@/lib/registry'
-import dynamic from 'next/dynamic'
 import {GlobalStyle, theme} from "@/styles/theme"
 import Announcement from "@/components/Announcement"
 import Meta from "@/components/Meta"
@@ -39,7 +38,7 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
   // const session = await auth()
 
   return (
-    <SessionProvider session={session}>
+    // <SessionProvider session={session}>
     <html lang="en">
       <body>
       <GlobalStyle />
@@ -57,6 +56,6 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
         </StyledComponentsRegistry>
       </body>
     </html>
-    </SessionProvider>
+    // </SessionProvider>
   )
 }

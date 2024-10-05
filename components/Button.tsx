@@ -26,8 +26,8 @@ const Btn = styled.button<{ $main?: boolean }>`
   ${mobile({lineHeight: "14px"})};
 `;
 
-export default function Button(props: { $main?: boolean, title?: string }) {
+export default function Button(props: { $main?: boolean, title?: string, onClick?: () => void }) {
   return (
-    <Btn $main={props.$main}>{props.title}</Btn>
+    <Btn $main={props.$main} onClick={props.onClick}>{props.title}</Btn>
   )
 }

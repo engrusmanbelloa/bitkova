@@ -1,17 +1,15 @@
 'use client'
-import Intro from "@/components/intro"
-import Slider from "@/components/Slider"
-import CoursesList from "@/components/CoursesList"
-import News from "@/components/News"
-import Events from "@/components/Events"
-import Testimonals from "@/components/Testimonals"
-import Newsletter from "@/components/Newsletter"
-import Head from "next/head"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
+import Link from "next/link"
+import BarChartIcon from '@mui/icons-material/BarChart'
+import ComputerIcon from '@mui/icons-material/Computer'
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment'
+import { signIn } from "@/auth"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
+import Button from "@/components/Button"
 
 const Container = styled.div`
   width: ${props => props.theme.dsktopWidth};
@@ -21,16 +19,72 @@ const Container = styled.div`
   ${ipad({ width: "665px", padding: "5px 0" })}
   ${mobile({ width: "360px", padding: 0})}
 `;
-
-const Button = styled.button`
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border-radius: 3px;
-
-  /* Color the border and text with theme.main */
-  color: ${props => props.theme.main};
-  border: 2px solid ${props => props.theme.main};
+const Intro = styled.section`
+  margin: 70px auto 0;
+  width: 520px;
+  height: 110px;
+  text-align: center;
+  ${mobile({ width: "360px", padding: 0})}
+`;
+const Title = styled.h2`
+  margin: 0;
+  color: ${props => props.theme.main}
+`;
+const Description = styled.p`
+  margin: 10px auto 0;
+  color: ${props => props.theme.black};
+`;
+const Services = styled.section`
+  width: ${props => props.theme.heroWidth};
+  height: 315px;
+  margin: 50px auto 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  ${ipad({ width: "665px", height: "85vh", padding: "5px 0" })}
+  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "120vh", marginTop: 20})}
+`;
+const ServicesBox = styled.div`
+  width: 350px;
+  height: 315px;
+  display: flex;
+  flex-direction: column;
+  border: 0.93px solid #ABD0ED;
+  border-radius: 8px;
+  ${ipad({ width: 325, height: 305, padding: "5px 0", marginBottom: 10 })};
+  ${mobile({ width: "360px", padding: 0, })}
+  &:hover {background: ${props => props.theme.navHover};
+`;
+const ServicesInnerBox = styled(Link)`
+  text-decoration: none;
+  width: 260px;
+  margin: auto;
+  cursor: pointer;
+  &::first-letter {
+    text-transform: uppercase;
+  };
+`;
+const ServicesIconBox = styled.div`
+  width: 90px;
+  height: 90px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50px;
+`;
+const ServicesTitle = styled.h3`
+  margin: 10px 0;
+  color: ${props => props.theme.black};
+  &::first-letter {
+    text-transform: uppercase;
+  };
+`;
+const ServicesDesc = styled.p`
+  margin: 0;
+  padding: 0;
+  color: ${props => props.theme.black};
+  &::first-letter {
+    text-transform: uppercase;
+  };
 `;
 
 export default function Home() {
@@ -38,6 +92,33 @@ export default function Home() {
   const [count, setCount] = useState(0)
   const [skip, setSkip] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+
+  const servicesData = [
+    {
+      icon: BarChartIcon,
+      title: "In-depth training and mentorship",
+      desc: "Let’s accelerate your journey into tech with our immersive training program. ",
+      href: "#",
+      color: "#34296B",
+      background: "#D5CDFF",
+    },
+    {
+      icon: ComputerIcon,
+      title: "Internship placement & job oppoopportunities ",
+      desc: "At the end of the training, you would be placed into an internship program to use your new skills.",
+      href: "#",
+      color: "#F3D400",
+      background: "#FEF3AE",
+    },
+    {
+      icon: LocalFireDepartmentIcon,
+      title: "Supportive community online and offline",
+      desc: "A fun & interactive community of like minds from all over the world, committed to helping each other grow",
+      href: "#",
+      color: "#FF9CAE",
+      background: "#FFCED7",
+    },
+  ]
 
   useEffect(() => {
     setIsLoading(true)
@@ -61,9 +142,34 @@ export default function Home() {
     <>
       <Container>
         <HomeHero />
-        <Button onClick={() => setCount(count + 1)}>
-        Click me {count} times
-        </Button>   
+        <Intro>
+          <Title>Here At Bitkova Academy,</Title>
+          <Description>
+            Our classes are designed to accommodate your current level 
+            matched with our unique learning process.
+          </Description>
+        </Intro>
+        <Services>
+        {servicesData.map((boxData, index) => (
+          <ServicesBox key={index}>
+            <ServicesInnerBox href={boxData.href}>
+              <ServicesIconBox style={{background: boxData.background, opacity: 0.8}}>
+                <boxData.icon sx={{ color: boxData.color, fontSize: 40, margin: "25px"}} />
+              </ServicesIconBox>
+              <ServicesTitle>{boxData.title}</ServicesTitle>
+              <ServicesDesc>{boxData.desc}</ServicesDesc>
+            </ServicesInnerBox>
+          </ServicesBox>
+        ))}
+        </Services>
+        <Intro>
+          <Title>Find your perfect Course</Title>
+          <Description>
+            Learn by doing, our courses are perfect for everyone from beginners 
+            to experienced learners.
+          </Description>
+        </Intro>
+        <Button title="Sign In" onClick={() => signIn("google")} /> 
       </Container>
     </>
   )

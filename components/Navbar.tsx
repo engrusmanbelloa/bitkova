@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import styled from "styled-components"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-import { useSession, signIn, signOut } from "next-auth/react"
+// import { useSession, signIn, signOut } from "next-auth/react"
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close';
 import useStore from "@/config/store"
@@ -126,7 +126,7 @@ const Toggle = styled.div`
 
 export default function Navbar(){
   const router = useRouter()
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
   const [toggleMenu, setToggleMenu] = useState(false)
   const main = "true"
 

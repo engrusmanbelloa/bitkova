@@ -10,6 +10,26 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import CredentialsProvider from "next-auth/providers/credentials"
 
+export const { GET, POST } = handlers
+export const runtime = "edge" // optional
+
+import Google from "next-auth/providers/google"
+ 
+export const { auth, signIn, signOut } = NextAuth({
+  providers: [
+    Google({
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
+  ],
+})
+
+
 // const handler = NextAuth({
 //         // Configure one or more authentication providers
 //         adapter: MongoDBAdapter(clientPromise),
