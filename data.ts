@@ -1,3 +1,4 @@
+import {CourseType} from "@/types"
 export const sliderItems = [
     {
       id: 1,
@@ -17,9 +18,9 @@ export const sliderItems = [
       title: "KNOW ABOUT BITCOIN, OTHER CRYPTOCURRENCIES INVESTMENT",
       desc: "Make informed decesion trading and investing professionally in cryptocurrencies and the next global reserve currency, BITCOIN. Position yourself in web3, the third iteration of the internet.",
     },
-  ];
+  ]
 
-  export const categories = [
+export const categories = [
     {
       id: 1,
       img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
@@ -35,17 +36,21 @@ export const sliderItems = [
       img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
       title: "LIGHT JACKETS",
     },
-  ];
+  ]
 
-  export const featuredCoures = [
+export const featuredCoures: CourseType[] = [
     {
-      id: 1,
-      img: "/courses/trade.png",
+      _id: 1,
+      image: "/courses/trade.png",
       title: "Certified CryptoCurrency Market Analyst (CCA)",
-      desc: "Become a professional profitable trader in six weeks, full course.",
-      time: "6h 40m",
-      student: 30,
-      price: "19,999",
+      shortDesc: "Become a professional profitable trader in six weeks, full course.",
+      duration: {
+        hours: 6,
+        minutes: 40
+      },
+      students: 30,
+      rating: 4.3,
+      price: 19999,
       onDemandVideos: 60,
       downloadableFiles: 15,
       courseDesc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget tristique tortor pretium ut. Curabitur elit justo, consequat id condimentum ac, volutpat ornare.",
@@ -88,52 +93,66 @@ export const sliderItems = [
     ],
     },
     {
-      id: 2,
-      img: "/courses/mkt.jpeg",
+      _id: 2,
+      image: "/courses/mkt.jpeg",
       title: "Certified Blockchain Marketing Specialist (CBM)",
-      desc: "Sale your blockchain product professionally in bigger market",
-      time: "6h 40m",
-      student: 30,
-      price: "14,999",
+      shortDesc: "Sale blockchain products professionally in bigger market",
+      duration: {
+        hours: 6,
+        minutes: 40
+      },
+      students: 30,
+      rating: 4.3,
+      price: 14999,
+      onDemandVideos: 60,
+      downloadableFiles: 15,
+      review:[],
     },
     {
-      id: 3,
-      img: "/courses/ui.png",
+      _id: 3,
+      image: "/courses/ui.png",
       title: "Certified Blockchain UI/UX Designer (CBX)",
-      desc: "Design stunning UIs that won't be willing to leave your pages.",
-      time: "6h 40m",
-      student: 30,
-      price: "9,999",
+      shortDesc: "Design stunning UIs that won't be willing to leave your pages.",
+      duration: {
+        hours: 6,
+        minutes: 40
+      },
+      students: 30,
+      rating: 4.3,
+      price: 9999,
+      onDemandVideos: 60,
+      downloadableFiles: 15,
+      review:[],
     },
-    {
-      id: 4,
-      img: "/courses/art.jpg",
-      title: "Certified Blockchain Graphics Artist (CBA)",
-      desc: "Design stunning arts that won't be willing to leave your pages.",
-      time: "6h 40m",
-      student: 30,
-      price: "9,999",
-    },
+    // {
+    //   id: 4,
+    //   img: "/courses/art.jpg",
+    //   title: "Certified Blockchain Graphics Artist (CBA)",
+    //   desc: "Design stunning arts that won't be willing to leave your pages.",
+    //   time: "6h 40m",
+    //   student: 30,
+    //   price: 9999,
+    // },
    
-    {
-      id: 5,
-      img: "/courses/art.jpg",
-      title: "Certified Blockchain Graphics Artist (CBA)",
-      desc: "Design stunning arts that won't be willing to leave your pages.",
-      time: "6h 40m",
-      student: 30,
-      price: "9,999",
-    },
+    // {
+    //   id: 5,
+    //   img: "/courses/art.jpg",
+    //   title: "Certified Blockchain Graphics Artist (CBA)",
+    //   desc: "Design stunning arts that won't be willing to leave your pages.",
+    //   time: "6h 40m",
+    //   student: 30,
+    //   price: 9,999,
+    // },
 
-    {
-      id: 6,
-      img: "/courses/art.jpg",
-      title: "Certified Blockchain Graphics Artist (CBA)",
-      desc: "Design stunning arts that won't be willing to leave your pages.",
-      time: "6h 40m",
-      student: 30,
-      price: "9,999",
-    },
+    // {
+    //   id: 6,
+    //   img: "/courses/art.jpg",
+    //   title: "Certified Blockchain Graphics Artist (CBA)",
+    //   desc: "Design stunning arts that won't be willing to leave your pages.",
+    //   time: "6h 40m",
+    //   student: 30,
+    //   price: 9999,
+    // },
 
     // // {
     // //   id: 7,

@@ -2,14 +2,17 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
+import Image from "next/image"
 import BarChartIcon from '@mui/icons-material/BarChart'
 import ComputerIcon from '@mui/icons-material/Computer'
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment'
+import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import { signIn } from "@/auth"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
 import Button from "@/components/Button"
+import CoursesList from "@/components/CoursesList"
 
 const Container = styled.div`
   width: ${props => props.theme.dsktopWidth};
@@ -86,6 +89,33 @@ const ServicesDesc = styled.p`
     text-transform: uppercase;
   };
 `;
+
+const Recomendations = styled.section`
+  width: ${props => props.theme.heroWidth};
+  height: 510px;
+  padding: 0px 10px;
+  margin: 50px auto 0;
+  padding: 0px;
+  border-radius: 8px;
+  text-align: center;
+`;
+const ShortClip = styled(Image)`
+  width: ${props => props.theme.heroWidth};
+  height: 460px;
+  margin: 20px auto 0;
+`;
+const PlayCircle = styled(PlayCircleIcon)`
+  position: relative;
+  font-size: 50px;
+  margin: auto;
+  bottom: 250px;
+  color: ${props => props.theme.main};
+&:hover {
+  color: ${props => props.theme.offWhite};
+  animation: pulse;
+  animation-duration: 1s;
+  };
+`
 
 export default function Home() {
   const [courses, setCourses] = useState([])
@@ -169,7 +199,13 @@ export default function Home() {
             to experienced learners.
           </Description>
         </Intro>
+        <CoursesList title="Featured courses" foot="Browse all courses" courses={courses} limit={limit}/>
         <Button title="Sign In" onClick={() => signIn("google")} /> 
+        <Recomendations>
+          <Title>Hear what they say about us</Title>
+          <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
+          <PlayCircle />
+        </Recomendations>
       </Container>
     </>
   )

@@ -185,7 +185,7 @@ export default function Footer(){
     },
     {
       icon: LocationOn,
-      data: "D4 Duwa Plaza, Opposite Bauchi Park, Gombe State",
+      data: "C6 Duwa Plaza, Opposite Bauchi Park, Gombe State",
       color: "#000000B2",
     },
     {

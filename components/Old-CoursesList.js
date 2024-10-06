@@ -1,15 +1,15 @@
-import AspectRatio from '@mui/joy/AspectRatio'
-import Card from '@mui/material/Card'
+"use cleint"
+import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import Card from '@mui/material/Card'
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import "animate.css/animate.min.css";
 import { AnimationOnScroll } from 'react-animation-on-scroll'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import {featuredCoures} from "../data"
-import { mobile, ipad} from "../responsive"
-import { useState, useEffect } from "react"
+import {featuredCoures} from "@/data"
+import { mobile, ipad} from "@/responsive"
 
 
 const Container = styled.section`
