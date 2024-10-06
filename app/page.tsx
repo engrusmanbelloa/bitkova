@@ -110,10 +110,10 @@ const PlayCircle = styled(PlayCircleIcon)`
   margin: auto;
   bottom: 250px;
   color: ${props => props.theme.main};
-&:hover {
-  color: ${props => props.theme.offWhite};
-  animation: pulse;
-  animation-duration: 1s;
+  &:hover {
+    color: ${props => props.theme.offWhite};
+    animation: pulse;
+    animation-duration: 1s;
   };
 `
 
@@ -200,7 +200,7 @@ export default function Home() {
           </Description>
         </Intro>
         <CoursesList title="Featured courses" foot="Browse all courses" courses={courses} limit={limit}/>
-        <Button title="Sign In" onClick={() => signIn("google")} /> 
+        {/* <Button title="Sign In" onClick={() => signIn("google")} />  */}
         <Recomendations>
           <Title>Hear what they say about us</Title>
           <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
