@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import Image from "next/image"
+import Card from '@mui/material/Card'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import ComputerIcon from '@mui/icons-material/Computer'
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment'
@@ -49,7 +50,7 @@ const Services = styled.section`
   ${ipad({ width: "665px", height: "85vh", padding: "5px 0", marginTop: 20 })}
   ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "120vh",})}
 `;
-const ServicesBox = styled.div`
+const ServicesBox = styled(Card)`
   width: 350px;
   height: 315px;
   display: flex;
@@ -58,7 +59,11 @@ const ServicesBox = styled.div`
   border-radius: 8px;
   ${ipad({ width: 325, height: 305, padding: "5px 0", marginBottom: 10 })};
   ${mobile({ width: "360px", padding: 0, })}
-  &:hover {background: ${props => props.theme.navHover};
+  &:hover {
+    background: ${props => props.theme.navHover};
+    animation: pulse;
+    animation-duration: 1s;
+  };
 `;
 const ServicesInnerBox = styled(Link)`
   text-decoration: none;
@@ -187,7 +192,7 @@ export default function Home() {
         </Intro>
         <Services>
         {servicesData.map((boxData, index) => (
-          <ServicesBox key={index}>
+          <ServicesBox key={index} variant="elevation" elevation={10}>
             <ServicesInnerBox href={boxData.href}>
               <ServicesIconBox style={{background: boxData.background, opacity: 0.8}}>
                 <boxData.icon sx={{ color: boxData.color, fontSize: 40, margin: "25px"}} />
