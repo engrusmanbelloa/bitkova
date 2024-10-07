@@ -96,6 +96,7 @@ const NavBtn = styled.button`
   height: 50px;
   font-size: 16px;
   font-weight: 600;
+  border: none;
   border-radius: 8px;
   background-color: ${props =>  props.theme.main};
   color: ${props => props.theme.offWhite};

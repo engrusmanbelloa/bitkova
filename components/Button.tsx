@@ -8,6 +8,7 @@ const Btn = styled.button<{ $main?: boolean }>`
   height: 40px;
   font-size: 16px;
   font-weight: 600;
+  border: none;
   border-radius: 8px;
   padding: 10px;
   display: flex;
