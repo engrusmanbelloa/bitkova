@@ -13,6 +13,7 @@ import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
 import Button from "@/components/Button"
 import CoursesList from "@/components/CoursesList"
+import StatsSection from "@/components/StatsSection"
 
 const Container = styled.div`
   width: ${props => props.theme.dsktopWidth};
@@ -206,6 +207,7 @@ export default function Home() {
           <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
           <PlayCircle />
         </Recomendations>
+        <StatsSection />
       </Container>
     </>
   )
