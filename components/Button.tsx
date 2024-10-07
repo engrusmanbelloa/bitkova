@@ -23,10 +23,9 @@ const Btn = styled.button<{ $main?: boolean }>`
       background-color: ${props => props.$main ? props.theme.navHover : props.theme.main};
       color: ${props => props.$main ? props.theme.main : props.theme.white};
   }
-  ${ipad({ height: 40, fontSize: "12px"})};
+  ${ipad({ height: 35, fontSize: "12px"})};
   ${mobile({lineHeight: "14px"})};
 `;
-
 export default function Button(props: { $main?: boolean, title?: string, onClick?: () => void }) {
   return (
     <Btn $main={props.$main} onClick={props.onClick}>{props.title}</Btn>

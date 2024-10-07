@@ -106,7 +106,7 @@ const NavBtn = styled.button`
       background-color: ${props => props.theme.navHover};
       color: ${props => props.theme.main};
   }
-  ${ipad({ width: 114, height: 30, fontSize: "12px"})};
+  ${ipad({ width: 114, height: 35, fontSize: "12px", borderRadius: 5})};
   ${mobile({display: "none"})};
 `;
 const Toggle = styled.div`

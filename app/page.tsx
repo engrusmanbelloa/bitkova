@@ -28,7 +28,8 @@ const Intro = styled.section`
   width: 520px;
   height: 110px;
   text-align: center;
-  ${mobile({ width: "360px", padding: 0})}
+  ${ipad({ marginTop: 20 })};
+  ${mobile({ width: "360px", padding: 0})};
 `;
 const Title = styled.h2`
   margin: 0;
@@ -45,8 +46,8 @@ const Services = styled.section`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  ${ipad({ width: "665px", height: "85vh", padding: "5px 0" })}
-  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "120vh", marginTop: 20})}
+  ${ipad({ width: "665px", height: "85vh", padding: "5px 0", marginTop: 20 })}
+  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "120vh",})}
 `;
 const ServicesBox = styled.div`
   width: 350px;
@@ -90,7 +91,6 @@ const ServicesDesc = styled.p`
     text-transform: uppercase;
   };
 `;
-
 const Recomendations = styled.section`
   width: ${props => props.theme.heroWidth};
   height: 510px;
@@ -99,11 +99,15 @@ const Recomendations = styled.section`
   padding: 0px;
   border-radius: 8px;
   text-align: center;
+  ${ipad({width: 665, height: 370, marginTop: 120})};
+  ${mobile({width: 360, height: 250, marginTop: 100})};
 `;
 const ShortClip = styled(Image)`
   width: ${props => props.theme.heroWidth};
   height: 460px;
-  margin: 20px auto 0;
+  margin: 30px auto 0;
+  ${ipad({width: 665, height: 315,})};
+  ${mobile({width: 360, height: 200})};
 `;
 const PlayCircle = styled(PlayCircleIcon)`
   position: relative;
@@ -116,6 +120,7 @@ const PlayCircle = styled(PlayCircleIcon)`
     animation: pulse;
     animation-duration: 1s;
   };
+  ${mobile({bottom: 130})};
 `
 
 export default function Home() {

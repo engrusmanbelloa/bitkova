@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation'
 import Card from '@mui/material/Card'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import StarHalfIcon from '@mui/icons-material/StarHalf'
-import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import "animate.css/animate.min.css";
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo'
+import "animate.css/animate.min.css"
 import { AnimationOnScroll } from 'react-animation-on-scroll'
 import {featuredCoures} from "@/data"
 import {CourseType} from "@/types"
@@ -20,39 +20,38 @@ const Container = styled.section`
   margin: 50px auto 0;
   padding: 0px;
   border-radius: 8px;
+  ${ipad({width: "665px", height: "118vh", marginTop: 20})};
+  ${mobile({width: "360px", height: "180vh", marginTop: 20})};
 `;
 const Wrapper = styled.div<{ $display?: string }>`
-  display: ${props => props.$display === 'grid' ? 'grid' : 'flex'};
-  grid-template-columns: auto auto auto auto;
-  gap: 0px;
+  display: flex;
   margin: 0 auto;
   padding: 0;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
-  ${ipad({
-    justifyContent: "flex-start",
-    overflow: "scroll",
-   })}
+  gap: 25px;
+  ${ipad({ justifyContent: "flex-start", flexWrap: "wrap", gap: 15,})};
+  ${mobile({ justifyContent: "center", gap: 0})};
 `;
 const Top = styled.div`
+  display: flex; 
   justify-content: center;
   align-items: center;
-  display: flex; 
   margin: 50px auto 0;
   padding: 0;
-  color: #fff;
+  ${ipad({ marginTop: 20})};
   `;
 const StyledCard = styled(Card)`
-  margin: 12px;
-  padding:0; 
+  margin: 0px;
+  padding: 0; 
   width: 350px;
   height: 470px; 
   color: #fff; 
-  border-radius: 5px
-  ${ipad({margin: 5})}
-  ${mobile({width: 300, margin: 5 })}
+  border-radius: 5px;
+  ${ipad({margin: "0 auto", width: 325})}
+  ${mobile({width: 360, margin: 5 })}
 `;
 const CourseImg = styled.img`
     width: 100%;
@@ -131,7 +130,8 @@ const PriceBtn = styled.button<{ $priceBtn?: string }>`
     animation-duration: 1s;
     background-color: ${props => props.theme.navHover};
     color: ${props => props.theme.main};
-  }
+  };
+  ${ipad({height: 35,})};
 `;
 const BtnLink = styled(Link)`
   text-decoration: none;
@@ -147,7 +147,7 @@ const CoursesList = (props: { courses: CourseType[], limit: number, title: strin
   
   return (
     <Container>
-      <Wrapper $display={$display}>
+      <Wrapper>
         {featuredCoures && featuredCoures.map((course) =>(
           <div key={course._id}>
           {/* <AnimationOnScroll animateIn="animate__pulse animate__slower"> */}

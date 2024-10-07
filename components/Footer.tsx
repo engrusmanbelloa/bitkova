@@ -30,7 +30,6 @@ const Left = styled.div`
 `;
 const Desc = styled.p`
   margin: 0px;
-  text-align: justify;
   ${ipad({})}
 `;
 const SocialContainer = styled.div`
