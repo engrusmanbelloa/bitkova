@@ -1,11 +1,14 @@
 'use client'
 import styled from "styled-components"
-import {mobile, ipad} from "../responsive"
+import CircularProgress from '@mui/material/CircularProgress'
+import {mobile, ipad} from "@/responsive"
 
 const SetUpdate = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 18px;
   margin: 10px auto;
-  font-weight: 400;
   color: #fff;
   width: 10%;
   padding: 10px;
@@ -20,6 +23,6 @@ const SetUpdate = styled.div`
 
 export default function IsLoading() {
   return (
-    <SetUpdate>Loading</SetUpdate>
+    <SetUpdate>Loading<CircularProgress size={18} sx={{ml: 2}} /></SetUpdate>
   )
 }
