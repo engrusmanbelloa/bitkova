@@ -20,8 +20,8 @@ const Container = styled.section`
   margin: 50px auto 0;
   padding: 0px;
   border-radius: 8px;
-  ${ipad({width: "665px", height: "118vh", marginTop: 20})};
-  ${mobile({width: "360px", height: "180vh", marginTop: 20})};
+  ${ipad({width: "665px", height: "140vh", marginTop: 20})};
+  ${mobile({width: "360px", height: "195vh", marginTop: 20})};
 `;
 const Wrapper = styled.div<{ $display?: string }>`
   display: flex;
@@ -42,16 +42,17 @@ const Top = styled.div`
   margin: 50px auto 0;
   padding: 0;
   ${ipad({ marginTop: 20})};
+  ${mobile({ marginTop: 100})};
   `;
 const StyledCard = styled(Card)`
   margin: 0px;
   padding: 0; 
   width: 350px;
-  height: 470px; 
+  height: 510px; 
   color: #fff; 
   border-radius: 5px;
-  ${ipad({margin: "0 auto", width: 325})}
-  ${mobile({width: 360, margin: 5 })}
+  ${ipad({margin: "0 auto", width: 325, height: 500})}
+  ${mobile({width: 360, margin: 5, height: 480 })}
 `;
 const CourseImg = styled.img`
     width: 100%;
@@ -85,11 +86,14 @@ const Time = styled.p`
   display: flex;
   justify-content: flex-start; 
   align-items: center;
-  margin: 0px;
+  margin: 0 5px 0 0;
+  padding: 0;
+  ${ipad({margin: "0 15px 0 0"})};
+  ${mobile({})};
 `;
 const Price = styled.p`
   flex: 0.8;
-  margin: 0 10px 0 0;
+  margin: 5px auto;
   font-weight: bold;
 `;
 const Hr = styled.hr`
@@ -99,6 +103,7 @@ const Hr = styled.hr`
     height: 0.5px;
 `;
 const Box = styled.div`
+  margin: 5px auto;
   display: flex;
   justify-content: flex-start; 
   align-items: center;
@@ -119,7 +124,7 @@ const PriceBtn = styled.button<{ $priceBtn?: string }>`
   align-items: center;
   justify-content: center;
   font-size: ${props => props.$priceBtn ? "16px" : "25px"};
-  margin: 0 10px auto;
+  margin: 5px auto;
   color: ${props => props.theme.white};
   background-color: ${props => props.theme.main};
   &::first-letter {
@@ -138,8 +143,7 @@ const BtnLink = styled(Link)`
   color: ${props => props.theme.white};
   font-weight: 400;
 `;
-
-const CoursesList = (props: { courses: CourseType[], limit: number, title: string, foot: string, $display?: string, priceBtn?: string, onClick?: () => void }) => {
+export default function CoursesList(props: { courses: CourseType[], limit: number, title: string, foot: string, $display?: string, priceBtn?: string, onClick?: () => void }) {
   const router = useRouter()
   const { courses, limit, title, foot, $display } = props
   const [coursesToDisplay, setCoursesToDisplay] = useState([])
@@ -151,7 +155,7 @@ const CoursesList = (props: { courses: CourseType[], limit: number, title: strin
         {featuredCoures && featuredCoures.map((course) =>(
           <div key={course._id}>
           {/* <AnimationOnScroll animateIn="animate__pulse animate__slower"> */}
-            <StyledCard variant="elevation" elevation={10}>
+            <StyledCard variant="elevation" elevation={1}>
               <CourseImg src={course.image} alt={course.title} />
               <InfoContainer>
                 <Title>
@@ -203,7 +207,6 @@ const CoursesList = (props: { courses: CourseType[], limit: number, title: strin
                   </Time>
                 </Box>
                 </DurationContainer>
-                <Hr />
                 <Box>
                 <Price>
                   {course.price > 0 ? (
@@ -226,5 +229,3 @@ const CoursesList = (props: { courses: CourseType[], limit: number, title: strin
   </Container>
   )
 }
-
-export default CoursesList

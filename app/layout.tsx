@@ -40,6 +40,8 @@ export default function RootLayout({children}: {children: React.ReactNode}, sess
   return (
     // <SessionProvider session={session}>
     <html lang="en">
+      <head>
+      </head>
       <body>
       <GlobalStyle />
         {/* Layout UI */}

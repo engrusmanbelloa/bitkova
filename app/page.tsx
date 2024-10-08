@@ -13,7 +13,8 @@ import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
 import Button from "@/components/Button"
-import CoursesList from "@/components/CoursesList"
+import CoursesList from "@/components/CoursesList" 
+import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
 
 const Container = styled.div`
@@ -105,7 +106,7 @@ const Recomendations = styled.section`
   border-radius: 8px;
   text-align: center;
   ${ipad({width: 665, height: 370, marginTop: 120})};
-  ${mobile({width: 360, height: 250, marginTop: 100})};
+  ${mobile({width: 360, height: 250, marginTop: 150})};
 `;
 const ShortClip = styled(Image)`
   width: ${props => props.theme.heroWidth};
@@ -175,9 +176,9 @@ export default function Home() {
   }, [])
   const limit = 4
 
-  if (isLoading) {
-    return <IsLoading />
-  }
+  // if (isLoading) {
+  //   return <IsLoading />
+  // }
 
   return (
     <>
@@ -192,7 +193,7 @@ export default function Home() {
         </Intro>
         <Services>
         {servicesData.map((boxData, index) => (
-          <ServicesBox key={index} variant="elevation" elevation={10}>
+          <ServicesBox key={index} variant="elevation" elevation={0}>
             <ServicesInnerBox href={boxData.href}>
               <ServicesIconBox style={{background: boxData.background, opacity: 0.8}}>
                 <boxData.icon sx={{ color: boxData.color, fontSize: 40, margin: "25px"}} />
@@ -217,6 +218,7 @@ export default function Home() {
           <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
           <PlayCircle />
         </Recomendations>
+        <Testimonials />
         <StatsSection />
       </Container>
     </>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState}from 'react'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -10,31 +10,35 @@ import { mobile, ipad} from "../responsive"
 import { AnimationOnScroll } from 'react-animation-on-scroll'
 
 const Container = styled.section`
-  margin: 0px 0px 20px;
-  padding: 0px 20px;
-  border: 1px solid #CDDEFF;
-  border-radius: 10px;
+  width: ${props => props.theme.heroWidth};
+  height: 280px;
+  margin: 50px auto 0px;
+  padding: 0px;
   letter-spacing: 1px;
-  text-align: center;
+  ${ipad({ width: "665px", height: "77vh", marginTop: 20 })};
+  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "110vh",})};
 `;
-
-const Wrapper = styled.div`
-  margin: auto;
-  display: inline-grid;
-  border-radius: 10px;
-`;
-
 const TestimonialContainer = styled.div`
   padding: 0;
   margin: 0;
-  ${ipad({
-    display: "flex",
-    justifyContent: "flex-start",
-    overflow: "scroll",
-   })}
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  ${ipad({})};
+  ${mobile({ })};
 `;
-
-
+const Wrapper = styled.div`
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  width: 360px;
+  height: 270px;
+  ${ipad({width: 327,})};
+  ${mobile({ width: 360,})};
+`;
 const Button = styled.button`
   flex:1;
   border: none;
@@ -45,77 +49,72 @@ const Button = styled.button`
   font-size: 25px;
   font-weight: 600;
   margin: 0 10px 0 0;
-
   &:hover {
     background-color: #CDDEFF;
   }
 `;
-
 const CardBox = styled.div`
-  margin: 20px 30px;
-  border: 0.5px solid rgba(28, 56, 121, 0.5);
+  margin: 0px;
+  padding: 0px;
+  border: 0.5px solid ${props => props.theme.navHover};
   border-radius: 10px;
-
   &:hover {
     animation: pulse;
     animation-duration: 1s;
-  }
+  };
 `;
-
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  margin: 0px;
+`;
+const CardTitle = styled.div`
+  margin: 0;
+  padding: 0px;
+`;
 const Title = styled.h4`
-  margin: 2px;
-  text-align: center;
-  font-size: 14px;
+  margin: 0 0 5px;
 `;
-
+const Profession = styled.p`
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+`;
 const Comment = styled.p`
   font-size: 12px;
   margin: 5px;
-  text-align: center
 `;
-
 const Review = styled.div`
   margin-top: 10px;
   text-align: center
 `;
 
-export const Testimonals = ()=> {
-
-  const [value, setValue] = React.useState(3);
+export default function Testimonials() {
+  const [value, setValue] = useState(3)
   
   return (
     <Container>
-    <Button>Testimonals</Button>
     <TestimonialContainer>
     {testimonials.map((review) => (
     <Wrapper key={review.id}>
     <CardBox>
-    <AnimationOnScroll animateIn="animate__pulse animate__slower">
-    <Card variant="elevation" elevation={15} sx={{width: 230,}}>
-      <CardMedia
-        sx={{width: 250, padding: 10}}
-        image={review.bg}
-        alt="Picture of the author"
-      />
-      <Avatar sx={{width: 150, height: 150, margin: "auto", marginTop: -15}} src={review.img} />
-      <CardContent>
+    <Card variant="elevation" elevation={1}>
+      <CardHeader>
+        <Avatar sx={{width: 75, height: 75, m: 1}} src={review.img} />
+        <CardTitle style={{margin: 0, padding: 0}}>
           <Title>{review.name}</Title>
+          <Profession>{review.profession}</Profession>
+        </CardTitle>
+      </CardHeader>
+      <CardContent sx={{m: 0, p: 0}}>
           <Comment>{review.comment}</Comment>
-          <Review>
-          <Rating
-            name="half-rating"
-            value={review.value}
-          />
-          </Review>
       </CardContent>
     </Card>
-    </AnimationOnScroll>
     </CardBox>
     </Wrapper>
     ))}
     </TestimonialContainer>
     </Container>
-  );
-};
-
-export default Testimonals;
+  )
+}

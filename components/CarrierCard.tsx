@@ -7,7 +7,7 @@ import { ipad, mobile} from "@/responsive"
 const Container = styled.div`
     width: 1440px;
     height: 500px;
-    margin: 0 auto 30px;
+    margin: 50px auto 30px;
     display: flex;
     justify-content: center;
     align-items: center;

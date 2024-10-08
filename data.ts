@@ -43,7 +43,7 @@ export const featuredCoures: CourseType[] = [
       _id: 1,
       image: "/courses/trade.png",
       title: "Certified CryptoCurrency Market Analyst (CCA)",
-      shortDesc: "Become a professional profitable trader in six weeks, full course.",
+      shortDesc: "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
       duration: {
         hours: 6,
         minutes: 40
@@ -96,7 +96,7 @@ export const featuredCoures: CourseType[] = [
       _id: 2,
       image: "/courses/mkt.jpeg",
       title: "Certified Blockchain Marketing Specialist (CBM)",
-      shortDesc: "Sale blockchain products professionally in bigger market",
+      shortDesc: "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
       duration: {
         hours: 6,
         minutes: 40
@@ -112,7 +112,7 @@ export const featuredCoures: CourseType[] = [
       _id: 3,
       image: "/courses/ui.png",
       title: "Certified Blockchain UI/UX Designer (CBX)",
-      shortDesc: "Design stunning UIs that won't be willing to leave your pages.",
+      shortDesc: "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
       duration: {
         hours: 6,
         minutes: 40
@@ -218,40 +218,45 @@ export const featuredCoures: CourseType[] = [
       bg: "/review/bg/btc.jpeg",
       img: "/review/usman.jpg",
       name: "Usman Bello A",
+      profession: "Blockchain software engineer",
       value: 4.5,
-      comment: "This impressive acadmey learnt a lot in blockchain. awesome learning resourses.",
+      comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion.",
     },
     {
       id: 2,
       bg: "/review/bg/intro.jpg",
       img: "/review/mh.jpg",
       name: "Mahmoud Sardauna",
+      profession: "UIUX Designer",
       value: 5,
-      comment: "This impressive acadmey learnt a lot in blockchain. awesome learning resourses.",
+      comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion.",
     },
     {
       id: 3,
       bg: "/review/bg/msbg.jpg",
       img: "/review/ms.jpg",
       name: "Engr M. Sageer",
+      profession: "UIUX Designer",
       value: 3,
-      comment: "This impressive acadmey learnt a lot in blockchain. awesome learning resourses.",
+      comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion.",
     },
-    {
-      id: 4,
-      bg: "/review/bg/sctv.jpg",
-      img: "/review/sunusi.jpg",
-      name: "Sunusi Danjuma",
-      value: 3.5,
-      comment: "This impressive acadmey learnt a lot in blockchain. awesome learning resourses.",
-    },
-    {
-      id: 5,
-      bg: "/review/bg/sdk.jpg",
-      img: "/review/sd.jpg",
-      name: "Sadik Yusuf",
-      value: 4,
-      comment: "This impressive acadmey learnt a lot in blockchain. awesome learning resourses.",
-    },
+    // {
+    //   id: 4,
+    //   bg: "/review/bg/sctv.jpg",
+    //   img: "/review/sunusi.jpg",
+    //   name: "Sunusi Danjuma",
+    //   profession: "Crypto Analysis",
+    //   value: 3.5,
+    //   comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion.",
+    // },
+    // {
+    //   id: 5,
+    //   bg: "/review/bg/sdk.jpg",
+    //   img: "/review/sd.jpg",
+    //   name: "Sadik Yusuf",
+    //   profession: "Graphics Design",
+    //   value: 4,
+    //   comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion..",
+    // },
    
   ];

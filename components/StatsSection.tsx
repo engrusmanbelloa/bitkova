@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { ipad, mobile } from "@/responsive"
 
 const Container = styled.div`
-  height: 200px;
+  height: 120px;
   width: ${props => props.theme.heroWidth};
   margin: 50px auto 0;
   padding: 0px;
@@ -52,7 +52,7 @@ const Counter = ({ end, label }) => {
             return end
           }
         })
-      }, 20) // Adjust speed here
+      }, 30) // Adjust speed here
     }
   }, [inView, count, end])
 

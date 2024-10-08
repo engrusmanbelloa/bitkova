@@ -38,19 +38,16 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: 900;
     line-height: 30px;
   }
-
   h4 {
     font-size: 20px;
     font-weight: 500;
     line-height: 25px;
   }
-  
   p {
     font-size: 16px;
     font-weight: 500;
     line-height: 25px;
   }
-
   @media (max-width: 768px) {
     h1 {
       font-size: 36px;
