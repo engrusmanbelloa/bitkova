@@ -11,12 +11,12 @@ import { AnimationOnScroll } from 'react-animation-on-scroll'
 
 const Container = styled.section`
   width: ${props => props.theme.heroWidth};
-  height: 280px;
+  height: 320px;
   margin: 50px auto 0px;
   padding: 0px;
   letter-spacing: 1px;
-  ${ipad({ width: "665px", height: "77vh", marginTop: 20 })};
-  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "110vh",})};
+  ${ipad({ width: "665px", height: "82vh", marginTop: 20 })};
+  ${mobile({ width: "360px", padding: 0, flexDirection: "column", flexWrap: "nowrap", height: "115vh",})};
 `;
 const TestimonialContainer = styled.div`
   padding: 0;
@@ -35,7 +35,7 @@ const Wrapper = styled.div`
   padding: 0;
   border-radius: 8px;
   width: 360px;
-  height: 270px;
+  height: 290px;
   ${ipad({width: 327,})};
   ${mobile({ width: 360,})};
 `;
@@ -99,7 +99,7 @@ export default function Testimonials() {
     {testimonials.map((review) => (
     <Wrapper key={review.id}>
     <CardBox>
-    <Card variant="elevation" elevation={1}>
+    <Card variant="elevation" elevation={1} sx={{p: 1}}>
       <CardHeader>
         <Avatar sx={{width: 75, height: 75, m: 1}} src={review.img} />
         <CardTitle style={{margin: 0, padding: 0}}>

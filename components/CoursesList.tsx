@@ -20,8 +20,8 @@ const Container = styled.section`
   margin: 50px auto 0;
   padding: 0px;
   border-radius: 8px;
-  ${ipad({width: "665px", height: "140vh", marginTop: 20})};
-  ${mobile({width: "360px", height: "195vh", marginTop: 20})};
+  ${ipad({width: "665px", height: "135vh", marginTop: 20})};
+  ${mobile({width: "360px", height: "190vh", marginTop: 20})};
 `;
 const Wrapper = styled.div<{ $display?: string }>`
   display: flex;
@@ -41,8 +41,8 @@ const Top = styled.div`
   align-items: center;
   margin: 50px auto 0;
   padding: 0;
-  ${ipad({ marginTop: 20})};
-  ${mobile({ marginTop: 100})};
+  ${ipad({ marginTop: 50})};
+  ${mobile({})};
   `;
 const StyledCard = styled(Card)`
   margin: 0px;
