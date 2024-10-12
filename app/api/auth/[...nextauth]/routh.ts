@@ -3,9 +3,9 @@ import NextAuth from "next-auth"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "@/lib/mongodb"
-import {User, Account, Session} from '@/models/UserModel'
-import connectDB from '@/config/connectDB'
-import bcrypt from 'bcrypt'
+import { User, Account, Session } from "@/models/UserModel"
+import connectDB from "@/config/connectDB"
+import bcrypt from "bcrypt"
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -14,21 +14,20 @@ export const { GET, POST } = handlers
 export const runtime = "edge" // optional
 
 import Google from "next-auth/providers/google"
- 
-export const { auth, signIn, signOut } = NextAuth({
-  providers: [
-    Google({
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-    }),
-  ],
-})
 
+export const { auth, signIn, signOut } = NextAuth({
+    providers: [
+        Google({
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code",
+                },
+            },
+        }),
+    ],
+})
 
 // const handler = NextAuth({
 //         // Configure one or more authentication providers
@@ -39,7 +38,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //           // updateAge: 24 * 60 * 60,
 //           // generateSessionToken: () => {
 //           //   return randomUUID?.() ?? randomBytes(32).toString("hex")
-//           // }    
+//           // }
 //         },
 //         providers: [
 //             GoogleProvider({
@@ -58,7 +57,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //             if (message?.isNewUser) {
 //               const { email } = message.user
 //               console.log("the user is new", message.isNewUser)
-    
+
 //               // Add custom fields to user object
 //               // message.user.username = ""
 //               // message.user.walletAddress = ""
@@ -74,7 +73,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //               // message.user.updatedAt = Date.now()
 //               // message.user.ownCourses = null
 //               // message.user.points = null
-    
+
 //               // Save user object to database
 //               try {
 //                 // Connect to database
@@ -96,7 +95,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //             }
 //           },
 //         },
-    
+
 //         pages: {
 //           signIn: '/signin',
 //           signOut: '/signout',
@@ -104,7 +103,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //           verifyRequest: '/auth/verify-request', // (used for check email message)
 //           // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
 //         },
-    
+
 //       //    callbacks for the sessions
 //       callbacks: {
 //         async redirect({ url, baseUrl }) {
@@ -148,7 +147,7 @@ export const { auth, signIn, signOut } = NextAuth({
 //             // token.isTutor = user.isTutor
 //             // token.username = user.username
 //             // token.phone = user.phone
-//             // token.bio = user.bio        
+//             // token.bio = user.bio
 //             // token.joined = user.createdAt
 //             // token.enrolledCourses = user.enrolledCourses
 //             // token.activeCourse = user.activeCourse
@@ -165,10 +164,9 @@ export const { auth, signIn, signOut } = NextAuth({
 //           return token
 //         }
 //       }
-      
+
 // })
 
 // export { handler as GET, handler as POST }
-
 
 // export const { GET, POST } = handlers

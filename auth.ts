@@ -4,6 +4,6 @@ import Apple from "next-auth/providers/apple"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import client from "@/lib/db"
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  debug: true,
-  providers: [Apple, Google],
+    debug: true,
+    providers: [Apple, Google],
 })

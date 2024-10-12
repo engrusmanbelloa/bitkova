@@ -1,4 +1,4 @@
-import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 
 export const theme = {
     main: "#356DF1",
@@ -10,7 +10,7 @@ export const theme = {
     dsktopWidth: "1140px",
     heroWidth: "1100px",
     pagePadding: "5px 15px",
-  }
+}
 
 export const GlobalStyle = createGlobalStyle`
   body {

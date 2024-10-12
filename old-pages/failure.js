@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react"
 
 const failure = () => {
-  return (
-    <div>failure</div>
-  )
+    return <div>failure</div>
 }
 
 export default failure

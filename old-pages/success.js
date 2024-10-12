@@ -1,10 +1,8 @@
-import React from 'react'
-import Success from '../components/Success'
+import React from "react"
+import Success from "../components/Success"
 
 const success = () => {
-  return (
-    <Success />
-  )
+    return <Success />
 }
 
 export default success

@@ -1,13 +1,13 @@
-import {google} from 'googleapis'
+import { google } from "googleapis"
 
 const auth = new google.auth.GoogleAuth({
-  // add your credentials here
-  keyFile: './credential.json',
-  scopes: ['https://www.googleapis.com/auth/youtube.upload'],
+    // add your credentials here
+    keyFile: "./credential.json",
+    scopes: ["https://www.googleapis.com/auth/youtube.upload"],
 })
-const youtube = google.youtube({ 
-  version: 'v3', 
-  auth
+const youtube = google.youtube({
+    version: "v3",
+    auth,
 })
 
 // const res = youtube.videos.insert({
