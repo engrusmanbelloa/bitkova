@@ -95,7 +95,6 @@ const Review = styled.div`
     margin-top: 10px;
     text-align: center;
 `
-
 export default function Testimonials() {
     const [value, setValue] = useState(3)
 

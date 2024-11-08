@@ -189,18 +189,6 @@ export default function CoursesList(props: {
                                             </Time>
                                         </Box>
                                         <Box>
-                                            {/* <Time>
-                    <StarHalfIcon/>
-                    <span style={{margin: "10px"}}>
-                      {
-                        course.review.length > 0 ? 
-                            course.review.reduce((total, review) => total + review.stars, 0) /
-                            course.review.length.toFixed(2)
-                           :
-                          0
-                      }
-                    </span>
-                  </Time> */}
                                             <Time>
                                                 <StarHalfIcon />
                                                 <span style={{ margin: "10px" }}>

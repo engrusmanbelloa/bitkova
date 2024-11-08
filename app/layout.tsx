@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 // import { auth } from "@/auth"
 import { SessionProvider } from "next-auth/react"
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { ipad, mobile } from "@/responsive"
 import CarrierCard from "@/components/CarrierCard"
+import IsLoading from "@/components/IsLoading"
 
 const Container = styled.div`
     width: 1440px;
@@ -34,7 +35,7 @@ const Container = styled.div`
 
 // export default RootLayout
 
-export default function RootLayout({ children }: { children: React.ReactNode }, session) {
+export default function RootLayout({ children }: { children: React.ReactNode }, session: any) {
     // const session = await auth()
 
     return (
@@ -46,17 +47,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }, 
                 {/* Layout UI */}
                 <StyledComponentsRegistry>
                     <ThemeProvider theme={theme}>
-                        <Container>
-                            <Announcement />
-                            <Navbar />
-                            {children}
-                            <CarrierCard />
-                            <Footer />
-                        </Container>
+                        <Suspense fallback={<IsLoading />}>
+                            <Container>
+                                <Announcement />
+                                <Navbar />
+                                {children}
+                                <CarrierCard />
+                                <Footer />
+                            </Container>
+                        </Suspense>
                     </ThemeProvider>
                 </StyledComponentsRegistry>
             </body>
         </html>
-        // </SessionProvider>
+        // {/* </SessionProvider> */}
     )
 }

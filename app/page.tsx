@@ -8,7 +8,6 @@ import BarChartIcon from "@mui/icons-material/BarChart"
 import ComputerIcon from "@mui/icons-material/Computer"
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
-import { signIn } from "@/auth"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
@@ -168,18 +167,18 @@ export default function Home() {
         },
     ]
 
-    useEffect(() => {
-        setIsLoading(true)
-        async function fetchCourses() {
-            const response = await fetch("/api/courses/getCourses")
-            const data = await response.json()
-            setCourses(data)
-            setCount(data.count)
-            setIsLoading(false)
-            console.log("courses found: ", courses)
-        }
-        fetchCourses()
-    }, [])
+    // useEffect(() => {
+    //     setIsLoading(true)
+    //     async function fetchCourses() {
+    //         const response = await fetch("/api/courses/getCourses")
+    //         const data = await response.json()
+    //         setCourses(data)
+    //         setCount(data.count)
+    //         setIsLoading(false)
+    //         console.log("courses found: ", courses)
+    //     }
+    //     fetchCourses()
+    // }, [])
     const limit = 4
 
     // if (isLoading) {
