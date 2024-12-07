@@ -41,8 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     <Announcement />
                                     <Navbar />
                                     {children}
-                                    {/* <CarrierCard />
-                                <Footer /> */}
+                                    <CarrierCard />
+                                    {/* <Footer /> */}
                                 </Container>
                             </Suspense>
                         </AppRouterCacheProvider>

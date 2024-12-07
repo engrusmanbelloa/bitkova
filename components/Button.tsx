@@ -15,13 +15,17 @@ const Btn = styled.button<{ $main?: boolean }>`
     justify-content: center;
     align-items: center;
     margin: 0;
-    background-color: ${(props) => (props.$main ? props.theme.main : props.theme.white)};
-    color: ${(props) => (props.$main ? props.theme.offWhite : props.theme.main)};
+    background-color: ${(props) =>
+        props.$main ? props.theme.palette.primary.main : props.theme.palette.common.white};
+    color: ${(props) =>
+        props.$main ? props.theme.mobile.offWhite : props.theme.palette.primary.main};
     &:hover {
         animation: pulse;
         animation-duration: 1s;
-        background-color: ${(props) => (props.$main ? props.theme.navHover : props.theme.main)};
-        color: ${(props) => (props.$main ? props.theme.main : props.theme.white)};
+        background-color: ${(props) =>
+            props.$main ? props.theme.palette.action.hover : props.theme.palette.primary.main};
+        color: ${(props) =>
+            props.$main ? props.theme.palette.primary.main : props.theme.palette.common.white};
     }
     ${ipad({ height: 35, fontSize: "12px" })};
     ${mobile({ lineHeight: "14px" })};
