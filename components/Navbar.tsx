@@ -6,22 +6,25 @@ import { useRouter } from "next/navigation"
 // import { useSession, signIn, signOut } from "next-auth/react"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
+import Button from "@mui/material/Button"
 import useStore from "@/config/store"
 import Logo from "@/components/Logo"
 import { mobile, ipad } from "@/responsive"
 
+// background-color: ${(props) => props.theme.palette.common.white};
+
 // containers section
 const Container = styled.section`
     height: 50px;
-    width: ${(props) => props.theme.dsktopWidth};
+    width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto;
-    padding: ${(props) => props.theme.pagePadding};
+    padding: ${(props) => props.theme.paddings.pagePadding};
     position: sticky;
     top: 0;
     box-shadow: 0px 4px 4px 0px #00000033;
     border-radius: 5px;
     z-index: 1;
-    background-color: ${(props) => props.theme.white};
+    background-color: ${(props) => props.theme.palette.common.white};
     ${ipad({ width: "665px", height: "30px", padding: "5px 0" })}
     ${mobile({
         width: "91.5%",
@@ -73,20 +76,20 @@ const Menu = styled.li`
     text-align: center;
     padding: 10px 25px;
     border-radius: 5px;
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
     &:hover {
         animation: pulse;
         animation-duration: 1s;
-        background-color: ${(props) => props.theme.navHover};
-        color: ${(props) => props.theme.main};
+        background-color: ${(props) => props.theme.palette.action.hover};
+        color: ${(props) => props.theme.palette.primary.main};
     }
     &::first-letter {
         text-transform: uppercase;
     }
     &:focus {
-        background-color: ${(props) => props.theme.main};
+        background-color: ${(props) => props.theme.palette.primary.main};
     }
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
     ${ipad({ fontSize: 12, lineHeigh: 14, padding: "5px 10px" })}
     ${mobile({ height: 16, width: "90%" })}
 `
@@ -104,13 +107,13 @@ const NavBtn = styled.button`
     font-weight: 600;
     border: none;
     border-radius: 8px;
-    background-color: ${(props) => props.theme.main};
-    color: ${(props) => props.theme.offWhite};
+    background-color: ${(props) => props.theme.palette.primary.main};
+    color: ${(props) => props.theme.mobile.offWhite};
     &:hover {
         animation: pulse;
         animation-duration: 1s;
-        background-color: ${(props) => props.theme.navHover};
-        color: ${(props) => props.theme.main};
+        background-color: ${(props) => props.theme.palette.action.hover};
+        color: ${(props) => props.theme.palette.primary.main};
     }
     ${ipad({ width: 114, height: 35, fontSize: "12px", borderRadius: 5 })};
     ${mobile({ display: "none" })};
@@ -185,6 +188,7 @@ export default function Navbar() {
                     {/* nav right items container  */}
                     <Right>
                         <NavBtn>Browse Courses</NavBtn>
+                        {/* Mobile nav toggler  */}
                         <Toggle>
                             {!toggleMenu ? (
                                 <MenuIcon

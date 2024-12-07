@@ -189,14 +189,14 @@ export default function Home() {
         <>
             <Container>
                 <HomeHero />
-                <Intro>
+                {/* <Intro>
                     <Title>Here At Bitkova Academy,</Title>
                     <Description>
                         Our classes are designed to accommodate your current level matched with our
                         unique learning process.
                     </Description>
-                </Intro>
-                <Services>
+                </Intro> */}
+                {/* <Services>
                     {servicesData.map((boxData, index) => (
                         <ServicesBox key={index} variant="elevation" elevation={0}>
                             <ServicesInnerBox href={boxData.href}>
@@ -212,28 +212,28 @@ export default function Home() {
                             </ServicesInnerBox>
                         </ServicesBox>
                     ))}
-                </Services>
-                <Intro>
+                </Services> */}
+                {/* <Intro>
                     <Title>Find your perfect Course</Title>
                     <Description>
                         Learn by doing, our courses are perfect for everyone from beginners to
                         experienced learners.
                     </Description>
-                </Intro>
-                <CoursesList
+                </Intro> */}
+                {/* <CoursesList
                     title="Featured courses"
                     foot="Browse all courses"
                     courses={courses}
                     limit={limit}
-                />
+                /> */}
                 {/* <Button title="Sign In" onClick={() => signIn("google")} />  */}
-                <Recomendations>
+                {/* <Recomendations>
                     <Title>Hear what they say about us</Title>
                     <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
                     <PlayCircle />
                 </Recomendations>
                 <Testimonials />
-                <StatsSection />
+                <StatsSection /> */}
             </Container>
         </>
     )
