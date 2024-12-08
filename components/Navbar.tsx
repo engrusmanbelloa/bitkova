@@ -27,7 +27,7 @@ const Container = styled.section`
     background-color: ${(props) => props.theme.palette.common.white};
     ${ipad({ width: "665px", height: "30px", padding: "5px 0" })}
     ${mobile({
-        width: "91.5%",
+        width: "100%",
         height: "40px",
         background: "#EAF3FB",
         padding: "5px 15px",
