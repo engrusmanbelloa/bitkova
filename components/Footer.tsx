@@ -139,7 +139,7 @@ export default function Footer() {
     const socialIconsData = [
         {
             icon: Facebook,
-            onClick: () => window.open("https://web.facebook.com/AcademyBitkova"),
+            onClick: () => window.open("https://www.facebook.com/BitkovaHub"),
             color: "#1877F2",
         },
         {
@@ -154,7 +154,7 @@ export default function Footer() {
         },
         {
             icon: Telegram,
-            onClick: () => window.open("https://t.me/bitkovaacademy"),
+            onClick: () => window.open("https://t.me/+RX1G04BIFdUxOTM8"),
             color: "#1c92d2",
         },
     ]
