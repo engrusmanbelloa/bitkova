@@ -15,7 +15,7 @@ const Container = styled.div`
     background: ${(props) => props.theme.palette.primary.main};
     color: ${(props) => props.theme.palette.common.white};
     ${ipad({ width: "100%", height: 290 })};
-    ${mobile({ marginTop: 20 })};
+    ${mobile({ marginTop: 20, width: "360px" })};
 `
 const Card = styled.div`
     width: 570px;

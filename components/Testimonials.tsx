@@ -15,13 +15,13 @@ const Container = styled.section`
     margin: 50px auto 0px;
     padding: 0px;
     letter-spacing: 1px;
-    ${ipad({ width: "665px", height: "82vh", marginTop: 20 })};
+    ${ipad({ width: "665px", height: "95vh", marginTop: 20 })};
     ${mobile({
         width: "360px",
         padding: 0,
         flexDirection: "column",
         flexWrap: "nowrap",
-        height: "115vh",
+        height: "125vh",
     })};
 `
 const TestimonialContainer = styled.div`
