@@ -25,7 +25,7 @@ export default function IsLoading() {
     return (
         <SetUpdate>
             Loading
-            <CircularProgress size={18} sx={{ ml: 2 }} />
+            {/* <CircularProgress size={18} sx={{ ml: 2 }} /> */}
         </SetUpdate>
     )
 }

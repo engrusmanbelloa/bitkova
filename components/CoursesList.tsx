@@ -15,7 +15,7 @@ import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 
 const Container = styled.section`
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     padding: 0px 10px;
     margin: 50px auto 0;
     padding: 0px;
@@ -61,9 +61,9 @@ const CourseImg = styled.img`
 const InfoContainer = styled.div`
     padding: 10px;
     height: 100%;
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
     text-align: start;
-    background-color: ${(props) => props.theme.white};
+    background-color: ${(props) => props.theme.palette.common.white};
     borderradius: 3px;
 `
 const Title = styled.h3`
@@ -126,21 +126,21 @@ const PriceBtn = styled.button<{ $priceBtn?: string }>`
     font-size: ${(props) => (props.$priceBtn ? "16px" : "25px")};
     margin: 5px auto;
     color: ${(props) => props.theme.white};
-    background-color: ${(props) => props.theme.main};
+    background-color: ${(props) => props.theme.palette.primary.main};
     &::first-letter {
         text-transform: uppercase;
     }
     &:hover {
         animation: pulse;
         animation-duration: 1s;
-        background-color: ${(props) => props.theme.navHover};
-        color: ${(props) => props.theme.main};
+        background-color: ${(props) => props.theme.palette.action.hover};
+        color: ${(props) => props.theme.palette.primary.main};
     }
     ${ipad({ height: 35 })};
 `
 const BtnLink = styled(Link)`
     text-decoration: none;
-    color: ${(props) => props.theme.white};
+    color: ${(props) => props.theme.palette.common.white};
     font-weight: 400;
 `
 export default function CoursesList(props: {

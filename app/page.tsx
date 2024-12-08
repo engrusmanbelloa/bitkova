@@ -17,10 +17,10 @@ import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
 
 const Container = styled.div`
-    width: ${(props) => props.theme.dsktopWidth};
+    width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto;
     z-index: 1;
-    padding: ${(props) => props.theme.pagePadding};
+    padding: ${(props) => props.theme.paddings.pagePadding};
     ${ipad({ width: "665px", padding: "5px 0" })}
     ${mobile({ width: "360px", padding: 0 })}
 `
@@ -41,7 +41,7 @@ const Description = styled.p`
     color: ${(props) => props.theme.black};
 `
 const Services = styled.section`
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     height: 315px;
     margin: 50px auto 0;
     display: flex;
@@ -66,7 +66,7 @@ const ServicesBox = styled(Card)`
     ${ipad({ width: 325, height: 305, padding: "5px 0", marginBottom: 10 })};
     ${mobile({ width: "360px", padding: 0 })}
     &:hover {
-        background: ${(props) => props.theme.navHover};
+        background: ${(props) => props.theme.palette.action.hover};
         animation: pulse;
         animation-duration: 1s;
     }
@@ -89,7 +89,7 @@ const ServicesIconBox = styled.div`
 `
 const ServicesTitle = styled.h3`
     margin: 10px 0;
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
     &::first-letter {
         text-transform: uppercase;
     }
@@ -97,13 +97,13 @@ const ServicesTitle = styled.h3`
 const ServicesDesc = styled.p`
     margin: 0;
     padding: 0;
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
     &::first-letter {
         text-transform: uppercase;
     }
 `
 const Recomendations = styled.section`
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     height: 510px;
     padding: 0px 10px;
     margin: 50px auto 0;
@@ -114,7 +114,7 @@ const Recomendations = styled.section`
     ${mobile({ width: 360, height: 250, marginTop: 150 })};
 `
 const ShortClip = styled(Image)`
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     height: 460px;
     margin: 30px auto 0;
     ${ipad({ width: 665, height: 315 })};
@@ -125,9 +125,9 @@ const PlayCircle = styled(PlayCircleIcon)`
     font-size: 50px;
     margin: auto;
     bottom: 250px;
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.palette.primary.main};
     &:hover {
-        color: ${(props) => props.theme.offWhite};
+        color: ${(props) => props.theme.mobile.offWhite};
         animation: pulse;
         animation-duration: 1s;
     }
@@ -189,6 +189,7 @@ export default function Home() {
         <>
             <Container>
                 <HomeHero />
+                {/* introduction to bitkova section */}
                 <Intro>
                     <Title>Here At Bitkova Academy,</Title>
                     <Description>
@@ -196,6 +197,7 @@ export default function Home() {
                         unique learning process.
                     </Description>
                 </Intro>
+                {/* servces offered by bitkova */}
                 <Services>
                     {servicesData.map((boxData, index) => (
                         <ServicesBox key={index} variant="elevation" elevation={0}>

@@ -15,10 +15,17 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Logo from "@/components/Logo"
 
+// props.theme.palette.primary.main
+// props.theme.palette.common.white
+// props.theme.mobile.offWhite
+// props.theme.widths.dsktopWidth
+// props.theme.paddings.pagePadding
+// props.theme.palette.action.hover
+
 const Container = styled.section`
-    color: ${(props) => props.theme.black};
-    background: ${(props) => props.theme.white};
-    width: ${(props) => props.theme.dsktopWidth};
+    color: ${(props) => props.theme.palette.common.black};
+    background: ${(props) => props.theme.palette.common.white};
+    width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto 10px;
     ${ipad({ width: "665px" })};
     ${mobile({ width: "360px", flexDirection: "column" })};
@@ -56,8 +63,8 @@ const SocialIcon = styled.div`
     &:hover {
         animation: pulse;
         animation-duration: 1s;
-        background-color: ${(props) => props.theme.navHover};
-        color: ${(props) => props.theme.main};
+        background-color: ${(props) => props.theme.palette.action.hover};
+        color: ${(props) => props.theme.palette.primary.main};
     }
     ${ipad({ marginRight: 5 })}
 `
@@ -88,13 +95,13 @@ const ListItem = styled.li`
     ${ipad({ fontWeight: "400" })}
 `
 const LinkItem = styled(Link)`
-  color: ${(props) => props.theme.black};
+  color: ${(props) => props.theme.palette.common.black};
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   ${ipad({})};
-  &:hover {color: ${(props) => props.theme.main};
+  &:hover {color: ${(props) => props.theme.palette.primary.main};
 `
 const Right = styled.div`
     flex: 2;

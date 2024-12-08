@@ -12,8 +12,8 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: ${(props) => props.theme.main};
-    color: ${(props) => props.theme.white};
+    background: ${(props) => props.theme.palette.primary.main};
+    color: ${(props) => props.theme.palette.common.white};
     ${ipad({ width: "100%", height: 290 })};
     ${mobile({ marginTop: 20 })};
 `
