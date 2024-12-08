@@ -14,7 +14,7 @@ const Container = styled.div`
     justify-content: center;
     font-size: 20px;
     letter-spacing: 1.5;
-    ${mobile({ display: "none" })}
+    ${ipad({ display: "none" })}
 `
 
 const Announcement = () => {

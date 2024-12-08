@@ -20,8 +20,8 @@ const Container = styled.section`
     margin: 50px auto 0;
     padding: 0px;
     border-radius: 8px;
-    ${ipad({ width: "665px", height: "135vh", marginTop: 20 })};
-    ${mobile({ width: "360px", height: "190vh", marginTop: 20 })};
+    ${ipad({ width: "665px", height: "150vh", marginTop: 20 })};
+    ${mobile({ width: "360px", height: "210vh", marginTop: 20 })};
 `
 const Wrapper = styled.div<{ $display?: string }>`
     display: flex;

@@ -29,7 +29,7 @@ const Intro = styled.section`
     width: 520px;
     height: 110px;
     text-align: center;
-    ${ipad({ marginTop: 20 })};
+    ${ipad({ marginTop: 40 })};
     ${mobile({ width: "360px", padding: 0 })};
 `
 const Title = styled.h2`
@@ -47,7 +47,7 @@ const Services = styled.section`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    ${ipad({ width: "665px", height: "85vh", padding: "5px 0", marginTop: 20 })}
+    ${ipad({ width: "665px", height: "95vh", padding: "5px 0", marginTop: 20 })}
     ${mobile({
         width: "360px",
         padding: 0,
