@@ -16,13 +16,6 @@ import CoursesList from "@/components/CoursesList"
 import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
 
-// props.theme.palette.primary.main
-// props.theme.palette.common.white
-// props.theme.mobile.offWhite
-// props.theme.widths.dsktopWidth
-// props.theme.paddings.pagePadding
-// props.theme.palette.action.hover
-
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto;
@@ -229,20 +222,20 @@ export default function Home() {
                         experienced learners.
                     </Description>
                 </Intro>
-                {/* <CoursesList
+                <CoursesList
                     title="Featured courses"
                     foot="Browse all courses"
                     courses={courses}
                     limit={limit}
-                /> */}
+                />
                 {/* <Button title="Sign In" onClick={() => signIn("google")} />  */}
-                {/* <Recomendations>
+                <Recomendations>
                     <Title>Hear what they say about us</Title>
                     <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
                     <PlayCircle />
                 </Recomendations>
                 <Testimonials />
-                <StatsSection /> */}
+                <StatsSection />
             </Container>
         </>
     )

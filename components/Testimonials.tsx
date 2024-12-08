@@ -10,7 +10,7 @@ import { mobile, ipad } from "../responsive"
 import { AnimationOnScroll } from "react-animation-on-scroll"
 
 const Container = styled.section`
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     height: 320px;
     margin: 50px auto 0px;
     padding: 0px;
@@ -62,7 +62,7 @@ const Button = styled.button`
 const CardBox = styled.div`
     margin: 0px;
     padding: 0px;
-    border: 0.5px solid ${(props) => props.theme.navHover};
+    border: 0.5px solid ${(props) => props.theme.palette.action.hover};
     border-radius: 10px;
     &:hover {
         animation: pulse;

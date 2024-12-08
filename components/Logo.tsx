@@ -14,7 +14,7 @@ const LogoTxt = styled.h2<{ $main?: string }>`
         text-transform: uppercase;
     }
     color: ${(props) =>
-        props.$main ? props.theme.palette.primary.main : props.theme.common.black};
+        props.$main ? props.theme.palette.primary.main : props.theme.palette.common.black};
     ${mobile({})}
 `
 

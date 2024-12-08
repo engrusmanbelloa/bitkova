@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     <Navbar />
                                     {children}
                                     <CarrierCard />
-                                    {/* <Footer /> */}
+                                    <Footer />
                                 </Container>
                             </Suspense>
                         </AppRouterCacheProvider>

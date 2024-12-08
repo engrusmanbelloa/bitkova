@@ -5,7 +5,7 @@ import { ipad, mobile } from "@/responsive"
 
 const Container = styled.div`
     height: 120px;
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     margin: 50px auto 0;
     padding: 0px;
     display: flex;
@@ -25,12 +25,12 @@ const Number = styled.h1`
     line-height: 80px;
     text-align: center;
     margin: 0;
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.palette.primary.main};
     ${ipad({ fontSize: 40 })};
     ${mobile({ fontSize: 25 })};
 `
 const Label = styled.p`
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.palette.primary.main};
     margin: 0;
 `
 
