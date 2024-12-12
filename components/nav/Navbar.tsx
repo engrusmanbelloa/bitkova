@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import Button from "@mui/material/Button"
 import useStore from "@/config/store"
 import Logo from "@/components/Logo"
+import LoginBtn from "@/components/nav/LoginBtn"
 import { mobile, ipad } from "@/responsive"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -138,7 +139,9 @@ export default function Navbar() {
     const router = useRouter()
     // const { data: session } = useSession()
     const [toggleMenu, setToggleMenu] = useState(false)
+    const [session, setSession] = useState(false)
     const main = "true"
+    const login = true
 
     const menuList = [
         {
@@ -187,7 +190,13 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        <NavBtn>Browse Courses</NavBtn>
+                        {session ? (
+                            <NavBtn>Browse Courses</NavBtn>
+                        ) : (
+                            <>
+                                <LoginBtn $login={login} /> <LoginBtn $login={false} />
+                            </>
+                        )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
                             {!toggleMenu ? (
