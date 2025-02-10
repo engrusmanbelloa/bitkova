@@ -20,8 +20,8 @@ const Container = styled.section`
     margin: 50px auto 0;
     padding: 0px;
     border-radius: 8px;
-    ${ipad({ width: "665px", height: "150vh", marginTop: 20 })};
-    ${mobile({ width: "360px", height: "210vh", marginTop: 20 })};
+    ${ipad({ width: "665px", height: 1020, marginTop: 20 })};
+    ${mobile({ width: "360px", height: 1460, marginTop: 20 })};
 `
 const Wrapper = styled.div<{ $display?: string }>`
     display: flex;
@@ -125,7 +125,7 @@ const PriceBtn = styled.button<{ $priceBtn?: string }>`
     justify-content: center;
     font-size: ${(props) => (props.$priceBtn ? "16px" : "25px")};
     margin: 5px auto;
-    color: ${(props) => props.theme.white};
+    color: ${(props) => props.theme.palette.common.white};
     background-color: ${(props) => props.theme.palette.primary.main};
     &::first-letter {
         text-transform: uppercase;
