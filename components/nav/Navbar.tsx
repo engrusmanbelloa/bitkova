@@ -1,15 +1,17 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useRef, ReactElement, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-// import { useSession, signIn, signOut } from "next-auth/react"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import Button from "@mui/material/Button"
+import Slide from "@mui/material/Slide"
+import { TransitionProps } from "@mui/material/transitions"
 import useStore from "@/config/store"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
+import SignIn from "@/components/auth/SignIn"
 import { mobile, ipad } from "@/responsive"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -103,7 +105,7 @@ const Right = styled.div`
 `
 const NavBtn = styled.button`
     width: 198px;
-    height: 50px;
+    height: 40px;
     font-size: 16px;
     font-weight: 600;
     border: none;
@@ -140,9 +142,35 @@ export default function Navbar() {
     // const { data: session } = useSession()
     const [toggleMenu, setToggleMenu] = useState(false)
     const [session, setSession] = useState(false)
+    const [singin, setSignin] = useState(false)
     const main = "true"
     const login = true
 
+    // SingIN Modal transition, open and close functions
+    const Transition = ({
+        children,
+        ...props
+    }: TransitionProps & {
+        children: ReactElement<any, any>
+    }) => {
+        const ref = useRef(null)
+
+        return (
+            <Slide direction="up" ref={ref} {...props}>
+                {children}
+            </Slide>
+        )
+    }
+
+    const handleClickOpen = () => {
+        setSignin(true)
+    }
+
+    const handleClose = () => {
+        setSignin(false)
+    }
+
+    // menu items array
     const menuList = [
         {
             id: 1,
@@ -194,8 +222,17 @@ export default function Navbar() {
                             <NavBtn>Browse Courses</NavBtn>
                         ) : (
                             <>
-                                <LoginBtn $login={login} /> <LoginBtn $login={false} />
+                                <NavBtn>Browse Courses</NavBtn>
+                                <LoginBtn $login={login} onClick={handleClickOpen} />
                             </>
+                        )}
+                        {/* Modal for login  */}
+                        {singin && (
+                            <SignIn
+                                open={singin}
+                                handleClose={handleClose}
+                                Transition={Transition}
+                            />
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
