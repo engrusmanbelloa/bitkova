@@ -1,14 +1,17 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useRef, ReactElement, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-// import { useSession, signIn, signOut } from "next-auth/react"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import Button from "@mui/material/Button"
+import Slide from "@mui/material/Slide"
+import { TransitionProps } from "@mui/material/transitions"
 import useStore from "@/config/store"
 import Logo from "@/components/Logo"
+import LoginBtn from "@/components/nav/LoginBtn"
+import SignIn from "@/components/auth/SignIn"
 import { mobile, ipad } from "@/responsive"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -51,6 +54,7 @@ const Left = styled.ul`
     margin: 0;
     padding: 0;
     height: 60px;
+    ${ipad({ flex: 0.6 })}
 `
 const LogoContainer = styled.li`
     margin: 0;
@@ -102,7 +106,7 @@ const Right = styled.div`
 `
 const NavBtn = styled.button`
     width: 198px;
-    height: 50px;
+    height: 40px;
     font-size: 16px;
     font-weight: 600;
     border: none;
@@ -115,7 +119,7 @@ const NavBtn = styled.button`
         background-color: ${(props) => props.theme.palette.action.hover};
         color: ${(props) => props.theme.palette.primary.main};
     }
-    ${ipad({ width: 114, height: 35, fontSize: "12px", borderRadius: 5 })};
+    ${ipad({ width: 110, height: 35, fontSize: "12px", borderRadius: 5 })};
     ${mobile({ display: "none" })};
 `
 const Toggle = styled.div`
@@ -138,8 +142,36 @@ export default function Navbar() {
     const router = useRouter()
     // const { data: session } = useSession()
     const [toggleMenu, setToggleMenu] = useState(false)
+    const [session, setSession] = useState(false)
+    const [singin, setSignin] = useState(false)
     const main = "true"
+    const login = true
 
+    // SingIN Modal transition, open and close functions
+    const Transition = ({
+        children,
+        ...props
+    }: TransitionProps & {
+        children: ReactElement<any, any>
+    }) => {
+        const ref = useRef(null)
+
+        return (
+            <Slide direction="up" ref={ref} {...props}>
+                {children}
+            </Slide>
+        )
+    }
+
+    const handleClickOpen = () => {
+        setSignin(true)
+    }
+
+    const handleClose = () => {
+        setSignin(false)
+    }
+
+    // menu items array
     const menuList = [
         {
             id: 1,
@@ -187,7 +219,22 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        <NavBtn>Browse Courses</NavBtn>
+                        {session ? (
+                            <NavBtn>Browse Courses</NavBtn>
+                        ) : (
+                            <>
+                                <NavBtn>Browse Courses</NavBtn>
+                                <LoginBtn $login={login} onClick={handleClickOpen} />
+                            </>
+                        )}
+                        {/* Modal for login  */}
+                        {singin && (
+                            <SignIn
+                                open={singin}
+                                handleClose={handleClose}
+                                Transition={Transition}
+                            />
+                        )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
                             {!toggleMenu ? (

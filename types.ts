@@ -25,3 +25,5 @@ export interface CourseType {
         Name: string
     }[]
 }
+
+export interface SignInType {}
