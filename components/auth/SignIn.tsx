@@ -40,7 +40,7 @@ const Input = styled.input`
     width: 95%;
     padding: 10px;
     margin-top: 0px;
-    border: 1px solid #ccc;
+    border: 1px solid ${(props) => props.theme.mobile.offWhite};
     border-radius: 30px;
     &:focus {
         outline: none;
@@ -63,7 +63,7 @@ const RememberMeLabel = styled.label`
     ${mobile({ fontSize: 15 })}
 `
 const ForgotPassword = styled.a`
-    color: #007bff;
+    color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
     margin-left: 10px;
     ${mobile({ fontSize: 15 })}
@@ -76,8 +76,8 @@ const Button = styled.button`
     width: 99%;
     height: 40px;
     margin: 5px auto;
-    background-color: #007bff;
-    color: #fff;
+    background-color: ${(props) => props.theme.palette.primary.main};
+    color: ${(props) => props.theme.palette.common.white};
     border: none;
     border-radius: 30px;
     padding: 10px 20px;
@@ -86,8 +86,9 @@ const Button = styled.button`
 const SocialButton = styled.button`
     width: 99%;
     height: 40px;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: ${(props) => props.theme.palette.common.white};
+    border: 1px solid ${(props) => props.theme.mobile.offWhite};
+    outline: none;
     border-radius: 30px;
     padding: 10px 20px;
     margin: 7px auto;
@@ -112,9 +113,8 @@ const Footer = styled.div`
 const TrustedBy = styled.p`
     margin-bottom: 10px;
 `
-
 const SignUpLink = styled.a`
-    color: #007bff;
+    color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
 `
 
