@@ -54,6 +54,7 @@ const Left = styled.ul`
     margin: 0;
     padding: 0;
     height: 60px;
+    ${ipad({ flex: 0.6 })}
 `
 const LogoContainer = styled.li`
     margin: 0;
@@ -118,7 +119,7 @@ const NavBtn = styled.button`
         background-color: ${(props) => props.theme.palette.action.hover};
         color: ${(props) => props.theme.palette.primary.main};
     }
-    ${ipad({ width: 114, height: 35, fontSize: "12px", borderRadius: 5 })};
+    ${ipad({ width: 110, height: 35, fontSize: "12px", borderRadius: 5 })};
     ${mobile({ display: "none" })};
 `
 const Toggle = styled.div`

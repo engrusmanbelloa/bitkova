@@ -28,8 +28,8 @@ const Btn = styled.button<{ $login?: boolean }>`
         color: ${(props) =>
             props.$login ? props.theme.palette.common.white : props.theme.palette.primary.main};
     }
-    ${ipad({ display: "none" })};
-    ${mobile({})};
+    ${ipad({ height: 35, width: 80 })};
+    ${mobile({ display: "none" })};
 `
 
 export default function LoginBtn(props: {
