@@ -28,18 +28,14 @@ const Title = styled.h2`
 `
 const InputContainer = styled.div`
     margin: 0 auto 10px;
-    width: 440px;
-    ${ipad({ width: 310 })};
+    text-align: center;
+    ${ipad({ width: 290 })};
     ${mobile({ width: 260 })};
 `
-const InputLabel = styled.label`
-    display: block;
-    margin-bottom: 5px;
-`
 const Input = styled.input`
-    width: 95%;
+    width: 91%;
     padding: 10px;
-    margin-top: 0px;
+    margin: 10px auto 0;
     border: 1px solid ${(props) => props.theme.mobile.offWhite};
     border-radius: 30px;
     &:focus {
@@ -70,22 +66,24 @@ const ForgotPassword = styled.a`
 `
 const OrLoginWith = styled.p`
     text-align: center;
-    margin: 10px 0;
+    margin: 15px auto 7px;
 `
 const Button = styled.button`
-    width: 99%;
-    height: 40px;
-    margin: 5px auto;
+    width: 97%;
+    height: 35px;
+    margin: 5px auto 0 7px;
+    text-align: center;
     background-color: ${(props) => props.theme.palette.primary.main};
     color: ${(props) => props.theme.palette.common.white};
     border: none;
     border-radius: 30px;
-    padding: 10px 20px;
     cursor: pointer;
+    ${ipad({ marginLeft: 3, width: "99%" })};
+    ${mobile({ width: 260 })};
 `
 const SocialButton = styled.button`
     width: 99%;
-    height: 40px;
+    height: 35px;
     background-color: ${(props) => props.theme.palette.common.white};
     border: 1px solid ${(props) => props.theme.mobile.offWhite};
     outline: none;
@@ -109,16 +107,16 @@ const Images = styled.img`
 const Footer = styled.div`
     text-align: center;
 `
-
 const TrustedBy = styled.p`
     margin-bottom: 10px;
+    font-size: 12px;
 `
 const SignUpLink = styled.a`
     color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
 `
 
-export default function SignIn({ handleClose, open, Transition }) {
+export default function SignIn({ handleClose, open, Transition, handleSingUpOpen }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const handleSubmit = (e) => {
@@ -147,16 +145,18 @@ export default function SignIn({ handleClose, open, Transition }) {
                     </SocialButton>
                     <OrLoginWith>Or login with Email</OrLoginWith>
                     <InputContainer>
-                        <InputLabel>Enter your email</InputLabel>
                         <Input
+                            placeholder="Enter your email"
+                            name="email"
+                            required
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                    </InputContainer>
-                    <InputContainer>
-                        <InputLabel>Enter password</InputLabel>
                         <Input
+                            placeholder="Enter password"
+                            name="password"
+                            required
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -172,10 +172,13 @@ export default function SignIn({ handleClose, open, Transition }) {
                     <Button type="submit">Sign in</Button>
                 </form>
                 <Footer>
-                    {/* <TrustedBy>Trusted by 10,000+ Learners</TrustedBy> */}
                     <p>
-                        Don't have an account? <SignUpLink href="#">Sign Up now</SignUpLink>
+                        Don't have an account?{" "}
+                        <SignUpLink onClick={handleSingUpOpen} href="#">
+                            Sign Up now
+                        </SignUpLink>
                     </p>
+                    <TrustedBy>Trusted by 10,000+ Learners</TrustedBy>
                 </Footer>
             </RightSide>
             {/* <DialogActions>

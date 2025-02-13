@@ -32,14 +32,10 @@ const Btn = styled.button<{ $login?: boolean }>`
     ${mobile({ display: "none" })};
 `
 
-export default function LoginBtn(props: {
-    $login?: boolean
-    //  title?: string
-    onClick?: () => void
-}) {
+export default function LoginBtn(props: { $login?: boolean; onClick?: () => void }) {
     return (
         <Btn $login={props.$login} onClick={props.onClick}>
-            {props.$login ? "Login" : "Create Account"}
+            {props.$login ? "Login" : "Logout"}
         </Btn>
     )
 }
