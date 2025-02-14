@@ -12,6 +12,7 @@ import useStore from "@/config/store"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
+import SignUp from "@/components/auth/SignUp"
 import { mobile, ipad } from "@/responsive"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -144,6 +145,7 @@ export default function Navbar() {
     const [toggleMenu, setToggleMenu] = useState(false)
     const [session, setSession] = useState(false)
     const [singin, setSignin] = useState(false)
+    const [singUp, setSignUp] = useState(false)
     const main = "true"
     const login = true
 
@@ -163,12 +165,22 @@ export default function Navbar() {
         )
     }
 
-    const handleClickOpen = () => {
+    const handleSignInOpen = () => {
+        setSignUp(false)
         setSignin(true)
     }
 
-    const handleClose = () => {
+    const handleSignInClose = () => {
         setSignin(false)
+    }
+    // SingUp Modal transition, open and close functions
+    const handleSignUpOpen = () => {
+        setSignin(false)
+        setSignUp(true)
+    }
+
+    const handleSignUpClose = () => {
+        setSignUp(false)
     }
 
     // menu items array
@@ -224,15 +236,25 @@ export default function Navbar() {
                         ) : (
                             <>
                                 <NavBtn>Browse Courses</NavBtn>
-                                <LoginBtn $login={login} onClick={handleClickOpen} />
+                                <LoginBtn $login={login} onClick={handleSignInOpen} />
                             </>
+                        )}
+                        {/* Modal for signup  */}
+                        {singUp && (
+                            <SignUp
+                                open={singUp}
+                                handleClose={handleSignUpClose}
+                                Transition={Transition}
+                                handleSignInOpen={handleSignInOpen}
+                            />
                         )}
                         {/* Modal for login  */}
                         {singin && (
                             <SignIn
                                 open={singin}
-                                handleClose={handleClose}
+                                handleClose={handleSignInClose}
                                 Transition={Transition}
+                                handleSingUpOpen={handleSignUpOpen}
                             />
                         )}
                         {/* Mobile nav toggler  */}

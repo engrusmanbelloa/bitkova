@@ -4,6 +4,7 @@ import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
+import IsLoading from "@/components/IsLoading"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -24,68 +25,55 @@ const RightSide = styled.div`
     padding: 20px;
 `
 const Title = styled.h2`
-    margin-bottom: 30px;
+    margin-bottom: 0px;
 `
 const InputContainer = styled.div`
     margin: 0 auto 10px;
     width: 440px;
-    ${ipad({ width: 310 })};
+    padding: 0;
+    text-align: center;
+    ${ipad({ width: 290 })};
     ${mobile({ width: 260 })};
 `
-const InputLabel = styled.label`
-    display: block;
-    margin-bottom: 5px;
+const Start = styled.p`
+    margin: 5px 0 25px;
 `
 const Input = styled.input`
-    width: 95%;
+    width: 92%;
     padding: 10px;
-    margin-top: 0px;
+    margin: 10px auto 0;
     border: 1px solid ${(props) => props.theme.mobile.offWhite};
     border-radius: 30px;
     &:focus {
         outline: none;
     }
 `
-const RememberMeSection = styled.section`
-    display: flex;
-    justify-content: space-between;
-`
-const RememberMe = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-`
-const RememberMeCheckbox = styled.input`
-    margin-right: 5px;
-`
-const RememberMeLabel = styled.label`
-    margin-left: 5px;
-    ${mobile({ fontSize: 15 })}
-`
-const ForgotPassword = styled.a`
-    color: ${(props) => props.theme.palette.primary.main};
-    text-decoration: none;
-    margin-left: 10px;
-    ${mobile({ fontSize: 15 })}
-`
 const OrLoginWith = styled.p`
     text-align: center;
-    margin: 10px 0;
+    margin: 15px auto 7px;
+`
+const OrLoginWithRule = styled.hr`
+    width: 100%;
+    border: none;
+    border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
+    margin-top: 10px;
 `
 const Button = styled.button`
-    width: 99%;
-    height: 40px;
-    margin: 5px auto;
+    width: 97%;
+    height: 35px;
+    margin: 7px auto 0 6px;
     background-color: ${(props) => props.theme.palette.primary.main};
     color: ${(props) => props.theme.palette.common.white};
     border: none;
     border-radius: 30px;
     padding: 10px 20px;
     cursor: pointer;
+    ${ipad({ marginLeft: 0, width: "99%" })};
+    ${mobile({ width: 260 })};
 `
 const SocialButton = styled.button`
     width: 99%;
-    height: 40px;
+    height: 35px;
     background-color: ${(props) => props.theme.palette.common.white};
     border: 1px solid ${(props) => props.theme.mobile.offWhite};
     outline: none;
@@ -109,22 +97,85 @@ const Images = styled.img`
 const Footer = styled.div`
     text-align: center;
 `
-
 const TrustedBy = styled.p`
     margin-bottom: 10px;
+    font-size: 12px;
+`
+const PasswordChar = styled.p`
+    margin: -10px 0px 0px 5px;
+    font-size: 10px;
+    line-height: 1.5;
+    color: red;
+    ${ipad({ width: 280, marginTop: 2, fontSize: 13 })}
+    ${mobile({ width: 250, fontSize: 11 })}
 `
 const SignUpLink = styled.a`
     color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
 `
 
-export default function SignIp({ handleClose, open, Transition }) {
+export default function SignUp({ handleClose, open, Transition, handleSignInOpen }) {
     const [email, setEmail] = useState("")
+    const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // Handle form submission logic here
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [passwordError, setPasswordError] = useState("")
+    const [passwordMismatchError, setPasswordMismatchError] = useState("")
+    const [hasErrors, setHasErrors] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
+    const passwordMismatch = "Passwords do not match"
+    const emailErrorMsg = "Invalid email address"
+    const hasFieldErrors = emailError || passwordError || passwordMismatchError
+
+    if (emailError || passwordError || passwordMismatchError) {
     }
+
+    const handleEmailChange = (event) => {
+        const newEmail = event.target.value
+        setEmail(newEmail)
+
+        // Email validation using a regular expression
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+        if (!emailRegex.test(newEmail)) {
+            setEmailError(emailErrorMsg)
+        } else {
+            setEmailError("")
+        }
+    }
+
+    const handlePasswordChange = (event: any) => {
+        const newPassword = event.target.value
+        setPassword(newPassword)
+        // handle password validation and complexity
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+        if (!newPassword || !passwordRegex.test(newPassword)) {
+            setPasswordError(passwordCharError)
+        } else {
+            setPasswordError("")
+        }
+    }
+
+    const handleConfirmPasswordChange = (event: any) => {
+        setConfirmPassword(event.target.value)
+        if (password !== confirmPassword) {
+            setPasswordMismatchError(passwordMismatch)
+        } else {
+            setPasswordMismatchError("")
+        }
+    }
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault()
+
+        setIsLoading(true)
+
+        // ... (Your sign-in logic here)
+
+        setIsLoading(false)
+    }
+
     return (
         <Container
             open={open}
@@ -135,7 +186,8 @@ export default function SignIp({ handleClose, open, Transition }) {
             aria-describedby="alert-dialog-description"
         >
             <RightSide>
-                <Title>Welcome back, sign in</Title>
+                <Title>Create a free account</Title>
+                <Start>Start your learning experience today</Start>
                 <form onSubmit={handleSubmit}>
                     <SocialButton>
                         <GoogleIcon sx={{ color: "red" }} />
@@ -145,37 +197,60 @@ export default function SignIp({ handleClose, open, Transition }) {
                         <AppleIcon />
                         <p style={{ marginLeft: 5 }}>Apple</p>
                     </SocialButton>
-                    <OrLoginWith>Or login with Email</OrLoginWith>
+                    <OrLoginWith>Or Signup with Email</OrLoginWith>
                     <InputContainer>
-                        <InputLabel>Enter your email</InputLabel>
                         <Input
+                            placeholder="Enter your email"
+                            name="email"
+                            required
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                         />
-                    </InputContainer>
-                    <InputContainer>
-                        <InputLabel>Enter password</InputLabel>
                         <Input
+                            placeholder="Enter password"
+                            name="password"
+                            required
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            // onChange={(e) => setPassword(e.target.value)}
+                            onChange={handlePasswordChange}
+                        />
+                        <Input
+                            placeholder="Confirm password"
+                            name="ConfirmPassword"
+                            required
+                            type="password"
+                            value={confirmPassword}
+                            onChange={handleConfirmPasswordChange}
                         />
                     </InputContainer>
-                    <RememberMeSection>
-                        <RememberMe>
-                            <RememberMeCheckbox type="checkbox" />
-                            <RememberMeLabel>Remember me</RememberMeLabel>
-                        </RememberMe>
-                        <ForgotPassword href="#">Forgot Password?</ForgotPassword>
-                    </RememberMeSection>
-                    <Button type="submit">Sign in</Button>
+                    <PasswordChar>
+                        {passwordError
+                            ? passwordError
+                            : passwordMismatchError
+                              ? passwordMismatchError
+                              : emailError && emailError}
+                    </PasswordChar>
+                    {/* || passwordError || passwordMismatchError || emailError */}
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? (
+                            <>
+                                Signing up <IsLoading />
+                            </>
+                        ) : (
+                            "Sign up"
+                        )}
+                    </Button>
                 </form>
                 <Footer>
-                    {/* <TrustedBy>Trusted by 10,000+ Learners</TrustedBy> */}
                     <p>
-                        Don't have an account? <SignUpLink href="#">Sign Up now</SignUpLink>
+                        Already have an account?{" "}
+                        <SignUpLink onClick={handleSignInOpen} href="#">
+                            Sign In
+                        </SignUpLink>
                     </p>
+                    <TrustedBy>Trusted by 10,000+ Learners</TrustedBy>
                 </Footer>
             </RightSide>
             {/* <DialogActions>
