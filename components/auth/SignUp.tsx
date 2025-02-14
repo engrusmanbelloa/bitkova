@@ -5,6 +5,9 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
+import CircularProgress from "@mui/material/CircularProgress"
+import { auth } from "@/config/firebaseConfig"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -122,17 +125,17 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
     const [passwordError, setPasswordError] = useState("")
     const [passwordMismatchError, setPasswordMismatchError] = useState("")
     const [hasErrors, setHasErrors] = useState(false)
+    const [SignUpError, setSignUpError] = useState(false)
+    const [loginError, setLoginError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
+    // form fields validation and handling
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
     const passwordMismatch = "Passwords do not match"
     const emailErrorMsg = "Invalid email address"
     const hasFieldErrors = emailError || passwordError || passwordMismatchError
 
-    if (emailError || passwordError || passwordMismatchError) {
-    }
-
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: any) => {
         const newEmail = event.target.value
         setEmail(newEmail)
 
@@ -166,14 +169,21 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
         }
     }
 
-    const handleSubmit = async (event: any) => {
+    // Sign up user
+    const handleSignUp = async (event: any) => {
         event.preventDefault()
-
         setIsLoading(true)
-
-        // ... (Your sign-in logic here)
-
-        setIsLoading(false)
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user
+            console.log(user)
+        } catch (error) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            console.log(errorMessage)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -188,7 +198,7 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
             <RightSide>
                 <Title>Create a free account</Title>
                 <Start>Start your learning experience today</Start>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSignUp}>
                     <SocialButton>
                         <GoogleIcon sx={{ color: "red" }} />
                         <p style={{ marginLeft: 5 }}>Google</p>
@@ -226,17 +236,14 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
                         />
                     </InputContainer>
                     <PasswordChar>
-                        {passwordError
-                            ? passwordError
-                            : passwordMismatchError
-                              ? passwordMismatchError
-                              : emailError && emailError}
+                        {emailError ? emailError : passwordError ? passwordError : ""}
                     </PasswordChar>
                     {/* || passwordError || passwordMismatchError || emailError */}
                     <Button type="submit" disabled={isLoading}>
                         {isLoading ? (
                             <>
-                                Signing up <IsLoading />
+                                Signing up..{" "}
+                                <CircularProgress size={12} sx={{ color: "#fff", ml: 2 }} />
                             </>
                         ) : (
                             "Sign up"

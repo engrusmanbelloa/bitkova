@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
-import { getAuth } from "firebase/auth"
-import { getAnalytics } from "firebase/analytics"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { getFirestore, collection, getDocs } from "firebase/firestore/lite"
 
 const firebaseConfig = {
     apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
@@ -14,4 +14,28 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
-export const analytics = getAnalytics(app)
+export const db = getFirestore(app)
+
+// export const createAccount = async (email: string, password: string) => {
+//     try {
+//         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+//         const user = userCredential.user
+//         console.log(user)
+//     } catch (error) {
+//         const errorCode = error.code
+//         const errorMessage = error.message
+//         console.log(errorMessage)
+//     }
+// }
+
+export const signIn = async (email: string, password: string) => {
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        const user = userCredential.user
+        console.log(user)
+    } catch (error) {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorMessage)
+    }
+}
