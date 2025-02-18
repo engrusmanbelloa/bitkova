@@ -1,5 +1,4 @@
-import mongoose from "mongoose"
-const { Schema } = mongoose
+import { z } from "zod"
 
 interface User {
     uid: string
@@ -21,9 +20,31 @@ interface User {
     wishlist: string[]
     updatedAt: Date
     createdAt: Date
-
-    // ... other fields
 }
+
+const userSchema = z.object({
+    uid: z.string(),
+    displayName: z.string().optional(),
+    email: z.string().email(),
+    username: z.string().optional(),
+    phoneNumber: z.string().optional(),
+    walletAddress: z.string().optional(),
+    emailVerified: z.boolean().optional(),
+    photoURL: z.string().optional(),
+    bio: z.string().optional(),
+    points: z.number().optional(),
+    isAdmin: z.boolean().optional(),
+    isTutor: z.boolean().optional(),
+    enrolledCourses: z.array(z.string()).optional(),
+    activeCourse: z.array(z.string()).optional(),
+    completedCourses: z.array(z.string()).optional(),
+    ownCourses: z.array(z.string()).optional(),
+    wishlist: z.array(z.string()).optional(),
+    updatedAt: z.date().optional(),
+    createdAt: z.date(),
+})
+
+export default userSchema
 // const userSchema = new mongoose.Schema({
 // walletAddress: { type: String, default: null },
 // email: { type: String, required: true, unique: true },

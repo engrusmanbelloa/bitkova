@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
@@ -6,8 +6,13 @@ import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import CircularProgress from "@mui/material/CircularProgress"
-import { auth } from "@/config/firebaseConfig"
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    signInWithEmailAndPassword,
+} from "firebase/auth"
+import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -117,7 +122,17 @@ const SignUpLink = styled.a`
     text-decoration: none;
 `
 
-export default function SignUp({ handleClose, open, Transition, handleSignInOpen }) {
+export default function SignUp({
+    handleClose,
+    open,
+    Transition,
+    handleSignInOpen,
+}: {
+    handleClose: () => void
+    open: boolean
+    Transition: ComponentType<any>
+    handleSignInOpen: () => void
+}) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
@@ -128,6 +143,7 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
     const [SignUpError, setSignUpError] = useState(false)
     const [loginError, setLoginError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [signUpSuccess, setSignUpSuccess] = useState(false)
 
     // form fields validation and handling
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
@@ -169,6 +185,24 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
         }
     }
 
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
+    }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
+
+    //     sendEmailVerification(auth.currentUser)
+    //   .then(() => {
+    //     // Email verification sent!
+    //     // ...
+    //   });
+
     // Sign up user
     const handleSignUp = async (event: any) => {
         event.preventDefault()
@@ -176,8 +210,10 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
+            setSignUpSuccess(true)
+            alert(user.email + "Account created successfully")
             console.log(user)
-        } catch (error) {
+        } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
             console.log(errorMessage)
@@ -245,6 +281,8 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
                                 Signing up..{" "}
                                 <CircularProgress size={12} sx={{ color: "#fff", ml: 2 }} />
                             </>
+                        ) : signUpSuccess ? (
+                            "Sign Up Successful!"
                         ) : (
                             "Sign up"
                         )}

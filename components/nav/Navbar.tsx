@@ -14,6 +14,14 @@ import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
 import { mobile, ipad } from "@/responsive"
+import { initializeApp } from "firebase/app"
+import { onAuthStateChanged } from "firebase/auth"
+import {
+    getAuth,
+    signOut,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth"
 
 // background-color: ${(props) => props.theme.palette.common.white};
 
@@ -141,13 +149,13 @@ const Toggle = styled.div`
 
 export default function Navbar() {
     const router = useRouter()
-    // const { data: session } = useSession()
     const [toggleMenu, setToggleMenu] = useState(false)
-    const [session, setSession] = useState(false)
+    const [userLoggedIn, setUserLoggedIn] = useState(false)
     const [singin, setSignin] = useState(false)
     const [singUp, setSignUp] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const main = "true"
-    const login = true
+    let login
 
     // SingIN Modal transition, open and close functions
     const Transition = ({
@@ -166,8 +174,20 @@ export default function Navbar() {
     }
 
     const handleSignInOpen = () => {
-        setSignUp(false)
-        setSignin(true)
+        if (!userLoggedIn) {
+            setSignUp(false)
+            setSignin(true)
+        } else {
+            signOut(auth)
+                .then(() => {
+                    login = false
+                    setUserLoggedIn(false)
+                    alert("user logged out")
+                })
+                .catch((error) => {
+                    alert(error.message)
+                })
+        }
     }
 
     const handleSignInClose = () => {
@@ -175,8 +195,12 @@ export default function Navbar() {
     }
     // SingUp Modal transition, open and close functions
     const handleSignUpOpen = () => {
-        setSignin(false)
-        setSignUp(true)
+        if (!userLoggedIn) {
+            setSignin(false)
+            setSignUp(true)
+        } else {
+            alert("You're already logged in")
+        }
     }
 
     const handleSignUpClose = () => {
@@ -206,8 +230,38 @@ export default function Navbar() {
             title: "Our Hub",
         },
     ]
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
+    }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
 
-    const { cart } = useStore()
+    useEffect(() => {
+        setIsLoading(true)
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user !== null) {
+                setUserLoggedIn(true)
+                setSignin(false)
+                setSignUp(false)
+                const uid = user.uid
+                login = true
+                console.log("user id is : " + uid)
+            } else {
+                setUserLoggedIn(false)
+            }
+            setIsLoading(false)
+        })
+        return () => {
+            setIsLoading(false)
+            unsubscribe()
+        }
+    }, [userLoggedIn])
 
     return (
         <>
@@ -231,12 +285,17 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {session ? (
-                            <NavBtn>Browse Courses</NavBtn>
+                        {isLoading ? (
+                            <>Loading...</>
+                        ) : userLoggedIn ? (
+                            <>
+                                <NavBtn>Browse Courses</NavBtn>
+                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
+                            </>
                         ) : (
                             <>
                                 <NavBtn>Browse Courses</NavBtn>
-                                <LoginBtn $login={login} onClick={handleSignInOpen} />
+                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
                             </>
                         )}
                         {/* Modal for signup  */}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
@@ -116,10 +116,20 @@ const SignUpLink = styled.a`
     text-decoration: none;
 `
 
-export default function SignIn({ handleClose, open, Transition, handleSingUpOpen }) {
+export default function SignIn({
+    handleClose,
+    open,
+    Transition,
+    handleSingUpOpen,
+}: {
+    handleClose: () => void
+    open: boolean
+    Transition: ComponentType<any>
+    handleSingUpOpen: () => void
+}) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault()
         // Handle form submission logic here
     }
