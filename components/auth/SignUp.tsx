@@ -3,9 +3,8 @@ import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
+import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import IsLoading from "@/components/IsLoading"
-import CircularProgress from "@mui/material/CircularProgress"
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -65,19 +64,6 @@ const OrLoginWithRule = styled.hr`
     border: none;
     border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
     margin-top: 10px;
-`
-const Button = styled.button`
-    width: 97%;
-    height: 35px;
-    margin: 7px auto 0 6px;
-    background-color: ${(props) => props.theme.palette.primary.main};
-    color: ${(props) => props.theme.palette.common.white};
-    border: none;
-    border-radius: 30px;
-    padding: 10px 20px;
-    cursor: pointer;
-    ${ipad({ marginLeft: 0, width: "99%" })};
-    ${mobile({ width: 260 })};
 `
 const SocialButton = styled.button`
     width: 99%;
@@ -139,11 +125,8 @@ export default function SignUp({
     const [confirmPassword, setConfirmPassword] = useState("")
     const [passwordError, setPasswordError] = useState("")
     const [passwordMismatchError, setPasswordMismatchError] = useState("")
-    const [hasErrors, setHasErrors] = useState(false)
-    const [SignUpError, setSignUpError] = useState(false)
-    const [loginError, setLoginError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [signUpSuccess, setSignUpSuccess] = useState(false)
+    const [signUpStatus, setSignUpStatus] = useState("initial")
 
     // form fields validation and handling
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
@@ -197,12 +180,6 @@ export default function SignUp({
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
 
-    //     sendEmailVerification(auth.currentUser)
-    //   .then(() => {
-    //     // Email verification sent!
-    //     // ...
-    //   });
-
     // Sign up user
     const handleSignUp = async (event: any) => {
         event.preventDefault()
@@ -210,12 +187,16 @@ export default function SignUp({
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
-            setSignUpSuccess(true)
-            alert(user.email + "Account created successfully")
+            setTimeout(() => {
+                setSignUpStatus("success")
+            }, 10000)
+            // alert(user.email + " Account created successfully")
             console.log(user)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
+            console.log("Error creating account:", errorMessage, " ", errorCode)
+            setSignUpStatus("error")
             console.log(errorMessage)
         } finally {
             setIsLoading(false)
@@ -275,18 +256,14 @@ export default function SignUp({
                         {emailError ? emailError : passwordError ? passwordError : ""}
                     </PasswordChar>
                     {/* || passwordError || passwordMismatchError || emailError */}
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? (
-                            <>
-                                Signing up..{" "}
-                                <CircularProgress size={12} sx={{ color: "#fff", ml: 2 }} />
-                            </>
-                        ) : signUpSuccess ? (
-                            "Sign Up Successful!"
-                        ) : (
-                            "Sign up"
-                        )}
-                    </Button>
+                    <AuthButton
+                        title="Sign Up"
+                        isLoading={isLoading}
+                        authenticating="Signing up..."
+                        authenticated="Sign Up Successful!"
+                        authenticationError="Sign Up Failed Retry"
+                        authStatus={signUpStatus}
+                    />
                 </form>
                 <Footer>
                     <p>

@@ -5,22 +5,22 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
-import Button from "@mui/material/Button"
 import Slide from "@mui/material/Slide"
 import { TransitionProps } from "@mui/material/transitions"
-import useStore from "@/config/store"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
+import NotifyModal from "@/components/NotifyModal"
 import { mobile, ipad } from "@/responsive"
 import { initializeApp } from "firebase/app"
-import { onAuthStateChanged } from "firebase/auth"
 import {
     getAuth,
     signOut,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    sendEmailVerification,
+    onAuthStateChanged,
 } from "firebase/auth"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -154,6 +154,9 @@ export default function Navbar() {
     const [singin, setSignin] = useState(false)
     const [singUp, setSignUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [sentVerification, setSentVerification] = useState(false)
+    const [verificationChecked, setVerificationChecked] = useState(false)
+    const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const main = "true"
     let login
 
@@ -182,7 +185,7 @@ export default function Navbar() {
                 .then(() => {
                     login = false
                     setUserLoggedIn(false)
-                    alert("user logged out")
+                    // alert("user logged out")
                 })
                 .catch((error) => {
                     alert(error.message)
@@ -242,11 +245,67 @@ export default function Navbar() {
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
 
+    // Handle user email verification
+    const handleSendVerification = async () => {
+        try {
+            if (auth.currentUser && !auth.currentUser.emailVerified) {
+                if (!sentVerification) {
+                    await sendEmailVerification(auth.currentUser)
+                    setSentVerification(true)
+                    alert("Verification email sent. Please check your inbox.")
+                } else {
+                    alert("Verification email already sent, check your inbox")
+                }
+            }
+        } catch (error: any) {
+            console.log("Error resending verification email:", error.message)
+            alert("Failed to resend verification email. Please try again later.")
+        }
+    }
+
+    // Check if the user confirmed their email
+    const handleCheckVerification = async () => {
+        try {
+            if (auth.currentUser) {
+                await auth.currentUser.reload()
+                if (auth.currentUser.emailVerified) {
+                    setVerificationChecked(true)
+                    setSentVerification(false)
+                    setUserLoggedIn(true)
+                    setNotifyModalOpen(false)
+                    alert("Email verification successful")
+                    // console.log(auth.currentUser.emailVerified)
+                } else {
+                    alert("Email not verified. Please verify your email.")
+                    // console.log(auth.currentUser.emailVerified)
+                }
+            }
+        } catch (error: any) {
+            // console.error("Error checking email verification:", error.message)
+            alert("Failed to check verification status. Please try again later.")
+        }
+    }
+
+    // close the notification modal
+    const notifyModalClose = async () => {
+        setNotifyModalOpen(false)
+    }
     useEffect(() => {
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user !== null) {
-                setUserLoggedIn(true)
+                if (user.emailVerified) {
+                    setUserLoggedIn(true)
+                    console.log(
+                        "user verification is : " +
+                            user.emailVerified +
+                            ", User logged in :" +
+                            userLoggedIn,
+                    )
+                } else {
+                    setUserLoggedIn(false)
+                    setNotifyModalOpen(true)
+                }
                 setSignin(false)
                 setSignUp(false)
                 const uid = user.uid
@@ -255,8 +314,11 @@ export default function Navbar() {
             } else {
                 setUserLoggedIn(false)
             }
-            setIsLoading(false)
         })
+        if (auth.currentUser && auth.currentUser.emailVerified) {
+            setUserLoggedIn(true)
+        }
+
         return () => {
             setIsLoading(false)
             unsubscribe()
@@ -285,9 +347,7 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {isLoading ? (
-                            <>Loading...</>
-                        ) : userLoggedIn ? (
+                        {auth.currentUser && auth.currentUser.emailVerified ? (
                             <>
                                 <NavBtn>Browse Courses</NavBtn>
                                 <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
@@ -314,6 +374,17 @@ export default function Navbar() {
                                 handleClose={handleSignInClose}
                                 Transition={Transition}
                                 handleSingUpOpen={handleSignUpOpen}
+                            />
+                        )}
+                        {notifyModalOpen && (
+                            <NotifyModal
+                                open={notifyModalOpen}
+                                handleNotifyModalClose={notifyModalClose}
+                                handleSendVerification={handleSendVerification}
+                                handleCheckVerification={handleCheckVerification}
+                                Transition={Transition}
+                                verificationChecked={verificationChecked}
+                                sentVerification={sentVerification}
                             />
                         )}
                         {/* Mobile nav toggler  */}

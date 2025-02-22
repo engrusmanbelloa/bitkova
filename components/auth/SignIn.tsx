@@ -4,6 +4,14 @@ import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
+import AuthButton from "@/components/auth/AuthButton"
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    signInWithEmailAndPassword,
+} from "firebase/auth"
+import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -129,10 +137,43 @@ export default function SignIn({
 }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
-        // Handle form submission logic here
+    const [isLoading, setIsLoading] = useState(false)
+    const [signInStatus, setSignInStatus] = useState("initial")
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
     }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
+    // Sign up user
+    const handleSignIn = async (event: any) => {
+        event.preventDefault()
+        setIsLoading(true)
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user
+            setTimeout(() => {
+                setSignInStatus("success")
+            }, 10000)
+            // alert(user.email + " Account created successfully")
+            console.log(user)
+        } catch (error: any) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            console.error("Error creating account:", errorMessage, " ", errorCode)
+            setSignInStatus("error")
+            console.log(errorMessage)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <Container
             open={open}
@@ -144,7 +185,7 @@ export default function SignIn({
         >
             <RightSide>
                 <Title>Welcome back, sign in</Title>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSignIn}>
                     <SocialButton>
                         <GoogleIcon sx={{ color: "red" }} />
                         <p style={{ marginLeft: 5 }}>Google</p>
@@ -179,7 +220,14 @@ export default function SignIn({
                         </RememberMe>
                         <ForgotPassword href="#">Forgot Password?</ForgotPassword>
                     </RememberMeSection>
-                    <Button type="submit">Sign in</Button>
+                    <AuthButton
+                        title="Sign in"
+                        isLoading={isLoading}
+                        authenticating="Signing in..."
+                        authenticated="Sign in Successful!"
+                        authenticationError="Sign in Failed"
+                        authStatus={signInStatus}
+                    />
                 </form>
                 <Footer>
                     <p>
