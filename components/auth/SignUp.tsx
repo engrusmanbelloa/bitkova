@@ -1,10 +1,12 @@
-import React, { useState, useRef } from "react"
+import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
+import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import IsLoading from "@/components/IsLoading"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -58,19 +60,6 @@ const OrLoginWithRule = styled.hr`
     border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
     margin-top: 10px;
 `
-const Button = styled.button`
-    width: 97%;
-    height: 35px;
-    margin: 7px auto 0 6px;
-    background-color: ${(props) => props.theme.palette.primary.main};
-    color: ${(props) => props.theme.palette.common.white};
-    border: none;
-    border-radius: 30px;
-    padding: 10px 20px;
-    cursor: pointer;
-    ${ipad({ marginLeft: 0, width: "99%" })};
-    ${mobile({ width: 260 })};
-`
 const SocialButton = styled.button`
     width: 99%;
     height: 35px;
@@ -114,25 +103,33 @@ const SignUpLink = styled.a`
     text-decoration: none;
 `
 
-export default function SignUp({ handleClose, open, Transition, handleSignInOpen }) {
+export default function SignUp({
+    handleClose,
+    open,
+    Transition,
+    handleSignInOpen,
+}: {
+    handleClose: () => void
+    open: boolean
+    Transition: ComponentType<any>
+    handleSignInOpen: () => void
+}) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [passwordError, setPasswordError] = useState("")
     const [passwordMismatchError, setPasswordMismatchError] = useState("")
-    const [hasErrors, setHasErrors] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [signUpStatus, setSignUpStatus] = useState("initial")
 
+    // form fields validation and handling
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
     const passwordMismatch = "Passwords do not match"
     const emailErrorMsg = "Invalid email address"
     const hasFieldErrors = emailError || passwordError || passwordMismatchError
 
-    if (emailError || passwordError || passwordMismatchError) {
-    }
-
-    const handleEmailChange = (event) => {
+    const handleEmailChange = (event: any) => {
         const newEmail = event.target.value
         setEmail(newEmail)
 
@@ -166,14 +163,42 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
         }
     }
 
-    const handleSubmit = async (event: any) => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
+    }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
+
+    // Sign up user
+    const handleSignUp = async (event: any) => {
         event.preventDefault()
-
         setIsLoading(true)
-
-        // ... (Your sign-in logic here)
-
-        setIsLoading(false)
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user
+            setSignUpStatus("success")
+            setTimeout(() => {
+                handleClose()
+            }, 3000)
+            // alert(user.email + " Account created successfully")
+            console.log(user)
+        } catch (error: any) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            console.log("Error creating account:", errorMessage, " ", errorCode)
+            setSignUpStatus("error")
+            setTimeout(() => {
+                setSignUpStatus("initial")
+            }, 1000)
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     return (
@@ -188,7 +213,7 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
             <RightSide>
                 <Title>Create a free account</Title>
                 <Start>Start your learning experience today</Start>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSignUp}>
                     <SocialButton>
                         <GoogleIcon sx={{ color: "red" }} />
                         <p style={{ marginLeft: 5 }}>Google</p>
@@ -226,22 +251,17 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
                         />
                     </InputContainer>
                     <PasswordChar>
-                        {passwordError
-                            ? passwordError
-                            : passwordMismatchError
-                              ? passwordMismatchError
-                              : emailError && emailError}
+                        {emailError ? emailError : passwordError ? passwordError : ""}
                     </PasswordChar>
                     {/* || passwordError || passwordMismatchError || emailError */}
-                    <Button type="submit" disabled={isLoading}>
-                        {isLoading ? (
-                            <>
-                                Signing up <IsLoading />
-                            </>
-                        ) : (
-                            "Sign up"
-                        )}
-                    </Button>
+                    <AuthButton
+                        title="Sign Up"
+                        isLoading={isLoading}
+                        authenticating="Signing up..."
+                        authenticated="Sign Up Successful!"
+                        authenticationError="Sign Up Failed Retry"
+                        authStatus={signUpStatus}
+                    />
                 </form>
                 <Footer>
                     <p>

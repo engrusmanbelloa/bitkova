@@ -1,9 +1,18 @@
-import React, { useState, useRef } from "react"
+import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
+import AuthButton from "@/components/auth/AuthButton"
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    browserSessionPersistence,
+    browserLocalPersistence,
+    setPersistence,
+} from "firebase/auth"
+import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -116,13 +125,66 @@ const SignUpLink = styled.a`
     text-decoration: none;
 `
 
-export default function SignIn({ handleClose, open, Transition, handleSingUpOpen }) {
+export default function SignIn({
+    handleClose,
+    open,
+    Transition,
+    handleSingUpOpen,
+    handleForgotPasswordOpen,
+}: {
+    handleClose: () => void
+    open: boolean
+    Transition: ComponentType<any>
+    handleSingUpOpen: () => void
+    handleForgotPasswordOpen: () => void
+}) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // Handle form submission logic here
+    const [isLoading, setIsLoading] = useState(false)
+    const [signInStatus, setSignInStatus] = useState("initial")
+    const [rememberMe, setRememberMe] = useState(false)
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
     }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
+
+    // Sign up user
+    const handleSignIn = async (event: any) => {
+        event.preventDefault()
+        setIsLoading(true)
+        try {
+            const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence
+            await setPersistence(auth, persistence)
+            const userCredential = await signInWithEmailAndPassword(auth, email, password)
+            const user = userCredential.user
+            setSignInStatus("success")
+            setTimeout(() => {
+                handleClose()
+            }, 1000)
+            // alert(user.email + " Account created successfully")
+            console.log(user)
+            console.log("user state persistence is: " + persistence)
+        } catch (error: any) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            console.log("Signing in error:", errorMessage, " ", errorCode)
+            setSignInStatus("error")
+            setTimeout(() => {
+                setSignInStatus("initial")
+            }, 1000)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <Container
             open={open}
@@ -134,7 +196,7 @@ export default function SignIn({ handleClose, open, Transition, handleSingUpOpen
         >
             <RightSide>
                 <Title>Welcome back, sign in</Title>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSignIn}>
                     <SocialButton>
                         <GoogleIcon sx={{ color: "red" }} />
                         <p style={{ marginLeft: 5 }}>Google</p>
@@ -164,12 +226,25 @@ export default function SignIn({ handleClose, open, Transition, handleSingUpOpen
                     </InputContainer>
                     <RememberMeSection>
                         <RememberMe>
-                            <RememberMeCheckbox type="checkbox" />
+                            <RememberMeCheckbox
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
                             <RememberMeLabel>Remember me</RememberMeLabel>
                         </RememberMe>
-                        <ForgotPassword href="#">Forgot Password?</ForgotPassword>
+                        <ForgotPassword onClick={handleForgotPasswordOpen} href="#">
+                            Forgot Password?
+                        </ForgotPassword>
                     </RememberMeSection>
-                    <Button type="submit">Sign in</Button>
+                    <AuthButton
+                        title="Sign in"
+                        isLoading={isLoading}
+                        authenticating="Signing in..."
+                        authenticated="Sign in Successful!"
+                        authenticationError="Sign in Failed"
+                        authStatus={signInStatus}
+                    />
                 </form>
                 <Footer>
                     <p>
@@ -181,9 +256,6 @@ export default function SignIn({ handleClose, open, Transition, handleSingUpOpen
                     <TrustedBy>Trusted by 10,000+ Learners</TrustedBy>
                 </Footer>
             </RightSide>
-            {/* <DialogActions>
-                <CloseIcon onClick={handleClose}>Disagree</CloseIcon>
-            </DialogActions> */}
         </Container>
     )
 }

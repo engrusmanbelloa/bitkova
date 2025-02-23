@@ -5,15 +5,25 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
-import Button from "@mui/material/Button"
 import Slide from "@mui/material/Slide"
 import { TransitionProps } from "@mui/material/transitions"
-import useStore from "@/config/store"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
+import NotifyModal from "@/components/auth/NotifyModal"
+import ResetPsswd from "@/components/auth/ResetPsswd"
 import { mobile, ipad } from "@/responsive"
+import { initializeApp } from "firebase/app"
+import {
+    getAuth,
+    signOut,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+} from "firebase/auth"
 
 // background-color: ${(props) => props.theme.palette.common.white};
 
@@ -141,13 +151,18 @@ const Toggle = styled.div`
 
 export default function Navbar() {
     const router = useRouter()
-    // const { data: session } = useSession()
     const [toggleMenu, setToggleMenu] = useState(false)
-    const [session, setSession] = useState(false)
-    const [singin, setSignin] = useState(false)
+    const [userLoggedIn, setUserLoggedIn] = useState(false)
+    const [signin, setSignin] = useState(false)
     const [singUp, setSignUp] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [sentVerification, setSentVerification] = useState(false)
+    const [verificationChecked, setVerificationChecked] = useState(false)
+    const [notifyModalOpen, setNotifyModalOpen] = useState(false)
+    const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
+
     const main = "true"
-    const login = true
+    let login
 
     // SingIN Modal transition, open and close functions
     const Transition = ({
@@ -166,21 +181,40 @@ export default function Navbar() {
     }
 
     const handleSignInOpen = () => {
-        setSignUp(false)
-        setSignin(true)
+        if (!userLoggedIn) {
+            setSignUp(false)
+            setSignin(true)
+        } else {
+            signOut(auth)
+                .then(() => {
+                    login = false
+                    setUserLoggedIn(false)
+                })
+                .catch((error) => {
+                    alert(error.message)
+                })
+        }
     }
 
     const handleSignInClose = () => {
-        setSignin(false)
+        setTimeout(() => {
+            setSignin(false)
+        }, 1000)
     }
     // SingUp Modal transition, open and close functions
     const handleSignUpOpen = () => {
-        setSignin(false)
-        setSignUp(true)
+        if (!userLoggedIn) {
+            setSignin(false)
+            setSignUp(true)
+        } else {
+            alert("You're already logged in")
+        }
     }
 
     const handleSignUpClose = () => {
-        setSignUp(false)
+        setTimeout(() => {
+            setSignUp(false)
+        }, 2000)
     }
 
     // menu items array
@@ -206,8 +240,109 @@ export default function Navbar() {
             title: "Our Hub",
         },
     ]
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
+        authDomain: "bitkova-digital-hub.firebaseapp.com",
+        projectId: "bitkova-digital-hub",
+        storageBucket: "bitkova-digital-hub.firebasestorage.app",
+        messagingSenderId: "541818898111",
+        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
+        measurementId: "G-STF7K5WZFX",
+    }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
 
-    const { cart } = useStore()
+    // Handle user email verification
+    const handleSendVerification = async () => {
+        try {
+            if (auth.currentUser && !auth.currentUser.emailVerified) {
+                if (!sentVerification) {
+                    await sendEmailVerification(auth.currentUser)
+                    setSentVerification(true)
+                    alert("Verification email sent. Please check your inbox.")
+                } else {
+                    alert("Verification email already sent, check your inbox")
+                }
+            }
+        } catch (error: any) {
+            console.log("Error resending verification email:", error.message)
+            alert("Failed to resend verification email. Please try again later.")
+        }
+    }
+
+    // Check if the user confirmed their email
+    const handleCheckVerification = async () => {
+        try {
+            if (auth.currentUser) {
+                await auth.currentUser.reload()
+                if (auth.currentUser.emailVerified) {
+                    setVerificationChecked(true)
+                    setSentVerification(false)
+                    setUserLoggedIn(true)
+                    setNotifyModalOpen(false)
+                    alert("Email verification successful")
+                    // console.log(auth.currentUser.emailVerified)
+                } else {
+                    alert("Email not verified. Please verify your email.")
+                    // console.log(auth.currentUser.emailVerified)
+                }
+            }
+        } catch (error: any) {
+            // console.error("Error checking email verification:", error.message)
+            alert("Failed to check verification status. Please try again later.")
+        }
+    }
+
+    // close the notification modal
+    const notifyModalClose = async () => {
+        setNotifyModalOpen(false)
+    }
+    // forgot password functions open, close the modal
+    const handleForgotPasswordOpen = () => {
+        setForgotPasswordOpen(true)
+        setSignUp(false)
+        setSignin(false)
+    }
+
+    const handleForgotPasswordClose = () => {
+        setForgotPasswordOpen(false)
+    }
+
+    // sign out functions
+    useEffect(() => {
+        setIsLoading(true)
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user !== null) {
+                if (user.emailVerified) {
+                    setUserLoggedIn(true)
+                    console.log(
+                        "user verification is : " +
+                            user.emailVerified +
+                            ", User logged in :" +
+                            userLoggedIn,
+                    )
+                } else {
+                    setUserLoggedIn(false)
+                    setNotifyModalOpen(true)
+                }
+                setSignin(false)
+                setSignUp(false)
+                const uid = user.uid
+                login = true
+                console.log("user id is : " + uid)
+            } else {
+                setUserLoggedIn(false)
+            }
+        })
+        if (auth.currentUser && auth.currentUser.emailVerified) {
+            setUserLoggedIn(true)
+        }
+
+        return () => {
+            setIsLoading(false)
+            unsubscribe()
+        }
+    }, [userLoggedIn, signin])
 
     return (
         <>
@@ -231,12 +366,15 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {session ? (
-                            <NavBtn>Browse Courses</NavBtn>
+                        {auth.currentUser && auth.currentUser.emailVerified ? (
+                            <>
+                                <NavBtn>Browse Courses</NavBtn>
+                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
+                            </>
                         ) : (
                             <>
                                 <NavBtn>Browse Courses</NavBtn>
-                                <LoginBtn $login={login} onClick={handleSignInOpen} />
+                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
                             </>
                         )}
                         {/* Modal for signup  */}
@@ -249,12 +387,31 @@ export default function Navbar() {
                             />
                         )}
                         {/* Modal for login  */}
-                        {singin && (
+                        {signin && (
                             <SignIn
-                                open={singin}
+                                open={signin}
                                 handleClose={handleSignInClose}
                                 Transition={Transition}
                                 handleSingUpOpen={handleSignUpOpen}
+                                handleForgotPasswordOpen={handleForgotPasswordOpen}
+                            />
+                        )}
+                        {notifyModalOpen && (
+                            <NotifyModal
+                                open={notifyModalOpen}
+                                handleNotifyModalClose={notifyModalClose}
+                                handleSendVerification={handleSendVerification}
+                                handleCheckVerification={handleCheckVerification}
+                                Transition={Transition}
+                                verificationChecked={verificationChecked}
+                                sentVerification={sentVerification}
+                            />
+                        )}
+                        {forgotPasswordOpen && (
+                            <ResetPsswd
+                                open={forgotPasswordOpen}
+                                handleClose={handleForgotPasswordClose}
+                                Transition={Transition}
                             />
                         )}
                         {/* Mobile nav toggler  */}
