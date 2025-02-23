@@ -52,7 +52,7 @@ const Counter = ({ end, label }: { end: number; label: string }) => {
                         return end
                     }
                 })
-            }, 30) // Adjust speed here
+            }, 30)
         }
     }, [inView, count, end])
 
