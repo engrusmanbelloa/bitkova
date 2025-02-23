@@ -5,12 +5,7 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    sendEmailVerification,
-    signInWithEmailAndPassword,
-} from "firebase/auth"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
@@ -187,9 +182,10 @@ export default function SignUp({
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
+            setSignUpStatus("success")
             setTimeout(() => {
-                setSignUpStatus("success")
-            }, 10000)
+                handleClose()
+            }, 3000)
             // alert(user.email + " Account created successfully")
             console.log(user)
         } catch (error: any) {
@@ -197,7 +193,9 @@ export default function SignUp({
             const errorMessage = error.message
             console.log("Error creating account:", errorMessage, " ", errorCode)
             setSignUpStatus("error")
-            console.log(errorMessage)
+            setTimeout(() => {
+                setSignUpStatus("initial")
+            }, 1000)
         } finally {
             setIsLoading(false)
         }

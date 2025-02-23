@@ -11,7 +11,8 @@ import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
-import NotifyModal from "@/components/NotifyModal"
+import NotifyModal from "@/components/auth/NotifyModal"
+import ResetPsswd from "@/components/auth/ResetPsswd"
 import { mobile, ipad } from "@/responsive"
 import { initializeApp } from "firebase/app"
 import {
@@ -21,6 +22,7 @@ import {
     signInWithEmailAndPassword,
     sendEmailVerification,
     onAuthStateChanged,
+    sendPasswordResetEmail,
 } from "firebase/auth"
 
 // background-color: ${(props) => props.theme.palette.common.white};
@@ -151,12 +153,14 @@ export default function Navbar() {
     const router = useRouter()
     const [toggleMenu, setToggleMenu] = useState(false)
     const [userLoggedIn, setUserLoggedIn] = useState(false)
-    const [singin, setSignin] = useState(false)
+    const [signin, setSignin] = useState(false)
     const [singUp, setSignUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [sentVerification, setSentVerification] = useState(false)
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
+    const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
+
     const main = "true"
     let login
 
@@ -185,7 +189,6 @@ export default function Navbar() {
                 .then(() => {
                     login = false
                     setUserLoggedIn(false)
-                    // alert("user logged out")
                 })
                 .catch((error) => {
                     alert(error.message)
@@ -194,7 +197,9 @@ export default function Navbar() {
     }
 
     const handleSignInClose = () => {
-        setSignin(false)
+        setTimeout(() => {
+            setSignin(false)
+        }, 1000)
     }
     // SingUp Modal transition, open and close functions
     const handleSignUpOpen = () => {
@@ -207,7 +212,9 @@ export default function Navbar() {
     }
 
     const handleSignUpClose = () => {
-        setSignUp(false)
+        setTimeout(() => {
+            setSignUp(false)
+        }, 2000)
     }
 
     // menu items array
@@ -290,6 +297,18 @@ export default function Navbar() {
     const notifyModalClose = async () => {
         setNotifyModalOpen(false)
     }
+    // forgot password functions open, close the modal
+    const handleForgotPasswordOpen = () => {
+        setForgotPasswordOpen(true)
+        setSignUp(false)
+        setSignin(false)
+    }
+
+    const handleForgotPasswordClose = () => {
+        setForgotPasswordOpen(false)
+    }
+
+    // sign out functions
     useEffect(() => {
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -323,7 +342,7 @@ export default function Navbar() {
             setIsLoading(false)
             unsubscribe()
         }
-    }, [userLoggedIn])
+    }, [userLoggedIn, signin])
 
     return (
         <>
@@ -368,12 +387,13 @@ export default function Navbar() {
                             />
                         )}
                         {/* Modal for login  */}
-                        {singin && (
+                        {signin && (
                             <SignIn
-                                open={singin}
+                                open={signin}
                                 handleClose={handleSignInClose}
                                 Transition={Transition}
                                 handleSingUpOpen={handleSignUpOpen}
+                                handleForgotPasswordOpen={handleForgotPasswordOpen}
                             />
                         )}
                         {notifyModalOpen && (
@@ -385,6 +405,13 @@ export default function Navbar() {
                                 Transition={Transition}
                                 verificationChecked={verificationChecked}
                                 sentVerification={sentVerification}
+                            />
+                        )}
+                        {forgotPasswordOpen && (
+                            <ResetPsswd
+                                open={forgotPasswordOpen}
+                                handleClose={handleForgotPasswordClose}
+                                Transition={Transition}
                             />
                         )}
                         {/* Mobile nav toggler  */}

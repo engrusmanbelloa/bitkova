@@ -2,14 +2,7 @@ import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import { initializeApp } from "firebase/app"
-import {
-    getAuth,
-    signOut,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendEmailVerification,
-    onAuthStateChanged,
-} from "firebase/auth"
+import { getAuth } from "firebase/auth"
 import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Dialog)`

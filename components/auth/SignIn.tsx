@@ -7,9 +7,10 @@ import { mobile, ipad } from "@/responsive"
 import AuthButton from "@/components/auth/AuthButton"
 import {
     getAuth,
-    createUserWithEmailAndPassword,
-    sendEmailVerification,
     signInWithEmailAndPassword,
+    browserSessionPersistence,
+    browserLocalPersistence,
+    setPersistence,
 } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 
@@ -129,16 +130,19 @@ export default function SignIn({
     open,
     Transition,
     handleSingUpOpen,
+    handleForgotPasswordOpen,
 }: {
     handleClose: () => void
     open: boolean
     Transition: ComponentType<any>
     handleSingUpOpen: () => void
+    handleForgotPasswordOpen: () => void
 }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [signInStatus, setSignInStatus] = useState("initial")
+    const [rememberMe, setRememberMe] = useState(false)
 
     const firebaseConfig = {
         apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
@@ -151,24 +155,31 @@ export default function SignIn({
     }
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
+
     // Sign up user
     const handleSignIn = async (event: any) => {
         event.preventDefault()
         setIsLoading(true)
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+            const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence
+            await setPersistence(auth, persistence)
+            const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
+            setSignInStatus("success")
             setTimeout(() => {
-                setSignInStatus("success")
-            }, 10000)
+                handleClose()
+            }, 1000)
             // alert(user.email + " Account created successfully")
             console.log(user)
+            console.log("user state persistence is: " + persistence)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
-            console.error("Error creating account:", errorMessage, " ", errorCode)
+            console.log("Signing in error:", errorMessage, " ", errorCode)
             setSignInStatus("error")
-            console.log(errorMessage)
+            setTimeout(() => {
+                setSignInStatus("initial")
+            }, 1000)
         } finally {
             setIsLoading(false)
         }
@@ -215,10 +226,16 @@ export default function SignIn({
                     </InputContainer>
                     <RememberMeSection>
                         <RememberMe>
-                            <RememberMeCheckbox type="checkbox" />
+                            <RememberMeCheckbox
+                                type="checkbox"
+                                checked={rememberMe}
+                                onChange={(e) => setRememberMe(e.target.checked)}
+                            />
                             <RememberMeLabel>Remember me</RememberMeLabel>
                         </RememberMe>
-                        <ForgotPassword href="#">Forgot Password?</ForgotPassword>
+                        <ForgotPassword onClick={handleForgotPasswordOpen} href="#">
+                            Forgot Password?
+                        </ForgotPassword>
                     </RememberMeSection>
                     <AuthButton
                         title="Sign in"
@@ -239,9 +256,6 @@ export default function SignIn({
                     <TrustedBy>Trusted by 10,000+ Learners</TrustedBy>
                 </Footer>
             </RightSide>
-            {/* <DialogActions>
-                <CloseIcon onClick={handleClose}>Disagree</CloseIcon>
-            </DialogActions> */}
         </Container>
     )
 }
