@@ -34,7 +34,7 @@ const Label = styled.p`
     margin: 0;
 `
 
-const Counter = ({ end, label }) => {
+const Counter = ({ end, label }: { end: number; label: string }) => {
     const [count, setCount] = useState(0)
     const { ref, inView } = useInView({
         triggerOnce: true,
