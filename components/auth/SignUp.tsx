@@ -5,7 +5,12 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+} from "firebase/auth"
 import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
@@ -175,7 +180,7 @@ export default function SignUp({
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
 
-    // Sign up user
+    // Sign up user with email and password then google
     const handleSignUp = async (event: any) => {
         event.preventDefault()
         setIsLoading(true)
@@ -201,6 +206,35 @@ export default function SignUp({
         }
     }
 
+    const handleSignInWithGoogle = async () => {
+        setIsLoading(true)
+        try {
+            const provider = new GoogleAuthProvider()
+            const userCredential = await signInWithPopup(auth, provider)
+            const user = userCredential.user
+            setSignUpStatus("success")
+            setTimeout(() => {
+                handleClose()
+            }, 1000)
+            // alert(user.email + " Account created successfully")
+            // console.log(user)
+        } catch (error: any) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            if (error.code === "auth/account-exists-with-different-credential") {
+                // The pending Google credential.
+                // let pendingCred = error.credential
+                setSignUpStatus("Sign In error")
+                // console.log("error:", errorMessage, " ", errorCode)
+            }
+            setTimeout(() => {
+                setSignUpStatus("initial")
+            }, 1000)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <Container
             open={open}
@@ -213,15 +247,15 @@ export default function SignUp({
             <RightSide>
                 <Title>Create a free account</Title>
                 <Start>Start your learning experience today</Start>
+                <SocialButton onClick={handleSignInWithGoogle}>
+                    <GoogleIcon sx={{ color: "red" }} />
+                    <p style={{ marginLeft: 5 }}>Google</p>
+                </SocialButton>
+                <SocialButton>
+                    <AppleIcon />
+                    <p style={{ marginLeft: 5 }}>Apple</p>
+                </SocialButton>
                 <form onSubmit={handleSignUp}>
-                    <SocialButton>
-                        <GoogleIcon sx={{ color: "red" }} />
-                        <p style={{ marginLeft: 5 }}>Google</p>
-                    </SocialButton>
-                    <SocialButton>
-                        <AppleIcon />
-                        <p style={{ marginLeft: 5 }}>Apple</p>
-                    </SocialButton>
                     <OrLoginWith>Or Signup with Email</OrLoginWith>
                     <InputContainer>
                         <Input
