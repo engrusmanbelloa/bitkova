@@ -10,6 +10,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
+    signInWithRedirect,
 } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 
@@ -210,8 +211,8 @@ export default function SignUp({
         setIsLoading(true)
         try {
             const provider = new GoogleAuthProvider()
-            const userCredential = await signInWithPopup(auth, provider)
-            const user = userCredential.user
+            const userCredential = await signInWithRedirect(auth, provider)
+            // const user = userCredential.user
             setSignUpStatus("success")
             setTimeout(() => {
                 handleClose()
