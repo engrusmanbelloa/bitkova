@@ -11,6 +11,8 @@ import {
     browserSessionPersistence,
     browserLocalPersistence,
     setPersistence,
+    signInWithPopup,
+    GoogleAuthProvider,
 } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 
@@ -156,7 +158,7 @@ export default function SignIn({
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
 
-    // Sign up user
+    // Sign in user with email and password then google
     const handleSignIn = async (event: any) => {
         event.preventDefault()
         setIsLoading(true)
@@ -170,12 +172,12 @@ export default function SignIn({
                 handleClose()
             }, 1000)
             // alert(user.email + " Account created successfully")
-            console.log(user)
-            console.log("user state persistence is: " + persistence)
+            // console.log(user)
+            // console.log("user state persistence is: " + persistence)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
-            console.log("Signing in error:", errorMessage, " ", errorCode)
+            // console.log("Signing in error:", errorMessage, " ", errorCode)
             setSignInStatus("error")
             setTimeout(() => {
                 setSignInStatus("initial")
@@ -184,7 +186,34 @@ export default function SignIn({
             setIsLoading(false)
         }
     }
-
+    const handleSignInWithGoogle = async () => {
+        setIsLoading(true)
+        try {
+            const provider = new GoogleAuthProvider()
+            const userCredential = await signInWithPopup(auth, provider)
+            const user = userCredential.user
+            setSignInStatus("success")
+            setTimeout(() => {
+                handleClose()
+            }, 1000)
+            // alert(user.email + " Account created successfully")
+            // console.log(user)
+        } catch (error: any) {
+            const errorCode = error.code
+            const errorMessage = error.message
+            if (error.code === "auth/account-exists-with-different-credential") {
+                // The pending Google credential.
+                // let pendingCred = error.credential
+                setSignInStatus("Sign In error")
+                // console.log("error:", errorMessage, " ", errorCode)
+            }
+            setTimeout(() => {
+                setSignInStatus("initial")
+            }, 1000)
+        } finally {
+            setIsLoading(false)
+        }
+    }
     return (
         <Container
             open={open}
@@ -196,15 +225,15 @@ export default function SignIn({
         >
             <RightSide>
                 <Title>Welcome back, sign in</Title>
+                <SocialButton onClick={handleSignInWithGoogle}>
+                    <GoogleIcon sx={{ color: "red" }} />
+                    <p style={{ marginLeft: 5 }}>Google</p>
+                </SocialButton>
+                <SocialButton>
+                    <AppleIcon />
+                    <p style={{ marginLeft: 5 }}>Apple</p>
+                </SocialButton>
                 <form onSubmit={handleSignIn}>
-                    <SocialButton>
-                        <GoogleIcon sx={{ color: "red" }} />
-                        <p style={{ marginLeft: 5 }}>Google</p>
-                    </SocialButton>
-                    <SocialButton>
-                        <AppleIcon />
-                        <p style={{ marginLeft: 5 }}>Apple</p>
-                    </SocialButton>
                     <OrLoginWith>Or login with Email</OrLoginWith>
                     <InputContainer>
                         <Input
