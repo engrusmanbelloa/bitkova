@@ -13,7 +13,7 @@ const Container = styled.div`
   ${ipad({ width: "98%" })}
 `
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <Container>
