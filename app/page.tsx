@@ -179,7 +179,7 @@ export default function Home() {
     //     }
     //     fetchCourses()
     // }, [])
-    const limit = 4
+    const limit = 3
 
     // if (isLoading) {
     //   return <IsLoading />
