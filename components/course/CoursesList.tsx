@@ -52,6 +52,8 @@ const StyledCard = styled(Card)`
     height: 510px;
     color: #fff;
     border-radius: 5px;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ margin: "0 auto", width: 325, height: 500 })}
     ${mobile({ width: 360, margin: 5, height: 480 })}
 `

@@ -39,6 +39,8 @@ const Intro = styled.section`
     width: 520px;
     height: 110px;
     text-align: center;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ marginTop: 40 })};
     ${mobile({ width: "360px", padding: 0 })};
 `
@@ -57,6 +59,8 @@ const Services = styled.section`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ width: "665px", height: 650, padding: "5px 0", marginTop: 20 })}
     ${mobile({
         width: "360px",
@@ -120,6 +124,8 @@ const Recomendations = styled.section`
     padding: 0px;
     border-radius: 8px;
     text-align: center;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ width: 665, height: 370, marginTop: 120 })};
     ${mobile({ width: 360, height: 250, marginTop: 150 })};
 `
@@ -233,7 +239,6 @@ export default function Home() {
                     </Description>
                 </Intro>
                 <CoursesList title="Featured courses" courses={courses} limit={limit} />
-                {/* <Button title="Sign In" onClick={() => signIn("google")} />  */}
                 <Recomendations>
                     <Title>Hear what they say about us</Title>
                     <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />

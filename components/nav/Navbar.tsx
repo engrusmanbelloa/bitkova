@@ -15,17 +15,7 @@ import NotifyModal from "@/components/auth/NotifyModal"
 import ResetPsswd from "@/components/auth/ResetPsswd"
 import { mobile, ipad } from "@/responsive"
 import { initializeApp } from "firebase/app"
-import {
-    getAuth,
-    signOut,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    sendEmailVerification,
-    onAuthStateChanged,
-    sendPasswordResetEmail,
-} from "firebase/auth"
-
-// background-color: ${(props) => props.theme.palette.common.white};
+import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 
 // containers section
 const Container = styled.section`
@@ -39,14 +29,24 @@ const Container = styled.section`
     border-radius: 5px;
     z-index: 1;
     background-color: ${(props) => props.theme.palette.common.white};
-    ${ipad({ width: "665px", height: "30px", padding: "5px 0" })}
-    ${mobile({
-        width: "100%",
-        height: "40px",
-        background: "#EAF3FB",
-        padding: "5px 15px",
-        boxShadow: "0px 4px 4px 0px #00000033",
-    })}
+    animation: pulse;
+    animation-duration: 2s;
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        height: 30px;
+        padding: 5px 0;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        height: 40px;
+        background: ${props.theme.mobile.mobileNavBg};
+        padding: 5px 15px;
+        box-shadow: 0px 4px 4px 0px #00000033;
+    `,
+    )}
 `
 const Wrapper = styled.nav`
     padding: 0;
@@ -368,7 +368,9 @@ export default function Navbar() {
                     <Right>
                         {auth.currentUser && auth.currentUser.emailVerified ? (
                             <>
-                                <NavBtn>Browse Courses</NavBtn>
+                                <NavBtn onClick={() => router.push("/courses")}>
+                                    Browse Courses
+                                </NavBtn>
                                 <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
                             </>
                         ) : (

@@ -46,7 +46,6 @@ const Wrapper = styled.section`
   `,
     )}
 `
-
 const ImageContainer = styled.div`
     flex: 1;
     margin: 0 auto;
