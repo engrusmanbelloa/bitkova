@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    // module.exports = withTM({
     transpilePackages: [
     '@mui/material',
     '@mui/system',

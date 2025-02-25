@@ -315,12 +315,12 @@ export default function Navbar() {
             if (user !== null) {
                 if (user.emailVerified) {
                     setUserLoggedIn(true)
-                    console.log(
-                        "user verification is : " +
-                            user.emailVerified +
-                            ", User logged in :" +
-                            userLoggedIn,
-                    )
+                    // console.log(
+                    //     "user verification is : " +
+                    //         user.emailVerified +
+                    //         ", User logged in :" +
+                    //         userLoggedIn,
+                    // )
                 } else {
                     setUserLoggedIn(false)
                     setNotifyModalOpen(true)
@@ -329,7 +329,7 @@ export default function Navbar() {
                 setSignUp(false)
                 const uid = user.uid
                 login = true
-                console.log("user id is : " + uid)
+                // console.log("user id is : " + uid)
             } else {
                 setUserLoggedIn(false)
             }
