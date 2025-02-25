@@ -238,7 +238,12 @@ export default function Home() {
                         experienced learners.
                     </Description>
                 </Intro>
-                <CoursesList title="Featured courses" courses={courses} limit={limit} />
+                <CoursesList
+                    coursesPg={true}
+                    title="Featured courses"
+                    courses={courses}
+                    limit={limit}
+                />
                 <Recomendations>
                     <Title>Hear what they say about us</Title>
                     <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />

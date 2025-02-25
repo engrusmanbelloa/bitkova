@@ -64,6 +64,8 @@ const CardBox = styled.div`
     padding: 0px;
     border: 0.5px solid ${(props) => props.theme.palette.action.hover};
     border-radius: 10px;
+    animation: pulse;
+    animation-duration: 2s;
     &:hover {
         animation: pulse;
         animation-duration: 1s;
