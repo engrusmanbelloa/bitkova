@@ -6,6 +6,7 @@ import { mobile, ipad } from "../responsive"
 
 const Container = styled.div`
     height: 300px;
+    margin-top: 50px;
     background-color: #cddeff;
     border-radius: 10px;
     display: flex;

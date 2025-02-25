@@ -12,7 +12,7 @@ import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/HomeHero"
 import Button from "@/components/Button"
-import CoursesList from "@/components/CoursesList"
+import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
 
@@ -21,8 +21,18 @@ const Container = styled.div`
     margin: 0 auto;
     z-index: 1;
     padding: ${(props) => props.theme.paddings.pagePadding};
-    ${ipad({ width: "665px", padding: "5px 0" })}
-    ${mobile({ width: "360px", padding: 0 })}
+    ${ipad(
+        (props: any) => `
+        padding: 5px 0;
+        width: ${props.theme.widths.ipadWidth};
+    `,
+    )};
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        padding: 0;
+    `,
+    )};
 `
 const Intro = styled.section`
     margin: 70px auto 0;
@@ -222,12 +232,7 @@ export default function Home() {
                         experienced learners.
                     </Description>
                 </Intro>
-                <CoursesList
-                    title="Featured courses"
-                    foot="Browse all courses"
-                    courses={courses}
-                    limit={limit}
-                />
+                <CoursesList title="Featured courses" courses={courses} limit={limit} />
                 {/* <Button title="Sign In" onClick={() => signIn("google")} />  */}
                 <Recomendations>
                     <Title>Hear what they say about us</Title>

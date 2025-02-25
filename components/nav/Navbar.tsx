@@ -373,7 +373,9 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <NavBtn>Browse Courses</NavBtn>
+                                <NavBtn onClick={() => router.push("/courses")}>
+                                    Browse Courses
+                                </NavBtn>
                                 <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
                             </>
                         )}

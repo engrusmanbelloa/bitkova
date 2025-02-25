@@ -9,7 +9,7 @@ import StarHalfIcon from "@mui/icons-material/StarHalf"
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
 import "animate.css/animate.min.css"
 import { AnimationOnScroll } from "react-animation-on-scroll"
-import { featuredCoures } from "@/data"
+import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
@@ -35,12 +35,13 @@ const Wrapper = styled.div<{ $display?: string }>`
     ${ipad({ justifyContent: "flex-start", flexWrap: "wrap", gap: 15 })};
     ${mobile({ justifyContent: "center", gap: 0 })};
 `
-const Top = styled.div`
-    display: flex;
+const Top = styled.div<{ $coursesPg?: boolean }>`
+    display: ${(props) => (props.$coursesPg ? "flex" : "none")};
     justify-content: center;
     align-items: center;
     margin: 50px auto 0;
     padding: 0;
+
     ${ipad({ marginTop: 50 })};
     ${mobile({})};
 `
@@ -147,21 +148,21 @@ export default function CoursesList(props: {
     courses: CourseType[]
     limit: number
     title: string
-    foot: string
     $display?: string
     priceBtn?: string
+    coursesPg?: boolean
     onClick?: () => void
 }) {
     const router = useRouter()
-    const { courses, limit, title, foot, $display } = props
+    const { courses, limit, title, coursesPg, $display } = props
     const [coursesToDisplay, setCoursesToDisplay] = useState([])
     const main = true
 
     return (
         <Container>
             <Wrapper>
-                {featuredCoures &&
-                    featuredCoures.map((course) => (
+                {featuredCourses &&
+                    featuredCourses.map((course) => (
                         <div key={course._id}>
                             {/* <AnimationOnScroll animateIn="animate__pulse animate__slower"> */}
                             <StyledCard variant="elevation" elevation={1}>
@@ -230,7 +231,7 @@ export default function CoursesList(props: {
                         </div>
                     ))}
             </Wrapper>
-            <Top>
+            <Top $coursesPg={coursesPg}>
                 <Button $main={main} title="Browse all courses" />
             </Top>
         </Container>

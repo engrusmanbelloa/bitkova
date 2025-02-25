@@ -1,24 +1,4 @@
 import { CourseType } from "@/types"
-export const sliderItems = [
-    {
-        id: 1,
-        img: "/slides/1.jpg",
-        title: "BITKOVA, IN THE JOURNEY TO STATELESS GLOBAL SOCIETY",
-        desc: "With bitkova, learn different skills within the blockchain nieche and set a pace for financial freedom. the opportunity is at your finger tip You will never regret being a student of bitkova academy.",
-    },
-    {
-        id: 2,
-        img: "/slides/2.jpg",
-        title: "LEARN TO BECOME FINANCIALLY INDEPENDENT WITH BLOCKCHAIN",
-        desc: "The 4iR and the only way create independent economy for businesses and individuals, the only ecosystem where you dont need to trust your business peer, less intermidiaries, no central authority.",
-    },
-    {
-        id: 3,
-        img: "/slides/3.jpg",
-        title: "KNOW ABOUT BITCOIN, OTHER CRYPTOCURRENCIES INVESTMENT",
-        desc: "Make informed decesion trading and investing professionally in cryptocurrencies and the next global reserve currency, BITCOIN. Position yourself in web3, the third iteration of the internet.",
-    },
-]
 
 export const categories = [
     {
@@ -38,7 +18,7 @@ export const categories = [
     },
 ]
 
-export const featuredCoures: CourseType[] = [
+export const featuredCourses: CourseType[] = [
     {
         _id: 1,
         image: "/courses/trade.png",

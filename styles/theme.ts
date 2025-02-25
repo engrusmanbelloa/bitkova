@@ -19,10 +19,13 @@ declare module "@mui/material/styles" {
         mobile: {
             mobileNavBg: string
             offWhite: string
+            horizontalrule: string
         }
         widths: {
             dsktopWidth: string
             heroWidth: string
+            ipadWidth: string
+            mobileWidth: string
         }
         paddings: {
             pagePadding: string
@@ -33,10 +36,13 @@ declare module "@mui/material/styles" {
         mobile?: {
             mobileNavBg?: string
             offWhite?: string
+            horizontalrule?: string
         }
         widths?: {
             dsktopWidth: string
             heroWidth: string
+            ipadWidth: string
+            mobileWidth: string
         }
         paddings?: {
             pagePadding: string
@@ -73,10 +79,13 @@ export const theme = createTheme({
     mobile: {
         mobileNavBg: "#EAF3FB",
         offWhite: "#ABD0ED",
+        horizontalrule: "#cddeff",
     },
     widths: {
         dsktopWidth: "1140px",
         heroWidth: "1100px",
+        ipadWidth: "665px",
+        mobileWidth: "360px",
     },
     paddings: {
         pagePadding: "5px 15px",
