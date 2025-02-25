@@ -6,7 +6,7 @@ import Button from "@/components/Button"
 import { ipad, mobile } from "@/responsive"
 
 const Container = styled.div`
-    width: 1440px;
+    width: ${(props) => props.theme.widths.heroWidth};
     height: 500px;
     margin: 50px auto 30px;
     display: flex;

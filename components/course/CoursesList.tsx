@@ -234,7 +234,11 @@ export default function CoursesList(props: {
                     ))}
             </Wrapper>
             <Top $coursesPg={coursesPg}>
-                <Button $main={main} title="Browse all courses" />
+                <Button
+                    onClick={() => router.push("/courses")}
+                    $main={main}
+                    title="Browse all courses"
+                />
             </Top>
         </Container>
     )
