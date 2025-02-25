@@ -4,16 +4,29 @@ import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 const Container = styled.section`
     height: 450px;
     width: ${(props) => props.theme.heroWidth};
-    margin: 50px auto 0;
+    margin: 10px auto 0;
     padding: 0px;
     display: flex;
     justify-content: space-between;
-    ${ipad({ width: "665px", height: "276px", padding: "5px 0" })};
-    ${mobile({ width: "360px", flexDirection: "column", height: "80vh" })}
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        height: 276px;
+        padding: 5px 0;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        flex-direction: column;
+        height: 600px;
+    `,
+    )}
 `
 const Left = styled.div`
     flex: 1;
@@ -25,6 +38,8 @@ const HeroHeader = styled.h1`
     width: 640px;
     height: 120px;
     margin: 50px 0 20px;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ width: "350px", height: "86px", margin: "30px 0 10px" })};
     ${mobile({ margin: "15px 0 10px" })}
 `
@@ -33,6 +48,8 @@ const HeroText = styled.p`
     padding: 0;
     width: 500px;
     height: 80px;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ width: "350px", height: "70px" })}
 `
 const Right = styled.div`
@@ -45,6 +62,8 @@ const HeroImg = styled(Image)`
     border-radius: 12px 0px 0px;
     margin: 0;
     padding: 0;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({ width: "220px", height: "276px", marginLeft: 60 })};
     ${mobile({ width: "300px", height: 340, margin: "0 0 0 20px" })}
 `
@@ -57,6 +76,8 @@ const GreenSquare = styled.div`
     left: 315px;
     border-radius: 25px;
     opacity: 0.7;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({
         width: "85px",
         height: "85px",
@@ -75,6 +96,8 @@ const BlueSquare = styled.div`
     bottom: 400px;
     right: 0px;
     border-radius: 12px;
+    animation: pulse;
+    animation-duration: 2s;
     ${ipad({
         width: "45px",
         height: "45px",
@@ -86,6 +109,7 @@ const BlueSquare = styled.div`
     ${mobile({ width: 55, height: 55, left: 0, bottom: 300 })}
 `
 export default function HomeHero() {
+    const router = useRouter()
     const main = true
     return (
         <Container>
@@ -98,7 +122,11 @@ export default function HomeHero() {
                     Build the tech skills you need for your dream job. We offer affordable courses
                     for everyone, from traders to developers and designers.
                 </HeroText>
-                <Button $main={main} title="Browse courses" />
+                <Button
+                    $main={main}
+                    title="Browse courses"
+                    onClick={() => router.push("/courses")}
+                />
             </Left>
             <Right>
                 <HeroImg

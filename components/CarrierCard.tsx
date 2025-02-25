@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import styled from "styled-components"
+import { useRouter } from "next/navigation"
 import Button from "@/components/Button"
 import { ipad, mobile } from "@/responsive"
 
@@ -29,6 +30,7 @@ const Title = styled.h2``
 const Description = styled.p``
 
 export default function CarrierCard() {
+    const router = useRouter()
     return (
         <Container>
             <Card>
@@ -39,7 +41,7 @@ export default function CarrierCard() {
                     connecting you to incredible jobs both in Nigeria and abroad
                 </Description>
             </Card>
-            <Button title="Browse all courses" />
+            <Button title="Browse all courses" onClick={() => router.push("/courses")} />
         </Container>
     )
 }

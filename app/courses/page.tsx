@@ -1,79 +1,87 @@
+"use client"
+import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import "animate.css/animate.min.css"
-import CoursesList from "../components/course/CoursesList"
+import CoursesList from "@/components/course/CoursesList"
 import Link from "next/link"
-import { mobile, ipad } from "../responsive"
-import Testimonals from "../components/Testimonals"
-import Newsletter from "../components/Newsletter"
-import { useState, useEffect } from "react"
+import { mobile, ipad } from "@/responsive"
+import Testimonials from "@/components/Testimonials"
+import Newsletter from "@/components/Newsletter"
+import { featuredCourses } from "@/data"
+import Button from "@/components/Button"
 
 const Container = styled.section`
-    border-top: 1px solid #cddeff;
+    width: ${(props) => props.theme.widths.heroWidth};
+    margin: 30px auto 0px;
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
+    )}
 `
-
 const Wrapper = styled.section`
+    border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
+    border-bottom: 1px solid ${(props) => props.theme.mobile.offWhite};
     display: flex;
-    height: 70vh;
-    margin: 20px 0px 0px 20px;
     align-items: center;
-    font-weight: 400;
     justify-content: center;
-    letter-spacing: 1px;
-    ${ipad({ display: "block", height: "100%", margin: "0" })}
-    ${mobile({})}
+    height: 310px;
+    margin: 0px;
+    padding: 0px;
+    ${ipad(
+        (props: any) => `
+        display: block;
+        width: ${props.theme.widths.ipadWidth};
+        height: 100%;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+      width: ${props.theme.widths.mobileWidth};
+  `,
+    )}
 `
-
 const ImageContainer = styled.div`
-    flex: 1.3;
+    flex: 1;
     margin: 0 auto;
     padding: 0;
+    ${ipad(
+        (props: any) => `
+        margin-top: 20px;
+    `,
+    )}
 `
-
 const Image = styled.img`
-    width: 120vh;
-    height: 60vh;
+    width: 100%;
+    height: 300px;
     animation: pulse;
     animation-duration: 2s;
     margin: 0 auto;
-    ${ipad({ width: "105vh", margin: "0 15px" })}
+    ${ipad(
+        (props: any) => `
+        width: 100%;
+        height: 300px;
+    `,
+    )};
     ${mobile({ display: "none" })}
 `
-
 const InfoContainer = styled.div`
     flex: 1;
-    padding: 15px;
-    text-align: justify;
+    padding: 0px 10px 0px 0px;
     animation: pulse;
     animation-duration: 2s;
     ${ipad({ textAlign: "justify" })}
 `
-
 const Title = styled.h1`
-    font-size: 35px;
+    margin: 0;
 `
-
 const Desc = styled.p`
-    font-size: 20px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    line-height: 1.5;
-`
-
-const Button = styled.button`
-    padding: 10px;
-    height: 50px;
-    font-size: 20px;
-    font-weight: 600;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background: rgba(28, 56, 121, 1);
-    color: #fff;
-
-    &:hover {
-        background-color: #cddeff;
-        color: rgba(28, 56, 121, 1);
-    }
+    margin: 15px auto;
 `
 
 const SetUpdate = styled.div`
@@ -92,23 +100,24 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-const Courses = (href) => {
-    const [courses, setCourses] = useState([])
+export default function Courses(href: any) {
+    //  const [courses, setCourses] = useState([])
     const [count, setCount] = useState(0)
     const [skip, setSkip] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(() => {
-        setIsLoading(true)
-        async function fetchCourses() {
-            const response = await fetch("/api/courses/getCourses")
-            const data = await response.json()
-            setCourses(data)
-            setCount(data.count)
-            setIsLoading(false)
-        }
-        fetchCourses()
-    }, [])
+    //  useEffect(() => {
+    //      setIsLoading(true)
+    //      async function fetchCourses() {
+    //          const response = await fetch("/api/courses/getCourses")
+    //          const data = await response.json()
+    //          setCourses(data)
+    //          setCount(data.count)
+    //          setIsLoading(false)
+    //      }
+    //      fetchCourses()
+    //  }, [])
+    const courses = featuredCourses
     const limit = 8
 
     if (isLoading) {
@@ -129,25 +138,23 @@ const Courses = (href) => {
                         laoreet ut elementum cras cursus Morbi morbi at diam.
                     </Desc>
                     <Link href="#courses" passHref legacyBehavior>
-                        <Button>View courses</Button>
+                        <Button $main={true} title="View courses" />
                     </Link>
                 </InfoContainer>
                 <ImageContainer>
-                    <Image src="/chd.jpg" alt="Picture of the author" />
+                    <Image src="/chd.jpg" alt="courses image" />
                 </ImageContainer>
             </Wrapper>
             <div id="courses">
                 <CoursesList
-                    display="grid"
-                    title="Latest courses"
+                    title="Featured courses"
+                    coursesPg={false}
                     courses={courses}
                     limit={limit}
                 />
             </div>
-            <Testimonals />
+            <Testimonials />
             <Newsletter />
         </Container>
     )
 }
-
-export default Courses
