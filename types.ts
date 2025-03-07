@@ -2,11 +2,14 @@
 
 export interface CourseType {
     _id: number
-    image?: string
+    image: string
     duration: {
         hours: number
         minutes: number
     }
+    category: string
+    facilitator: string
+    facilitatorImage: string
     title: string
     shortDesc: string
     students: number

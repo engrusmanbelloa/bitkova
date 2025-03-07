@@ -23,6 +23,9 @@ export const featuredCourses: CourseType[] = [
         _id: 1,
         image: "/courses/trade.png",
         title: "Certified CryptoCurrency Market Analyst (CCA)",
+        category: "Cryptocurrency",
+        facilitator: "Mahmoud Sardauna",
+        facilitatorImage: "/review/mh.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {
@@ -30,7 +33,7 @@ export const featuredCourses: CourseType[] = [
             minutes: 40,
         },
         students: 30,
-        rating: 4.3,
+        rating: 4.5,
         price: 19999,
         onDemandVideos: 60,
         downloadableFiles: 15,
@@ -81,6 +84,9 @@ export const featuredCourses: CourseType[] = [
         _id: 2,
         image: "/courses/mkt.jpeg",
         title: "Certified Blockchain Marketing Specialist (CBM)",
+        category: "Cryptocurrency",
+        facilitator: "Bello Usman A.",
+        facilitatorImage: "/review/usman.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {
@@ -98,6 +104,9 @@ export const featuredCourses: CourseType[] = [
         _id: 3,
         image: "/courses/ui.png",
         title: "Certified Blockchain UI/UX Designer (CBX)",
+        category: "Cryptocurrency",
+        facilitator: "Bello Usman A",
+        facilitatorImage: "/review/usman.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {

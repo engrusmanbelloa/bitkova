@@ -104,7 +104,7 @@ const LinkItem = styled(Link)`
   &:hover {color: ${(props) => props.theme.palette.primary.main};
 `
 const Right = styled.div`
-    flex: 1.5;
+    flex: 1.7;
     padding: 10px 0px;
     margin: 0;
     ${ipad({ flex: 2 })}
@@ -198,7 +198,7 @@ export default function Footer() {
         },
         {
             icon: LocationOn,
-            data: "C6 Duwa Plaza, Opposite Bauchi Park, Gombe State",
+            data: "C6 Duwa Plaza, Opposite old Bauchi Park, Gombe State",
             color: "#000000B2",
         },
         {

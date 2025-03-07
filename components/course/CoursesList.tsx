@@ -8,7 +8,6 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt"
 import StarHalfIcon from "@mui/icons-material/StarHalf"
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
 import "animate.css/animate.min.css"
-import { AnimationOnScroll } from "react-animation-on-scroll"
 import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
@@ -166,7 +165,6 @@ export default function CoursesList(props: {
                 {featuredCourses &&
                     featuredCourses.map((course) => (
                         <div key={course._id}>
-                            {/* <AnimationOnScroll animateIn="animate__pulse animate__slower"> */}
                             <StyledCard variant="elevation" elevation={1}>
                                 <CourseImg src={course.image} alt={course.title} />
                                 <InfoContainer>
@@ -222,14 +220,16 @@ export default function CoursesList(props: {
                                         <PriceBtn
                                             $priceBtn="PriceBtn"
                                             type="button"
-                                            onClick={() => router.push(`/course/${course._id}`)}
+                                            onClick={
+                                                () => router.push(`/courses/${course._id}`)
+                                                // router.push(`/single-course/${course._id}
+                                            }
                                         >
                                             Learn more
                                         </PriceBtn>
                                     </Box>
                                 </InfoContainer>
                             </StyledCard>
-                            {/* </AnimationOnScroll> */}
                         </div>
                     ))}
             </Wrapper>

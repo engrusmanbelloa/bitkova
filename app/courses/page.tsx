@@ -83,7 +83,10 @@ const Title = styled.h1`
 const Desc = styled.p`
     margin: 15px auto;
 `
-
+const TestimonialsTitle = styled.h2`
+    margin: 50px auto 0;
+    color: ${(props) => props.theme.main};
+`
 const SetUpdate = styled.div`
     font-size: 18px;
     margin: 10px auto;
@@ -153,6 +156,7 @@ export default function Courses(href: any) {
                     limit={limit}
                 />
             </div>
+            <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />
             <Newsletter />
         </Container>
