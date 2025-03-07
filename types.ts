@@ -13,6 +13,7 @@ export interface CourseType {
     title: string
     shortDesc: string
     students: number
+    skillLevel: string
     rating: number
     price: number
     onDemandVideos: number

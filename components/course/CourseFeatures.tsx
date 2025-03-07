@@ -6,8 +6,11 @@ import Rating from "@mui/material/Rating"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import ShareIcon from "@mui/icons-material/Share"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
+import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { featuredCourses } from "@/data"
 import { mobile, ipad } from "@/responsive"
+import { string } from "zod"
 
 const Top = styled.div`
     border-width: 1px;
@@ -18,17 +21,16 @@ const Top = styled.div`
     margin-left: 10px;
 `
 const Price = styled.h2``
-const Button = styled.button`
+const Button = styled.button<{ color?: string; background?: string }>`
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    background: #007bff;
-    color: white;
+    background-color: ${(props) => props.background || "#0056d2"};
+    color: ${(props) => props.color || "#fff"};
     font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s;
     &:hover {
         background: #0056b3;
     }
@@ -121,6 +123,12 @@ const FacilitatorName = styled.p`
     font-size: 14px;
     margin-left: 15px;
 `
+const BottomBtn = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+`
 
 interface CourseProps {
     price: string
@@ -131,6 +139,7 @@ interface CourseProps {
     minutes: number
     students: number
     rating: number
+    skillLevel: string
 }
 
 export default function CourseFeatures({
@@ -142,6 +151,7 @@ export default function CourseFeatures({
     minutes,
     students,
     rating,
+    skillLevel,
 }: CourseProps) {
     return (
         <div>
@@ -174,12 +184,25 @@ export default function CourseFeatures({
                         <span>📜</span> Certificate of Completion
                     </FeatureItem>
                     <FeatureItem>
-                        <span>📈</span> Skill Level: All Levels
+                        <span>📈</span> Skill Level: {skillLevel}
                     </FeatureItem>
                     <FeatureItem>
                         <StarBorderIcon /> Rated: {rating}
                     </FeatureItem>
                 </FeatureList>
+                {/* Actions */}
+
+                <Button background="#fdb913">
+                    <BottomBtn>
+                        <AddShoppingCartIcon /> Add to Cart
+                    </BottomBtn>
+                </Button>
+
+                <Button background="#eee" color="#000">
+                    <BottomBtn>
+                        <PlayCircleIcon /> Watch Preview
+                    </BottomBtn>
+                </Button>
             </Middle>
             <Bottom>
                 <Facilitator>

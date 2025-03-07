@@ -64,6 +64,7 @@ interface CourseProps {
     hours: number
     minutes: number
     students: number
+    skillLevel: string
 }
 
 export default function CourseHeader({
@@ -78,6 +79,7 @@ export default function CourseHeader({
     hours,
     minutes,
     students,
+    skillLevel,
 }: CourseProps) {
     const courses = featuredCourses
     const limit = 8
@@ -105,6 +107,7 @@ export default function CourseHeader({
                         minutes={minutes}
                         students={students}
                         rating={rating}
+                        skillLevel={skillLevel}
                     />
                 </Right>
             </HeaderContainer>

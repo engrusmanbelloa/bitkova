@@ -51,6 +51,7 @@ export default async function Course({ params }: { params: Promise<{ id: string 
                 hours={course.duration.hours}
                 minutes={course.duration.minutes}
                 students={course.students}
+                skillLevel={course.skillLevel}
             />
         </div>
     )
