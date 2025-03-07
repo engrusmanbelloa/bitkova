@@ -8,7 +8,6 @@ import ShareIcon from "@mui/icons-material/Share"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
-import { featuredCourses } from "@/data"
 import { mobile, ipad } from "@/responsive"
 import { string } from "zod"
 
@@ -21,12 +20,12 @@ const Top = styled.div`
     margin-left: 10px;
 `
 const Price = styled.h2``
-const Button = styled.button<{ color?: string; background?: string }>`
+const Button = styled.button<{ $color?: string; $background?: string }>`
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    background-color: ${(props) => props.background || "#0056d2"};
-    color: ${(props) => props.color || "#fff"};
+    background-color: ${(props) => props.$background || "#0056d2"};
+    color: ${(props) => props.$color || "#fff"};
     font-size: 16px;
     border: none;
     border-radius: 8px;
@@ -192,13 +191,13 @@ export default function CourseFeatures({
                 </FeatureList>
                 {/* Actions */}
 
-                <Button background="#fdb913">
+                <Button $background="#fdb913">
                     <BottomBtn>
                         <AddShoppingCartIcon /> Add to Cart
                     </BottomBtn>
                 </Button>
 
-                <Button background="#eee" color="#000">
+                <Button $background="#eee" $color="#000">
                     <BottomBtn>
                         <PlayCircleIcon /> Watch Preview
                     </BottomBtn>
@@ -209,12 +208,7 @@ export default function CourseFeatures({
                     <FacilitatorInfo>A course by</FacilitatorInfo>
                     <FacilitatorRight>
                         <FacilitatorImage>
-                            <Image
-                                src={facilitatorImage}
-                                alt={facilitator}
-                                layout="fill"
-                                objectFit="cover"
-                            />
+                            <Image src={facilitatorImage} alt={facilitator} fill={true} />
                         </FacilitatorImage>
                         <FacilitatorName>{facilitator}</FacilitatorName>
                     </FacilitatorRight>

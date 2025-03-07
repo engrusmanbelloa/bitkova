@@ -93,7 +93,7 @@ export default function CourseHeader({
                         Categories: <span>{category}</span>
                     </Category>
                     <CourseImage>
-                        <Image src={imageUrl} alt={title} layout="fill" objectFit="cover" />
+                        <Image src={imageUrl} alt={title} fill={true} />
                     </CourseImage>
                 </Left>
 
