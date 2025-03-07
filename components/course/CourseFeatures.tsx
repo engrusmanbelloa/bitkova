@@ -9,7 +9,6 @@ import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { mobile, ipad } from "@/responsive"
-import { string } from "zod"
 
 const Top = styled.div`
     border-width: 1px;
@@ -24,19 +23,19 @@ const Button = styled.button<{ $color?: string; $background?: string }>`
     width: 100%;
     padding: 10px;
     margin-top: 10px;
-    background-color: ${(props) => props.$background || "#0056d2"};
-    color: ${(props) => props.$color || "#fff"};
+    background-color: ${(props) => props.$background || props.theme.palette.primary.main};
+    color: ${(props) => props.$color || props.theme.palette.common.white};
     font-size: 16px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     &:hover {
-        background: #0056b3;
+        background: ${(props) => props.theme.palette.primary.main};
     }
 `
 const Middle = styled.div`
-    background-color: #fff;
-    border: 1px solid #eee;
+    background-color: ${(props) => props.theme.palette.common.white};
+    border: 1px solid ${(props) => props.theme.palette.common.white};
     padding: 10px;
     margin-left: 10px;
     border-radius: 0 0 8px 8px;
@@ -59,7 +58,7 @@ const FeatureItem = styled.li`
     }
     svg {
         margin-right: 8px;
-        color: #555;
+        color: ${(props) => props.theme.palette.common.black};
     }
 `
 const Actions = styled.div`
@@ -74,7 +73,7 @@ const Actions = styled.div`
         display: flex;
         align-items: center;
         font-size: 14px;
-        color: #666;
+        color: ${(props) => props.theme.palette.common.black};
 
         &:hover {
             color: black;
@@ -105,7 +104,7 @@ const FacilitatorImage = styled.div`
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #ddd;
+    border: 2px solid ${(props) => props.theme.palette.common.white};
 `
 const FacilitatorInfo = styled.h3`
     text-align: left;
@@ -115,7 +114,7 @@ const FacilitatorInfo = styled.h3`
 const FacilitatorRight = styled.div`
     display: flex;
     padding: 10px 0 30px;
-    background: #fcfcfd;
+    background: ${(props) => props.theme.palette.common.white};
 `
 const FacilitatorName = styled.p`
     font-weight: bold;

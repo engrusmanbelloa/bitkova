@@ -18,10 +18,14 @@ export interface CourseType {
     price: number
     onDemandVideos: number
     downloadableFiles?: number
-    courseDesc?: string
+    courseDesc: string
     about?: string
-    whatYoullLearn?: string[]
+    whatYoullLearn: string[]
     courseContent?: string[]
+    modules: {
+        title: string
+        content: string[]
+    }[]
     review: {
         id: number
         stars: number

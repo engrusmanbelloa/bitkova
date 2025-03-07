@@ -93,7 +93,7 @@ export default function CourseHeader({
                         Categories: <span>{category}</span>
                     </Category>
                     <CourseImage>
-                        <Image src={imageUrl} alt={title} fill={true} />
+                        <Image src={imageUrl} alt={title} fill={true} priority={true} />
                     </CourseImage>
                 </Left>
 

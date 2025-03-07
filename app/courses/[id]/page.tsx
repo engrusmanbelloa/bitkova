@@ -4,6 +4,7 @@ import Image from "next/image"
 import { redirect } from "next/navigation"
 import { featuredCourses } from "@/data"
 import CourseHeader from "@/components/course/CourseHeader"
+import CourseTabs from "@/components/course/CourseTabs"
 import { mobile, ipad } from "@/responsive"
 
 // const CourseContainer = styled.div`
@@ -52,6 +53,12 @@ export default async function Course({ params }: { params: Promise<{ id: string 
                 minutes={course.duration.minutes}
                 students={course.students}
                 skillLevel={course.skillLevel}
+            />
+            <CourseTabs
+                courseDesc={course.courseDesc}
+                whatYoullLearn={course.whatYoullLearn}
+                modules={course.modules}
+                review={course.review}
             />
         </div>
     )
