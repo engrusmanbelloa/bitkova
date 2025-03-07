@@ -35,7 +35,7 @@ const Button = styled.button<{ $color?: string; $background?: string }>`
 `
 const Middle = styled.div`
     background-color: ${(props) => props.theme.palette.common.white};
-    border: 1px solid ${(props) => props.theme.palette.common.white};
+    border: 1px solid ${(props) => props.theme.mobile.horizontalrule};
     padding: 10px;
     margin-left: 10px;
     border-radius: 0 0 8px 8px;
@@ -104,7 +104,7 @@ const FacilitatorImage = styled.div`
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid ${(props) => props.theme.palette.common.white};
+    border: 2px solid ${(props) => props.theme.mobile.horizontalrule};
 `
 const FacilitatorInfo = styled.h3`
     text-align: left;
@@ -114,7 +114,6 @@ const FacilitatorInfo = styled.h3`
 const FacilitatorRight = styled.div`
     display: flex;
     padding: 10px 0 30px;
-    background: ${(props) => props.theme.palette.common.white};
 `
 const FacilitatorName = styled.p`
     font-weight: bold;

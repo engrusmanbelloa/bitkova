@@ -6,7 +6,6 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import LockIcon from "@mui/icons-material/Lock"
 import Accordion from "@mui/material/Accordion"
-import AccordionActions from "@mui/material/AccordionActions"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
@@ -32,7 +31,7 @@ const TabLabel = styled(Tab)`
     text-transform: capitalize;
 `
 const SectionTitle = styled.h2`
-    margin: 0px;
+    margin-bottom: 15px;
 `
 const BulletList = styled.ul`
     list-style-type: disc;
