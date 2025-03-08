@@ -14,9 +14,8 @@ import QuizIcon from "@mui/icons-material/Quiz"
 const Container = styled(Box)`
     display: flex;
     flex-direction: column;
-    margin: -320px 0 0 150px;
+    margin: 20px auto 0px;
     padding: 0px;
-    width: 840px;
 `
 const TabContainer = styled(Box)`
     border-bottom: 1px solid ${(props) => props.theme.mobile.horizontalrule};

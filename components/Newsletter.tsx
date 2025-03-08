@@ -1,7 +1,6 @@
 "use client"
 import SendIcon from "@mui/icons-material/Send"
 import styled from "styled-components"
-import { AnimationOnScroll } from "react-animation-on-scroll"
 import { mobile, ipad } from "../responsive"
 
 const Container = styled.div`
@@ -56,9 +55,7 @@ const Button = styled.button`
 const Newsletter = () => {
     return (
         <Container>
-            <AnimationOnScroll animateIn="animate__pulse animate__slower">
-                <Title>Newsletter</Title>
-            </AnimationOnScroll>
+            <Title>Newsletter</Title>
             <Desc>
                 Get timely updates for new discoveries, discounts and scholarships from bitkova
                 academy

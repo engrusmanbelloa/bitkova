@@ -1,22 +1,8 @@
 import React from "react"
-import styled from "styled-components"
-import Image from "next/image"
 import { redirect } from "next/navigation"
 import { featuredCourses } from "@/data"
 import CourseHeader from "@/components/course/CourseHeader"
-import CourseTabs from "@/components/course/CourseTabs"
 import { mobile, ipad } from "@/responsive"
-
-// const CourseContainer = styled.div`
-//     width: ${(props) => props.theme.widths.dsktopWidth};
-// `
-
-// fetch the course from the database
-// async function fetchCourse(id: string) {
-//     const res = await fetch("/data/featuredCourses")
-//     if (!res.ok) return undefined
-//     return res.json()
-// }
 
 export default async function Course({ params }: { params: Promise<{ id: string }> }) {
     const courses = featuredCourses
@@ -36,7 +22,6 @@ export default async function Course({ params }: { params: Promise<{ id: string 
 
     // get the course for the user using the id
     // const course = await fetchCourse(id)
-    // lessons, hours, minutes, students, rating
 
     return (
         <div>
@@ -53,8 +38,6 @@ export default async function Course({ params }: { params: Promise<{ id: string 
                 minutes={course.duration.minutes}
                 students={course.students}
                 skillLevel={course.skillLevel}
-            />
-            <CourseTabs
                 courseDesc={course.courseDesc}
                 whatYoullLearn={course.whatYoullLearn}
                 modules={course.modules}

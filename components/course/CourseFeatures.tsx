@@ -3,8 +3,6 @@ import React from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
-import ShareIcon from "@mui/icons-material/Share"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
@@ -151,15 +149,7 @@ export default function CourseFeatures({
     skillLevel,
 }: CourseProps) {
     return (
-        <div>
-            <Actions>
-                <button>
-                    <BookmarkBorderIcon /> Wishlist
-                </button>
-                <button>
-                    <ShareIcon /> Share
-                </button>
-            </Actions>
+        <>
             <Top>
                 <Price>{price}</Price>
                 <Button>Buy Now</Button>
@@ -212,6 +202,6 @@ export default function CourseFeatures({
                     </FacilitatorRight>
                 </Facilitator>
             </Bottom>
-        </div>
+        </>
     )
 }

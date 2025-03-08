@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
-import "animate.css/animate.min.css"
 import CoursesList from "@/components/course/CoursesList"
 import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
