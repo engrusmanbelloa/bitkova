@@ -15,6 +15,7 @@ import Button from "@/components/Button"
 import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
+import CarrierCard from "@/components/CarrierCard"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -251,6 +252,7 @@ export default function Home() {
                 </Recomendations>
                 <Testimonials />
                 <StatsSection />
+                <CarrierCard />
             </Container>
         </>
     )

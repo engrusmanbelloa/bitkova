@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
-import "animate.css/animate.min.css"
 import CoursesList from "@/components/course/CoursesList"
 import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
@@ -83,7 +82,10 @@ const Title = styled.h1`
 const Desc = styled.p`
     margin: 15px auto;
 `
-
+const TestimonialsTitle = styled.h2`
+    margin: 50px auto 0;
+    color: ${(props) => props.theme.main};
+`
 const SetUpdate = styled.div`
     font-size: 18px;
     margin: 10px auto;
@@ -153,6 +155,7 @@ export default function Courses(href: any) {
                     limit={limit}
                 />
             </div>
+            <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />
             <Newsletter />
         </Container>

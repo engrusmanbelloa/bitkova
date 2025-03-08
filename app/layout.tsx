@@ -8,7 +8,6 @@ import Announcement from "@/components/Announcement"
 import Navbar from "@/components/nav/Navbar"
 import Footer from "@/components/Footer"
 import { ipad, mobile } from "@/responsive"
-import CarrierCard from "@/components/CarrierCard"
 import IsLoading from "@/components/IsLoading"
 
 const Container = styled.div`
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     <Announcement />
                                     <Navbar />
                                     {children}
-                                    <CarrierCard />
                                     <Footer />
                                 </Container>
                             </Suspense>

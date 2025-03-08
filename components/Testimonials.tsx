@@ -5,9 +5,8 @@ import CardMedia from "@mui/material/CardMedia"
 import CardContent from "@mui/material/CardContent"
 import Rating from "@mui/material/Rating"
 import styled from "styled-components"
-import { testimonials } from "../data"
-import { mobile, ipad } from "../responsive"
-import { AnimationOnScroll } from "react-animation-on-scroll"
+import { testimonials } from "@/data"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};

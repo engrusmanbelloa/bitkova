@@ -23,6 +23,9 @@ export const featuredCourses: CourseType[] = [
         _id: 1,
         image: "/courses/trade.png",
         title: "Certified CryptoCurrency Market Analyst (CCA)",
+        category: "Cryptocurrency",
+        facilitator: "Mahmoud Sardauna",
+        facilitatorImage: "/review/mh.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {
@@ -30,7 +33,8 @@ export const featuredCourses: CourseType[] = [
             minutes: 40,
         },
         students: 30,
-        rating: 4.3,
+        skillLevel: "All Levels",
+        rating: 4.5,
         price: 19999,
         onDemandVideos: 60,
         downloadableFiles: 15,
@@ -52,6 +56,28 @@ export const featuredCourses: CourseType[] = [
             "ullamcorper sit amet, tortor pretium ut, eget",
             "venenatis velit. Donec vulputate, nibh at",
             "scelerisque felis. Nulla fermentum, ligula ut",
+        ],
+        modules: [
+            {
+                title: "Module 0: Onboarding",
+                content: ["Course Breakdown - 03:44"],
+            },
+            {
+                title: "Module 1: Intro to Blockchain",
+                content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+            },
+            {
+                title: "Module 2: Fundamental Analysis",
+                content: ["Fundamental Analysis"],
+            },
+            {
+                title: "Module 3: Technical Analysis",
+                content: ["Technical Analysis"],
+            },
+            {
+                title: "Module 4: Risk Management",
+                content: ["Financial risk Management"],
+            },
         ],
         review: [
             {
@@ -81,6 +107,9 @@ export const featuredCourses: CourseType[] = [
         _id: 2,
         image: "/courses/mkt.jpeg",
         title: "Certified Blockchain Marketing Specialist (CBM)",
+        category: "Cryptocurrency",
+        facilitator: "Bello Usman A.",
+        facilitatorImage: "/review/usman.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {
@@ -88,16 +117,83 @@ export const featuredCourses: CourseType[] = [
             minutes: 40,
         },
         students: 30,
+        skillLevel: "All levels",
         rating: 4.3,
         price: 14999,
         onDemandVideos: 60,
         downloadableFiles: 15,
-        review: [],
+        courseDesc:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget tristique tortor pretium ut. Curabitur elit justo, consequat id condimentum ac, volutpat ornare.",
+        about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget tristique tortor pretium ut. Curabitur elit justo, consequat id condimentum ac, volutpat ornare.",
+        whatYoullLearn: [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+        ],
+        courseContent: [
+            "Lorem ipsum dolor sit amet, consectetur",
+            "adipiscing elit. Donec venenatis, dolor in finibus malesuada",
+            "lectus ipsum porta nunc, at iaculis arcu nisi sed",
+            "malesuada consequat elit. Curabitur elit justo, consequat",
+            "id condimentum ac, volutpat ornare. Nulla fer",
+            "ullamcorper sit amet, tortor pretium ut, eget",
+            "venenatis velit. Donec vulputate, nibh at",
+            "scelerisque felis. Nulla fermentum, ligula ut",
+        ],
+        modules: [
+            {
+                title: "Module 0: Onboarding",
+                content: ["Course Breakdown - 03:44"],
+            },
+            {
+                title: "Module 1: Intro to Blockchain",
+                content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+            },
+            {
+                title: "Module 2: Fundamental Analysis",
+                content: ["Fundamental Analysis"],
+            },
+            {
+                title: "Module 3: Technical Analysis",
+                content: ["Technical Analysis"],
+            },
+            {
+                title: "Module 4: Risk Management",
+                content: ["Financial risk Management"],
+            },
+        ],
+        review: [
+            {
+                id: 1,
+                stars: 5,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Muhammad Sabiu Danfullo",
+            },
+            {
+                id: 2,
+                stars: 4,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Bilal Lawal",
+            },
+            {
+                id: 3,
+                stars: 5,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Muhammad MSageer",
+            },
+        ],
     },
     {
         _id: 3,
         image: "/courses/ui.png",
         title: "Certified Blockchain UI/UX Designer (CBX)",
+        category: "Cryptocurrency",
+        facilitator: "Bello Usman A",
+        facilitatorImage: "/review/usman.jpg",
         shortDesc:
             "Welcome to the Blockchain Fundamentals Course. Explore Blockchain: Learn about the secure record-keeping system behind Bitcoin.",
         duration: {
@@ -105,11 +201,75 @@ export const featuredCourses: CourseType[] = [
             minutes: 40,
         },
         students: 30,
+        skillLevel: "All levels",
         rating: 4.3,
         price: 9999,
         onDemandVideos: 60,
         downloadableFiles: 15,
-        review: [],
+        courseDesc:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget tristique tortor pretium ut. Curabitur elit justo, consequat id condimentum ac, volutpat ornare.",
+        about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget tristique tortor pretium ut. Curabitur elit justo, consequat id condimentum ac, volutpat ornare.",
+        whatYoullLearn: [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. lorem ipsum dor",
+        ],
+        courseContent: [
+            "Lorem ipsum dolor sit amet, consectetur",
+            "adipiscing elit. Donec venenatis, dolor in finibus malesuada",
+            "lectus ipsum porta nunc, at iaculis arcu nisi sed",
+            "malesuada consequat elit. Curabitur elit justo, consequat",
+            "id condimentum ac, volutpat ornare. Nulla fer",
+            "ullamcorper sit amet, tortor pretium ut, eget",
+            "venenatis velit. Donec vulputate, nibh at",
+            "scelerisque felis. Nulla fermentum, ligula ut",
+        ],
+        modules: [
+            {
+                title: "Module 0: Onboarding",
+                content: ["Course Breakdown - 03:44"],
+            },
+            {
+                title: "Module 1: Intro to Blockchain",
+                content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+            },
+            {
+                title: "Module 2: Fundamental Analysis",
+                content: ["Fundamental Analysis"],
+            },
+            {
+                title: "Module 3: Technical Analysis",
+                content: ["Technical Analysis"],
+            },
+            {
+                title: "Module 4: Risk Management",
+                content: ["Financial risk Management"],
+            },
+        ],
+        review: [
+            {
+                id: 1,
+                stars: 5,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Muhammad Sabiu Danfullo",
+            },
+            {
+                id: 2,
+                stars: 4,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Bilal Lawal",
+            },
+            {
+                id: 3,
+                stars: 5,
+                comment:
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est fringilla morbi mauris gravida. Eu vel arcu neque vitae vitae justo. Sit integer faucibus in dictumst amet hac. Enim amet, elementum faucibus id ultrices facilisis. Integer sed aenean consectetur.",
+                Name: "Muhammad MSageer",
+            },
+        ],
     },
     // {
     //   id: 4,
