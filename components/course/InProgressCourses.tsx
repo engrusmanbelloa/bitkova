@@ -103,7 +103,7 @@ export default function InProgressCourses() {
                             <CourseTitle>{course.title}</CourseTitle>
 
                             <ProgressText>
-                                Completed Lessons: {course.completedLessons} of{" "}
+                                Completed Lessons: {course.completedLessons} of
                                 {course.totalLessons}
                             </ProgressText>
                             <ProgressContainer>
