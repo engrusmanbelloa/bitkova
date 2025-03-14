@@ -30,15 +30,30 @@ const Label = styled.p`
     font-size: 16px;
     color: ${(props) => props.theme.palette.common.black};
 `
+interface Course {
+    id: string
+    title: string
+    progress: number // Percentage (0-100)
+    status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
+}
+interface UserProps {
+    enrolledCourses: Course[]
+    completedCourses: Course[]
+    archivedCourses: Course[]
+}
 
-export default function DashboardOverview() {
+export default function DashboardOverview({
+    enrolledCourses,
+    completedCourses,
+    archivedCourses,
+}: UserProps) {
     return (
         <OverviewContainer>
             <OverviewBox>
                 <IconWrapper color="#3b82f6">
                     <SchoolIcon fontSize="large" />
                 </IconWrapper>
-                <Count>2</Count>
+                <Count>{enrolledCourses.length}</Count>
                 <Label>Enrolled Courses</Label>
             </OverviewBox>
 
@@ -46,7 +61,7 @@ export default function DashboardOverview() {
                 <IconWrapper color="#10b981">
                     <PlayCircleFilledIcon fontSize="large" />
                 </IconWrapper>
-                <Count>2</Count>
+                <Count>{archivedCourses.length}</Count>
                 <Label>Active Courses</Label>
             </OverviewBox>
 
@@ -54,7 +69,7 @@ export default function DashboardOverview() {
                 <IconWrapper color="#f59e0b">
                     <EmojiEventsIcon fontSize="large" />
                 </IconWrapper>
-                <Count>0</Count>
+                <Count>{completedCourses.length}</Count>
                 <Label>Completed Courses</Label>
             </OverviewBox>
         </OverviewContainer>

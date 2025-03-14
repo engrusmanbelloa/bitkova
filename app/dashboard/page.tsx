@@ -4,7 +4,7 @@ import Dashboard from "@/components/dashboard/Dashoard"
 import { users } from "@/userType"
 
 export default function page() {
-    const id = "user2"
+    const id = "user1"
 
     const user = users.find((user) => user.id.toString() === id)
     if (!user) {
@@ -14,7 +14,12 @@ export default function page() {
     }
     return (
         <div>
-            <Dashboard user={user.name} />
+            <Dashboard
+                name={user.name}
+                completedCourses={user.completedCourses}
+                enrolledCourses={user.completedCourses}
+                archivedCourses={user.archivedCourses}
+            />
         </div>
     )
 }

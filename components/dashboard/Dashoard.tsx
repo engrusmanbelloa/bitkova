@@ -59,22 +59,37 @@ const Button = styled.button`
         background: ${(props) => props.theme.mobile.horizontalrule};
     }
 `
-
-interface UserProps {
-    user: string
+interface Course {
+    id: string
+    title: string
+    progress: number // Percentage (0-100)
+    status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
 }
-export default function Dashboard({ user }: UserProps) {
+interface UserProps {
+    name: string
+    enrolledCourses: Course[]
+    completedCourses: Course[]
+    archivedCourses: Course[]
+}
+export default function Dashboard({
+    name,
+    enrolledCourses,
+    completedCourses,
+    archivedCourses,
+}: UserProps) {
+    // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
 
+    // { name: 'Usman Bello Abdullahi', initials: 'UB' }
     const getInitials = (name: string): string => {
         const words = name.split(" ")
         return words.length > 1
             ? `${words[0][0]}${words[1][0]}`.toUpperCase()
-            : words[0][0].toUpperCase()
+            : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
 
-    const initials = getInitials(user)
-    const userData = { name: user, initials: initials }
+    const initials = getInitials(name)
+    const userData = { name: name, initials: initials }
     return (
         <>
             <DashboardHeader user={userData} />
@@ -96,7 +111,11 @@ export default function Dashboard({ user }: UserProps) {
                                     <Button>Click Here</Button>
                                 </ProfileSetupContainer>
                                 <Title>Dashboard</Title>
-                                <DashboardOverview />
+                                <DashboardOverview
+                                    enrolledCourses={enrolledCourses}
+                                    archivedCourses={archivedCourses}
+                                    completedCourses={completedCourses}
+                                />
                                 <InProgressCourses />
                             </>
                         )}
