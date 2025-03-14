@@ -5,6 +5,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
 import DashboardOverview from "@/components/dashboard/DashboardOverview"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import ProfileSection from "@/components/dashboard/ProfileSection"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -23,6 +24,10 @@ const SidebarContainer = styled.div`
 const ContentContainer = styled.div`
     flex: 3;
     padding: 0 0 20px 20px;
+`
+const Title = styled.h3`
+    font-weight: 500;
+    color: #333;
 `
 const ProfileSetupContainer = styled.div`
     padding: 2px 20px;
@@ -73,41 +78,32 @@ export default function Dashboard(props: any) {
                 {/* Main Content Area */}
                 <ContentContainer>
                     <div className="main-content">
-                        {/* Profile Setup Prompt */}
-                        <ProfileSetupContainer>
-                            <Text>Set Your Profile</Text>
-                            <Button>Click Here</Button>
-                        </ProfileSetupContainer>
                         {/* Dashboard Overview */}
                         {activeItem === "dashboard" && (
                             <>
-                                <DashboardOverview /> <InProgressCourses />
+                                {/* Profile Setup Prompt */}
+                                <ProfileSetupContainer>
+                                    <Text>Set Your Profile</Text>
+                                    <Button>Click Here</Button>
+                                </ProfileSetupContainer>
+                                <Title>Dashboard</Title>
+                                <DashboardOverview />
+                                <InProgressCourses />
                             </>
                         )}
 
-                        {activeItem === "profile" && <h3>Profile Section</h3>}
+                        {activeItem === "profile" && (
+                            <>
+                                <h3>Profile Section</h3>
+                                <ProfileSection />
+                            </>
+                        )}
                         {activeItem === "courses" && <h3>Enrolled Courses</h3>}
                         {activeItem === "wishlist" && <h3>Wishlist</h3>}
                         {activeItem === "quiz" && <h3>My Quiz Attempts</h3>}
                         {activeItem === "history" && <h3>Order History</h3>}
                         {activeItem === "qa" && <h3>Question & Answer</h3>}
                         {activeItem === "settings" && <h3>Settings</h3>}
-                        {/* Dashboard Overview */}
-                        {/* <div className="dashboard-overview">
-                            <div className="enrolled-courses">
-                                <h1>enrolled-courses</h1>{" "}
-                            </div>
-                            <div className="active-courses">
-                                <h1>active-courses</h1>
-                            </div>
-                            <div className="completed-courses">
-                                <h1>completed-courses</h1>
-                            </div>
-                        </div> */}
-                        {/* In-Progress Courses Section */}
-                        {/* <div className="in-progress-courses">
-                            <h1>In progress Courses</h1>
-                        </div> */}
                     </div>
                 </ContentContainer>
             </DashboardContainer>

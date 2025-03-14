@@ -11,7 +11,6 @@ const OverviewContainer = styled.div`
 `
 const OverviewBox = styled.div`
     flex: 1;
-    background: #ffffff;
     padding: 20px;
     border-radius: 10px;
     text-align: center;

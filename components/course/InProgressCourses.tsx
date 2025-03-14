@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import StarIcon from "@mui/icons-material/Star"
 import Rating from "@mui/material/Rating"
 
 const Container = styled.div`
@@ -46,7 +45,7 @@ const ProgressContainer = styled.div`
     align-items: center;
     margin-top: 30px;
     span {
-        font-size: 10px;
+        font-size: 12px;
         margin: 0px;
         padding-left: 10px;
     }
