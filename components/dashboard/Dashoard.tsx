@@ -3,6 +3,8 @@ import { useState } from "react"
 import styled from "styled-components"
 import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
+import DashboardOverview from "@/components/dashboard/DashboardOverview"
+import InProgressCourses from "@/components/course/InProgressCourses"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -20,8 +22,36 @@ const SidebarContainer = styled.div`
 `
 const ContentContainer = styled.div`
     flex: 3;
+    padding: 0 0 20px 20px;
 `
+const ProfileSetupContainer = styled.div`
+    padding: 2px 20px;
+    height: 50px;
+    border: 1px solid ${(props) => props.theme.mobile.offWhite};
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px auto;
+`
+const Text = styled.p`
+    font-weight: 500;
+    color: #333;
+`
+const Button = styled.button`
+    background: ${(props) => props.theme.mobile.offWhite};
+    color: ${(props) => props.theme.palette.primary.main};
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
 
+    &:hover {
+        background: ${(props) => props.theme.mobile.horizontalrule};
+    }
+`
 export default function Dashboard(props: any) {
     const [activeItem, setActiveItem] = useState("dashboard")
     const users = [
@@ -44,18 +74,24 @@ export default function Dashboard(props: any) {
                 <ContentContainer>
                     <div className="main-content">
                         {/* Profile Setup Prompt */}
-                        <div className="profile-setup">
-                            <h1>Setup profile</h1>
-                        </div>
+                        <ProfileSetupContainer>
+                            <Text>Set Your Profile</Text>
+                            <Button>Click Here</Button>
+                        </ProfileSetupContainer>
                         {/* Dashboard Overview */}
-                        {activeItem === "dashboard" && <h1>Dashboard Overview</h1>}
-                        {activeItem === "profile" && <h1>Profile Section</h1>}
-                        {activeItem === "courses" && <h1>Enrolled Courses</h1>}
-                        {activeItem === "wishlist" && <h1>Wishlist</h1>}
-                        {activeItem === "quiz" && <h1>My Quiz Attempts</h1>}
-                        {activeItem === "history" && <h1>Order History</h1>}
-                        {activeItem === "qa" && <h1>Question & Answer</h1>}
-                        {activeItem === "settings" && <h1>Settings</h1>}
+                        {activeItem === "dashboard" && (
+                            <>
+                                <DashboardOverview /> <InProgressCourses />
+                            </>
+                        )}
+
+                        {activeItem === "profile" && <h3>Profile Section</h3>}
+                        {activeItem === "courses" && <h3>Enrolled Courses</h3>}
+                        {activeItem === "wishlist" && <h3>Wishlist</h3>}
+                        {activeItem === "quiz" && <h3>My Quiz Attempts</h3>}
+                        {activeItem === "history" && <h3>Order History</h3>}
+                        {activeItem === "qa" && <h3>Question & Answer</h3>}
+                        {activeItem === "settings" && <h3>Settings</h3>}
                         {/* Dashboard Overview */}
                         {/* <div className="dashboard-overview">
                             <div className="enrolled-courses">
