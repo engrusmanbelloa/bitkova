@@ -13,8 +13,8 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: ${(props) => props.theme.palette.primary.main};
-    color: ${(props) => props.theme.palette.common.white};
+    background: ${(props) => props.theme.palette.action.hover};
+    color: ${(props) => props.theme.palette.common.black};
     ${ipad({ width: "100%", height: 290 })};
     ${mobile({ marginTop: 20, width: "360px" })};
 `

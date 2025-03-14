@@ -6,6 +6,8 @@ import Sidebar from "@/components/dashboard/SideBar"
 import DashboardOverview from "@/components/dashboard/DashboardOverview"
 import InProgressCourses from "@/components/course/InProgressCourses"
 import ProfileSection from "@/components/dashboard/ProfileSection"
+import NoDataAvailable from "./NoData"
+import { User } from "@/userType"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -27,7 +29,7 @@ const ContentContainer = styled.div`
 `
 const Title = styled.h3`
     font-weight: 500;
-    color: #333;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const ProfileSetupContainer = styled.div`
     padding: 2px 20px;
@@ -41,7 +43,7 @@ const ProfileSetupContainer = styled.div`
 `
 const Text = styled.p`
     font-weight: 500;
-    color: #333;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const Button = styled.button`
     background: ${(props) => props.theme.mobile.offWhite};
@@ -57,18 +59,25 @@ const Button = styled.button`
         background: ${(props) => props.theme.mobile.horizontalrule};
     }
 `
-export default function Dashboard(props: any) {
-    const [activeItem, setActiveItem] = useState("dashboard")
-    const users = [
-        { name: "Usman Bello Abdullahi", initials: "UB" },
-        { name: "Mahmoud Sardauna", initials: "MS" },
-        { name: "Aisha Yusuf", initials: "AY" },
-    ]
 
-    const user = users[0]
+interface UserProps {
+    user: string
+}
+export default function Dashboard({ user }: UserProps) {
+    const [activeItem, setActiveItem] = useState("dashboard")
+
+    const getInitials = (name: string): string => {
+        const words = name.split(" ")
+        return words.length > 1
+            ? `${words[0][0]}${words[1][0]}`.toUpperCase()
+            : words[0][0].toUpperCase()
+    }
+
+    const initials = getInitials(user)
+    const userData = { name: user, initials: initials }
     return (
         <>
-            <DashboardHeader user={user} />
+            <DashboardHeader user={userData} />
             {/* Dashboard Section Structure (Div Layout)*/}
             <DashboardContainer>
                 {/* Sidebar (Navigation) */}
@@ -92,18 +101,43 @@ export default function Dashboard(props: any) {
                             </>
                         )}
 
-                        {activeItem === "profile" && (
+                        {activeItem === "profile" && <ProfileSection />}
+                        {activeItem === "courses" && (
                             <>
-                                <h3>Profile Section</h3>
-                                <ProfileSection />
+                                <Title>Enrolled Courses</Title>
+                                <NoDataAvailable />
                             </>
                         )}
-                        {activeItem === "courses" && <h3>Enrolled Courses</h3>}
-                        {activeItem === "wishlist" && <h3>Wishlist</h3>}
-                        {activeItem === "quiz" && <h3>My Quiz Attempts</h3>}
-                        {activeItem === "history" && <h3>Order History</h3>}
-                        {activeItem === "qa" && <h3>Question & Answer</h3>}
-                        {activeItem === "settings" && <h3>Settings</h3>}
+                        {activeItem === "wishlist" && (
+                            <>
+                                <Title>Wishlist</Title>
+                                <NoDataAvailable />
+                            </>
+                        )}
+                        {activeItem === "quiz" && (
+                            <>
+                                <Title>My Quiz Attempts</Title>
+                                <NoDataAvailable />
+                            </>
+                        )}
+                        {activeItem === "history" && (
+                            <>
+                                <Title>Order History</Title>
+                                <NoDataAvailable />
+                            </>
+                        )}
+                        {activeItem === "qa" && (
+                            <>
+                                <Title>Question & Answer</Title>
+                                <NoDataAvailable />
+                            </>
+                        )}
+                        {activeItem === "settings" && (
+                            <>
+                                <Title>Settings</Title>
+                                <NoDataAvailable />
+                            </>
+                        )}
                     </div>
                 </ContentContainer>
             </DashboardContainer>

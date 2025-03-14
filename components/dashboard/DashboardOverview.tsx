@@ -24,10 +24,11 @@ const IconWrapper = styled.div`
 const Count = styled.h2`
     font-size: 24px;
     margin: 0;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const Label = styled.p`
     font-size: 16px;
-    color: #555;
+    color: ${(props) => props.theme.palette.common.black};
 `
 
 export default function DashboardOverview() {

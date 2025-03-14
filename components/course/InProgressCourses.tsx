@@ -4,9 +4,10 @@ import Rating from "@mui/material/Rating"
 const Container = styled.div`
     margin-top: 20px;
 `
-const Title = styled.h2`
-    font-size: 20px;
+const Title = styled.h3`
     margin-bottom: 10px;
+    font-weight: 500;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const CourseList = styled.div`
     display: flex;
@@ -32,12 +33,12 @@ const CourseInfo = styled.div`
 `
 const CourseTitle = styled.h3`
     margin-top: 20px;
-    color: #333;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const ProgressText = styled.p`
     font-size: 14px;
-    color: #666;
     margin-top: 20px auto;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const ProgressContainer = styled.div`
     width: 100%;
@@ -53,14 +54,14 @@ const ProgressContainer = styled.div`
 const ProgressBarContainer = styled.div`
     width: 80%;
     height: 6px;
-    background: #e5e7eb;
     border-radius: 3px;
     overflow: hidden;
+    background: ${(props) => props.theme.palette.action.hover};
 `
 const ProgressBar = styled.div<{ $progress: number }>`
     height: 100%;
     width: ${({ $progress }) => $progress}%;
-    background: #3b82f6;
+    background: ${(props) => props.theme.palette.primary.main};
 `
 
 export default function InProgressCourses() {
