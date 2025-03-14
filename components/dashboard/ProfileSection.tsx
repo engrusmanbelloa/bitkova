@@ -25,12 +25,13 @@ const DetailRow = styled.div`
     padding-top: 5px;
 `
 const Label = styled.span`
-    font-weight: bold;
     color: ${(props) => props.theme.palette.common.black};
     margin-right: 100px;
     width: 150px;
 `
-const Value = styled.span``
+const Value = styled.span`
+    font-weight: 500;
+`
 
 export default function ProfileSection() {
     const user = {
