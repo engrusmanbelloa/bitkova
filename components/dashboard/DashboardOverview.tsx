@@ -3,6 +3,8 @@ import styled from "styled-components"
 import SchoolIcon from "@mui/icons-material/School"
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
+import InProgressCourses from "@/components/course/InProgressCourses"
+import { User } from "@/userType"
 
 const OverviewContainer = styled.div`
     display: flex;
@@ -30,48 +32,37 @@ const Label = styled.p`
     font-size: 16px;
     color: ${(props) => props.theme.palette.common.black};
 `
-interface Course {
-    id: string
-    title: string
-    progress: number // Percentage (0-100)
-    status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
-}
-interface UserProps {
-    enrolledCourses: Course[]
-    completedCourses: Course[]
-    archivedCourses: Course[]
+interface DashboardProps {
+    user: User
 }
 
-export default function DashboardOverview({
-    enrolledCourses,
-    completedCourses,
-    archivedCourses,
-}: UserProps) {
+export default function DashboardOverview({ user }: DashboardProps) {
     return (
-        <OverviewContainer>
-            <OverviewBox>
-                <IconWrapper color="#3b82f6">
-                    <SchoolIcon fontSize="large" />
-                </IconWrapper>
-                <Count>{enrolledCourses.length}</Count>
-                <Label>Enrolled Courses</Label>
-            </OverviewBox>
-
-            <OverviewBox>
-                <IconWrapper color="#10b981">
-                    <PlayCircleFilledIcon fontSize="large" />
-                </IconWrapper>
-                <Count>{archivedCourses.length}</Count>
-                <Label>Active Courses</Label>
-            </OverviewBox>
-
-            <OverviewBox>
-                <IconWrapper color="#f59e0b">
-                    <EmojiEventsIcon fontSize="large" />
-                </IconWrapper>
-                <Count>{completedCourses.length}</Count>
-                <Label>Completed Courses</Label>
-            </OverviewBox>
-        </OverviewContainer>
+        <>
+            <OverviewContainer>
+                <OverviewBox>
+                    <IconWrapper color="#3b82f6">
+                        <SchoolIcon fontSize="large" />
+                    </IconWrapper>
+                    <Count>{user.enrolledCourses.length}</Count>
+                    <Label>Enrolled Courses</Label>
+                </OverviewBox>
+                <OverviewBox>
+                    <IconWrapper color="#10b981">
+                        <PlayCircleFilledIcon fontSize="large" />
+                    </IconWrapper>
+                    <Count>{user.archivedCourses.length}</Count>
+                    <Label>Active Courses</Label>
+                </OverviewBox>
+                <OverviewBox>
+                    <IconWrapper color="#f59e0b">
+                        <EmojiEventsIcon fontSize="large" />
+                    </IconWrapper>
+                    <Count>{user.completedCourses.length}</Count>
+                    <Label>Completed Courses</Label>
+                </OverviewBox>
+            </OverviewContainer>
+            <InProgressCourses user={user} />
+        </>
     )
 }

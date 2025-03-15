@@ -10,16 +10,11 @@ export default function page() {
     if (!user) {
         redirect("/")
     } else {
-        console.log(user)
+        console.log("User details ", user)
     }
     return (
         <div>
-            <Dashboard
-                name={user.name}
-                completedCourses={user.completedCourses}
-                enrolledCourses={user.completedCourses}
-                archivedCourses={user.archivedCourses}
-            />
+            <Dashboard userCourse={user} />
         </div>
     )
 }

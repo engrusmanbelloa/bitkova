@@ -1,6 +1,14 @@
-interface Course {
-    id: string
-    title: string
+import { CourseType } from "@/types"
+import { featuredCourses } from "@/data"
+
+const getCourseDetailsById = (courseId: number): CourseType | undefined => {
+    return featuredCourses.find((course) => course._id === courseId)
+}
+
+// Represents user-specific progress for a course
+export interface UserCourseProgress {
+    course: CourseType
+    completedLessons: number
     progress: number // Percentage (0-100)
     status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
 }
@@ -15,11 +23,11 @@ export interface User {
     skill: string
     bio: string
     registrationDate: string
-    enrolledCourses: Course[]
-    completedCourses: Course[]
-    archivedCourses: Course[]
-    wishList: Course[]
-    cart: Course[]
+    enrolledCourses: UserCourseProgress[]
+    completedCourses: UserCourseProgress[]
+    archivedCourses: UserCourseProgress[]
+    wishList: UserCourseProgress[]
+    cart: UserCourseProgress[]
 }
 
 export const users: User[] = [
@@ -35,22 +43,38 @@ export const users: User[] = [
         registrationDate: "February 15, 2024 10:45am",
         enrolledCourses: [
             {
-                id: "course1",
-                title: "Blockchain Fundamentals",
+                course: getCourseDetailsById(1)!,
+                completedLessons: 14,
                 progress: 70,
                 status: "in-progress",
             },
-            { id: "course2", title: "AI for Telecom", progress: 30, status: "in-progress" },
+            {
+                course: getCourseDetailsById(2)!,
+                completedLessons: 5,
+                progress: 30,
+                status: "in-progress",
+            },
         ],
         completedCourses: [
-            { id: "course3", title: "Intro to 5G", progress: 100, status: "completed" },
+            {
+                course: getCourseDetailsById(1)!,
+                completedLessons: 25,
+                progress: 100,
+                status: "completed",
+            },
         ],
         archivedCourses: [],
         wishList: [
-            { id: "course4", title: "Quantum Cryptography", progress: 0, status: "wishlist" },
+            {
+                course: getCourseDetailsById(3)!,
+                completedLessons: 0,
+                progress: 0,
+                status: "wishlist",
+            },
         ],
         cart: [],
     },
+
     {
         id: "user2",
         name: "Mahmoud Muhammad Sardauna",

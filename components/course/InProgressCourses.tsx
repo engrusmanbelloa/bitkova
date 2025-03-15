@@ -1,5 +1,7 @@
 import styled from "styled-components"
 import Rating from "@mui/material/Rating"
+import NoDataAvailable from "@/components/dashboard/NoData"
+import { User } from "@/userType"
 
 const Container = styled.div`
     margin-top: 20px;
@@ -64,57 +66,57 @@ const ProgressBar = styled.div<{ $progress: number }>`
     background: ${(props) => props.theme.palette.primary.main};
 `
 
-export default function InProgressCourses() {
-    const courses = [
-        {
-            id: 1,
-            title: "Cryptocurrency Trading for BEGINNERS",
-            image: "/courses/crypto-trading.png",
-            rating: 5.0,
-            completedLessons: 5,
-            totalLessons: 25,
-            progress: 20,
-        },
-        {
-            id: 2,
-            title: "Cryptocurrency Trading for BEGINNERS",
-            image: "/courses/crypto.png",
-            rating: 5.0,
-            completedLessons: 5,
-            totalLessons: 25,
-            progress: 20,
-        },
-    ]
+interface DashboardProps {
+    user: User
+}
+// interface InProgressCoursesProps {
+//     courses: Courses[]
+// }
+export default function InProgressCourses({ user }: DashboardProps) {
+    console.log("Received courses prop:", user)
+    // Filter only courses with status "in-progress"
+    const inProgressCourses = user.enrolledCourses
+    // const inProgressCourses = user
+    //     .flatMap((userCourse: any) => userCourse.enrolledCourses) // Extract all enrolled courses
+    //     .filter((userCourse: any) => userCourse.status === "in-progress") // Filter in-progress courses
+
+    console.log("Courses in progress", inProgressCourses)
 
     return (
         <Container>
-            <Title>In Progress Courses</Title>
             <CourseList>
-                {courses.map((course) => (
-                    <CourseCard key={course.id}>
-                        <CourseImage src={course.image} alt={course.title} />
-                        <CourseInfo>
-                            <Rating
-                                name="half-rating-read"
-                                defaultValue={course.rating}
-                                precision={1}
-                                readOnly
+                {inProgressCourses.length > 0 ? (
+                    inProgressCourses.map((userCourse: any) => (
+                        <CourseCard key={userCourse.course._id}>
+                            <CourseImage
+                                src={userCourse.course.image}
+                                alt={userCourse.course.title}
                             />
-                            <CourseTitle>{course.title}</CourseTitle>
+                            <CourseInfo>
+                                <Rating
+                                    name="half-rating-read"
+                                    defaultValue={userCourse.course.rating}
+                                    precision={1}
+                                    readOnly
+                                />
+                                <CourseTitle>{userCourse.course.title}</CourseTitle>
 
-                            <ProgressText>
-                                Completed Lessons: {course.completedLessons} of
-                                {course.totalLessons}
-                            </ProgressText>
-                            <ProgressContainer>
-                                <ProgressBarContainer>
-                                    <ProgressBar $progress={course.progress} />
-                                </ProgressBarContainer>
-                                <span>{course.progress}% completed</span>
-                            </ProgressContainer>
-                        </CourseInfo>
-                    </CourseCard>
-                ))}
+                                <ProgressText>
+                                    Completed Lessons: {userCourse.completedLessons} of
+                                    {userCourse.course.onDemandVideos}
+                                </ProgressText>
+                                <ProgressContainer>
+                                    <ProgressBarContainer>
+                                        <ProgressBar $progress={userCourse.progress} />
+                                    </ProgressBarContainer>
+                                    <span>{userCourse.progress}% completed</span>
+                                </ProgressContainer>
+                            </CourseInfo>
+                        </CourseCard>
+                    ))
+                ) : (
+                    <NoDataAvailable />
+                )}
             </CourseList>
         </Container>
     )

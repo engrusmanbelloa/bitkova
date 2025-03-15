@@ -59,24 +59,11 @@ const Button = styled.button`
         background: ${(props) => props.theme.mobile.horizontalrule};
     }
 `
-interface Course {
-    id: string
-    title: string
-    progress: number // Percentage (0-100)
-    status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
+interface DashboardProps {
+    userCourse: User
 }
-interface UserProps {
-    name: string
-    enrolledCourses: Course[]
-    completedCourses: Course[]
-    archivedCourses: Course[]
-}
-export default function Dashboard({
-    name,
-    enrolledCourses,
-    completedCourses,
-    archivedCourses,
-}: UserProps) {
+
+export default function Dashboard({ userCourse }: DashboardProps) {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
 
@@ -88,8 +75,8 @@ export default function Dashboard({
             : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
 
-    const initials = getInitials(name)
-    const userData = { name: name, initials: initials }
+    const initials = getInitials(userCourse.name)
+    const userData = { name: userCourse.name, initials: initials }
     return (
         <>
             <DashboardHeader user={userData} />
@@ -101,63 +88,62 @@ export default function Dashboard({
                 </SidebarContainer>
                 {/* Main Content Area */}
                 <ContentContainer>
-                    <div className="main-content">
-                        {/* Dashboard Overview */}
-                        {activeItem === "dashboard" && (
-                            <>
-                                {/* Profile Setup Prompt */}
-                                <ProfileSetupContainer>
-                                    <Text>Set Your Profile</Text>
-                                    <Button>Click Here</Button>
-                                </ProfileSetupContainer>
-                                <Title>Dashboard</Title>
-                                <DashboardOverview
-                                    enrolledCourses={enrolledCourses}
-                                    archivedCourses={archivedCourses}
-                                    completedCourses={completedCourses}
-                                />
-                                <InProgressCourses />
-                            </>
-                        )}
+                    {/* Dashboard Overview */}
+                    {activeItem === "dashboard" && (
+                        <>
+                            {/* Profile Setup Prompt */}
+                            <ProfileSetupContainer>
+                                <Text>Set Your Profile</Text>
+                                <Button>Click Here</Button>
+                            </ProfileSetupContainer>
+                            <Title>Dashboard</Title>
+                            <DashboardOverview
+                                user={userCourse}
+                                // enrolledCourses={userCourse.enrolledCourses}
+                                // archivedCourses={userCourse.archivedCourses}
+                                // completedCourses={userCourse.completedCourses}
+                            />
+                            {/* <InProgressCourses courses={enrolledCourses} /> */}
+                        </>
+                    )}
 
-                        {activeItem === "profile" && <ProfileSection />}
-                        {activeItem === "courses" && (
-                            <>
-                                <Title>Enrolled Courses</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                        {activeItem === "wishlist" && (
-                            <>
-                                <Title>Wishlist</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                        {activeItem === "quiz" && (
-                            <>
-                                <Title>My Quiz Attempts</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                        {activeItem === "history" && (
-                            <>
-                                <Title>Order History</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                        {activeItem === "qa" && (
-                            <>
-                                <Title>Question & Answer</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                        {activeItem === "settings" && (
-                            <>
-                                <Title>Settings</Title>
-                                <NoDataAvailable />
-                            </>
-                        )}
-                    </div>
+                    {activeItem === "profile" && <ProfileSection />}
+                    {activeItem === "courses" && (
+                        <>
+                            <Title>Enrolled Courses</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
+                    {activeItem === "wishlist" && (
+                        <>
+                            <Title>Wishlist</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
+                    {activeItem === "quiz" && (
+                        <>
+                            <Title>My Quiz Attempts</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
+                    {activeItem === "history" && (
+                        <>
+                            <Title>Order History</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
+                    {activeItem === "qa" && (
+                        <>
+                            <Title>Question & Answer</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
+                    {activeItem === "settings" && (
+                        <>
+                            <Title>Settings</Title>
+                            <NoDataAvailable />
+                        </>
+                    )}
                 </ContentContainer>
             </DashboardContainer>
         </>
