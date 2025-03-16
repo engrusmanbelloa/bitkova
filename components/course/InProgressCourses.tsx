@@ -65,7 +65,6 @@ interface DashboardProps {
     user: User
 }
 export default function InProgressCourses({ user }: DashboardProps) {
-    console.log("Received courses prop:", user)
     // Filter only courses with status "in-progress"
     const inProgressCourses = user.enrolledCourses
     // console.log("Courses in progress", inProgressCourses)
