@@ -257,7 +257,7 @@ export default function Footer() {
                         />
                     </Right>
                 </Wrapper>
-                <Alrights>© {currentYear} Bitkova Academy. All rights reserved.</Alrights>
+                <Alrights>© {currentYear} Bitkova Digital Hub Ltd. All rights reserved.</Alrights>
             </Container>
         </>
     )

@@ -1,6 +1,5 @@
 "use client"
 import styled from "styled-components"
-import { User } from "@/userType"
 
 const HeaderContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};

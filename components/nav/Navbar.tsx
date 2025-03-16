@@ -13,6 +13,7 @@ import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
 import NotifyModal from "@/components/auth/NotifyModal"
 import ResetPsswd from "@/components/auth/ResetPsswd"
+import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
 import { initializeApp } from "firebase/app"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
@@ -371,7 +372,8 @@ export default function Navbar() {
                                 <NavBtn onClick={() => router.push("/courses")}>
                                     Browse Courses
                                 </NavBtn>
-                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
+                                {/* <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} /> */}
+                                <NavAvatar user={auth.currentUser.displayName} />
                             </>
                         ) : (
                             <>
