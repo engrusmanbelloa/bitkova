@@ -23,6 +23,7 @@ export interface CourseType {
     whatYoullLearn: string[]
     courseContent?: string[]
     modules: {
+        id: number
         title: string
         content: string[]
     }[]
@@ -33,5 +34,3 @@ export interface CourseType {
         Name: string
     }[]
 }
-
-export interface SignInType {}

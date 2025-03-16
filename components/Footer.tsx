@@ -15,17 +15,11 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Logo from "@/components/Logo"
 
-// props.theme.palette.primary.main
-// props.theme.palette.common.white
-// props.theme.mobile.offWhite
-// props.theme.widths.dsktopWidth
-// props.theme.paddings.pagePadding
-// props.theme.palette.action.hover
-
 const Container = styled.section`
-    color: ${(props) => props.theme.palette.common.black};
-    background: ${(props) => props.theme.palette.common.white};
+    color: ${(props) => props.theme.palette.common.white};
+    background: ${(props) => props.theme.palette.primary.main};
     width: ${(props) => props.theme.widths.dsktopWidth};
+    padding: ${(props) => props.theme.paddings.pagePadding};
     margin: 0 auto 10px;
     ${ipad({ width: "665px" })};
     ${mobile({ width: "360px", flexDirection: "column" })};
@@ -95,7 +89,7 @@ const ListItem = styled.li`
     ${ipad({ fontWeight: "400" })}
 `
 const LinkItem = styled(Link)`
-  color: ${(props) => props.theme.palette.common.black};
+  color: ${(props) => props.theme.palette.common.white};
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
@@ -140,7 +134,7 @@ export default function Footer() {
         {
             icon: Facebook,
             onClick: () => window.open("https://www.facebook.com/BitkovaHub"),
-            color: "#1877F2",
+            color: "#ffffff",
         },
         {
             icon: Instagram,
@@ -199,12 +193,12 @@ export default function Footer() {
         {
             icon: LocationOn,
             data: "C6 Duwa Plaza, Opposite old Bauchi Park, Gombe State",
-            color: "#000000B2",
+            color: "#fff",
         },
         {
             icon: MailOutline,
             data: "info@bitkova.com",
-            color: "#000000B2",
+            color: "#fff",
         },
     ]
     const router = useRouter()
@@ -263,7 +257,7 @@ export default function Footer() {
                         />
                     </Right>
                 </Wrapper>
-                <Alrights>© {currentYear} Bitkova Academy. All rights reserved.</Alrights>
+                <Alrights>© {currentYear} Bitkova Digital Hub Ltd. All rights reserved.</Alrights>
             </Container>
         </>
     )

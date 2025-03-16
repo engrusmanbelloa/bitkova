@@ -8,6 +8,7 @@ import ShareIcon from "@mui/icons-material/Share"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
 import { featuredCourses } from "@/data"
+import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`
