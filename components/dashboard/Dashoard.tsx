@@ -4,7 +4,6 @@ import styled from "styled-components"
 import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
 import DashboardOverview from "@/components/dashboard/DashboardOverview"
-import InProgressCourses from "@/components/course/InProgressCourses"
 import ProfileSection from "@/components/dashboard/ProfileSection"
 import NoDataAvailable from "./NoData"
 import { User } from "@/userType"
@@ -31,39 +30,11 @@ const Title = styled.h3`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
 `
-const ProfileSetupContainer = styled.div`
-    padding: 2px 20px;
-    height: 50px;
-    border: 1px solid ${(props) => props.theme.mobile.offWhite};
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px auto;
-`
-const Text = styled.p`
-    font-weight: 500;
-    color: ${(props) => props.theme.palette.common.black};
-`
-const Button = styled.button`
-    background: ${(props) => props.theme.mobile.offWhite};
-    color: ${(props) => props.theme.palette.primary.main};
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
-
-    &:hover {
-        background: ${(props) => props.theme.mobile.horizontalrule};
-    }
-`
 interface DashboardProps {
-    userCourse: User
+    user: User
 }
 
-export default function Dashboard({ userCourse }: DashboardProps) {
+export default function Dashboard({ user }: DashboardProps) {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
 
@@ -75,8 +46,8 @@ export default function Dashboard({ userCourse }: DashboardProps) {
             : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
 
-    const initials = getInitials(userCourse.name)
-    const userData = { name: userCourse.name, initials: initials }
+    const initials = getInitials(user.name)
+    const userData = { name: user.name, initials: initials }
     return (
         <>
             <DashboardHeader user={userData} />
@@ -89,59 +60,43 @@ export default function Dashboard({ userCourse }: DashboardProps) {
                 {/* Main Content Area */}
                 <ContentContainer>
                     {/* Dashboard Overview */}
-                    {activeItem === "dashboard" && (
-                        <>
-                            {/* Profile Setup Prompt */}
-                            <ProfileSetupContainer>
-                                <Text>Set Your Profile</Text>
-                                <Button>Click Here</Button>
-                            </ProfileSetupContainer>
-                            <Title>Dashboard</Title>
-                            <DashboardOverview
-                                user={userCourse}
-                                // enrolledCourses={userCourse.enrolledCourses}
-                                // archivedCourses={userCourse.archivedCourses}
-                                // completedCourses={userCourse.completedCourses}
-                            />
-                            {/* <InProgressCourses courses={enrolledCourses} /> */}
-                        </>
-                    )}
+                    {activeItem === "dashboard" && <DashboardOverview user={user} />}
+                    {activeItem === "profile" && <ProfileSection user={user} />}
 
-                    {activeItem === "profile" && <ProfileSection />}
                     {activeItem === "courses" && (
                         <>
                             <Title>Enrolled Courses</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "wishlist" && (
                         <>
                             <Title>Wishlist</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "quiz" && (
                         <>
                             <Title>My Quiz Attempts</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "history" && (
                         <>
                             <Title>Order History</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "qa" && (
                         <>
                             <Title>Question & Answer</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "settings" && (
                         <>
                             <Title>Settings</Title>
-                            <NoDataAvailable />
+                            <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                 </ContentContainer>

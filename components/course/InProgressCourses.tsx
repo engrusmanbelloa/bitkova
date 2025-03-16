@@ -6,11 +6,6 @@ import { User } from "@/userType"
 const Container = styled.div`
     margin-top: 20px;
 `
-const Title = styled.h3`
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: ${(props) => props.theme.palette.common.black};
-`
 const CourseList = styled.div`
     display: flex;
     flex-direction: column;
@@ -69,18 +64,12 @@ const ProgressBar = styled.div<{ $progress: number }>`
 interface DashboardProps {
     user: User
 }
-// interface InProgressCoursesProps {
-//     courses: Courses[]
-// }
 export default function InProgressCourses({ user }: DashboardProps) {
     console.log("Received courses prop:", user)
     // Filter only courses with status "in-progress"
     const inProgressCourses = user.enrolledCourses
-    // const inProgressCourses = user
-    //     .flatMap((userCourse: any) => userCourse.enrolledCourses) // Extract all enrolled courses
-    //     .filter((userCourse: any) => userCourse.status === "in-progress") // Filter in-progress courses
-
-    console.log("Courses in progress", inProgressCourses)
+    // console.log("Courses in progress", inProgressCourses)
+    const comment = " you have no enrolled courses"
 
     return (
         <Container>
@@ -115,7 +104,7 @@ export default function InProgressCourses({ user }: DashboardProps) {
                         </CourseCard>
                     ))
                 ) : (
-                    <NoDataAvailable />
+                    <NoDataAvailable comment={user.name + " " + "sir," + comment} />
                 )}
             </CourseList>
         </Container>

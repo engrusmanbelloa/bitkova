@@ -32,6 +32,38 @@ const Label = styled.p`
     font-size: 16px;
     color: ${(props) => props.theme.palette.common.black};
 `
+const ProfileSetupContainer = styled.div`
+    padding: 2px 20px;
+    height: 50px;
+    border: 1px solid ${(props) => props.theme.mobile.offWhite};
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px auto;
+`
+const Text = styled.p`
+    font-weight: 500;
+    color: ${(props) => props.theme.palette.common.black};
+`
+const Button = styled.button`
+    background: ${(props) => props.theme.mobile.offWhite};
+    color: ${(props) => props.theme.palette.primary.main};
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+
+    &:hover {
+        background: ${(props) => props.theme.mobile.horizontalrule};
+    }
+`
+const Title = styled.h3`
+    font-weight: 500;
+    color: ${(props) => props.theme.palette.common.black};
+`
 interface DashboardProps {
     user: User
 }
@@ -39,6 +71,11 @@ interface DashboardProps {
 export default function DashboardOverview({ user }: DashboardProps) {
     return (
         <>
+            <ProfileSetupContainer>
+                <Text>Set Your Profile</Text>
+                <Button>Click Here</Button>
+            </ProfileSetupContainer>
+            <Title>Dashboard</Title>
             <OverviewContainer>
                 <OverviewBox>
                     <IconWrapper color="#3b82f6">

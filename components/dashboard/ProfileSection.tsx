@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { User } from "@/userType"
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -32,17 +33,10 @@ const Label = styled.span`
 const Value = styled.span`
     font-weight: 500;
 `
-
-export default function ProfileSection() {
-    const user = {
-        DisplayName: "Mahmoud Sardauna",
-        username: "Abudanbwai",
-        email: "abudanbwai@bitkova.com",
-        phoneNumber: "+234 80361 07361",
-        skill: "Danbaiwa",
-        bio: "UX/UI Designer in the Morning. Danbaiwa in the Night.",
-        registrationDate: "March 25, 2024 12:32pm",
-    }
+interface DashboardProps {
+    user: User
+}
+export default function ProfileSection({ user }: DashboardProps) {
     return (
         <Container>
             <ProfileHeader>Profile</ProfileHeader>
@@ -53,7 +47,7 @@ export default function ProfileSection() {
                 </DetailRow>
                 <DetailRow>
                     <Label>Display Name</Label>
-                    <Value>{user.DisplayName}</Value>
+                    <Value>{user.name}</Value>
                 </DetailRow>
                 <DetailRow>
                     <Label>Username</Label>
