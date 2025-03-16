@@ -59,22 +59,27 @@ export const featuredCourses: CourseType[] = [
         ],
         modules: [
             {
+                id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
             },
             {
+                id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
             },
             {
+                id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
             },
             {
+                id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
             },
             {
+                id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
             },
@@ -143,22 +148,27 @@ export const featuredCourses: CourseType[] = [
         ],
         modules: [
             {
+                id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
             },
             {
+                id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
             },
             {
+                id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
             },
             {
+                id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
             },
             {
+                id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
             },
@@ -227,22 +237,27 @@ export const featuredCourses: CourseType[] = [
         ],
         modules: [
             {
+                id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
             },
             {
+                id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
             },
             {
+                id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
             },
             {
+                id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
             },
             {
+                id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
             },
