@@ -6,7 +6,12 @@ import { useRouter } from "next/navigation"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import Slide from "@mui/material/Slide"
+import OutlinedInput from "@mui/material/OutlinedInput"
+import IconButton from "@mui/material/IconButton"
 import { TransitionProps } from "@mui/material/transitions"
+import SearchIcon from "@mui/icons-material/Search"
+import InputBase from "@mui/material/InputBase"
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
@@ -63,6 +68,7 @@ const Left = styled.ul`
     list-style: none;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin: 0;
     padding: 0;
     height: 60px;
@@ -72,9 +78,17 @@ const LogoContainer = styled.li`
     margin: 0;
     padding: 0;
 `
+const SearchContainer = styled.div`
+    display: flex;
+    flex: 0.8;
+    outline: solid 0.5px;
+    border-radius: 20px;
+    height: 35px;
+`
+const SearchInput = styled.input``
 // middle section of the nav bar
 const Center = styled.ul`
-    flex: 2.5;
+    flex: 1.6;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -90,7 +104,7 @@ const Menu = styled.li`
     font-weight: 400;
     line-height: 20px;
     text-align: center;
-    padding: 10px 25px;
+    padding: 5px 25px;
     border-radius: 5px;
     color: ${(props) => props.theme.palette.common.black};
     &:hover {
@@ -117,7 +131,7 @@ const Right = styled.div`
     ${mobile({ justifyContent: "center", alignItems: "center" })}
 `
 const NavBtn = styled.button`
-    width: 198px;
+    width: 150px;
     height: 40px;
     font-size: 16px;
     font-weight: 600;
@@ -223,7 +237,7 @@ export default function Navbar() {
         {
             id: 1,
             href: "#",
-            title: "Testimonials",
+            title: "Blog",
         },
         {
             id: 2,
@@ -233,12 +247,12 @@ export default function Navbar() {
         {
             id: 3,
             href: "#",
-            title: "Offline Class",
+            title: "Our Hub",
         },
         {
             id: 4,
             href: "#",
-            title: "Our Hub",
+            title: "My Learning",
         },
     ]
     const firebaseConfig = {
@@ -356,6 +370,16 @@ export default function Navbar() {
                                 <Logo $main={main} />
                             </Link>
                         </LogoContainer>
+                        <SearchContainer>
+                            <InputBase
+                                sx={{ ml: 1, flex: 2 }}
+                                placeholder="Search courses"
+                                inputProps={{ "aria-label": "search bitkova" }}
+                            />
+                            <IconButton type="button" sx={{ m: 0, pr: "10px" }} aria-label="search">
+                                <SearchIcon />
+                            </IconButton>
+                        </SearchContainer>
                     </Left>
                     {/* nav center items container  */}
                     <Center>
@@ -377,6 +401,9 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
+                                <AddShoppingCartIcon
+                                    sx={{ m: "auto", fontSize: 30, color: "#356DF1" }}
+                                />
                                 <NavBtn onClick={() => router.push("/courses")}>
                                     Browse Courses
                                 </NavBtn>
