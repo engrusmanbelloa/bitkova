@@ -73,6 +73,7 @@ const Left = styled.ul`
     padding: 0;
     height: 60px;
     ${ipad({ flex: 0.3 })}
+    ${mobile({ flex: 0.2 })}
 `
 const LogoContainer = styled.li`
     margin: 0;
@@ -138,6 +139,7 @@ const MobileNavMiddle = styled.div`
     height: 25px;
     border-radius: 20px;
     ${ipad({ display: "flex" })}
+    ${mobile({ width: 140 })}
 `
 const NavBtn = styled.button`
     width: 150px;
