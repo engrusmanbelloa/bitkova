@@ -72,7 +72,7 @@ const Left = styled.ul`
     margin: 0;
     padding: 0;
     height: 60px;
-    ${ipad({ flex: 0.6 })}
+    ${ipad({ flex: 0.3 })}
 `
 const LogoContainer = styled.li`
     margin: 0;
@@ -84,6 +84,7 @@ const SearchContainer = styled.div`
     outline: solid 0.5px;
     border-radius: 20px;
     height: 35px;
+    ${ipad({ display: "none" })};
 `
 const SearchInput = styled.input``
 // middle section of the nav bar
@@ -97,7 +98,7 @@ const Center = styled.ul`
     height: 40px;
     padding: 10px;
     gap: 10px;
-    ${mobile({ display: "none" })}
+    ${ipad({ display: "none" })}
 `
 const Menu = styled.li`
     font-size: 16px;
@@ -128,7 +129,15 @@ const Right = styled.div`
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    ${mobile({ justifyContent: "center", alignItems: "center" })}
+    ${mobile({ justifyContent: "flex-start", alignItems: "center" })}
+`
+const MobileNavMiddle = styled.div`
+    display: none;
+    margin: auto;
+    outline: solid 0.5px;
+    height: 25px;
+    border-radius: 20px;
+    ${ipad({ display: "flex" })}
 `
 const NavBtn = styled.button`
     width: 150px;
@@ -145,23 +154,22 @@ const NavBtn = styled.button`
         background-color: ${(props) => props.theme.palette.action.hover};
         color: ${(props) => props.theme.palette.primary.main};
     }
-    ${ipad({ width: 110, height: 35, fontSize: "12px", borderRadius: 5 })};
-    ${mobile({ display: "none" })};
+    ${ipad({ display: "none" })};
 `
 const Toggle = styled.div`
     display: none;
+    flex: 0.5;
     justify-content: flex-end;
     align-items: flex-end;
     flex-direction: column;
     text-align: end;
     padding: 0px;
-    position: absolute;
     right: 15px;
-    top: 10px;
+    top: 3px;
     margin: auto 0;
     border-radius: 5px;
     z-index: 99;
-    ${mobile({ display: "block" })}
+    ${ipad({ display: "block" })}
 `
 
 export default function Navbar() {
@@ -401,9 +409,20 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
-                                <AddShoppingCartIcon
-                                    sx={{ m: "auto", fontSize: 30, color: "#356DF1" }}
-                                />
+                                <MobileNavMiddle>
+                                    <InputBase
+                                        sx={{ ml: 1, flex: 1 }}
+                                        placeholder="Search courses"
+                                        inputProps={{ "aria-label": "search bitkova" }}
+                                    />
+                                    <IconButton
+                                        type="button"
+                                        sx={{ m: 0, pr: "0" }}
+                                        aria-label="search"
+                                    >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </MobileNavMiddle>
                                 <NavBtn onClick={() => router.push("/courses")}>
                                     Browse Courses
                                 </NavBtn>
@@ -449,6 +468,9 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
+                            <AddShoppingCartIcon
+                                sx={{ m: "auto", mr: 2, fontSize: 25, color: "#356DF1" }}
+                            />
                             {!toggleMenu ? (
                                 <MenuIcon
                                     sx={{ p: 0, m: 0, fontSize: 30 }}

@@ -24,8 +24,7 @@ const Btn = styled.button<{ $login?: boolean }>`
         background-color: ${(props) => props.theme.palette.action.hover};
         color: ${(props) => props.theme.palette.common.black};
     }
-    ${ipad({ height: 35, width: 80 })};
-    ${mobile({ display: "none" })};
+    ${ipad({ display: "none" })};
 `
 
 export default function LoginBtn(props: { $login: boolean; onClick: () => void }) {
