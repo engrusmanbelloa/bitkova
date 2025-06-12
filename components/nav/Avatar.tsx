@@ -2,8 +2,10 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import Link from "next/link"
+import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { initializeApp } from "firebase/app"
+import { mobile, ipad } from "@/responsive"
 
 const AvatarContainer = styled.div`
     width: 50px;
@@ -12,6 +14,7 @@ const AvatarContainer = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    ${ipad({ display: "none" })}
 `
 const Avatar = styled.button`
     width: 40px;
@@ -39,23 +42,29 @@ const DropdownContent = styled.ul<{ $isVisible: boolean }>`
     top: 100%;
     right: 0;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    min-width: 150px;
+    border-radius: 0px 8px 8px 0;
+    width: 200px;
     list-style: none;
     margin: 5px 0;
-    padding: 0;
+    padding: 20px 0 0 0;
     background-color: ${(props) => props.theme.palette.common.white};
     z-index: 1000;
     display: ${({ $isVisible }) => ($isVisible ? "block" : "none")};
 `
 const DropdownItem = styled.li`
-    padding: 10px;
+    padding: 10px 20px;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 0px 8px 8px 0;
+    text-transform: capitalize;
+    font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
     &:hover {
         background: ${(props) => props.theme.palette.action.hover};
     }
+`
+const Hr = styled.hr`
+    margin-top: 15px;
+    border: 1px solid ${(props) => props.theme.palette.action.hover};
 `
 const Links = styled(Link)`
     text-decoration: none;
@@ -96,19 +105,47 @@ export default function NavAvatar({ user }: any) {
     const app = initializeApp(firebaseConfig)
     const auth = getAuth(app)
 
+    // menu items array
+    const menuList = [
+        {
+            id: 1,
+            href: "#",
+            title: "Dashboard",
+        },
+        {
+            id: 2,
+            href: "#",
+            title: "Be a partner",
+        },
+        {
+            id: 3,
+            href: "#",
+            title: "Our Hub",
+        },
+        {
+            id: 4,
+            href: "#",
+            title: "My Learning",
+        },
+    ]
+
     return (
         <AvatarContainer>
             <Avatar onClick={() => setIsOpen(!isOpen)}>{initials}</Avatar>
             <DropdownContent $isVisible={isOpen}>
+                {menuList.map((item) => (
+                    <Link onClick={() => setIsOpen(!isOpen)} key={item.id} href={item.href}>
+                        <DropdownItem>{item.title}</DropdownItem>
+                    </Link>
+                ))}
+                <Hr />
                 <DropdownItem>
-                    <Links onClick={() => setIsOpen(!isOpen)} href="/dashboard">
-                        Profile
-                    </Links>
-                </DropdownItem>
-                <DropdownItem>Settings</DropdownItem>
-                <DropdownItem>
-                    <Links onClick={handleSignOut} href="/">
-                        Logout
+                    <Links
+                        style={{ display: "flex", alignItems: "center", color: "red" }}
+                        onClick={handleSignOut}
+                        href="/"
+                    >
+                        <span>Logout</span> <LogoutIcon sx={{ ml: 1, mt: 0, p: 0 }} />
                     </Links>
                 </DropdownItem>
             </DropdownContent>
