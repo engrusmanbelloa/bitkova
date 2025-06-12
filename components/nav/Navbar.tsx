@@ -12,10 +12,13 @@ import { TransitionProps } from "@mui/material/transitions"
 import SearchIcon from "@mui/icons-material/Search"
 import InputBase from "@mui/material/InputBase"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
+import DropdownMenu from "@/components/nav/Dropdown"
 import NotifyModal from "@/components/auth/NotifyModal"
 import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
@@ -130,7 +133,7 @@ const Right = styled.div`
     flex: 1;
     display: flex;
     justify-content: flex-end;
-    ${mobile({ justifyContent: "flex-start", alignItems: "center" })}
+    ${mobile({ alignItems: "center" })}
 `
 const MobileNavMiddle = styled.div`
     display: none;
@@ -140,6 +143,13 @@ const MobileNavMiddle = styled.div`
     border-radius: 20px;
     ${ipad({ display: "flex" })}
     ${mobile({ width: 140 })}
+`
+const CartsContainer = styled.div`
+    dislpay: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    ${ipad({ display: "none" })};
 `
 const NavBtn = styled.button`
     width: 150px;
@@ -162,16 +172,16 @@ const Toggle = styled.div`
     display: none;
     flex: 0.5;
     justify-content: flex-end;
-    align-items: flex-end;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
     text-align: end;
     padding: 0px;
-    right: 15px;
-    top: 3px;
     margin: auto 0;
+    height: 30px;
     border-radius: 5px;
     z-index: 99;
-    ${ipad({ display: "block" })}
+    ${ipad({ display: "flex" })}
+    ${mobile({})}
 `
 
 export default function Navbar() {
@@ -403,10 +413,17 @@ export default function Navbar() {
                     <Right>
                         {auth.currentUser && auth.currentUser.emailVerified ? (
                             <>
-                                <NavBtn onClick={() => router.push("/courses")}>
-                                    Browse Courses
-                                </NavBtn>
-                                {/* <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} /> */}
+                                <CartsContainer>
+                                    <IconButton
+                                        type="button"
+                                        sx={{ m: 0, pr: "10px", color: "#356DF1" }}
+                                        aria-label="search"
+                                    >
+                                        <AddShoppingCartIcon sx={{ fontSize: 30, m: 1 }} />
+                                        <FavoriteBorderIcon sx={{ fontSize: 30, m: 1 }} />
+                                        <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
+                                    </IconButton>
+                                </CartsContainer>
                                 <NavAvatar user={auth.currentUser.displayName} />
                             </>
                         ) : (
@@ -470,12 +487,18 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
-                            <AddShoppingCartIcon
-                                sx={{ m: "auto", mr: 2, fontSize: 25, color: "#356DF1" }}
-                            />
+                            <IconButton
+                                type="button"
+                                sx={{ m: 0, pr: "10px", color: "#356DF1" }}
+                                aria-label="search"
+                            >
+                                <AddShoppingCartIcon sx={{ fontSize: 20, m: 0.5 }} />
+                                <FavoriteBorderIcon sx={{ fontSize: 20, m: 0.5 }} />
+                                <CircleNotificationsIcon sx={{ fontSize: 20, m: 0.5 }} />
+                            </IconButton>
                             {!toggleMenu ? (
                                 <MenuIcon
-                                    sx={{ p: 0, m: 0, fontSize: 30 }}
+                                    sx={{ p: 0, m: 0, fontSize: 25 }}
                                     onClick={() => {
                                         setToggleMenu(true)
                                         // console.log("Toggle state changed to " + toggleMenu)
@@ -483,15 +506,27 @@ export default function Navbar() {
                                 />
                             ) : (
                                 <CloseIcon
-                                    sx={{ p: 0, m: 0, fontSize: 30 }}
+                                    sx={{ p: 0, m: 0, fontSize: 25 }}
                                     onClick={() => {
                                         setToggleMenu(false)
                                     }}
                                 />
                             )}
-                            {/* {toggleMenu && (
-            
-          )} */}
+                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified ? (
+                                <DropdownMenu
+                                    handleSingUpOpen={handleSignInOpen}
+                                    user={auth.currentUser.displayName}
+                                    closeMenu={() => setToggleMenu(false)}
+                                />
+                            ) : (
+                                toggleMenu && (
+                                    <DropdownMenu
+                                        user={false}
+                                        handleSingUpOpen={handleSignInOpen}
+                                        closeMenu={() => setToggleMenu(false)}
+                                    />
+                                )
+                            )}
                         </Toggle>
                     </Right>
                 </Wrapper>
