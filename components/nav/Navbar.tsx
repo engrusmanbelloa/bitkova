@@ -52,7 +52,6 @@ const Container = styled.section`
         width: ${props.theme.widths.mobileWidth};
         height: 40px;
         background: ${props.theme.mobile.mobileNavBg};
-        padding: 5px 15px;
         box-shadow: 0px 4px 4px 0px #00000033;
     `,
     )}
