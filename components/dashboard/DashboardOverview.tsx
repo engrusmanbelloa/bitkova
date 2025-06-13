@@ -4,12 +4,26 @@ import SchoolIcon from "@mui/icons-material/School"
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
+// containers section
+const Container = styled.section`
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
+    )}
+`
 const OverviewContainer = styled.div`
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            `,
+    )}
 `
 const OverviewBox = styled.div`
     flex: 1;
@@ -41,9 +55,18 @@ const ProfileSetupContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     margin: 10px auto;
+    ${mobile(
+        (props: any) => `
+            height: 35px;
+            width: ${props.theme.widths.mobileWidth};
+            padding: 0;
+            margin: 0;
+        `,
+    )}
 `
 const Text = styled.p`
     font-weight: 500;
+    margin-left: 10px;
     color: ${(props) => props.theme.palette.common.black};
 `
 const Button = styled.button`
@@ -55,7 +78,7 @@ const Button = styled.button`
     cursor: pointer;
     font-size: 14px;
     transition: background 0.3s;
-
+    margin-right: 5px;
     &:hover {
         background: ${(props) => props.theme.mobile.horizontalrule};
     }
@@ -70,7 +93,7 @@ interface DashboardProps {
 
 export default function DashboardOverview({ user }: DashboardProps) {
     return (
-        <>
+        <Container>
             <ProfileSetupContainer>
                 <Text>Set Your Profile</Text>
                 <Button>Click Here</Button>
@@ -100,6 +123,6 @@ export default function DashboardOverview({ user }: DashboardProps) {
                 </OverviewBox>
             </OverviewContainer>
             <InProgressCourses user={user} />
-        </>
+        </Container>
     )
 }

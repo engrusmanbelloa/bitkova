@@ -8,6 +8,7 @@ import HistoryIcon from "@mui/icons-material/History"
 import HelpIcon from "@mui/icons-material/Help"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
+import { mobile, ipad } from "@/responsive"
 
 const SidebarContainer = styled.div`
     width: 100%;
@@ -21,6 +22,11 @@ const Hr = styled.hr`
     border-top: 0.5px solid ${(props) => props.theme.mobile.offWhite};
     margin: 10px 0 5px;
     padding: 0;
+    ${mobile(
+        (props: any) => `
+                display: none;
+            `,
+    )}
 `
 const NavItem = styled.a<{ $active?: boolean }>`
     display: flex;

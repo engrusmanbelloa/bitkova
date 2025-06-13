@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import Rating from "@mui/material/Rating"
 import NoDataAvailable from "@/components/dashboard/NoData"
+import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
 const Container = styled.div`
@@ -16,6 +17,11 @@ const CourseCard = styled.div`
     padding: 0px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    ${mobile(
+        (props: any) => `
+        flex-direction: column;
+    `,
+    )}
 `
 const CourseImage = styled.img`
     width: 300px;
@@ -23,19 +29,40 @@ const CourseImage = styled.img`
     border-radius: 8px;
     object-fit: cover;
     margin-right: 15px;
+    ${mobile(
+        (props: any) => `
+        width: 100%;
+    `,
+    )}
 `
 const CourseInfo = styled.div`
     flex: 1;
     padding-top: 20px;
+    ${mobile(
+        (props: any) => `
+        margin: 5px;
+        padding-top: 10px;
+    `,
+    )}
 `
 const CourseTitle = styled.h3`
     margin-top: 20px;
     color: ${(props) => props.theme.palette.common.black};
+    ${mobile(
+        (props: any) => `
+        margin-to: 5px;
+    `,
+    )}
 `
 const ProgressText = styled.p`
     font-size: 14px;
-    margin-top: 20px auto;
+    margin-top: 20px;
     color: ${(props) => props.theme.palette.common.black};
+    ${mobile(
+        (props: any) => `
+        margin-top: 0px;
+    `,
+    )}
 `
 const ProgressContainer = styled.div`
     width: 100%;
@@ -47,6 +74,11 @@ const ProgressContainer = styled.div`
         margin: 0px;
         padding-left: 10px;
     }
+    ${mobile(
+        (props: any) => `
+        margin-top: 5px;
+    `,
+    )}
 `
 const ProgressBarContainer = styled.div`
     width: 80%;
@@ -54,6 +86,11 @@ const ProgressBarContainer = styled.div`
     border-radius: 3px;
     overflow: hidden;
     background: ${(props) => props.theme.palette.action.hover};
+    ${mobile(
+        (props: any) => `
+        width: 70%;
+    `,
+    )}
 `
 const ProgressBar = styled.div<{ $progress: number }>`
     height: 100%;

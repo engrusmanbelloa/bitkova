@@ -21,18 +21,22 @@ const Container = styled.section`
     width: ${(props) => props.theme.widths.dsktopWidth};
     padding: ${(props) => props.theme.paddings.pagePadding};
     margin: 0 auto 10px;
-    ${ipad({ width: "665px" })};
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+            padding: 5px 0;
+        `,
+    )}
     ${mobile(
         (props: any) => `
             width: ${props.theme.widths.mobileWidth};
             flex-direction: column;
-            box-shadow: 0px 4px 4px 0px #00000033;
         `,
     )}
 `
 const Wrapper = styled.div`
     display: flex;
-    ${ipad({})};
+    ${ipad({ padding: 5 })};
     ${mobile({ flexDirection: "column" })};
 `
 const Left = styled.div`
@@ -41,7 +45,6 @@ const Left = styled.div`
     flex-direction: column;
     padding: 10px 0px;
     margin: 0;
-    ${ipad({})}
 `
 const Desc = styled.p`
     margin: 0px;

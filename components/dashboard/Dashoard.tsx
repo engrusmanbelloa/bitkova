@@ -6,6 +6,7 @@ import Sidebar from "@/components/dashboard/SideBar"
 import DashboardOverview from "@/components/dashboard/DashboardOverview"
 import ProfileSection from "@/components/dashboard/ProfileSection"
 import NoDataAvailable from "./NoData"
+import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
 const DashboardContainer = styled.div`
@@ -15,16 +16,36 @@ const DashboardContainer = styled.div`
     margin: 5px auto 10px;
     padding: 20px auto;
     border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
+    ${mobile(
+        (props: any) => `
+                flex-direction: column;
+                width: ${props.theme.widths.mobileWidth};
+                border: none;
+                padding: 0px auto;
+                margin: 0px auto 10px;
+            `,
+    )}
 `
 const SidebarContainer = styled.div`
     flex: 1;
     padding: 20px 0px 5px;
     margin: 0px;
     border-right: 1px solid ${(props) => props.theme.mobile.offWhite};
+    ${mobile(
+        (props: any) => `
+                border: none;
+                padding: 0;
+            `,
+    )}
 `
 const ContentContainer = styled.div`
     flex: 3;
     padding: 0 0 20px 20px;
+    ${mobile(
+        (props: any) => `
+                padding: 0;
+            `,
+    )}
 `
 const Title = styled.h3`
     font-weight: 500;

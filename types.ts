@@ -1,5 +1,4 @@
 // course.ts
-
 export interface CourseType {
     _id: number
     image: string

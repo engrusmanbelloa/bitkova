@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 const Container = styled.div`
     display: flex;

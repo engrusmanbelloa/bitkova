@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { mobile, ipad } from "@/responsive"
 const Container = styled.div``
 const Wraper = styled.div`
     margin: auto;
@@ -11,6 +12,11 @@ const NotAvailable = styled.img`
     margin: 10px auto;
     border-radius: 8px;
     object-fit: cover;
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
+    )}
 `
 const Text = styled.p`
     font-size: 14px;
