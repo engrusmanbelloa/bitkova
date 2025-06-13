@@ -114,6 +114,12 @@ export default function Dashboard({ user }: DashboardProps) {
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
+                    {activeItem === "RedeemIcon" && (
+                        <>
+                            <Title>Referal Reward</Title>
+                            <NoDataAvailable comment="Comming Soon" />
+                        </>
+                    )}
                     {activeItem === "settings" && (
                         <>
                             <Title>Settings</Title>

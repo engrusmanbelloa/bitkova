@@ -6,6 +6,8 @@ import StarIcon from "@mui/icons-material/Star"
 import QuizIcon from "@mui/icons-material/Quiz"
 import HistoryIcon from "@mui/icons-material/History"
 import HelpIcon from "@mui/icons-material/Help"
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
+import RedeemIcon from "@mui/icons-material/Redeem"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
 import { mobile, ipad } from "@/responsive"
@@ -61,6 +63,7 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
         { id: "quiz", icon: <QuizIcon />, label: "My Quiz Attempts" },
         { id: "history", icon: <HistoryIcon />, label: "Order History" },
         { id: "qa", icon: <HelpIcon />, label: "Question & Answer" },
+        { id: "RedeemIcon", icon: <RedeemIcon />, label: "Referal Reward" },
         { id: "settings", icon: <SettingsIcon />, label: "Settings" },
     ]
 
