@@ -86,7 +86,7 @@ export default function Dashboard({ user }: DashboardProps) {
 
                     {activeItem === "courses" && (
                         <>
-                            <Title>Enrolled Courses</Title>
+                            <Title>My Learning</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}

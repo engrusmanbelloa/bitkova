@@ -101,7 +101,7 @@ export default function DropdownMenu({
     const menuList = [
         {
             id: 1,
-            href: "#",
+            href: "/dashboard",
             title: "Dashboard",
         },
         {
