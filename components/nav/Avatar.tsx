@@ -109,7 +109,7 @@ export default function NavAvatar({ user }: any) {
     const menuList = [
         {
             id: 1,
-            href: "#",
+            href: "/dashboard",
             title: "Dashboard",
         },
         {

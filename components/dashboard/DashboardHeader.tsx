@@ -1,5 +1,6 @@
 "use client"
 import styled from "styled-components"
+import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -8,6 +9,20 @@ const HeaderContainer = styled.div`
     display: flex;
     align-items: center;
     padding: 10px;
+    ${ipad(
+        (props: any) => `
+            
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            height: 100px;
+            margin: 10px auto 0px;
+            padding: 0;
+            flex-direction: column;
+        `,
+    )}
 `
 const Avatar = styled.div`
     width: 70px;
@@ -21,6 +36,12 @@ const Avatar = styled.div`
     font-size: 20px;
     font-weight: bold;
     text-transform: uppercase;
+    ${mobile(
+        (props: any) => `
+            width: 50px;
+            height: 50px;
+        `,
+    )}
 `
 const UserInfo = styled.div`
     display: flex;
@@ -29,15 +50,31 @@ const UserInfo = styled.div`
     margin-left: 10px;
     padding: 5px;
     height: 70px;
+    ${mobile(
+        (props: any) => `
+            height: 40px;
+        `,
+    )}
 `
 const Greeting = styled.p`
     color: #6b7280;
     font-size: 14px;
     margin-bottom: 5px;
+    ${mobile(
+        (props: any) => `
+            display: none;
+        `,
+    )}
 `
 const DisplayName = styled.h3`
     font-weight: 600;
     margin-top: 0px;
+    ${mobile(
+        (props: any) => `
+            margin: 0px auto;
+            padding: 0;
+        `,
+    )}
 `
 
 export default function DashboardHeader({ user }: any) {
