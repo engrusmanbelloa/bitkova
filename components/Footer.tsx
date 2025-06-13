@@ -22,7 +22,13 @@ const Container = styled.section`
     padding: ${(props) => props.theme.paddings.pagePadding};
     margin: 0 auto 10px;
     ${ipad({ width: "665px" })};
-    ${mobile({ width: "360px", flexDirection: "column" })};
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            flex-direction: column;
+            box-shadow: 0px 4px 4px 0px #00000033;
+        `,
+    )}
 `
 const Wrapper = styled.div`
     display: flex;

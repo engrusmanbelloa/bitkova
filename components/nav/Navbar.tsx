@@ -90,7 +90,6 @@ const SearchContainer = styled.div`
     height: 35px;
     ${ipad({ display: "none" })};
 `
-const SearchInput = styled.input``
 // middle section of the nav bar
 const Center = styled.ul`
     flex: 1.6;
