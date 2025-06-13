@@ -45,7 +45,6 @@ const Left = styled.div`
     flex-direction: column;
     padding: 10px 0px;
     margin: 0;
-    ${ipad({})}
 `
 const Desc = styled.p`
     margin: 0px;
