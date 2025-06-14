@@ -1,23 +1,5 @@
 import { CourseType } from "@/types"
 
-export const categories = [
-    {
-        id: 1,
-        img: "https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        title: "SHIRT STYLE!",
-    },
-    {
-        id: 2,
-        img: "https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        title: "LOUNGEWEAR LOVE",
-    },
-    {
-        id: 3,
-        img: "https://images.pexels.com/photos/5480696/pexels-photo-5480696.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
-        title: "LIGHT JACKETS",
-    },
-]
-
 export const featuredCourses: CourseType[] = [
     {
         _id: 1,
@@ -34,7 +16,7 @@ export const featuredCourses: CourseType[] = [
         },
         students: 30,
         skillLevel: "All Levels",
-        rating: 4.5,
+        rating: 4,
         price: 19999,
         onDemandVideos: 60,
         downloadableFiles: 15,
@@ -62,26 +44,47 @@ export const featuredCourses: CourseType[] = [
                 id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
+                links: [
+                    {
+                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology II": "https://youtu.be/kl1lgnbjUX8",
+                        "Psychology III": "https://youtu.be/bptUgdcUbic",
+                        "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
+                        "Pole & flag": "https://youtu.be/TmplpLQ3d0M",
+                    },
+                ],
             },
             {
                 id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+                links: [
+                    {
+                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology II": "https://youtu.be/kl1lgnbjUX8",
+                        "Psychology III": "https://youtu.be/bptUgdcUbic",
+                        "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
+                        "Pole & flag": "https://youtu.be/TmplpLQ3d0M",
+                    },
+                ],
             },
             {
                 id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
+                links: [],
             },
             {
                 id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
+                links: [],
             },
             {
                 id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
+                links: [],
             },
         ],
         review: [
@@ -151,26 +154,39 @@ export const featuredCourses: CourseType[] = [
                 id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
+                links: [
+                    {
+                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology II": "https://youtu.be/kl1lgnbjUX8",
+                        "Psychology III": "https://youtu.be/bptUgdcUbic",
+                        "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
+                        "Pole & flag": "https://youtu.be/TmplpLQ3d0M",
+                    },
+                ],
             },
             {
                 id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+                links: [],
             },
             {
                 id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
+                links: [],
             },
             {
                 id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
+                links: [],
             },
             {
                 id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
+                links: [],
             },
         ],
         review: [
@@ -240,26 +256,39 @@ export const featuredCourses: CourseType[] = [
                 id: 1,
                 title: "Module 0: Onboarding",
                 content: ["Course Breakdown - 03:44"],
+                links: [
+                    {
+                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology II": "https://youtu.be/kl1lgnbjUX8",
+                        "Psychology III": "https://youtu.be/bptUgdcUbic",
+                        "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
+                        "Pole & flag": "https://youtu.be/TmplpLQ3d0M",
+                    },
+                ],
             },
             {
                 id: 2,
                 title: "Module 1: Intro to Blockchain",
                 content: ["Course Breakdown - 08:04", "Module 1 Quiz"],
+                links: [],
             },
             {
                 id: 3,
                 title: "Module 2: Fundamental Analysis",
                 content: ["Fundamental Analysis"],
+                links: [],
             },
             {
                 id: 4,
                 title: "Module 3: Technical Analysis",
                 content: ["Technical Analysis"],
+                links: [],
             },
             {
                 id: 5,
                 title: "Module 4: Risk Management",
                 content: ["Financial risk Management"],
+                links: [],
             },
         ],
         review: [

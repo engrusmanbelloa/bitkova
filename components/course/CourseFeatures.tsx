@@ -7,6 +7,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { mobile, ipad } from "@/responsive"
+import { CourseType } from "@/types"
 
 const Top = styled.div`
     border-width: 1px;
@@ -126,32 +127,15 @@ const BottomBtn = styled.div`
 `
 
 interface CourseProps {
-    price: string
-    facilitator: string
-    facilitatorImage: string
-    lessons: number
-    hours: number
-    minutes: number
-    students: number
-    rating: number
-    skillLevel: string
+    course: CourseType
+    handlePlay: () => void
 }
 
-export default function CourseFeatures({
-    price,
-    facilitator,
-    facilitatorImage,
-    lessons,
-    hours,
-    minutes,
-    students,
-    rating,
-    skillLevel,
-}: CourseProps) {
+export default function CourseFeatures({ course, handlePlay }: CourseProps) {
     return (
         <>
             <Top>
-                <Price>{price}</Price>
+                <Price>{course.price}</Price>
                 <Button>Buy Now</Button>
             </Top>
             {/* Course Features */}
@@ -159,10 +143,11 @@ export default function CourseFeatures({
                 <FeaturesTitle>Course Features</FeaturesTitle>
                 <FeatureList>
                     <FeatureItem>
-                        <span>📚</span> {lessons} Lessons ({hours}:{minutes} Hours)
+                        <span>📚</span> {course.onDemandVideos} Lessons ({course.duration.hours}:
+                        {course.duration.minutes} Hours)
                     </FeatureItem>
                     <FeatureItem>
-                        <span>👨‍🎓</span> {students} Students
+                        <span>👨‍🎓</span> {course.students} Students
                     </FeatureItem>
                     <FeatureItem>
                         <span>🔒</span> Lifetime access to course
@@ -171,10 +156,10 @@ export default function CourseFeatures({
                         <span>📜</span> Certificate of Completion
                     </FeatureItem>
                     <FeatureItem>
-                        <span>📈</span> Skill Level: {skillLevel}
+                        <span>📈</span> Skill Level: {course.skillLevel}
                     </FeatureItem>
                     <FeatureItem>
-                        <StarBorderIcon /> Rated: {rating}
+                        <StarBorderIcon /> Rated: {course.rating}
                     </FeatureItem>
                 </FeatureList>
                 {/* Actions */}
@@ -186,7 +171,7 @@ export default function CourseFeatures({
                 </Button>
 
                 <Button $background="#eee" $color="#000">
-                    <BottomBtn>
+                    <BottomBtn onClick={handlePlay}>
                         <PlayCircleIcon /> Watch Preview
                     </BottomBtn>
                 </Button>
@@ -196,9 +181,13 @@ export default function CourseFeatures({
                     <FacilitatorInfo>A course by</FacilitatorInfo>
                     <FacilitatorRight>
                         <FacilitatorImage>
-                            <Image src={facilitatorImage} alt={facilitator} fill={true} />
+                            <Image
+                                src={course.facilitatorImage}
+                                alt={course.facilitator}
+                                fill={true}
+                            />
                         </FacilitatorImage>
-                        <FacilitatorName>{facilitator}</FacilitatorName>
+                        <FacilitatorName>{course.facilitator}</FacilitatorName>
                     </FacilitatorRight>
                 </Facilitator>
             </Bottom>

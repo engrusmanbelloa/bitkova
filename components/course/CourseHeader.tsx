@@ -1,12 +1,15 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import ShareIcon from "@mui/icons-material/Share"
+import PlayCircleIcon from "@mui/icons-material/PlayCircle"
+import ReactPlayer from "react-player/lazy"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
+import extractPreviewVideo from "@/config/ExtractPreview"
 import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
@@ -68,6 +71,19 @@ const CourseImage = styled.div`
     `,
     )}
 `
+const Player = styled(ReactPlayer)`
+    position: absolute;
+    top: 0;
+    left: 0;
+`
+const PlayerBtn = styled(PlayCircleIcon)`
+    position: absolute;
+    color: #fff;
+    left: 45%;
+    top: 40%;
+    font-size: 90px;
+    cursor: pointer;
+`
 const Right = styled.div`
     flex: 1;
     margin-top: 100px;
@@ -104,61 +120,39 @@ const Actions = styled.div`
 `
 
 interface CourseProps {
-    rating: number
-    title: string
-    category: string
-    price: string
-    imageUrl: string
-    facilitator: string
-    facilitatorImage: string
-    lessons: number
-    hours: number
-    minutes: number
-    students: number
-    skillLevel: string
-    courseDesc: string
-    whatYoullLearn: string[]
-    modules: {
-        title: string
-        content: string[]
-    }[]
-    review: {
-        id: number
-        stars: number
-        comment: string
-        Name: string
-    }[]
+    course: CourseType
 }
 
-export default function CourseHeader({
-    rating,
-    title,
-    category,
-    price,
-    imageUrl,
-    facilitator,
-    facilitatorImage,
-    lessons,
-    hours,
-    minutes,
-    students,
-    skillLevel,
-    courseDesc,
-    whatYoullLearn,
-    modules,
-    review,
-}: CourseProps) {
+export default function CourseHeader({ course }: CourseProps) {
+    const [showPlayer, setShowPlayer] = useState(false)
     const courses = featuredCourses
     const limit = 8
+    const url = "https://youtu.be/-_nqpMFcvls?si=tITKisr4HegPLH2b"
+    const previewVideoUrl = extractPreviewVideo(course.modules)
+
+    const urls = {
+        Lesson1: "https://youtu.be/ut7-hKybwHI",
+        lesson2: "https://youtu.be/kl1lgnbjUX8",
+        lesson3: "https://youtu.be/bptUgdcUbic",
+        lesson4: "https://youtu.be/lg7CrwBAYmM",
+        Lesson5: "https://youtu.be/TmplpLQ3d0M",
+    }
+
+    const handlePlay = () => setShowPlayer(true)
     return (
         <>
             <HeaderContainer>
                 <Left>
-                    <Rating name="half-rating-read" defaultValue={rating} precision={1} readOnly />
-                    <Title>{title}</Title>
+                    <Rating
+                        name="half-rating-read"
+                        defaultValue={course.rating}
+                        precision={1}
+                        readOnly
+                    />
+                    <Title>{course.title}</Title>
                     <ActionsDiv>
                         <Category>
-                            Categories: <span>{category}</span>
+                            Categories: <span>{course.category}</span>
                         </Category>
                         <Actions>
                             <button>
@@ -169,28 +163,48 @@ export default function CourseHeader({
                             </button>
                         </Actions>
                     </ActionsDiv>
-                    <CourseImage>
-                        <Image src={imageUrl} alt={title} fill={true} priority={true} />
-                    </CourseImage>
+                    {!showPlayer ? (
+                        <CourseImage>
+                            <Image
+                                src={course.image}
+                                alt={course.title}
+                                fill={true}
+                                priority={true}
+                            />
+                            <PlayerBtn onClick={handlePlay} />
+                        </CourseImage>
+                    ) : (
+                        <CourseImage>
+                            <Player
+                                config={{
+                                    youtube: {
+                                        playerVars: {
+                                            modestbranding: 1,
+                                            rel: 0,
+                                            iv_load_policy: 3,
+                                            disablekb: 1,
+                                            showinfo: 0,
+                                            controls: 1,
+                                        },
+                                    },
+                                }}
+                                url={previewVideoUrl}
+                                controls
+                                playing
+                                width="100%"
+                                height="100%"
+                            />
+                        </CourseImage>
+                    )}
                     <CourseTabs
-                        courseDesc={courseDesc}
-                        whatYoullLearn={whatYoullLearn}
-                        modules={modules}
-                        review={review}
+                        courseDesc={course.courseDesc}
+                        whatYoullLearn={course.whatYoullLearn}
+                        modules={course.modules}
+                        review={course.review}
                     />
                 </Left>
                 <Right>
-                    <CourseFeatures
-                        price={price}
-                        facilitator={facilitator}
-                        facilitatorImage={facilitatorImage}
-                        lessons={lessons}
-                        hours={hours}
-                        minutes={minutes}
-                        students={students}
-                        rating={rating}
-                        skillLevel={skillLevel}
-                    />
+                    <CourseFeatures course={course} handlePlay={handlePlay} />
                 </Right>
             </HeaderContainer>
         </>

@@ -414,10 +414,25 @@ export default function Navbar() {
                                 <CartsContainer>
                                     <IconButton
                                         type="button"
-                                        sx={{ m: 0, pr: "10px", color: "#356DF1" }}
+                                        sx={{
+                                            m: 0,
+                                            pr: "10px",
+                                            color: "#356DF1",
+                                            hover: {
+                                                backgroundColor: "#776",
+                                            },
+                                        }}
                                         aria-label="search"
                                     >
-                                        <AddShoppingCartIcon sx={{ fontSize: 30, m: 1 }} />
+                                        <AddShoppingCartIcon
+                                            sx={{
+                                                fontSize: 30,
+                                                m: 1,
+                                                hover: {
+                                                    background: "red",
+                                                },
+                                            }}
+                                        />
                                         <FavoriteBorderIcon sx={{ fontSize: 30, m: 1 }} />
                                         <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
                                     </IconButton>
@@ -426,6 +441,7 @@ export default function Navbar() {
                             </>
                         ) : (
                             <>
+                                {/* Mobile middle search bar */}
                                 <MobileNavMiddle>
                                     <InputBase
                                         sx={{ ml: 1, flex: 1 }}

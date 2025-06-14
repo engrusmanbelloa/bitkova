@@ -23,26 +23,5 @@ export default async function Course({ params }: { params: Promise<{ id: string 
     // get the course for the user using the id
     // const course = await fetchCourse(id)
 
-    return (
-        <div>
-            <CourseHeader
-                rating={course.rating}
-                title={course.title}
-                category={course.category}
-                price={price}
-                imageUrl={course.image}
-                facilitator={course.facilitator}
-                facilitatorImage={course.facilitatorImage}
-                lessons={course.onDemandVideos}
-                hours={course.duration.hours}
-                minutes={course.duration.minutes}
-                students={course.students}
-                skillLevel={course.skillLevel}
-                courseDesc={course.courseDesc}
-                whatYoullLearn={course.whatYoullLearn}
-                modules={course.modules}
-                review={course.review}
-            />
-        </div>
-    )
+    return <CourseHeader course={course} />
 }
