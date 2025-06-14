@@ -159,6 +159,10 @@ export default function CoursesList(props: {
     const [coursesToDisplay, setCoursesToDisplay] = useState([])
     const main = true
 
+    const formatPrice = (price: number): string => {
+        return price > 0 ? `₦${price.toLocaleString("en-US")}` : "Free"
+    }
+
     return (
         <Container>
             <Wrapper>
@@ -207,16 +211,7 @@ export default function CoursesList(props: {
                                         </Box>
                                     </DurationContainer>
                                     <Box>
-                                        <Price>
-                                            {course.price > 0 ? (
-                                                <span>
-                                                    Price: &#8358;
-                                                    {course.price.toLocaleString("en-US")}
-                                                </span>
-                                            ) : (
-                                                "Free"
-                                            )}
-                                        </Price>
+                                        <Price>{formatPrice(course.price)}</Price>
                                         <PriceBtn
                                             $priceBtn="PriceBtn"
                                             type="button"

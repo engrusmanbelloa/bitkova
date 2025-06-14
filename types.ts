@@ -25,6 +25,7 @@ export interface CourseType {
         id: number
         title: string
         content: string[]
+        links: {}[]
     }[]
     review: {
         id: number

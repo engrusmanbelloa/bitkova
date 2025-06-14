@@ -86,7 +86,7 @@ export default function Dashboard({ user }: DashboardProps) {
 
                     {activeItem === "courses" && (
                         <>
-                            <Title>Enrolled Courses</Title>
+                            <Title>My Learning</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
@@ -111,6 +111,12 @@ export default function Dashboard({ user }: DashboardProps) {
                     {activeItem === "qa" && (
                         <>
                             <Title>Question & Answer</Title>
+                            <NoDataAvailable comment="Comming Soon" />
+                        </>
+                    )}
+                    {activeItem === "RedeemIcon" && (
+                        <>
+                            <Title>Referal Reward</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}

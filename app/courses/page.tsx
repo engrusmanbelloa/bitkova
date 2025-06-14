@@ -137,7 +137,7 @@ export default function Courses(href: any) {
                         cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra
                         tristique laoreet ut elementum cras cursus cursus consectetur adipiscing
                         elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique
-                        laoreet ut elementum cras cursus Morbi morbi at diam.
+                        laoreet ut elementum cras cursus Morbi at diam.
                     </Desc>
                     <Link href="#courses" passHref legacyBehavior>
                         <Button $main={true} title="View courses" />
