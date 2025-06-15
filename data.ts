@@ -46,7 +46,8 @@ export const featuredCourses: CourseType[] = [
                 content: ["Course Breakdown - 03:44"],
                 links: [
                     {
-                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology I":
+                            "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX",
                         "Psychology II": "https://youtu.be/kl1lgnbjUX8",
                         "Psychology III": "https://youtu.be/bptUgdcUbic",
                         "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
@@ -156,7 +157,8 @@ export const featuredCourses: CourseType[] = [
                 content: ["Course Breakdown - 03:44"],
                 links: [
                     {
-                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology I":
+                            "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX",
                         "Psychology II": "https://youtu.be/kl1lgnbjUX8",
                         "Psychology III": "https://youtu.be/bptUgdcUbic",
                         "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",
@@ -258,7 +260,8 @@ export const featuredCourses: CourseType[] = [
                 content: ["Course Breakdown - 03:44"],
                 links: [
                     {
-                        "Psychology I": "https://youtu.be/ut7-hKybwHI",
+                        "Psychology I":
+                            "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX",
                         "Psychology II": "https://youtu.be/kl1lgnbjUX8",
                         "Psychology III": "https://youtu.be/bptUgdcUbic",
                         "Lesson 4: Dominance": "https://youtu.be/lg7CrwBAYmM",

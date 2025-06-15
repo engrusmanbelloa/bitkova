@@ -4,12 +4,9 @@ import styled from "styled-components"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
-import LockIcon from "@mui/icons-material/Lock"
-import Accordion from "@mui/material/Accordion"
-import AccordionSummary from "@mui/material/AccordionSummary"
-import AccordionDetails from "@mui/material/AccordionDetails"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import QuizIcon from "@mui/icons-material/Quiz"
+import CourseContent from "@/components/course/CourseContent"
+import CertificateVerifier from "@/components/course/CertificateVerifier"
+import { CourseType } from "@/types"
 
 const Container = styled(Box)`
     display: flex;
@@ -42,19 +39,6 @@ const BulletListLi = styled.li`
     padding-left: 0px;
     margin-bottom: 20px;
 `
-const ModuleHeader = styled.div`
-    padding: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-`
-const ModuleContent = styled.div`
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-`
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -63,18 +47,7 @@ interface TabPanelProps {
 }
 
 interface CourseProps {
-    courseDesc: string
-    whatYoullLearn: string[]
-    modules: {
-        title: string
-        content: string[]
-    }[]
-    review: {
-        id: number
-        stars: number
-        comment: string
-        Name: string
-    }[]
+    course: CourseType
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -88,7 +61,7 @@ function CustomTabPanel(props: TabPanelProps) {
             aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+            {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
         </div>
     )
 }
@@ -100,7 +73,8 @@ function a11yProps(index: number) {
     }
 }
 
-export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
+// export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
+export default function BasicTabs({ course }: CourseProps) {
     const [value, setValue] = useState(0)
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -111,42 +85,32 @@ export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review 
         <Container>
             <TabContainer>
                 <TabsItem value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <TabLabel label="Course detail" {...a11yProps(0)} />
-                    <TabLabel label="Student Reviews" {...a11yProps(1)} />
+                    <TabLabel label="Modules" {...a11yProps(0)} />
+                    <TabLabel label="Course detail" {...a11yProps(1)} />
+                    <TabLabel label="Certificate" {...a11yProps(2)} />
+                    <TabLabel label="Student Reviews" {...a11yProps(3)} />
                 </TabsItem>
             </TabContainer>
             {/* Course detail section */}
             <CustomTabPanel value={value} index={0}>
+                <SectionTitle>Course Modules</SectionTitle>
+                <CourseContent course={course} />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={1}>
                 <SectionTitle>About Course</SectionTitle>
-                <p>{courseDesc}</p>
+                <p>{course.courseDesc}</p>
                 <SectionTitle>What will you Learn?</SectionTitle>
-                {whatYoullLearn.map((item, index) => (
+                {course.whatYoullLearn.map((item, index) => (
                     <BulletList key={index}>
                         <BulletListLi>{item}</BulletListLi>
                     </BulletList>
                 ))}
-                <SectionTitle>Course Content</SectionTitle>
-                {modules.map((module, index) => (
-                    <Accordion key={index}>
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                        >
-                            <ModuleHeader>{module.title}</ModuleHeader>
-                        </AccordionSummary>
-                        {module.content.map((item, i) => (
-                            <AccordionDetails key={i}>
-                                <ModuleContent>
-                                    <LockIcon /> {item}
-                                </ModuleContent>
-                            </AccordionDetails>
-                        ))}
-                    </Accordion>
-                ))}
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-                {review.map((item, i) => (
+            <CustomTabPanel value={value} index={2}>
+                <CertificateVerifier />
+            </CustomTabPanel>
+            <CustomTabPanel value={value} index={3}>
+                {course.review.map((item, i) => (
                     <div key={i}>
                         <p>
                             <strong>{item.Name}</strong> - {item.stars} stars
