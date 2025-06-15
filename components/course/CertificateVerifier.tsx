@@ -66,6 +66,42 @@ const Right = styled.div`
         `,
     )}
 `
+const InfoBoxes = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    gap: 20px;
+    ${mobile(
+        (props: any) => `
+            flex-direction: column;
+        `,
+    )}
+`
+
+const Box = styled.div`
+    flex: 1;
+    display: flex;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    text-align: left;
+`
+
+const Icon = styled.div`
+    font-size: 20px;
+    margin: 5px;
+`
+const TextDiv = styled.div`
+    margin: 5px;
+    padding: 0;
+    p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 300;
+    }
+`
 
 export default function CertificateVerifier() {
     const [certificateId, setCertificateId] = useState("")
@@ -146,6 +182,38 @@ export default function CertificateVerifier() {
                     />
                 </Right>
             </TopContainer>
+            <InfoBoxes>
+                <Box>
+                    <Icon>🏆</Icon>
+                    <TextDiv>
+                        <p>
+                            Our digital verification platform strengthens certificate integrity,
+                            ensuring transparent and accessible authentication for stakeholders,
+                            enhancing trust.
+                        </p>
+                    </TextDiv>
+                </Box>
+                <Box>
+                    <Icon>💻</Icon>
+                    <TextDiv>
+                        <p>
+                            Streamlines external verification, enabling employers and institutions
+                            to easily confirm certificates, enhancing user experience and reducing
+                            issuer workload.
+                        </p>
+                    </TextDiv>
+                </Box>
+                <Box>
+                    <Icon>🌐</Icon>
+                    <TextDiv>
+                        <p>
+                            Effortless Online Verification.Quickly validate certificate authenticity
+                            without physical checks or contacting the issuer, accessible from
+                            anywhere.
+                        </p>
+                    </TextDiv>
+                </Box>
+            </InfoBoxes>
         </Container>
     )
 }
