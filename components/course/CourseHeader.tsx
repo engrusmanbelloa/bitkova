@@ -9,6 +9,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import ReactPlayer from "react-player/lazy"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
+import CourseContent from "@/components/course/CourseContent"
 import extractPreviewVideo from "@/config/ExtractPreview"
 import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
@@ -38,6 +39,8 @@ const HeaderContainer = styled.div`
 `
 const Left = styled.div`
     flex: 3;
+    margin: 0;
+    padding: 0;
 `
 const ActionsDiv = styled.div`
     display: flex;
@@ -67,7 +70,7 @@ const CourseImage = styled.div`
     overflow: hidden;
     ${mobile(
         (props: any) => `
-        height: 300px;
+        height: 200px;
     `,
     )}
 `
@@ -83,6 +86,37 @@ const PlayerBtn = styled(PlayCircleIcon)`
     top: 40%;
     font-size: 90px;
     cursor: pointer;
+    ${ipad(
+        (props: any) => `
+        font-size: 60px;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        font-size: 50px;
+    `,
+    )}
+`
+const MobileTabs = styled.div`
+    display: none:
+    margin: 0;
+    padding: 0;
+     ${ipad(
+         (props: any) => `
+        display: block:
+    `,
+     )}
+`
+const DeskTabs = styled.div`
+    display: block:
+    margin: 0;
+    padding: 0;
+    background: red;
+     ${ipad(
+         (props: any) => `
+        display: none:
+    `,
+     )}
 `
 const Right = styled.div`
     flex: 1;
@@ -127,8 +161,9 @@ export default function CourseHeader({ course }: CourseProps) {
     const [showPlayer, setShowPlayer] = useState(false)
     const courses = featuredCourses
     const limit = 8
-    const url = "https://youtu.be/-_nqpMFcvls?si=tITKisr4HegPLH2b"
+    const url = "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX"
     const previewVideoUrl = extractPreviewVideo(course.modules)
+    const enrolled = true
 
     const urls = {
         Lesson1: "https://youtu.be/ut7-hKybwHI",
@@ -196,15 +231,17 @@ export default function CourseHeader({ course }: CourseProps) {
                             />
                         </CourseImage>
                     )}
-                    <CourseTabs
-                        courseDesc={course.courseDesc}
-                        whatYoullLearn={course.whatYoullLearn}
-                        modules={course.modules}
-                        review={course.review}
-                    />
+                    <MobileTabs>
+                        <CourseTabs course={course} />
+                    </MobileTabs>
+                    <DeskTabs>{!enrolled ? <CourseTabs course={course} /> : <></>}</DeskTabs>
                 </Left>
                 <Right>
-                    <CourseFeatures course={course} handlePlay={handlePlay} />
+                    {!enrolled ? (
+                        <CourseFeatures course={course} handlePlay={handlePlay} />
+                    ) : (
+                        <CourseContent course={course} />
+                    )}
                 </Right>
             </HeaderContainer>
         </>
