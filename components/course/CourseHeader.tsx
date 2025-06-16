@@ -9,7 +9,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import ReactPlayer from "react-player/lazy"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
-import CourseContent from "@/components/course/CourseContent"
+import CourseModules from "@/components/course/CourseModules"
 import extractPreviewVideo from "@/config/ExtractPreview"
 import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
@@ -84,13 +84,8 @@ const PlayerBtn = styled(PlayCircleIcon)`
     color: #fff;
     left: 45%;
     top: 40%;
-    font-size: 90px;
+    font-size: 60px;
     cursor: pointer;
-    ${ipad(
-        (props: any) => `
-        font-size: 60px;
-    `,
-    )}
     ${mobile(
         (props: any) => `
         font-size: 50px;
@@ -108,15 +103,14 @@ const MobileTabs = styled.div`
      )}
 `
 const DeskTabs = styled.div`
-    display: block:
+    display: block;
     margin: 0;
     padding: 0;
-    background: red;
-     ${ipad(
-         (props: any) => `
-        display: none:
+    ${ipad(
+        (props: any) => `
+        display: none;
     `,
-     )}
+    )}
 `
 const Right = styled.div`
     flex: 1;
@@ -159,21 +153,21 @@ interface CourseProps {
 
 export default function CourseHeader({ course }: CourseProps) {
     const [showPlayer, setShowPlayer] = useState(false)
+    const [selectedVideo, setSelectedVideo] = useState<string>("")
+    const [selectedTitle, setSelectedTitle] = useState<string>("")
     const courses = featuredCourses
     const limit = 8
     const url = "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX"
     const previewVideoUrl = extractPreviewVideo(course.modules)
     const enrolled = true
 
-    const urls = {
-        Lesson1: "https://youtu.be/ut7-hKybwHI",
-        lesson2: "https://youtu.be/kl1lgnbjUX8",
-        lesson3: "https://youtu.be/bptUgdcUbic",
-        lesson4: "https://youtu.be/lg7CrwBAYmM",
-        Lesson5: "https://youtu.be/TmplpLQ3d0M",
+    const handlePlay = () => setShowPlayer(true)
+    const handleVideoSelect = (url: string, title: string) => {
+        setSelectedTitle(title)
+        setSelectedVideo(url)
+        setShowPlayer(true)
     }
 
-    const handlePlay = () => setShowPlayer(true)
     return (
         <>
             <HeaderContainer>
@@ -190,26 +184,28 @@ export default function CourseHeader({ course }: CourseProps) {
                             Categories: <span>{course.category}</span>
                         </Category>
                         <Actions>
-                            <button>
-                                <BookmarkBorderIcon /> Wishlist
-                            </button>
+                            {!enrolled && (
+                                <button>
+                                    <BookmarkBorderIcon /> Wishlist
+                                </button>
+                            )}
                             <button>
                                 <ShareIcon /> Share
                             </button>
                         </Actions>
                     </ActionsDiv>
-                    {!showPlayer ? (
-                        <CourseImage>
-                            <Image
-                                src={course.image}
-                                alt={course.title}
-                                fill={true}
-                                priority={true}
-                            />
-                            <PlayerBtn onClick={handlePlay} />
-                        </CourseImage>
-                    ) : (
-                        <CourseImage>
+                    <CourseImage>
+                        {!showPlayer ? (
+                            <>
+                                <Image
+                                    src={course.image}
+                                    alt={course.title}
+                                    fill={true}
+                                    priority={true}
+                                />
+                                <PlayerBtn onClick={handlePlay} />
+                            </>
+                        ) : !enrolled ? (
                             <Player
                                 config={{
                                     youtube: {
@@ -229,18 +225,54 @@ export default function CourseHeader({ course }: CourseProps) {
                                 width="100%"
                                 height="100%"
                             />
-                        </CourseImage>
-                    )}
-                    <MobileTabs>
-                        <CourseTabs course={course} />
-                    </MobileTabs>
-                    <DeskTabs>{!enrolled ? <CourseTabs course={course} /> : <></>}</DeskTabs>
+                        ) : selectedVideo ? (
+                            <Player
+                                config={{
+                                    youtube: {
+                                        playerVars: {
+                                            modestbranding: 1,
+                                            rel: 0,
+                                            iv_load_policy: 3,
+                                            disablekb: 1,
+                                            showinfo: 0,
+                                            controls: 1,
+                                        },
+                                    },
+                                }}
+                                url={selectedVideo}
+                                controls
+                                playing
+                                width="100%"
+                                height="100%"
+                            />
+                        ) : null}
+                    </CourseImage>
+                    <CourseTabs
+                        setSelectedTitle={setSelectedTitle}
+                        setSelectedVideo={setSelectedVideo}
+                        enrolled={enrolled}
+                        course={course}
+                    />
                 </Left>
                 <Right>
                     {!enrolled ? (
                         <CourseFeatures course={course} handlePlay={handlePlay} />
                     ) : (
-                        <CourseContent course={course} />
+                        <DeskTabs>
+                            <CourseModules
+                                // setSelectedTitle={setSelectedTitle}
+                                setSelectedVideo={(url) => {
+                                    setSelectedVideo(url)
+                                    setShowPlayer(true)
+                                }}
+                                setSelectedTitle={(title) => {
+                                    setSelectedTitle(title)
+                                    setShowPlayer(true)
+                                }}
+                                enrolled={enrolled}
+                                course={course}
+                            />
+                        </DeskTabs>
                     )}
                 </Right>
             </HeaderContainer>
