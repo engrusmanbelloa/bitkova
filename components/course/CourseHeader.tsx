@@ -9,6 +9,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import ReactPlayer from "react-player/lazy"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
+import GuestCourseTabs from "@/components/course/GuestCourseTab"
 import CourseModules from "@/components/course/CourseModules"
 import extractPreviewVideo from "@/config/ExtractPreview"
 import { featuredCourses } from "@/data"
@@ -153,19 +154,16 @@ interface CourseProps {
 
 export default function CourseHeader({ course }: CourseProps) {
     const [showPlayer, setShowPlayer] = useState(false)
+    const [enrolled, setEnrolled] = useState(true)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
     const courses = featuredCourses
     const limit = 8
-    const url = "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX"
     const previewVideoUrl = extractPreviewVideo(course.modules)
-    const enrolled = true
 
-    const handlePlay = () => setShowPlayer(true)
-    const handleVideoSelect = (url: string, title: string) => {
-        setSelectedTitle(title)
-        setSelectedVideo(url)
+    const handlePlay = () => {
         setShowPlayer(true)
+        console.log(previewVideoUrl)
     }
 
     return (
@@ -196,6 +194,50 @@ export default function CourseHeader({ course }: CourseProps) {
                     </ActionsDiv>
                     <CourseImage>
                         {!showPlayer ? (
+                            <>
+                                <Image src={course.image} alt={course.title} fill priority />
+                                <PlayerBtn onClick={handlePlay} />
+                            </>
+                        ) : selectedVideo ? (
+                            <Player
+                                url={selectedVideo}
+                                playing
+                                controls
+                                width="100%"
+                                height="100%"
+                                config={{
+                                    youtube: {
+                                        playerVars: {
+                                            modestbranding: 1,
+                                            rel: 0,
+                                            iv_load_policy: 3,
+                                        },
+                                    },
+                                }}
+                            />
+                        ) : previewVideoUrl ? (
+                            <Player
+                                url={previewVideoUrl}
+                                playing
+                                controls
+                                width="100%"
+                                height="100%"
+                                config={{
+                                    youtube: {
+                                        playerVars: {
+                                            modestbranding: 1,
+                                            rel: 0,
+                                            iv_load_policy: 3,
+                                        },
+                                    },
+                                }}
+                            />
+                        ) : (
+                            <div style={{ padding: "20px", textAlign: "center" }}>
+                                No preview video available.
+                            </div>
+                        )}
+                        {/* {!showPlayer ? (
                             <>
                                 <Image
                                     src={course.image}
@@ -245,14 +287,23 @@ export default function CourseHeader({ course }: CourseProps) {
                                 width="100%"
                                 height="100%"
                             />
-                        ) : null}
+                        ) : null} */}
                     </CourseImage>
-                    <CourseTabs
-                        setSelectedTitle={setSelectedTitle}
-                        setSelectedVideo={setSelectedVideo}
-                        enrolled={enrolled}
-                        course={course}
-                    />
+                    {enrolled ? (
+                        <CourseTabs
+                            setSelectedTitle={setSelectedTitle}
+                            setSelectedVideo={setSelectedVideo}
+                            enrolled={enrolled}
+                            course={course}
+                        />
+                    ) : (
+                        <GuestCourseTabs
+                            setSelectedTitle={setSelectedTitle}
+                            setSelectedVideo={setSelectedVideo}
+                            enrolled={enrolled}
+                            course={course}
+                        />
+                    )}
                 </Left>
                 <Right>
                     {!enrolled ? (

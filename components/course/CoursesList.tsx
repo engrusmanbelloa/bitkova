@@ -9,6 +9,7 @@ import StarHalfIcon from "@mui/icons-material/StarHalf"
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
 import "animate.css/animate.min.css"
 import { featuredCourses } from "@/data"
+import { formatPrice } from "@/config/FormatPrice"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
@@ -158,10 +159,6 @@ export default function CoursesList(props: {
     const { courses, limit, title, coursesPg, $display } = props
     const [coursesToDisplay, setCoursesToDisplay] = useState([])
     const main = true
-
-    const formatPrice = (price: number): string => {
-        return price > 0 ? `₦${price.toLocaleString("en-US")}` : "Free"
-    }
 
     return (
         <Container>

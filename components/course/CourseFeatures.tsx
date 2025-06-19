@@ -6,6 +6,7 @@ import Rating from "@mui/material/Rating"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
+import { formatPrice } from "@/config/FormatPrice"
 import { mobile, ipad } from "@/responsive"
 import { CourseType } from "@/types"
 
@@ -135,7 +136,8 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
     return (
         <>
             <Top>
-                <Price>{course.price}</Price>
+                {/* <Price>{course.price}</Price> */}
+                <Price>{formatPrice(course.price)}</Price>
                 <Button>Buy Now</Button>
             </Top>
             {/* Course Features */}

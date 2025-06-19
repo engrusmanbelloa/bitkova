@@ -5,13 +5,14 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
-import CertificateVerifier from "@/components/course/CertificateVerifier"
-import { CourseType, VideoSelectionProps } from "@/types"
+import { formatPrice } from "@/config/FormatPrice"
+import { CourseType } from "@/types"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Box)`
     display: flex;
     flex-direction: column;
-    margin: 20px auto 0px;
+    margin: 10px auto 0px;
     padding: 0px;
 `
 const TabContainer = styled(Box)`
@@ -25,6 +26,18 @@ const TabLabel = styled(Tab)`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
     text-transform: capitalize;
+`
+const ModuleTabLabel = styled(Tab)`
+    display: none;
+    font-size: 18px;
+    font-weight: 500;
+    color: ${(props) => props.theme.palette.common.black};
+    text-transform: capitalize;
+    ${ipad(
+        (props: any) => `
+            display: inline;
+        `,
+    )}
 `
 const SectionTitle = styled.h2`
     margin-bottom: 15px;
@@ -49,8 +62,8 @@ interface TabPanelProps {
 interface CourseProps {
     course: CourseType
     enrolled: boolean
-    setSelectedTitle: () => void
-    setSelectedVideo: () => void
+    setSelectedVideo: (url: string) => void
+    setSelectedTitle: (title: string) => void
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -68,7 +81,6 @@ function CustomTabPanel(props: TabPanelProps) {
         </div>
     )
 }
-
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
@@ -76,11 +88,13 @@ function a11yProps(index: number) {
     }
 }
 
-// export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
-export default function GuestCourseTab({ course, enrolled }: CourseProps) {
+export default function GuestCourseTab({
+    course,
+    setSelectedTitle,
+    setSelectedVideo,
+    enrolled,
+}: CourseProps) {
     const [value, setValue] = useState(0)
-    const [selectedVideo, setSelectedVideo] = useState<string | null>(null)
-    const [selectedTitle, setSelectedTitle] = useState<string | null>(null)
 
     const handleChange = (event: SyntheticEvent, newValue: number) => {
         setValue(newValue)
@@ -92,13 +106,18 @@ export default function GuestCourseTab({ course, enrolled }: CourseProps) {
                 <TabsItem value={value} onChange={handleChange} aria-label="basic tabs example">
                     <TabLabel label="Modules" {...a11yProps(0)} />
                     <TabLabel label="Course detail" {...a11yProps(1)} />
-                    <TabLabel label="Student Reviews" {...a11yProps(2)} />
+                    <TabLabel label="Reviews" {...a11yProps(2)} />
                 </TabsItem>
             </TabContainer>
             {/* Course detail section */}
             <CustomTabPanel value={value} index={0}>
                 <SectionTitle>Course Modules</SectionTitle>
-                <CourseModules enrolled={enrolled} course={course} />
+                <CourseModules
+                    setSelectedTitle={setSelectedTitle}
+                    setSelectedVideo={setSelectedVideo}
+                    enrolled={enrolled}
+                    course={course}
+                />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <SectionTitle>About Course</SectionTitle>
@@ -110,7 +129,7 @@ export default function GuestCourseTab({ course, enrolled }: CourseProps) {
                     </BulletList>
                 ))}
             </CustomTabPanel>
-            <CustomTabPanel value={value} index={3}>
+            <CustomTabPanel value={value} index={2}>
                 {course.review.map((item, i) => (
                     <div key={i}>
                         <p>
