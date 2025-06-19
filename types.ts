@@ -25,7 +25,7 @@ export interface CourseType {
         id: number
         title: string
         content: string[]
-        links: {}[]
+        links: Record<string, string>
     }[]
     review: {
         id: number
@@ -33,4 +33,11 @@ export interface CourseType {
         comment: string
         Name: string
     }[]
+}
+
+export interface VideoSelectionProps {
+    url: string
+    title: string
+    setSelectedVideo: (url: string) => void
+    setSelectedTitle: (title: string) => void
 }
