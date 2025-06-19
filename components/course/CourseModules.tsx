@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import LockIcon from "@mui/icons-material/Lock"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import SmartDisplayIcon from "@mui/icons-material/SmartDisplay"
+import YouTubeIcon from "@mui/icons-material/YouTube"
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
@@ -33,7 +34,7 @@ const RoundCheckBox = styled(RadioButtonUncheckedIcon)`
     right: 15px;
     cursor: pointer;
 `
-const Playbtn = styled(PlayArrowIcon)`
+const Playbtn = styled(YouTubeIcon)`
     color: ${(props) => props.theme.mobile.offWhite};
     font-size: 30px;
     cursor: pointer;

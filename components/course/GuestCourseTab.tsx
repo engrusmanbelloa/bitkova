@@ -5,7 +5,7 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
-import CertificateVerifier from "@/components/course/CertificateVerifier"
+import { formatPrice } from "@/config/FormatPrice"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
@@ -88,8 +88,7 @@ function a11yProps(index: number) {
     }
 }
 
-// export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
-export default function GuestCourseTabs({
+export default function GuestCourseTab({
     course,
     setSelectedTitle,
     setSelectedVideo,
@@ -107,7 +106,7 @@ export default function GuestCourseTabs({
                 <TabsItem value={value} onChange={handleChange} aria-label="basic tabs example">
                     <TabLabel label="Modules" {...a11yProps(0)} />
                     <TabLabel label="Course detail" {...a11yProps(1)} />
-                    <TabLabel label="Certificate" {...a11yProps(2)} />
+                    <TabLabel label="Reviews" {...a11yProps(2)} />
                 </TabsItem>
             </TabContainer>
             {/* Course detail section */}
@@ -131,7 +130,14 @@ export default function GuestCourseTabs({
                 ))}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <CertificateVerifier />
+                {course.review.map((item, i) => (
+                    <div key={i}>
+                        <p>
+                            <strong>{item.Name}</strong> - {item.stars} stars
+                        </p>
+                        <p>{item.comment}</p>
+                    </div>
+                ))}
             </CustomTabPanel>
         </Container>
     )
