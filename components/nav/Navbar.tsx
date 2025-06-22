@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import Slide from "@mui/material/Slide"
-import OutlinedInput from "@mui/material/OutlinedInput"
 import IconButton from "@mui/material/IconButton"
 import { TransitionProps } from "@mui/material/transitions"
 import SearchIcon from "@mui/icons-material/Search"
@@ -23,8 +22,8 @@ import NotifyModal from "@/components/auth/NotifyModal"
 import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
-import { initializeApp } from "firebase/app"
-import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
+import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
+import { auth } from "@/firebase/firebaseConfig"
 
 // containers section
 const Container = styled.section`
@@ -273,18 +272,6 @@ export default function Navbar() {
             title: "My Learning",
         },
     ]
-    const firebaseConfig = {
-        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
-        authDomain: "bitkova-digital-hub.firebaseapp.com",
-        projectId: "bitkova-digital-hub",
-        storageBucket: "bitkova-digital-hub.firebasestorage.app",
-        messagingSenderId: "541818898111",
-        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
-        measurementId: "G-STF7K5WZFX",
-    }
-    const app = initializeApp(firebaseConfig)
-    const auth = getAuth(app)
-
     // Handle user email verification
     const handleSendVerification = async () => {
         try {

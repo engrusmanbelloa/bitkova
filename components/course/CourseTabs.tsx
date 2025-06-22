@@ -64,6 +64,7 @@ interface CourseProps {
     enrolled: boolean
     setSelectedVideo: (url: string) => void
     setSelectedTitle: (title: string) => void
+    completedVideos: string[]
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -94,6 +95,7 @@ export default function CourseTabs({
     setSelectedTitle,
     setSelectedVideo,
     enrolled,
+    completedVideos,
 }: CourseProps) {
     const [value, setValue] = useState(0)
 
@@ -118,6 +120,7 @@ export default function CourseTabs({
                     setSelectedVideo={setSelectedVideo}
                     enrolled={enrolled}
                     course={course}
+                    completedVideos={completedVideos}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>

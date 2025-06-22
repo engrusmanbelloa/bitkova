@@ -1,6 +1,9 @@
 "use client"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
+import { useEffect } from "react"
+import { onAuthStateChanged, getAuth } from "firebase/auth"
+import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
 
 const HeaderContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -82,7 +85,6 @@ export default function DashboardHeader({ user }: any) {
         <HeaderContainer>
             {/* Avatar with User Initials */}
             <Avatar>{user.initials}</Avatar>
-
             {/* Greeting Message */}
             <UserInfo>
                 <Greeting>Hello,</Greeting>
