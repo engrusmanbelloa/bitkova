@@ -17,7 +17,7 @@ export interface User {
     id: string
     name: string
     email: string
-    type: "student" | "instructor" | "admin"
+    type: "student" | "instructor" | "admin" | "guest"
     username: string
     phoneNumber: string
     skill: string

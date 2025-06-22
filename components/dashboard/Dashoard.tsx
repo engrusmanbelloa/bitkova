@@ -5,6 +5,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
 import DashboardOverview from "@/components/dashboard/DashboardOverview"
 import ProfileSection from "@/components/dashboard/ProfileSection"
+import ProfileForm from "@/components/dashboard/Settings"
 import NoDataAvailable from "./NoData"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
@@ -123,7 +124,7 @@ export default function Dashboard({ user }: DashboardProps) {
                     {activeItem === "settings" && (
                         <>
                             <Title>Settings</Title>
-                            <NoDataAvailable comment="Comming Soon" />
+                            <ProfileForm />
                         </>
                     )}
                 </ContentContainer>

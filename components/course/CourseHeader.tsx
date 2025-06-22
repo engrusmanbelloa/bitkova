@@ -157,6 +157,8 @@ export default function CourseHeader({ course }: CourseProps) {
     const [enrolled, setEnrolled] = useState(true)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
+    const [completedVideos, setCompletedVideos] = useState<string[]>([])
+
     const courses = featuredCourses
     const limit = 8
     const previewVideoUrl = extractPreviewVideo(course.modules)
@@ -205,6 +207,11 @@ export default function CourseHeader({ course }: CourseProps) {
                                 controls
                                 width="100%"
                                 height="100%"
+                                onEnded={() => {
+                                    if (!completedVideos.includes(selectedTitle)) {
+                                        setCompletedVideos((prev) => [...prev, selectedTitle])
+                                    }
+                                }}
                                 config={{
                                     youtube: {
                                         playerVars: {
@@ -237,57 +244,6 @@ export default function CourseHeader({ course }: CourseProps) {
                                 No preview video available.
                             </div>
                         )}
-                        {/* {!showPlayer ? (
-                            <>
-                                <Image
-                                    src={course.image}
-                                    alt={course.title}
-                                    fill={true}
-                                    priority={true}
-                                />
-                                <PlayerBtn onClick={handlePlay} />
-                            </>
-                        ) : !enrolled ? (
-                            <Player
-                                config={{
-                                    youtube: {
-                                        playerVars: {
-                                            modestbranding: 1,
-                                            rel: 0,
-                                            iv_load_policy: 3,
-                                            disablekb: 1,
-                                            showinfo: 0,
-                                            controls: 1,
-                                        },
-                                    },
-                                }}
-                                url={previewVideoUrl}
-                                controls
-                                playing
-                                width="100%"
-                                height="100%"
-                            />
-                        ) : selectedVideo ? (
-                            <Player
-                                config={{
-                                    youtube: {
-                                        playerVars: {
-                                            modestbranding: 1,
-                                            rel: 0,
-                                            iv_load_policy: 3,
-                                            disablekb: 1,
-                                            showinfo: 0,
-                                            controls: 1,
-                                        },
-                                    },
-                                }}
-                                url={selectedVideo}
-                                controls
-                                playing
-                                width="100%"
-                                height="100%"
-                            />
-                        ) : null} */}
                     </CourseImage>
                     {enrolled ? (
                         <CourseTabs
@@ -295,6 +251,7 @@ export default function CourseHeader({ course }: CourseProps) {
                             setSelectedVideo={setSelectedVideo}
                             enrolled={enrolled}
                             course={course}
+                            completedVideos={completedVideos}
                         />
                     ) : (
                         <GuestCourseTabs
@@ -322,6 +279,7 @@ export default function CourseHeader({ course }: CourseProps) {
                                 }}
                                 enrolled={enrolled}
                                 course={course}
+                                completedVideos={completedVideos}
                             />
                         </DeskTabs>
                     )}

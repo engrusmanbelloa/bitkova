@@ -1,17 +1,14 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import LockIcon from "@mui/icons-material/Lock"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import SmartDisplayIcon from "@mui/icons-material/SmartDisplay"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import YouTubeIcon from "@mui/icons-material/YouTube"
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked"
 import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
-import { boolean } from "zod"
 
 const ModuleHeader = styled.div`
     padding: 5px;
@@ -28,7 +25,7 @@ const ModuleContent = styled.div`
     justify-content: flex-start;
     gap: 8px;
 `
-const RoundCheckBox = styled(RadioButtonUncheckedIcon)`
+const RoundCheckBox = styled(CheckCircleIcon)`
     color: ${(props) => props.theme.mobile.offWhite};
     position: absolute;
     right: 15px;
@@ -44,12 +41,14 @@ interface CourseProps {
     enrolled: boolean
     setSelectedVideo: (url: string) => void
     setSelectedTitle: (title: string) => void
+    completedVideos: string[]
 }
 
 export default function CourseModules({
     course,
     setSelectedTitle,
     setSelectedVideo,
+    completedVideos,
     enrolled,
 }: CourseProps) {
     const handleSelectVideo = (url: string, title: string) => {
@@ -87,7 +86,13 @@ export default function CourseModules({
                                         />
                                     )}
                                     {title}
-                                    <RoundCheckBox />
+                                    {completedVideos.includes(title) ? (
+                                        <RoundCheckBox style={{ color: "#0072ff" }} />
+                                    ) : (
+                                        <RoundCheckBox />
+                                    )}
+
+                                    {/* <RoundCheckBox /> */}
                                 </ModuleContent>
                             </AccordionDetails>
                         ))}
