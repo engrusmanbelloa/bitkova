@@ -6,7 +6,6 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 import { auth } from "@/firebase/firebaseConfig"
-
 import { mobile, ipad } from "@/responsive"
 
 const AvatarContainer = styled.div`
@@ -82,12 +81,21 @@ export default function NavAvatar({ user }: any) {
         return null
     }
     // console.log("Received User name for avatar: ", user.name)
-    const getInitials = (name: string): string => {
-        const words = name.split(" ")
+    const getInitials = (nameOrEmail: string): string => {
+        if (!nameOrEmail) return "GU"
+        if (nameOrEmail.includes("@")) return nameOrEmail.slice(0, 2).toUpperCase()
+
+        const words = nameOrEmail.trim().split(" ")
         return words.length > 1
             ? `${words[0][0]}${words[1][0]}`.toUpperCase()
-            : `${words[0][0]}${words[0][1]}`.toUpperCase()
+            : nameOrEmail.slice(0, 2).toUpperCase()
     }
+    // const getInitials = (name: string): string => {
+    //     const words = name.split(" ")
+    //     return words.length > 1
+    //         ? `${words[0][0]}${words[1][0]}`.toUpperCase()
+    //         : `${words[0][0]}${words[0][1]}`.toUpperCase()
+    // }
     const initials = getInitials(user)
 
     // SignOut

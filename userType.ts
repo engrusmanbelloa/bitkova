@@ -17,7 +17,7 @@ export interface User {
     id: string
     name: string
     email: string
-    type: "student" | "instructor" | "admin" | "guest"
+    role: "student" | "instructor" | "admin" | "guest"
     username: string
     phoneNumber: string
     skill: string
@@ -35,7 +35,7 @@ export const users: User[] = [
         id: "user1",
         name: "Usman Bello Abdullahi",
         email: "usman@example.com",
-        type: "student",
+        role: "student",
         username: "usmanbello",
         phoneNumber: "+234 80361 00001",
         skill: "Blockchain Developer",
@@ -79,7 +79,7 @@ export const users: User[] = [
         id: "user2",
         name: "Mahmoud Muhammad Sardauna",
         email: "abudanbwai@bitkova.com",
-        type: "instructor",
+        role: "instructor",
         username: "Abudanbwai",
         phoneNumber: "+234 80361 07361",
         skill: "Danbaiwa",

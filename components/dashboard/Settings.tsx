@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import ProfileForm from "@/components/dashboard/ProfileFormTab"
+import NoDataAvailable from "./NoData"
 
 const Container = styled.div`
     max-width: 800px;
@@ -78,8 +79,8 @@ export default function Settings() {
             </TabsWrapper>
 
             {activeTab === "profile" && <ProfileForm />}
-            {activeTab === "password" && <>Comming Soon</>}
-            {activeTab === "social" && <>Comming Soon</>}
+            {activeTab === "password" && <NoDataAvailable comment="Comming Soon" />}
+            {activeTab === "social" && <NoDataAvailable comment="Comming Soon" />}
         </Container>
     )
 }

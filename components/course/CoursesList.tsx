@@ -212,10 +212,7 @@ export default function CoursesList(props: {
                                         <PriceBtn
                                             $priceBtn="PriceBtn"
                                             type="button"
-                                            onClick={
-                                                () => router.push(`/courses/${course._id}`)
-                                                // router.push(`/single-course/${course._id}
-                                            }
+                                            onClick={() => router.push(`/courses/${course._id}`)}
                                         >
                                             Learn more
                                         </PriceBtn>

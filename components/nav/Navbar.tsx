@@ -24,6 +24,7 @@ import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { auth } from "@/firebase/firebaseConfig"
+import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
 
 // containers section
 const Container = styled.section`
@@ -289,7 +290,6 @@ export default function Navbar() {
             alert("Failed to resend verification email. Please try again later.")
         }
     }
-
     // Check if the user confirmed their email
     const handleCheckVerification = async () => {
         try {
@@ -300,8 +300,9 @@ export default function Navbar() {
                     setSentVerification(false)
                     setUserLoggedIn(true)
                     setNotifyModalOpen(false)
+                    await createOrUpdateUserDoc(auth.currentUser)
                     alert("Email verification successful")
-                    // console.log(auth.currentUser.emailVerified)
+                    console.log(auth.currentUser)
                 } else {
                     alert("Email not verified. Please verify your email.")
                     // console.log(auth.currentUser.emailVerified)
@@ -424,7 +425,9 @@ export default function Navbar() {
                                         <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
                                     </IconButton>
                                 </CartsContainer>
-                                <NavAvatar user={auth.currentUser.displayName} />
+                                <NavAvatar
+                                    user={auth.currentUser.displayName || auth.currentUser.email}
+                                />
                             </>
                         ) : (
                             <>
@@ -516,7 +519,7 @@ export default function Navbar() {
                             {toggleMenu && auth.currentUser && auth.currentUser.emailVerified ? (
                                 <DropdownMenu
                                     handleSingUpOpen={handleSignInOpen}
-                                    user={auth.currentUser.displayName}
+                                    user={auth.currentUser.displayName || auth.currentUser.email}
                                     closeMenu={() => setToggleMenu(false)}
                                 />
                             ) : (

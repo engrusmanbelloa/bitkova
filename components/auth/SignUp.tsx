@@ -5,13 +5,14 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
+import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
+import { auth } from "@/firebase/firebaseConfig"
 import {
-    getAuth,
+    getAdditionalUserInfo,
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
-import { initializeApp } from "firebase/app"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -167,19 +168,6 @@ export default function SignUp({
             setPasswordMismatchError("")
         }
     }
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
-        authDomain: "bitkova-digital-hub.firebaseapp.com",
-        projectId: "bitkova-digital-hub",
-        storageBucket: "bitkova-digital-hub.firebasestorage.app",
-        messagingSenderId: "541818898111",
-        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
-        measurementId: "G-STF7K5WZFX",
-    }
-    const app = initializeApp(firebaseConfig)
-    const auth = getAuth(app)
-
     // Sign up user with email and password then google
     const handleSignUp = async (event: any) => {
         event.preventDefault()
@@ -192,7 +180,7 @@ export default function SignUp({
                 handleClose()
             }, 3000)
             // alert(user.email + " Account created successfully")
-            console.log(user)
+            // console.log(user)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
@@ -212,12 +200,21 @@ export default function SignUp({
             const provider = new GoogleAuthProvider()
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
+
+            // Check if it's a new user
+            const info = getAdditionalUserInfo(userCredential)
+            await user.getIdToken(true)
+            console.log("Checking if user is new...", info?.isNewUser)
+            if (info?.isNewUser) {
+                await createOrUpdateUserDoc(user)
+                alert(user.email + " Account created successfully")
+            }
             setSignUpStatus("success")
             setTimeout(() => {
                 handleClose()
             }, 1000)
-            // alert(user.email + " Account created successfully")
-            // console.log(user)
+            alert(user.email + " Account created successfully")
+            console.log(userCredential, info)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message

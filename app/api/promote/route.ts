@@ -1,4 +1,3 @@
-// /app/api/promote/route.ts (App Router structure)
 import { NextRequest, NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
 import { adminApp } from "@/firebase/admin"

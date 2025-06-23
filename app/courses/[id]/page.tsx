@@ -18,8 +18,6 @@ export default async function Course({ params }: { params: Promise<{ id: string 
     if (!course) {
         redirect("/")
     }
-    const price = course.price > 0 ? "N" + course.price.toLocaleString("en-US") : "Free"
-
     // get the course for the user using the id
     // const course = await fetchCourse(id)
 
