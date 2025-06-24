@@ -204,7 +204,7 @@ export default function SignUp({
             // Check if it's a new user
             const info = getAdditionalUserInfo(userCredential)
             await user.getIdToken(true)
-            console.log("Checking if user is new...", info?.isNewUser)
+            // console.log("Checking if user is new...", info?.isNewUser)
             if (info?.isNewUser) {
                 await createOrUpdateUserDoc(user)
                 alert(user.email + " Account created successfully")

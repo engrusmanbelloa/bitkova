@@ -192,6 +192,16 @@ export default function SignIn({
             const provider = new GoogleAuthProvider()
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
+            const idToken = await user.getIdToken()
+            // console.log("id token is: ", idToken)
+            const res = await fetch("/api/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idToken }),
+                credentials: "include",
+            })
+            const data = await res.json()
+            console.log("SESSION SET:", data)
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()

@@ -9,6 +9,7 @@
             "@/styles/*": ["styles/*"],
             "@/config/*": ["config/*"],
             "@/firebase/*": ["firebase/*"],
+            "@/utils/*": ["app/utils/*"],
             "@/models/*": ["app/api/models/*"],
             "@/lib/*": ["app/api/auth/lib/*"],
             "@/*": ["./*"]

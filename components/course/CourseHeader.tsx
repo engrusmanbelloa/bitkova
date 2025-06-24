@@ -259,6 +259,7 @@ export default function CourseHeader({ course }: CourseProps) {
                             setSelectedVideo={setSelectedVideo}
                             enrolled={enrolled}
                             course={course}
+                            completedVideos={completedVideos}
                         />
                     )}
                 </Left>
