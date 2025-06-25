@@ -1,27 +1,37 @@
 // app/api/set-claims/route.ts
-import { NextResponse } from "next/server"
-import { adminAuth } from "@/utils/admin" // or wherever your admin SDK is initialized
+import { NextRequest, NextResponse } from "next/server"
+import { adminAuth, adminDb } from "@/utils/admin"
 
-export async function POST(req: Request) {
+const SUPER_ADMIN_EMAIL = "usmanbelloa@gmail.com"
+
+export async function POST(req: NextRequest) {
+    const body = await req.json()
+    const { targetEmail, role, requesterEmail } = body
+
+    if (!targetEmail || !role || !requesterEmail) {
+        return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
+
+    if (requesterEmail !== SUPER_ADMIN_EMAIL) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+    }
+
     try {
-        const body = await req.json()
-        const { email, role } = body
+        // 1. Get user by email
+        const user = await adminAuth.getUserByEmail(targetEmail)
 
-        if (!email || !role) {
-            return NextResponse.json({ error: "Missing email or role" }, { status: 400 })
-        }
-
-        const user = await adminAuth.getUserByEmail(email)
-
-        let claims: { [key: string]: any } = user.customClaims || {}
-        claims[role] = true // e.g., { admin: true } or { instructor: true }
-
+        // 2. Update custom claims
+        const claims = { ...user.customClaims, [role]: true }
         await adminAuth.setCustomUserClaims(user.uid, claims)
 
-        return NextResponse.json({
-            message: `Claim '${role}' added to ${email}`,
+        // 3. Update Firestore user document
+        await adminDb.collection("users").doc(user.uid).update({
+            role: role, // e.g., "admin" or "instructor"
         })
+
+        return NextResponse.json({ message: `Role '${role}' granted to ${targetEmail}` })
     } catch (error: any) {
-        return NextResponse.json({ error: error?.message || "Unexpected error" }, { status: 500 })
+        console.error("SetClaims Error:", error)
+        return NextResponse.json({ error: error.message }, { status: 500 })
     }
 }

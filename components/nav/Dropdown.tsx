@@ -6,6 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import LoginIcon from "@mui/icons-material/Login"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { initializeApp } from "firebase/app"
+import { auth } from "@/firebase/firebaseConfig"
 
 const DropdownContent = styled.ul<{ $isVisible: boolean }>`
     position: absolute;
@@ -55,7 +56,7 @@ export default function DropdownMenu({
 }) {
     const [isOpen, setIsOpen] = useState(true)
     if (!user) {
-        console.log("User or name is missing, showing default avatar.")
+        // console.log("User or name is missing, showing default avatar.")
         return (
             <DropdownContent $isVisible={isOpen}>
                 <DropdownItem
@@ -71,21 +72,19 @@ export default function DropdownMenu({
         )
     }
     // SignOut
-    const handleSignOut = () => {
-        setIsOpen(!isOpen)
-        signOut(auth)
+    async function handleSignOut() {
+        try {
+            setIsOpen(!isOpen)
+            signOut(auth)
+            await fetch("/api/session", {
+                method: "DELETE",
+            })
+            console.log("Session deleted")
+            window.location.href = "/"
+        } catch (error) {
+            console.error("Error signing out:", error)
+        }
     }
-    const firebaseConfig = {
-        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
-        authDomain: "bitkova-digital-hub.firebaseapp.com",
-        projectId: "bitkova-digital-hub",
-        storageBucket: "bitkova-digital-hub.firebasestorage.app",
-        messagingSenderId: "541818898111",
-        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
-        measurementId: "G-STF7K5WZFX",
-    }
-    const app = initializeApp(firebaseConfig)
-    const auth = getAuth(app)
 
     // menu items array
     const menuList = [

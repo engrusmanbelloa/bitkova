@@ -2,23 +2,40 @@ import React from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
+
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     padding: 20px;
     border-radius: 10px;
     margin: auto;
+    ${mobile(
+        (props: any) => `
+            padding: 5px;
+        `,
+    )}
 `
 const ProfileHeader = styled.h2`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
     margin: 0 0 20px 0;
     padding: 0;
+    ${mobile(
+        (props: any) => `
+            font-weight: 350;
+            margin: 0 0 10px 0;
+        `,
+    )}
 `
 const ProfileDetails = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    ${mobile(
+        (props: any) => `
+            gap: 5px;
+        `,
+    )}
 `
 const DetailRow = styled.div`
     display: flex;
@@ -30,9 +47,19 @@ const Label = styled.span`
     color: ${(props) => props.theme.palette.common.black};
     margin-right: 100px;
     width: 150px;
+    ${mobile(
+        (props: any) => `
+            margin-right: 50px;
+        `,
+    )}
 `
 const Value = styled.span`
     font-weight: 500;
+    ${mobile(
+        (props: any) => `
+           font-weight: 200;
+        `,
+    )}
 `
 interface DashboardProps {
     user: User

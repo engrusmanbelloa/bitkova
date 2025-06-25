@@ -203,12 +203,19 @@ export default function SignUp({
 
             // Check if it's a new user
             const info = getAdditionalUserInfo(userCredential)
-            await user.getIdToken(true)
+            await user.getIdToken(true) // force refresh
+            const idToken = await user.getIdToken()
             // console.log("Checking if user is new...", info?.isNewUser)
             if (info?.isNewUser) {
                 await createOrUpdateUserDoc(user)
                 alert(user.email + " Account created successfully")
             }
+            await fetch("/api/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idToken }),
+                credentials: "include",
+            })
             setSignUpStatus("success")
             setTimeout(() => {
                 handleClose()

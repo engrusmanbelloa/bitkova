@@ -212,8 +212,8 @@ export default function Navbar() {
             </Slide>
         )
     }
-
-    const handleSignInOpen = () => {
+    const handleSignInOpen = async () => {
+        // const handleSignInOpen = () => {
         if (!userLoggedIn) {
             setSignUp(false)
             setSignin(true)
@@ -301,6 +301,13 @@ export default function Navbar() {
                     setUserLoggedIn(true)
                     setNotifyModalOpen(false)
                     await createOrUpdateUserDoc(auth.currentUser)
+                    const idToken = await auth.currentUser.getIdToken()
+                    await fetch("/api/session", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ idToken }),
+                        credentials: "include",
+                    })
                     alert("Email verification successful")
                     console.log(auth.currentUser)
                 } else {
