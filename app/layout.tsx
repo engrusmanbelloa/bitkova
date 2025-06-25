@@ -9,7 +9,8 @@ import Navbar from "@/components/nav/Navbar"
 import Footer from "@/components/Footer"
 import { ipad, mobile } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
-
+import useNetworkStatus from "@/components/auth/useNetworkStatus"
+import { Toaster, toast } from "sonner"
 const Container = styled.div`
     width: 1440px;
     margin: 0 auto;
@@ -19,7 +20,43 @@ const Container = styled.div`
 `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    // const session = await auth()
+    const isOnline = useNetworkStatus()
+    useEffect(() => {
+        if (isOnline) {
+            toast.dismiss("offline")
+            toast.success("Back online!", { id: "online" })
+        } else {
+            toast.error("You are offline", {
+                id: "offline",
+                duration: Infinity,
+            })
+        }
+    }, [isOnline])
+
+    if (!isOnline) {
+        toast.error("You are offline. Please connect to the internet")
+        return (
+            <html lang="en">
+                <head>
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+                    />
+                </head>
+                <body>
+                    <Toaster
+                        position="top-center"
+                        toastOptions={{
+                            style: {
+                                background: "#356DF1",
+                                color: "#fff",
+                            },
+                        }}
+                    />
+                </body>
+            </html>
+        )
+    }
 
     return (
         <html lang="en">
@@ -43,6 +80,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     {children}
                                     <Footer />
                                 </Container>
+                                <Toaster
+                                    position="top-center"
+                                    toastOptions={{
+                                        style: {
+                                            background: "#356DF1",
+                                            color: "#fff",
+                                        },
+                                    }}
+                                />
                             </Suspense>
                         </AppRouterCacheProvider>
                     </ThemeProvider>

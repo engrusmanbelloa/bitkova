@@ -15,6 +15,7 @@ import {
     GoogleAuthProvider,
 } from "firebase/auth"
 import { auth } from "@/firebase/firebaseConfig"
+import { toast } from "sonner"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -162,18 +163,15 @@ export default function SignIn({
                 body: JSON.stringify({ idToken }),
                 credentials: "include",
             })
-            // const data = await res.json() the res deleted after debug just left the await
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()
             }, 1000)
             // alert(user.email + " Account created successfully")
-            // console.log(user)
             // console.log("user state persistence is: " + persistence)
         } catch (error: any) {
-            const errorCode = error.code
-            const errorMessage = error.message
             // console.log("Signing in error:", errorMessage, " ", errorCode)
+            toast.error("Sign In failed/invalid credential ")
             setSignInStatus("error")
             setTimeout(() => {
                 setSignInStatus("initial")
@@ -196,7 +194,7 @@ export default function SignIn({
                 body: JSON.stringify({ idToken }),
                 credentials: "include",
             })
-            // const data = await res.json() the res deleted after debug just the await
+            // await res.json() //the res deleted after debug just the await
             // console.log("SESSION SET:", data)
             setSignInStatus("success")
             setTimeout(() => {

@@ -1,47 +1,39 @@
-import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
-import { adminAuth, adminDb } from "@/utils/admin"
-import { getFirestore } from "firebase-admin/firestore"
+import { adminAuth } from "@/utils/admin"
+import { cookies } from "next/headers"
 
-export async function POST(req: Request) {
+const FIVE_DAYS = 60 * 60 * 24 * 5 * 1000
+
+export async function POST(req: NextRequest) {
     const body = await req.json()
-    const idToken = body?.idToken
+    const idToken = body.idToken
 
     if (!idToken) {
-        return NextResponse.json({ error: "Missing token" }, { status: 400 })
+        return NextResponse.json({ error: "Missing ID token" }, { status: 400 })
     }
 
     try {
-        const decodedToken = await adminAuth.verifyIdToken(idToken)
-        const uid = decodedToken.uid
+        const expiresIn = FIVE_DAYS
+        const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn })
 
-        // const userDocRef = adminDb.collection("users").doc(uid)
-        // const userSnap = await userDocRef.get()
-        // if (!userSnap.exists) {
-        //     return NextResponse.json({ error: "User doc not found" }, { status: 404 })
-        // }
-        // const userData = userSnap.data()
-        // if (decodedToken.admin) { /* grant admin access */ }
-
-        const res = NextResponse.json({ status: "success", user: idToken })
-        res.cookies.set("session", idToken, {
+        const response = NextResponse.json({ status: "success" })
+        response.cookies.set("session", sessionCookie, {
+            maxAge: expiresIn / 1000,
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24 * 5, // 5 days
             path: "/",
         })
-        return res
+
+        return response
     } catch (error) {
-        console.error("Session error:", error)
-        return NextResponse.json({ error: "Session error" }, { status: 500 })
+        console.error("Session cookie creation failed:", error)
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 }
 
 export async function DELETE() {
-    // Remove the session cookie
     const cookiesObj = await cookies()
     cookiesObj.delete("session")
     console.log("Session deleted....")
-
     return NextResponse.json({ status: "logged out" })
 }

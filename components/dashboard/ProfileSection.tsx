@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import { formatToDDMMYYYY } from "@/config/formatDate"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
@@ -65,13 +66,14 @@ interface DashboardProps {
     user: User
 }
 export default function ProfileSection({ user }: DashboardProps) {
+    const formattedDate = formatToDDMMYYYY(user.registrationDate)
     return (
         <Container>
             <ProfileHeader>Profile</ProfileHeader>
             <ProfileDetails>
                 <DetailRow>
                     <Label>Registration Date</Label>
-                    <Value>{user.registrationDate}</Value>
+                    <Value>{formattedDate}</Value>
                 </DetailRow>
                 <DetailRow>
                     <Label>Display Name</Label>
