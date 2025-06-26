@@ -23,8 +23,10 @@ import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth, app } from "@/firebase/firebaseConfig"
+import { getFirestore, doc, getDoc } from "firebase/firestore"
 import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
+import { useUserDoc } from "@/hooks/useUserDoc"
 import { toast } from "sonner"
 
 // containers section
@@ -194,7 +196,8 @@ export default function Navbar() {
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-
+    const [initials, setInitials] = useState("GU")
+    const { userDoc, loading } = useUserDoc()
     const main = "true"
     let login
 
@@ -432,9 +435,9 @@ export default function Navbar() {
                                         <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
                                     </IconButton>
                                 </CartsContainer>
-                                <NavAvatar
-                                    user={auth.currentUser.displayName || auth.currentUser.email}
-                                />
+                                {!loading
+                                    ? userDoc && <NavAvatar user={userDoc.name || userDoc.email} />
+                                    : null}
                             </>
                         ) : (
                             <>
@@ -523,21 +526,23 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
-                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified ? (
-                                <DropdownMenu
-                                    handleSingUpOpen={handleSignInOpen}
-                                    user={auth.currentUser.displayName || auth.currentUser.email}
-                                    closeMenu={() => setToggleMenu(false)}
-                                />
-                            ) : (
-                                toggleMenu && (
-                                    <DropdownMenu
-                                        user={false}
-                                        handleSingUpOpen={handleSignInOpen}
-                                        closeMenu={() => setToggleMenu(false)}
-                                    />
-                                )
-                            )}
+                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified
+                                ? !loading
+                                    ? userDoc && (
+                                          <DropdownMenu
+                                              handleSingUpOpen={handleSignInOpen}
+                                              closeMenu={() => setToggleMenu(false)}
+                                              user={userDoc.name || userDoc.email}
+                                          />
+                                      )
+                                    : null
+                                : toggleMenu && (
+                                      <DropdownMenu
+                                          user={false}
+                                          handleSingUpOpen={handleSignInOpen}
+                                          closeMenu={() => setToggleMenu(false)}
+                                      />
+                                  )}
                         </Toggle>
                     </Right>
                 </Wrapper>

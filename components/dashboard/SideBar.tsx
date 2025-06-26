@@ -58,7 +58,8 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
     const menuItems = [
         { id: "dashboard", icon: <DashboardIcon />, label: "Dashboard" },
         { id: "profile", icon: <AccountCircleIcon />, label: "My Profile" },
-        { id: "courses", icon: <SchoolIcon />, label: "Enrolled Courses" },
+        { id: "learning", icon: <SchoolIcon />, label: "My Learning" },
+        { id: "certificate", icon: <SchoolIcon />, label: "My Certificates" },
         { id: "wishlist", icon: <StarIcon />, label: "Wishlist" },
         { id: "quiz", icon: <QuizIcon />, label: "My Quiz Attempts" },
         { id: "history", icon: <HistoryIcon />, label: "Order History" },

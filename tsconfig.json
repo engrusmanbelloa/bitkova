@@ -12,6 +12,8 @@
             "@/utils/*": ["app/utils/*"],
             "@/models/*": ["app/api/models/*"],
             "@/lib/*": ["app/api/auth/lib/*"],
+            "@/session/*": ["app/api/session/*"],
+            "@/hooks/*": ["app/hooks/*"],
             "@/*": ["./*"]
         },
         "allowJs": true,

@@ -4,13 +4,18 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
+import { useRouter } from "next/navigation"
+import { Toaster, toast } from "sonner"
+import { signOut } from "firebase/auth"
 import Announcement from "@/components/Announcement"
 import Navbar from "@/components/nav/Navbar"
 import Footer from "@/components/Footer"
-import { ipad, mobile } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
-import { Toaster, toast } from "sonner"
+import { ipad, mobile } from "@/responsive"
+import { checkSessionValid } from "@/session/checkSession"
+import { auth } from "@/firebase/firebaseConfig"
+
 const Container = styled.div`
     width: 1440px;
     margin: 0 auto;
@@ -21,6 +26,32 @@ const Container = styled.div`
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()
+    const router = useRouter()
+    // Handle session expiration every 5 minutes
+    useEffect(() => {
+        const interval = setInterval(
+            async () => {
+                const valid = await checkSessionValid()
+                if (!valid) {
+                    try {
+                        signOut(auth)
+                        toast.warning("Session expired. Logging out...")
+                        await fetch("/api/session", {
+                            method: "DELETE",
+                        })
+                        console.log("Session deleted")
+                        router.push("/")
+                    } catch (error) {
+                        console.error("Error signing out:", error)
+                    }
+                }
+            },
+            1000 * 60 * 5,
+        ) // 5 minutes
+
+        return () => clearInterval(interval)
+    }, [router])
+    // Network status handler
     useEffect(() => {
         if (isOnline) {
             toast.dismiss("offline")
@@ -61,7 +92,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <head>
-                {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"

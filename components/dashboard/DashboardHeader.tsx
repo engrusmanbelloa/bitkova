@@ -30,7 +30,7 @@ const HeaderContainer = styled.div`
 const Avatar = styled.div`
     width: 70px;
     height: 70px;
-    background: #3b82f6;
+    background: ${(props) => props.theme.palette.primary.main};
     border-radius: 50%;
     display: flex;
     align-items: center;

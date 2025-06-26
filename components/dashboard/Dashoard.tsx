@@ -60,14 +60,12 @@ export default function Dashboard({ user }: DashboardProps) {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
 
-    // { name: 'Usman Bello Abdullahi', initials: 'UB' }
     const getInitials = (name: string): string => {
         const words = name.split(" ")
         return words.length > 1
             ? `${words[0][0]}${words[1][0]}`.toUpperCase()
             : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
-
     const initials = getInitials(user.name)
     const userData = { name: user.name, initials: initials }
     return (
@@ -85,9 +83,15 @@ export default function Dashboard({ user }: DashboardProps) {
                     {activeItem === "dashboard" && <DashboardOverview user={user} />}
                     {activeItem === "profile" && <ProfileSection user={user} />}
 
-                    {activeItem === "courses" && (
+                    {activeItem === "learning" && (
                         <>
                             <Title>My Learning</Title>
+                            <NoDataAvailable comment="Comming Soon" />
+                        </>
+                    )}
+                    {activeItem === "certificate" && (
+                        <>
+                            <Title>My Certificates</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
