@@ -17,7 +17,7 @@ export default async function createOrUpdateUserDoc(user: FirebaseUser) {
             id: user.uid,
             name: user.displayName || "Guest User",
             email: user.email || "",
-            type: "guest", // default type
+            role: "guest",
             username: user.displayName?.split(" ").join("").toLowerCase() || "guest",
             phoneNumber: user.phoneNumber || "",
             skill: "",

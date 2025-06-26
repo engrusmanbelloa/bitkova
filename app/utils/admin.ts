@@ -1,11 +1,19 @@
-import { initializeApp, applicationDefault, getApps } from "firebase-admin/app"
-// import { getAuth } from "firebase-admin/auth"
+import { initializeApp, applicationDefault, getApps, cert } from "firebase-admin/app"
+import { getFirestore } from "firebase-admin/firestore"
 import { getAuth as getAdminAuth } from "firebase-admin/auth"
 
-export const adminApp = getApps().length ? getApps()[0] : initializeApp()
-// const app = initializeApp()
-
+// ?.replace(/\\n/g, "\n"),
+const adminApp = getApps().length
+    ? getApps()[0]
+    : initializeApp({
+          credential: cert({
+              projectId: process.env.PROJECT_ID,
+              clientEmail: process.env.CLIENT_EMAIL,
+              privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, "\n"),
+          }),
+      })
 const adminAuth = getAdminAuth(adminApp)
+const adminDb = getFirestore(adminApp)
 
 export async function addCustomClaim(uid: string, role: "admin" | "instructor") {
     const user = await getAdminAuth().getUser(uid)
@@ -27,4 +35,4 @@ export async function removeCustomClaim(uid: string, role: "admin" | "instructor
     }
 }
 
-export { adminAuth }
+export { adminAuth, adminDb, adminApp }

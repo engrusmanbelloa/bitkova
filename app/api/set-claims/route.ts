@@ -1,25 +1,27 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { adminAuth } from "@/firebase/admin"
+// app/api/set-claims/route.ts
+import { NextResponse } from "next/server"
+import { adminAuth } from "@/utils/admin" // or wherever your admin SDK is initialized
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") return res.status(405).end()
-
-    const { email, role } = req.body
-
+export async function POST(req: Request) {
     try {
+        const body = await req.json()
+        const { email, role } = body
+
+        if (!email || !role) {
+            return NextResponse.json({ error: "Missing email or role" }, { status: 400 })
+        }
+
         const user = await adminAuth.getUserByEmail(email)
 
         let claims: { [key: string]: any } = user.customClaims || {}
-        claims[role] = true // e.g., admin, instructor
+        claims[role] = true // e.g., { admin: true } or { instructor: true }
 
         await adminAuth.setCustomUserClaims(user.uid, claims)
 
-        return res.status(200).json({ message: `Claim '${role}' added to ${email}` })
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return res.status(500).json({ error: error.message })
-        } else {
-            return res.status(500).json({ error: "An unexpected error occurred" })
-        }
+        return NextResponse.json({
+            message: `Claim '${role}' added to ${email}`,
+        })
+    } catch (error: any) {
+        return NextResponse.json({ error: error?.message || "Unexpected error" }, { status: 500 })
     }
 }

@@ -40,6 +40,7 @@ const ProfilePhoto = styled.div`
     border-radius: 50%;
     width: 80px;
     height: 80px;
+    cursor: pointer;
     overflow: hidden;
 `
 const Fields = styled.div`
@@ -83,7 +84,7 @@ const SaveButton = styled.button`
 interface ProfileFormProps {
     onSave: (data: FormData) => Promise<void>
 }
-export default function ProfileForm({ onSave }: ProfileFormProps) {
+export default function ProfileForm() {
     const [cover, setCover] = useState<string>("/cover.png")
     const [profile, setProfile] = useState<string>("/avater.png")
     const inputRef = useRef<HTMLInputElement>(null)

@@ -54,7 +54,6 @@ export default function DropdownMenu({
     closeMenu: () => void
 }) {
     const [isOpen, setIsOpen] = useState(true)
-    // { name: 'Usman Bello Abdullahi', initials: 'UB' }
     if (!user) {
         console.log("User or name is missing, showing default avatar.")
         return (
@@ -71,15 +70,6 @@ export default function DropdownMenu({
             </DropdownContent>
         )
     }
-    // console.log("Received User name for avatar: ", user.name)
-    const getInitials = (name: string): string => {
-        const words = name.split(" ")
-        return words.length > 1
-            ? `${words[0][0]}${words[1][0]}`.toUpperCase()
-            : `${words[0][0]}${words[0][1]}`.toUpperCase()
-    }
-    const initials = getInitials(user)
-
     // SignOut
     const handleSignOut = () => {
         setIsOpen(!isOpen)
