@@ -209,7 +209,7 @@ export default function SignUp({
                 await createOrUpdateUserDoc(user)
                 toast.success(user.email + " Account created successfully")
             }
-            await fetch("/api/session", {
+            await fetch("/api/auth/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ idToken }),

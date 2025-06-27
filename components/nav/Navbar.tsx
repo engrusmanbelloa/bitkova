@@ -306,7 +306,7 @@ export default function Navbar() {
                     setNotifyModalOpen(false)
                     await createOrUpdateUserDoc(auth.currentUser)
                     const idToken = await auth.currentUser.getIdToken()
-                    await fetch("/api/session", {
+                    await fetch("/api/auth/session", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ idToken }),
