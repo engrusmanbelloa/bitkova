@@ -1,7 +1,12 @@
-import React, { useState, useRef, ChangeEvent } from "react"
+import React, { useState, useRef, ChangeEvent, useEffect } from "react"
 import styled from "styled-components"
 import Image from "next/image"
+import { getAuth } from "firebase/auth"
+import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore"
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { mobile, ipad } from "@/responsive"
+import { Toaster, toast } from "sonner"
+import useNetworkStatus from "@/components/auth/useNetworkStatus"
 
 const Container = styled.div`
     padding: 10px;
@@ -85,13 +90,12 @@ interface ProfileFormProps {
     onSave: (data: FormData) => Promise<void>
 }
 export default function ProfileForm() {
+    const isOnline = useNetworkStatus()
     const [cover, setCover] = useState<string>("/cover.png")
     const [profile, setProfile] = useState<string>("/avater.png")
     const inputRef = useRef<HTMLInputElement>(null)
-
-    const formRef = useRef<HTMLFormElement>(null)
+    const [uid, setUid] = useState<string | null>(null)
     const [saving, setSaving] = useState(false)
-
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -101,10 +105,13 @@ export default function ProfileForm() {
         bio: "",
     })
 
+    const auth = getAuth()
+    const db = getFirestore()
+    const storage = getStorage()
+
     const handleImageClick = () => {
         inputRef.current?.click()
     }
-
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>, type: "cover" | "profile") => {
         const file = e.target.files?.[0]
         if (!file) return
@@ -119,20 +126,83 @@ export default function ProfileForm() {
         }
         reader.readAsDataURL(file)
     }
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
-
-    const handleSave = () => {
-        console.log("Saving profile:", form)
-        // TODO: Upload images and update user profile document in Firestore
+    const uploadImage = async (fileDataUrl: string, path: string) => {
+        const response = await fetch(fileDataUrl)
+        const blob = await response.blob()
+        const imageRef = ref(storage, path)
+        await uploadBytes(imageRef, blob)
+        return getDownloadURL(imageRef)
     }
+    const handleSave = async () => {
+        if (!isOnline) {
+            toast.error("You are offline. Please connect to the internet to save.")
+            return
+        }
+        if (!uid) return
 
+        setSaving(true)
+        toast.loading("Saving profile...")
+        try {
+            const userRef = doc(db, "users", uid)
+            const updates: any = {
+                name: `${form.firstName} ${form.lastName}`,
+                phoneNumber: form.phone,
+                skill: form.skill,
+                bio: form.bio,
+            }
+
+            if (cover.startsWith("data:")) {
+                const url = await uploadImage(cover, `users/${uid}/cover.jpg`)
+                updates.coverUrl = url
+            }
+            if (profile.startsWith("data:")) {
+                const url = await uploadImage(profile, `users/${uid}/profile.jpg`)
+                updates.profileUrl = url
+            }
+
+            await updateDoc(userRef, updates)
+            console.log("Profile updated successfully")
+            toast.dismiss()
+            toast.success("Profile updated successfully!")
+        } catch (error) {
+            console.error("Error saving profile:", error)
+            toast.dismiss()
+            toast.error("Failed to save profile.")
+        } finally {
+            setSaving(false)
+        }
+    }
+    useEffect(() => {
+        const user = auth.currentUser
+        if (user) {
+            setUid(user.uid)
+            const fetchUser = async () => {
+                const docRef = doc(db, "users", user.uid)
+                const docSnap = await getDoc(docRef)
+                if (docSnap.exists()) {
+                    const data = docSnap.data()
+                    setForm({
+                        firstName: data.name?.split(" ")[0] || "",
+                        lastName: data.name?.split(" ")[1] || "",
+                        email: data.email || "",
+                        phone: data.phoneNumber || "",
+                        skill: data.skill || "",
+                        bio: data.bio || "",
+                    })
+                    if (data.coverUrl) setCover(data.coverUrl)
+                    if (data.profileUrl) setProfile(data.profileUrl)
+                }
+            }
+            fetchUser()
+        }
+    }, [])
     return (
         <Container>
             <UploadContainer>
-                <Image src={cover} alt="Cover" layout="fill" />
+                <Image src={cover} alt="Cover" fill={true} />
                 <UploadButton htmlFor="coverUpload">Upload Cover Photo</UploadButton>
                 <input
                     id="coverUpload"

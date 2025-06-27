@@ -13,6 +13,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
+import { toast } from "sonner"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -147,7 +148,6 @@ export default function SignUp({
             setEmailError("")
         }
     }
-
     const handlePasswordChange = (event: any) => {
         const newPassword = event.target.value
         setPassword(newPassword)
@@ -159,7 +159,6 @@ export default function SignUp({
             setPasswordError("")
         }
     }
-
     const handleConfirmPasswordChange = (event: any) => {
         setConfirmPassword(event.target.value)
         if (password !== confirmPassword) {
@@ -179,13 +178,14 @@ export default function SignUp({
             setTimeout(() => {
                 handleClose()
             }, 3000)
-            // alert(user.email + " Account created successfully")
+            toast.success("Account created successfully!")
             // console.log(user)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
-            console.log("Error creating account:", errorMessage, " ", errorCode)
+            // console.log("Error creating account:", errorMessage, " ", errorCode)
             setSignUpStatus("error")
+            toast.error("Failed", errorMessage)
             setTimeout(() => {
                 setSignUpStatus("initial")
             }, 1000)
@@ -193,7 +193,6 @@ export default function SignUp({
             setIsLoading(false)
         }
     }
-
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
         try {
@@ -203,25 +202,30 @@ export default function SignUp({
 
             // Check if it's a new user
             const info = getAdditionalUserInfo(userCredential)
-            await user.getIdToken(true)
+            await user.getIdToken(true) // force refresh
+            const idToken = await user.getIdToken()
             // console.log("Checking if user is new...", info?.isNewUser)
             if (info?.isNewUser) {
                 await createOrUpdateUserDoc(user)
-                alert(user.email + " Account created successfully")
+                toast.success(user.email + " Account created successfully")
             }
+            await fetch("/api/auth/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idToken }),
+                credentials: "include",
+            })
             setSignUpStatus("success")
             setTimeout(() => {
                 handleClose()
             }, 1000)
-            alert(user.email + " Account created successfully")
-            console.log(userCredential, info)
+            // console.log(userCredential, info)
         } catch (error: any) {
             const errorCode = error.code
             const errorMessage = error.message
             if (error.code === "auth/account-exists-with-different-credential") {
-                // The pending Google credential.
-                // let pendingCred = error.credential
                 setSignUpStatus("Sign In error")
+                toast.error("error:", errorMessage)
                 // console.log("error:", errorMessage, " ", errorCode)
             }
             setTimeout(() => {

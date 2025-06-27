@@ -1,7 +1,6 @@
 import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
 import { adminAuth, adminDb } from "@/utils/admin"
-import { getFirestore } from "firebase-admin/firestore"
 
 export async function POST(req: Request) {
     const body = await req.json()
@@ -10,18 +9,8 @@ export async function POST(req: Request) {
     if (!idToken) {
         return NextResponse.json({ error: "Missing token" }, { status: 400 })
     }
-
     try {
-        const decodedToken = await adminAuth.verifyIdToken(idToken)
-        const uid = decodedToken.uid
-
-        // const userDocRef = adminDb.collection("users").doc(uid)
-        // const userSnap = await userDocRef.get()
-        // if (!userSnap.exists) {
-        //     return NextResponse.json({ error: "User doc not found" }, { status: 404 })
-        // }
-        // const userData = userSnap.data()
-        // if (decodedToken.admin) { /* grant admin access */ }
+        await adminAuth.verifyIdToken(idToken)
 
         const res = NextResponse.json({ status: "success", user: idToken })
         res.cookies.set("session", idToken, {

@@ -4,7 +4,6 @@ import styled from "styled-components"
 import Link from "next/link"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { initializeApp } from "firebase/app"
 import { auth } from "@/firebase/firebaseConfig"
 import { mobile, ipad } from "@/responsive"
 

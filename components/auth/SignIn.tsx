@@ -14,7 +14,8 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
-import { initializeApp } from "firebase/app"
+import { auth } from "@/firebase/firebaseConfig"
+import { toast } from "sonner"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -146,18 +147,6 @@ export default function SignIn({
     const [signInStatus, setSignInStatus] = useState("initial")
     const [rememberMe, setRememberMe] = useState(false)
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
-        authDomain: "bitkova-digital-hub.firebaseapp.com",
-        projectId: "bitkova-digital-hub",
-        storageBucket: "bitkova-digital-hub.firebasestorage.app",
-        messagingSenderId: "541818898111",
-        appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
-        measurementId: "G-STF7K5WZFX",
-    }
-    const app = initializeApp(firebaseConfig)
-    const auth = getAuth(app)
-
     // Sign in user with email and password then google
     const handleSignIn = async (event: any) => {
         event.preventDefault()
@@ -167,17 +156,22 @@ export default function SignIn({
             await setPersistence(auth, persistence)
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
+            const idToken = await user.getIdToken()
+            await fetch("/api/auth/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idToken }),
+                credentials: "include",
+            })
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()
             }, 1000)
             // alert(user.email + " Account created successfully")
-            // console.log(user)
             // console.log("user state persistence is: " + persistence)
         } catch (error: any) {
-            const errorCode = error.code
-            const errorMessage = error.message
             // console.log("Signing in error:", errorMessage, " ", errorCode)
+            toast.error("Sign In failed/invalid credential ")
             setSignInStatus("error")
             setTimeout(() => {
                 setSignInStatus("initial")
@@ -194,14 +188,14 @@ export default function SignIn({
             const user = userCredential.user
             const idToken = await user.getIdToken()
             // console.log("id token is: ", idToken)
-            const res = await fetch("/api/session", {
+            await fetch("/api/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ idToken }),
                 credentials: "include",
             })
-            const data = await res.json()
-            console.log("SESSION SET:", data)
+            // await res.json() //the res deleted after debug just the await
+            // console.log("SESSION SET:", data)
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()

@@ -1,82 +1,15 @@
-// const videoData = await cloudinary.v2.uploader.upload(video._writeStream.path, {
-            //   resource_type: 'video',
-            //   upload_preset: "courses_upload",
-            //   folder: `${courseTitle}/lesson_${i}/videos`,
-            // })
-            // lessonObj.videos.push({
-            //   name: video.originalFilename.slice(0, -4),
-            //   url: videoData.secure_url,
-            //   publicId: videoData.public_id,
-            // })
+await fetch("/api/set-claims", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        targetEmail: "someone@example.com",
+        role: "admin", // or "instructor"
+        requesterEmail: currentUser.email, // e.g., from Firebase
+    }),
+})
 
-            import { useState } from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Title = styled.h2`
-  font-size: 2rem;
-  margin-bottom: 1rem;
-`;
-
-const Desc = styled.p`
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  text-align: justify;
-`;
-
-const Button = styled.button`
-  background-color: #0070f3;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-`;
-
-const Intro = () => {
-  const [showFullDesc, setShowFullDesc] = useState(false);
-
-  const descWords = "To fill the need of individuals seeking in-demand crypto and blockchain skills to improve their standard of living and attaining financial freedom by providing excellent hands-on training for a wider variety of students by offering alternate solutions to conventional schooling utilizing current internet technologies and proven teaching practices implemented by a team of professionals in blockchain, e-commerce, forex, cryptocurrency, social media marketing and motion/graphics industries."
-    .split(" ");
-  const truncatedDesc = descWords.slice(0, 40).join(" ");
-  const fullDesc = descWords.join(" ");
-
-  const toggleDesc = () => {
-    setShowFullDesc(!showFullDesc);
-  };
-
-  return (
-    <Container>
-      <Title>Why Bitkova</Title>
-      <InfoContainer>
-        {showFullDesc ? (
-          <Desc>{fullDesc}</Desc>
-        ) : (
-          <Desc>{truncatedDesc}... </Desc>
-        )}
-        <Button onClick={toggleDesc}>
-          {showFullDesc ? "See less" : "See more"}
-        </Button>
-      </InfoContainer>
-    </Container>
-  );
-};
-
-export default Intro;
 
 // textx truncation
 

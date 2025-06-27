@@ -4,26 +4,29 @@ import { cookies } from "next/headers"
 import Dashboard from "@/components/dashboard/Dashoard"
 import { users, User } from "@/userType"
 import { getUserById } from "@/utils/ getUserById"
-import { verifyIdToken } from "@/utils/verifySession"
+import { verifySession } from "@/session/verifySession"
+import { toast } from "sonner"
 
 export default async function page() {
-    const id = "user1"
+    // Get session cookie
     const cookieStore = await cookies()
-    // console.log("All cookies", cookieStore.getAll())
-    const token = cookieStore.get("session")?.value
-    // console.log("Session token from cookie:", token)
-    if (!token) {
-        console.log("User token does not exist")
-        redirect("/")
+    const session = cookieStore.get("session")?.value
+    // Check if session is available
+    if (!session) {
+        console.log("❌ No session cookie found")
+        return redirect("/")
     }
-    const decodedToken = await verifyIdToken(token)
+    // Verify session cookie
+    const decodedToken = await verifySession()
     if (!decodedToken) {
-        redirect("/")
+        console.log("❌ Invalid or expired session")
+        return redirect("/")
     }
-    // const user = users.find((user) => user.id.toString() === id)
+    // Get user by id
     const user = (await getUserById(decodedToken.uid)) as User
     if (!user) {
-        console.log("User details does not exist")
+        // console.log("User details does not exist")
+        toast.error("User details does not exist")
         redirect("/")
     } else {
         // console.log("User details ", user)

@@ -4,11 +4,17 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
+import { useRouter } from "next/navigation"
+import { Toaster, toast } from "sonner"
+import { signOut } from "firebase/auth"
 import Announcement from "@/components/Announcement"
 import Navbar from "@/components/nav/Navbar"
 import Footer from "@/components/Footer"
-import { ipad, mobile } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
+import useNetworkStatus from "@/components/auth/useNetworkStatus"
+import { ipad, mobile } from "@/responsive"
+import { checkSessionValid } from "@/app/api/auth/session/checkSession"
+import { auth } from "@/firebase/firebaseConfig"
 
 const Container = styled.div`
     width: 1440px;
@@ -17,14 +23,75 @@ const Container = styled.div`
     ${ipad({ width: "96%" })}
     ${mobile({ width: "95%" })}
 `
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    // const session = await auth()
+    const isOnline = useNetworkStatus()
+    const router = useRouter()
+    // Handle session expiration every 5 minutes
+    useEffect(() => {
+        const interval = setInterval(
+            async () => {
+                const valid = await checkSessionValid()
+                // console.log("Session checked")
+                if (!valid) {
+                    try {
+                        toast.warning("Session expired. Logging out...")
+                        signOut(auth)
+                        await fetch("/api/auth/session", {
+                            method: "DELETE",
+                        })
+                        console.log("Session deleted")
+                        router.push("/")
+                    } catch (error) {
+                        console.error("Error signing out:", error)
+                    }
+                }
+            },
+            1000 * 60 * 5,
+        ) // 5 minutes
+
+        return () => clearInterval(interval)
+    }, [router])
+    // Network status handler
+    useEffect(() => {
+        if (isOnline) {
+            toast.dismiss("offline")
+            toast.success("Back online!", { id: "online" })
+        } else {
+            toast.error("You are offline", {
+                id: "offline",
+                duration: Infinity,
+            })
+        }
+    }, [isOnline])
+
+    if (!isOnline) {
+        toast.error("You are offline. Please connect to the internet")
+        return (
+            <html lang="en">
+                <head>
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+                    />
+                </head>
+                <body>
+                    <Toaster
+                        position="top-center"
+                        toastOptions={{
+                            style: {
+                                background: "#356DF1",
+                                color: "#fff",
+                            },
+                        }}
+                    />
+                </body>
+            </html>
+        )
+    }
 
     return (
         <html lang="en">
             <head>
-                {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -43,6 +110,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                     {children}
                                     <Footer />
                                 </Container>
+                                <Toaster
+                                    position="top-center"
+                                    toastOptions={{
+                                        style: {
+                                            background: "#356DF1",
+                                            color: "#fff",
+                                        },
+                                    }}
+                                />
                             </Suspense>
                         </AppRouterCacheProvider>
                     </ThemeProvider>

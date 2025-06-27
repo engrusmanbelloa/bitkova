@@ -148,9 +148,9 @@ const PlayCircle = styled(PlayCircleIcon)`
         animation: pulse;
         animation-duration: 1s;
     }
+    ${ipad({ bottom: 180 })};
     ${mobile({ bottom: 130 })};
 `
-
 export default function Home() {
     const [courses, setCourses] = useState([])
     const [count, setCount] = useState(0)

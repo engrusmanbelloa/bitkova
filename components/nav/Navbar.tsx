@@ -23,8 +23,11 @@ import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth, app } from "@/firebase/firebaseConfig"
+import { getFirestore, doc, getDoc } from "firebase/firestore"
 import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
+import { useUserDoc } from "@/hooks/useUserDoc"
+import { toast } from "sonner"
 
 // containers section
 const Container = styled.section`
@@ -193,62 +196,10 @@ export default function Navbar() {
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-
+    const [initials, setInitials] = useState("GU")
+    const { userDoc, loading } = useUserDoc()
     const main = "true"
     let login
-
-    // SingIN Modal transition, open and close functions
-    const Transition = ({
-        children,
-        ...props
-    }: TransitionProps & {
-        children: ReactElement<any, any>
-    }) => {
-        const ref = useRef(null)
-
-        return (
-            <Slide direction="up" ref={ref} {...props}>
-                {children}
-            </Slide>
-        )
-    }
-
-    const handleSignInOpen = () => {
-        if (!userLoggedIn) {
-            setSignUp(false)
-            setSignin(true)
-        } else {
-            signOut(auth)
-                .then(() => {
-                    login = false
-                    setUserLoggedIn(false)
-                })
-                .catch((error) => {
-                    alert(error.message)
-                })
-        }
-    }
-
-    const handleSignInClose = () => {
-        setTimeout(() => {
-            setSignin(false)
-        }, 1000)
-    }
-    // SingUp Modal transition, open and close functions
-    const handleSignUpOpen = () => {
-        if (!userLoggedIn) {
-            setSignin(false)
-            setSignUp(true)
-        } else {
-            alert("You're already logged in")
-        }
-    }
-
-    const handleSignUpClose = () => {
-        setTimeout(() => {
-            setSignUp(false)
-        }, 2000)
-    }
 
     // menu items array
     const menuList = [
@@ -273,6 +224,59 @@ export default function Navbar() {
             title: "My Learning",
         },
     ]
+
+    // SingIN Modal transition, open and close functions
+    const Transition = ({
+        children,
+        ...props
+    }: TransitionProps & {
+        children: ReactElement<any, any>
+    }) => {
+        const ref = useRef(null)
+
+        return (
+            <Slide direction="up" ref={ref} {...props}>
+                {children}
+            </Slide>
+        )
+    }
+    const handleSignInOpen = async () => {
+        if (!userLoggedIn) {
+            setSignUp(false)
+            setSignin(true)
+        } else {
+            signOut(auth)
+                .then(() => {
+                    login = false
+                    setUserLoggedIn(false)
+                })
+                .catch((error) => {
+                    toast.error(error.message)
+                })
+        }
+    }
+
+    const handleSignInClose = () => {
+        setTimeout(() => {
+            setSignin(false)
+        }, 1000)
+    }
+    // SingUp Modal transition, open and close functions
+    const handleSignUpOpen = () => {
+        if (!userLoggedIn) {
+            setSignin(false)
+            setSignUp(true)
+        } else {
+            toast.success("You are already logged in")
+        }
+    }
+
+    const handleSignUpClose = () => {
+        setTimeout(() => {
+            setSignUp(false)
+        }, 2000)
+    }
+
     // Handle user email verification
     const handleSendVerification = async () => {
         try {
@@ -280,14 +284,14 @@ export default function Navbar() {
                 if (!sentVerification) {
                     await sendEmailVerification(auth.currentUser)
                     setSentVerification(true)
-                    alert("Verification email sent. Please check your inbox.")
+                    toast.success("Verification email sent check your inbox")
                 } else {
-                    alert("Verification email already sent, check your inbox")
+                    toast.success("Verification email already sent, check your inbox")
                 }
             }
         } catch (error: any) {
-            console.log("Error resending verification email:", error.message)
-            alert("Failed to resend verification email. Please try again later.")
+            // console.log("Error resending verification email:", error.message)
+            toast.error("Failed to resend verification email. Please try again later.")
         }
     }
     // Check if the user confirmed their email
@@ -301,16 +305,24 @@ export default function Navbar() {
                     setUserLoggedIn(true)
                     setNotifyModalOpen(false)
                     await createOrUpdateUserDoc(auth.currentUser)
-                    alert("Email verification successful")
-                    console.log(auth.currentUser)
+                    const idToken = await auth.currentUser.getIdToken()
+                    await fetch("/api/auth/session", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ idToken }),
+                        credentials: "include",
+                    })
+                    toast.success("Email verification successful")
+                    // console.log(auth.currentUser)
                 } else {
-                    alert("Email not verified. Please verify your email.")
+                    toast.success("Email not verified. Please verify your email")
                     // console.log(auth.currentUser.emailVerified)
                 }
             }
         } catch (error: any) {
             // console.error("Error checking email verification:", error.message)
-            alert("Failed to check verification status. Please try again later.")
+            // alert("Failed to check verification status. Please try again later.")
+            toast.error("Failed to check verification status. Please try again lat")
         }
     }
 
@@ -324,12 +336,10 @@ export default function Navbar() {
         setSignUp(false)
         setSignin(false)
     }
-
     const handleForgotPasswordClose = () => {
         setForgotPasswordOpen(false)
     }
 
-    // sign out functions
     useEffect(() => {
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -425,9 +435,9 @@ export default function Navbar() {
                                         <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
                                     </IconButton>
                                 </CartsContainer>
-                                <NavAvatar
-                                    user={auth.currentUser.displayName || auth.currentUser.email}
-                                />
+                                {!loading
+                                    ? userDoc && <NavAvatar user={userDoc.name || userDoc.email} />
+                                    : null}
                             </>
                         ) : (
                             <>
@@ -516,21 +526,23 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
-                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified ? (
-                                <DropdownMenu
-                                    handleSingUpOpen={handleSignInOpen}
-                                    user={auth.currentUser.displayName || auth.currentUser.email}
-                                    closeMenu={() => setToggleMenu(false)}
-                                />
-                            ) : (
-                                toggleMenu && (
-                                    <DropdownMenu
-                                        user={false}
-                                        handleSingUpOpen={handleSignInOpen}
-                                        closeMenu={() => setToggleMenu(false)}
-                                    />
-                                )
-                            )}
+                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified
+                                ? !loading
+                                    ? userDoc && (
+                                          <DropdownMenu
+                                              handleSingUpOpen={handleSignInOpen}
+                                              closeMenu={() => setToggleMenu(false)}
+                                              user={userDoc.name || userDoc.email}
+                                          />
+                                      )
+                                    : null
+                                : toggleMenu && (
+                                      <DropdownMenu
+                                          user={false}
+                                          handleSingUpOpen={handleSignInOpen}
+                                          closeMenu={() => setToggleMenu(false)}
+                                      />
+                                  )}
                         </Toggle>
                     </Right>
                 </Wrapper>

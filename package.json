@@ -66,6 +66,7 @@
         "react-toastify": "^9.1.1",
         "rsuite": "^5.23.3",
         "server-only": "^0.0.1",
+        "sonner": "^2.0.5",
         "styled-components": "^6.1.13",
         "validator": "^13.7.0",
         "video.js": "7.21.4",
