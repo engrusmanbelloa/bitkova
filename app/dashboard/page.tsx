@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 import Dashboard from "@/components/dashboard/Dashoard"
 import { users, User } from "@/userType"
 import { getUserById } from "@/utils/ getUserById"
-import { verifySession } from "@/utils/verifySession"
+import { verifySession } from "@/session/verifySession"
 import { toast } from "sonner"
 
 export default async function page() {

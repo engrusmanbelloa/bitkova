@@ -157,7 +157,7 @@ export default function SignIn({
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
             const idToken = await user.getIdToken()
-            await fetch("/api/session", {
+            await fetch("/api/auth/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ idToken }),

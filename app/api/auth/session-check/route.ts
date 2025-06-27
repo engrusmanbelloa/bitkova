@@ -1,7 +1,6 @@
-// app/api/check-session/route.ts
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
-import { verifySession } from "@/utils/verifySession"
+import { verifySession } from "@/session/verifySession"
 
 export async function GET() {
     const decoded = await verifySession()

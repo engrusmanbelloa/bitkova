@@ -13,7 +13,7 @@ import Footer from "@/components/Footer"
 import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
-import { checkSessionValid } from "@/session/checkSession"
+import { checkSessionValid } from "@/app/api/auth/session/checkSession"
 import { auth } from "@/firebase/firebaseConfig"
 
 const Container = styled.div`
@@ -23,7 +23,6 @@ const Container = styled.div`
     ${ipad({ width: "96%" })}
     ${mobile({ width: "95%" })}
 `
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()
     const router = useRouter()
@@ -32,11 +31,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         const interval = setInterval(
             async () => {
                 const valid = await checkSessionValid()
+                // console.log("Session checked")
                 if (!valid) {
                     try {
-                        signOut(auth)
                         toast.warning("Session expired. Logging out...")
-                        await fetch("/api/session", {
+                        signOut(auth)
+                        await fetch("/api/auth/session", {
                             method: "DELETE",
                         })
                         console.log("Session deleted")

@@ -12,7 +12,7 @@
             "@/utils/*": ["app/utils/*"],
             "@/models/*": ["app/api/models/*"],
             "@/lib/*": ["app/api/auth/lib/*"],
-            "@/session/*": ["app/api/session/*"],
+            "@/session/*": ["app/api/auth/session/*"],
             "@/hooks/*": ["app/hooks/*"],
             "@/*": ["./*"]
         },

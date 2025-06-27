@@ -28,14 +28,14 @@ export const db = getFirestore(app)
 //     }
 // }
 
-export const signIn = async (email: string, password: string) => {
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password)
-        const user = userCredential.user
-        console.log(user)
-    } catch (error: any) {
-        const errorCode = error.code
-        const errorMessage = error.message
-        console.log(errorMessage)
-    }
-}
+// export const signIn = async (email: string, password: string) => {
+//     try {
+//         const userCredential = await signInWithEmailAndPassword(auth, email, password)
+//         const user = userCredential.user
+//         console.log(user)
+//     } catch (error: any) {
+//         const errorCode = error.code
+//         const errorMessage = error.message
+//         console.log(errorMessage)
+//     }
+// }
