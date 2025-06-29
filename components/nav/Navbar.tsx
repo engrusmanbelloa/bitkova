@@ -325,7 +325,6 @@ export default function Navbar() {
             toast.error("Failed to check verification status. Please try again lat")
         }
     }
-
     // close the notification modal
     const notifyModalClose = async () => {
         setNotifyModalOpen(false)

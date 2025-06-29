@@ -52,19 +52,19 @@ const BulletListLi = styled.li`
     padding-left: 0px;
     margin-bottom: 20px;
 `
+interface CourseProps {
+    course: CourseType
+    enrolled: boolean
+    // setSelectedVideo: (url: string) => void
+    // setSelectedTitle: (title: string) => void
+    completedVideos: string[]
+    handleSelectVideo: (index: number) => void
+}
 
 interface TabPanelProps {
     children?: React.ReactNode
     index: number
     value: number
-}
-
-interface CourseProps {
-    course: CourseType
-    enrolled: boolean
-    setSelectedVideo: (url: string) => void
-    setSelectedTitle: (title: string) => void
-    completedVideos: string[]
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -91,8 +91,9 @@ function a11yProps(index: number) {
 
 export default function GuestCourseTab({
     course,
-    setSelectedTitle,
-    setSelectedVideo,
+    // setSelectedTitle,
+    // setSelectedVideo,
+    handleSelectVideo,
     enrolled,
     completedVideos,
 }: CourseProps) {
@@ -115,8 +116,9 @@ export default function GuestCourseTab({
             <CustomTabPanel value={value} index={0}>
                 <SectionTitle>Course Modules</SectionTitle>
                 <CourseModules
-                    setSelectedTitle={setSelectedTitle}
-                    setSelectedVideo={setSelectedVideo}
+                    // setSelectedTitle={setSelectedTitle}
+                    // setSelectedVideo={setSelectedVideo}
+                    handleSelectVideo={handleSelectVideo}
                     enrolled={enrolled}
                     course={course}
                     completedVideos={completedVideos}

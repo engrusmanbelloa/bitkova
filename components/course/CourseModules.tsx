@@ -36,66 +36,72 @@ const Playbtn = styled(YouTubeIcon)`
     font-size: 30px;
     cursor: pointer;
 `
+// interface CourseProps {
+//     course: CourseType
+//     enrolled: boolean
+//     setSelectedVideo: (url: string) => void
+//     setSelectedTitle: (title: string) => void
+//     completedVideos: string[]
+// }
 interface CourseProps {
     course: CourseType
     enrolled: boolean
-    setSelectedVideo: (url: string) => void
-    setSelectedTitle: (title: string) => void
     completedVideos: string[]
+    handleSelectVideo: (index: number) => void
 }
 
 export default function CourseModules({
     course,
-    setSelectedTitle,
-    setSelectedVideo,
+    // setSelectedTitle,
+    // setSelectedVideo,
     completedVideos,
     enrolled,
+    handleSelectVideo,
 }: CourseProps) {
-    const handleSelectVideo = (url: string, title: string) => {
-        setSelectedVideo(url)
-        setSelectedTitle(title)
+    // const handleSelectVideo = (url: string, title: string) => {
+    //     // setSelectedVideo(url)
+    //     // setSelectedTitle(title)
 
-        console.log("Selected:", title, url)
-    }
+    //     console.log("Selected:", title, url)
+    // }
+    let globalIndex = 0 // Track flat video index across modules
     return (
         <div>
             {course.modules.map((module, index) => (
                 <Accordion key={index}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1-content"
-                        id="panel1-header"
+                        aria-controls={`panel${index}-content`}
+                        id={`panel${index}-header`}
+                        // aria-controls="panel1-content"
+                        // id="panel1-header"
                     >
                         <ModuleHeader>{module.title}</ModuleHeader>
                     </AccordionSummary>
                     {module.links &&
-                        Object.entries(module.links).map(([title, url], subIndex) => (
-                            <AccordionDetails key={subIndex}>
-                                <ModuleContent>
-                                    {!enrolled ? (
-                                        <LockIcon />
-                                    ) : (
-                                        <Playbtn
-                                            onClick={() => {
-                                                if (enrolled) {
-                                                    setSelectedVideo(url)
-                                                    setSelectedTitle(title)
-                                                    console.log()
-                                                }
-                                            }}
-                                        />
-                                    )}
-                                    {title}
-                                    {completedVideos.includes(title) ? (
-                                        <RoundCheckBox style={{ color: "#0072ff" }} />
-                                    ) : (
-                                        <RoundCheckBox />
-                                    )}
-
-                                    {/* <RoundCheckBox /> */}
-                                </ModuleContent>
-                            </AccordionDetails>
-                        ))}
+                        Object.entries(module.links).map(([title, url], subIndex) => {
+                            const currentIndex = globalIndex
+                            globalIndex++ // move to next video index
+                            return (
+                                <AccordionDetails key={subIndex}>
+                                    <ModuleContent>
+                                        {!enrolled ? (
+                                            <LockIcon />
+                                        ) : (
+                                            <Playbtn
+                                                onClick={() => handleSelectVideo(currentIndex)}
+                                            />
+                                        )}
+                                        {title}
+                                        {completedVideos.includes(title) ? (
+                                            <RoundCheckBox style={{ color: "#0072ff" }} />
+                                        ) : (
+                                            <RoundCheckBox />
+                                        )}
+                                    </ModuleContent>
+                                </AccordionDetails>
+                            )
+                        })}
                 </Accordion>
             ))}
         </div>

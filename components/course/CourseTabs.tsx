@@ -62,9 +62,10 @@ interface TabPanelProps {
 interface CourseProps {
     course: CourseType
     enrolled: boolean
-    setSelectedVideo: (url: string) => void
-    setSelectedTitle: (title: string) => void
+    // setSelectedVideo: (url: string) => void
+    // setSelectedTitle: (title: string) => void
     completedVideos: string[]
+    handleSelectVideo: (index: number) => void
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -92,10 +93,11 @@ function a11yProps(index: number) {
 // export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
 export default function CourseTabs({
     course,
-    setSelectedTitle,
-    setSelectedVideo,
+    // setSelectedTitle,
+    // setSelectedVideo,
     enrolled,
     completedVideos,
+    handleSelectVideo,
 }: CourseProps) {
     const [value, setValue] = useState(0)
 
@@ -116,8 +118,9 @@ export default function CourseTabs({
             <CustomTabPanel value={value} index={0}>
                 <SectionTitle>Course Modules</SectionTitle>
                 <CourseModules
-                    setSelectedTitle={setSelectedTitle}
-                    setSelectedVideo={setSelectedVideo}
+                    // setSelectedTitle={setSelectedTitle}
+                    // setSelectedVideo={setSelectedVideo}
+                    handleSelectVideo={handleSelectVideo}
                     enrolled={enrolled}
                     course={course}
                     completedVideos={completedVideos}
