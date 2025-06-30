@@ -28,28 +28,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const router = useRouter()
     // Handle session expiration every 5 minutes
     useEffect(() => {
-        const interval = setInterval(
-            async () => {
-                const valid = await checkSessionValid()
-                // console.log("Session checked")
-                if (!valid) {
-                    try {
-                        toast.warning("Session expired. Logging out...")
-                        signOut(auth)
-                        await fetch("/api/auth/session", {
-                            method: "DELETE",
-                        })
-                        console.log("Session deleted")
-                        router.push("/")
-                    } catch (error) {
-                        console.error("Error signing out:", error)
+        if (auth.currentUser) {
+            const interval = setInterval(
+                async () => {
+                    const valid = await checkSessionValid()
+                    // console.log("Session checked")
+                    if (!valid) {
+                        try {
+                            toast.warning("Too long idle Logging out...")
+                            signOut(auth)
+                            await fetch("/api/auth/session", {
+                                method: "DELETE",
+                            })
+                            console.log("Session deleted")
+                            router.push("/")
+                        } catch (error) {
+                            console.error("Error signing out:", error)
+                        }
                     }
-                }
-            },
-            1000 * 60 * 5,
-        ) // 5 minutes
+                },
+                1000 * 60 * 5,
+            ) // 5 minutes
 
-        return () => clearInterval(interval)
+            return () => clearInterval(interval)
+        } else {
+            console.log("No User logged in")
+        }
     }, [router])
     // Network status handler
     useEffect(() => {

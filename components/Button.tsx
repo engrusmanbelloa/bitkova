@@ -17,6 +17,7 @@ const Btn = styled.button<{ $main?: boolean }>`
     margin: 0;
     animation: pulse;
     animation-duration: 2s;
+    z-index: 100;
     background-color: ${(props) =>
         props.$main ? props.theme.palette.primary.main : props.theme.palette.common.white};
     color: ${(props) =>

@@ -2,9 +2,15 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import Image from "next/image"
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
+import LaptopIcon from "@mui/icons-material/Laptop"
+import LanguageIcon from "@mui/icons-material/Language"
 import { mobile, ipad } from "@/responsive"
-// import { db } from '@/firebase' // your initialized firestore instance
 import { doc, getDoc } from "firebase/firestore"
+import { toast } from "sonner"
+import Certificate from "@/components/course/Certificate"
+import { CourseType } from "@/types"
+import { teal } from "@mui/material/colors"
 
 const Container = styled.div`
     max-width: 800px;
@@ -77,7 +83,6 @@ const InfoBoxes = styled.div`
         `,
     )}
 `
-
 const Box = styled.div`
     flex: 1;
     display: flex;
@@ -88,7 +93,6 @@ const Box = styled.div`
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     text-align: left;
 `
-
 const Icon = styled.div`
     font-size: 20px;
     margin: 5px;
@@ -102,11 +106,42 @@ const TextDiv = styled.div`
         font-weight: 300;
     }
 `
+interface CertProf {
+    user: any
+    title: any
+    id: any
+    duration: any
+    completed: boolean
+}
 
-export default function CertificateVerifier() {
+export default function CertificateVerifier({ user, completed, title, duration, id }: CertProf) {
     const [certificateId, setCertificateId] = useState("")
     const [result, setResult] = useState<any>(null)
     const [loading, setLoading] = useState(false)
+    const [visible, setVisible] = useState(false)
+
+    const [open, setOpen] = useState(false)
+
+    const openModal = () => {
+        if (!completed) {
+            toast.error("You haven't completed this course yet.")
+            return
+        }
+        if (!title) {
+            toast.warning("Please enter your course title.")
+            return
+        }
+        setResult(true)
+        setOpen(true)
+        setVisible(true)
+        toast.success("Congratulations>>> download your certificate")
+        console.log(result, id, title, user)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+        setResult(false)
+    }
 
     //   const handleVerify = async () => {
     //     setLoading(true)
@@ -144,31 +179,42 @@ export default function CertificateVerifier() {
                             onChange={(e) => setCertificateId(e.target.value)}
                         />
                         {/* <Button onClick={handleVerify}> */}
-                        <Button>{loading ? "Verifying..." : "Verify ID"}</Button>
+                        <Button onClick={openModal}>
+                            {loading ? "Verifying..." : "Verify ID"}
+                        </Button>
                     </InputContainer>
 
                     {result && (
-                        <ResultBox>
-                            {result.notFound ? (
-                                <p>❌ Certificate not found.</p>
-                            ) : (
-                                <>
-                                    <h3>✅ Certificate Verified</h3>
-                                    <p>
-                                        <strong>Name:</strong> {result.userName}
-                                    </p>
-                                    <p>
-                                        <strong>Course:</strong> {result.courseTitle}
-                                    </p>
-                                    <p>
-                                        <strong>Issued On:</strong> {result.issueDate}
-                                    </p>
-                                    <p>
-                                        <strong>Issuer:</strong> {result.issuer}
-                                    </p>
-                                </>
-                            )}
-                        </ResultBox>
+                        // <ResultBox>
+                        //     {result.notFound ? (
+                        //         <p>❌ Certificate not found.</p>
+                        //     ) : (
+                        //         <>
+                        //             <h3>✅ Certificate Verified</h3>
+                        //             <p>
+                        //                 <strong>Name:</strong> {result.userName}
+                        //             </p>
+                        //             <p>
+                        //                 <strong>Course:</strong> {result.courseTitle}
+                        //             </p>
+                        //             <p>
+                        //                 <strong>Issued On:</strong> {result.issueDate}
+                        //             </p>
+                        //             <p>
+                        //                 <strong>Issuer:</strong> {result.issuer}
+                        //             </p>
+                        //         </>
+                        //     )}
+                        // </ResultBox>
+                        <Certificate
+                            open={open}
+                            handleClose={handleClose}
+                            user={user}
+                            title={title}
+                            duration={duration}
+                            id={id}
+                            $visible={visible}
+                        />
                     )}
                 </Left>
                 <Right>
@@ -178,13 +224,14 @@ export default function CertificateVerifier() {
                         fill={false}
                         width={300}
                         height={400}
-                        priority={true}
                     />
                 </Right>
             </TopContainer>
             <InfoBoxes>
                 <Box>
-                    <Icon>🏆</Icon>
+                    <Icon>
+                        <EmojiEventsIcon />
+                    </Icon>
                     <TextDiv>
                         <p>
                             Our digital verification platform strengthens certificate integrity,
@@ -194,7 +241,9 @@ export default function CertificateVerifier() {
                     </TextDiv>
                 </Box>
                 <Box>
-                    <Icon>💻</Icon>
+                    <Icon>
+                        <LaptopIcon />
+                    </Icon>
                     <TextDiv>
                         <p>
                             Streamlines external verification, enabling employers and institutions
@@ -204,7 +253,9 @@ export default function CertificateVerifier() {
                     </TextDiv>
                 </Box>
                 <Box>
-                    <Icon>🌐</Icon>
+                    <Icon>
+                        <LanguageIcon />
+                    </Icon>
                     <TextDiv>
                         <p>
                             Effortless Online Verification.Quickly validate certificate authenticity

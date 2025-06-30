@@ -58,16 +58,15 @@ interface TabPanelProps {
     index: number
     value: number
 }
-
 interface CourseProps {
     course: CourseType
     enrolled: boolean
-    // setSelectedVideo: (url: string) => void
-    // setSelectedTitle: (title: string) => void
     completedVideos: string[]
     handleSelectVideo: (index: number) => void
+    user: any
+    completed: boolean
+    id: any
 }
-
 function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props
 
@@ -90,14 +89,14 @@ function a11yProps(index: number) {
     }
 }
 
-// export default function BasicTabs({ courseDesc, whatYoullLearn, modules, review }: CourseProps) {
 export default function CourseTabs({
     course,
-    // setSelectedTitle,
-    // setSelectedVideo,
+    user,
+    completed,
     enrolled,
     completedVideos,
     handleSelectVideo,
+    id,
 }: CourseProps) {
     const [value, setValue] = useState(0)
 
@@ -118,8 +117,6 @@ export default function CourseTabs({
             <CustomTabPanel value={value} index={0}>
                 <SectionTitle>Course Modules</SectionTitle>
                 <CourseModules
-                    // setSelectedTitle={setSelectedTitle}
-                    // setSelectedVideo={setSelectedVideo}
                     handleSelectVideo={handleSelectVideo}
                     enrolled={enrolled}
                     course={course}
@@ -137,7 +134,13 @@ export default function CourseTabs({
                 ))}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                <CertificateVerifier />
+                <CertificateVerifier
+                    user={user}
+                    completed={completed}
+                    title={course.title}
+                    id={id}
+                    duration={course.duration.hours}
+                />
             </CustomTabPanel>
         </Container>
     )

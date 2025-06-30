@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
@@ -178,11 +178,11 @@ export default function CourseHeader({ course }: CourseProps) {
     const [selectedTitle, setSelectedTitle] = useState<string>("")
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+    const [certificateReady, setCertificateReady] = useState(true)
     // All course videos array
     const videoList = course.modules.flatMap((module) =>
         Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
     )
-
     const courses = featuredCourses
     const limit = 8
     const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
@@ -217,7 +217,17 @@ export default function CourseHeader({ course }: CourseProps) {
             setCompletedVideos((prev) => [...prev, selectedTitle])
         }
         // console.log("Completed video titles: ", completedVideos)
+        console.log("Completed videos", completedVideos.length)
+        console.log("Completed videos", videoList.length)
     }
+
+    useEffect(() => {
+        if (completedVideos.length === videoList.length) {
+            setCertificateReady(true)
+        }
+        console.log("Completed videos", completedVideos.length)
+        console.log("Completed videos", videoList.length)
+    }, [completedVideos])
 
     return (
         <>
@@ -307,6 +317,9 @@ export default function CourseHeader({ course }: CourseProps) {
                             enrolled={enrolled}
                             course={course}
                             completedVideos={completedVideos}
+                            user={"Usman Bello Abdullahi"}
+                            completed={certificateReady}
+                            id={1234567}
                         />
                     ) : (
                         <GuestCourseTabs
