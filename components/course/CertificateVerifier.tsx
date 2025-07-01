@@ -193,36 +193,20 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                     </InputContainer>
 
                     {result && (
-                        // <ResultBox>
-                        //     {result.notFound ? (
-                        //         <p>❌ Certificate not found.</p>
-                        //     ) : (
-                        //         <>
-                        //             <h3>✅ Certificate Verified</h3>
-                        //             <p>
-                        //                 <strong>Name:</strong> {result.userName}
-                        //             </p>
-                        //             <p>
-                        //                 <strong>Course:</strong> {result.courseTitle}
-                        //             </p>
-                        //             <p>
-                        //                 <strong>Issued On:</strong> {result.issueDate}
-                        //             </p>
-                        //             <p>
-                        //                 <strong>Issuer:</strong> {result.issuer}
-                        //             </p>
-                        //         </>
-                        //     )}
-                        // </ResultBox>
-                        <Certificate
-                            open={open}
-                            handleClose={handleClose}
-                            user={user}
-                            title={title}
-                            duration={duration}
-                            id={id}
-                            $visible={visible}
-                        />
+                        <ResultBox>
+                            {result.notFound ? (
+                                <p>❌ Certificate not found.</p>
+                            ) : (
+                                <Certificate
+                                    handleClose={handleClose}
+                                    user={user}
+                                    title={title}
+                                    duration={duration}
+                                    id={id}
+                                    $visible={visible}
+                                />
+                            )}
+                        </ResultBox>
                     )}
                 </Left>
                 <Right>

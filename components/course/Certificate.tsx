@@ -27,6 +27,18 @@ const Container = styled.div<{ $visible?: boolean }>`
         `,
     )}
 `
+const ResponsivePreview = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.6);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 const Name = styled.div`
     position: absolute;
     top: 45%;
@@ -38,7 +50,6 @@ const Name = styled.div`
         (props: any) => `
             font-size: 25px;
             text-align: center;
-            color: red;
         `,
     )}
     ${mobile(
@@ -55,7 +66,6 @@ const Duration = styled.div`
     transform: translate(-50%, -50%);
     font-size: 18px;
     color: #36a9e1;
-    color: red;
     ${ipad(
         (props: any) => `
             top: 51%;
@@ -84,7 +94,6 @@ const CourseTitle = styled.div`
             font-size: 15px;
             text-align: center;
             width: 400px;
-            color: red;
         `,
     )}
     ${mobile(
@@ -105,14 +114,13 @@ const Desc = styled.div`
     line-height: 1.5;
     color: #36a9e1;
     text-align: center;
-    color: red;
     ${ipad(
         (props: any) => `
             right: 15%;
             bottom: 20%;
             font-size: 14px;
-             width: 500px;
-             line-height: 1;
+            width: 500px;
+            line-height: 1;
         `,
     )}
     ${mobile(
@@ -131,7 +139,6 @@ const DateIssued = styled.div`
     font-size: 20px;
     font-weight: bold;
     color: #36a9e1;
-    color: red;
     ${ipad(
         (props: any) => `
             right: 15%;
@@ -181,22 +188,10 @@ const DownloadBtn = styled.div`
     )}
     ${mobile(
         (props: any) => `
-        left: 30%;
+            left: 30%;
             bottom: 27%;
         `,
     )}
-`
-const ResponsivePreview = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 99;
-    background: rgba(0, 0, 0, 0.6);
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 `
 const Icon = styled(CloseIcon)`
     z-index: 9999;
@@ -227,7 +222,6 @@ interface CertProf {
     id: any
     duration: any
     handleClose: () => void
-    open: boolean
     $visible?: boolean
 }
 
@@ -238,7 +232,6 @@ export default function Certificate({
     id,
     duration,
     handleClose,
-    open,
 }: CertProf) {
     const certRef = useRef<HTMLDivElement>(null)
 
@@ -285,28 +278,6 @@ export default function Certificate({
                     {id}
                 </Id>
             </ResponsivePreview>
-            {/* <CertificateWrapper id="certificate-template" ref={certRef}>
-                <Image
-                    src="/certificate-bitkova.jpg"
-                    alt="Certificate"
-                    priority
-                    fill={true}
-                    style={{ objectFit: "cover" }}
-                />
-                <CertName>{user}</CertName>
-                <CertDuration>has successfully completed all requirements for the</CertDuration>
-                <CertCourseTitle>{title}</CertCourseTitle>
-                <CertDesc>
-                    This student has successfully completed more than {duration} Credit hours of
-                    theory and practice courses in Blockchain studies, Decentralized Finance,
-                    Fundamental Analysis, Onchain analysis and Cryptocurrency Trading.
-                </CertDesc>
-                <CertDateIssued>{new Date().toLocaleDateString()}</CertDateIssued>
-                <CartId>
-                    <span style={{ color: "#356DF1" }}>Certificate id: </span>
-                    {id}
-                </CartId>
-            </CertificateWrapper> */}
             <HiddenCertificate
                 certRef={certRef}
                 user={user}

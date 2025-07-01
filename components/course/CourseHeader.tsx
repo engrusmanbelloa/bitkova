@@ -42,7 +42,7 @@ const HeaderContainer = styled.div`
 `
 const Left = styled.div`
     flex: 3;
-    margin: 0;
+    margin: auto;
     padding: 0;
 `
 const ActionsDiv = styled.div`

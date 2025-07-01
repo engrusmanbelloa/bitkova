@@ -13,8 +13,8 @@ const Container = styled(Box)`
     display: flex;
     flex-direction: column;
     margin: 10px auto 0px;
-    padding: 0px;
 `
+// width: ${props.theme.widths.mobileWidth};
 const TabContainer = styled(Box)`
     border-bottom: 1px solid ${(props) => props.theme.mobile.horizontalrule};
 `
@@ -26,18 +26,6 @@ const TabLabel = styled(Tab)`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
     text-transform: capitalize;
-`
-const ModuleTabLabel = styled(Tab)`
-    display: none;
-    font-size: 18px;
-    font-weight: 500;
-    color: ${(props) => props.theme.palette.common.black};
-    text-transform: capitalize;
-    ${ipad(
-        (props: any) => `
-            display: inline;
-        `,
-    )}
 `
 const SectionTitle = styled.h2`
     margin-bottom: 15px;
