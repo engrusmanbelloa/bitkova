@@ -1,79 +1,190 @@
 "use client"
-import React, { useState, useRef, ReactElement, useEffect } from "react"
+import React, { useRef } from "react"
 import html2canvas from "html2canvas"
 import jsPDF from "jspdf"
 import Image from "next/image"
-import Dialog from "@mui/material/Dialog"
-import { TransitionProps } from "@mui/material/transitions"
-import Slide from "@mui/material/Slide"
 import CloseIcon from "@mui/icons-material/Close"
 import styled from "styled-components"
 import Button from "@/components/Button"
 import HiddenCertificate from "@/components/course/HiddenCert"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled.div<{ $visible?: boolean }>`
     padding: ${(props) => props.theme.paddings.pagePadding};
     display: ${(props) => (props.$visible ? "flex" : "none")};
     justify-content: space-between;
     align-items: center;
-    background-color: ${(props) => props.theme.mobile.mobileNavBg};
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+            padding: 5px 0;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            padding:0;
+        `,
+    )}
 `
 const Name = styled.div`
     position: absolute;
-    top: 47%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 32px;
     font-weight: bold;
+    ${ipad(
+        (props: any) => `
+            font-size: 25px;
+            text-align: center;
+            color: red;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        top: 48%;
+        font-size: 15px;
+        `,
+    )}
 `
 const Duration = styled.div`
     position: absolute;
     top: 52%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 16px;
+    font-size: 18px;
     color: #36a9e1;
+    color: red;
+    ${ipad(
+        (props: any) => `
+            top: 51%;
+            left: 51%;
+            font-size: 12px;
+            text-align: center;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        font-size: 6px;
+        `,
+    )}
 `
 const CourseTitle = styled.div`
     position: absolute;
-    top: 55%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
-    font-size: 24px;
+    font-size: 28px;
     color: #021d41;
+    ${ipad(
+        (props: any) => `
+            top: 54%;
+            font-size: 15px;
+            text-align: center;
+            width: 400px;
+            color: red;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        top: 52%;
+        font-size: 10px;
+        `,
+    )}
 `
 const Desc = styled.div`
     position: absolute;
-    top: 60%;
+    top: 64%;
     left: 50%;
     width: 550px;
     transform: translate(-50%, -50%);
-    font-size: 16px;
+    font-size: 20px;
+    width: 800px;
+    line-height: 1.5;
     color: #36a9e1;
+    text-align: center;
+    color: red;
+    ${ipad(
+        (props: any) => `
+            right: 15%;
+            bottom: 20%;
+            font-size: 14px;
+             width: 500px;
+             line-height: 1;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        font-size: 8px;
+        bottom: 15%;
+        width: 280px;
+        `,
+    )}
 `
 const DateIssued = styled.div`
     position: absolute;
-    bottom: 26%;
-    right: 33%;
+    bottom: 16%;
+    right: 29%;
     transform: translateX(-50%);
     font-size: 20px;
     font-weight: bold;
     color: #36a9e1;
+    color: red;
+    ${ipad(
+        (props: any) => `
+            right: 15%;
+            bottom: 28%;
+            font-size: 16px;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        bottom: 39%;
+        font-size: 8px;
+        `,
+    )}
 `
 const Id = styled.div`
     position: absolute;
-    top: 22%;
-    left: 34%;
+    top: 10%;
+    left: 25%;
     transform: translateX(-50%);
     font-size: 14px;
     color: #000;
+    ${ipad(
+        (props: any) => `
+            left: 20%;
+            top: 28%;
+            font-size: 12px;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        left: 20%;
+            top: 38%;
+            font-size: 8px;
+        `,
+    )}
 `
 const DownloadBtn = styled.div`
     position: fixed;
     z-index: 1000;
     left: 45%;
-    bottom: 8%;
+    bottom: 0%;
+    ${ipad(
+        (props: any) => `
+            left: 40%;
+            bottom: 12%;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        left: 30%;
+            bottom: 27%;
+        `,
+    )}
 `
 const ResponsivePreview = styled.div`
     position: fixed;
@@ -86,6 +197,28 @@ const ResponsivePreview = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+`
+const Icon = styled(CloseIcon)`
+    z-index: 9999;
+    font-size: 50px;
+    position: fixed;
+    right: 12%;
+    top: 0;
+    color: red;
+    ${ipad(
+        (props: any) => `
+            left: 96%;
+            top: 13%;
+            font-size: 35px;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            left: 93%;
+            top: 30%;
+            font-size: 30px;
+        `,
+    )}
 `
 
 interface CertProf {
@@ -109,21 +242,6 @@ export default function Certificate({
 }: CertProf) {
     const certRef = useRef<HTMLDivElement>(null)
 
-    const Transition = ({
-        children,
-        ...props
-    }: TransitionProps & {
-        children: ReactElement<any, any>
-    }) => {
-        const ref = useRef(null)
-
-        return (
-            <Slide direction="up" ref={ref} {...props}>
-                {children}
-            </Slide>
-        )
-    }
-
     const handleDownload = async () => {
         if (!certRef.current) return
         const canvas = await html2canvas(certRef.current, { scale: 2 })
@@ -137,27 +255,16 @@ export default function Certificate({
 
     return (
         <Container $visible={$visible}>
-            <CloseIcon
-                sx={{
-                    zIndex: 9999,
-                    fontSize: 50,
-                    position: "fixed",
-                    left: "75%",
-                    top: "10%",
-                    color: "red",
-                }}
-                onClick={handleClose}
-            />
+            <Icon onClick={handleClose} />
             <ResponsivePreview>
                 <Image
                     src="/certificate-bitkova.jpg"
                     alt="Certificate"
                     priority
-                    width={900}
-                    height={650}
-                    // fill={true}
-                    // style={{ objectFit: "cover" }}
+                    fill
+                    style={{ objectFit: "contain" }}
                 />
+
                 <Name>{user}</Name>
                 <Duration>has successfully completed all requirements for the</Duration>
                 <CourseTitle>{title}</CourseTitle>

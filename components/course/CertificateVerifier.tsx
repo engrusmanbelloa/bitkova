@@ -10,7 +10,6 @@ import { doc, getDoc } from "firebase/firestore"
 import { toast } from "sonner"
 import Certificate from "@/components/course/Certificate"
 import { CourseType } from "@/types"
-import { teal } from "@mui/material/colors"
 
 const Container = styled.div`
     max-width: 800px;
@@ -19,6 +18,15 @@ const Container = styled.div`
 const TopContainer = styled.div`
     display: flex;
     justify-content: flex-start;
+    ${ipad(
+        (props: any) => `
+            `,
+    )}
+    ${mobile(
+        (props: any) => `
+           
+            `,
+    )}
 `
 const Left = styled.div`
     flex: 1;
