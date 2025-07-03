@@ -13,13 +13,13 @@ export default async function page() {
     const session = cookieStore.get("session")?.value
     // Check if session is available
     if (!session) {
-        console.log("❌ No session cookie found")
+        console.log("No session cookie found")
         return redirect("/")
     }
     // Verify session cookie
     const decodedToken = await verifySession()
     if (!decodedToken) {
-        console.log("❌ Invalid or expired session")
+        console.log("Invalid or expired session")
         return redirect("/")
     }
     // Get user by id

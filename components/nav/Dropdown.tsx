@@ -44,7 +44,6 @@ const Links = styled(Link)`
     color: ${(props) => props.theme.palette.common.black};
     text-transform: capitalize;
 `
-
 export default function DropdownMenu({
     user,
     handleSingUpOpen,
@@ -76,7 +75,7 @@ export default function DropdownMenu({
         try {
             setIsOpen(!isOpen)
             signOut(auth)
-            await fetch("/api/session", {
+            await fetch("/api/auth/session", {
                 method: "DELETE",
             })
             console.log("Session deleted")
