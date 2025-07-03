@@ -14,6 +14,7 @@ import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
 import { checkSessionValid } from "@/app/api/auth/session/checkSession"
+import useSessionRefresh from "@/hooks/useSessionRefresh"
 import { auth } from "@/firebase/firebaseConfig"
 
 const Container = styled.div`
@@ -25,32 +26,8 @@ const Container = styled.div`
 `
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()
-    const router = useRouter()
-    // Handle session expiration every 5 minutes
-    useEffect(() => {
-        const interval = setInterval(
-            async () => {
-                const valid = await checkSessionValid()
-                // console.log("Session checked")
-                if (!valid) {
-                    try {
-                        toast.warning("Session expired. Logging out...")
-                        signOut(auth)
-                        await fetch("/api/auth/session", {
-                            method: "DELETE",
-                        })
-                        console.log("Session deleted")
-                        router.push("/")
-                    } catch (error) {
-                        console.error("Error signing out:", error)
-                    }
-                }
-            },
-            1000 * 60 * 5,
-        ) // 5 minutes
-
-        return () => clearInterval(interval)
-    }, [router])
+    // Handle session expiration every 30 minutes
+    useSessionRefresh()
     // Network status handler
     useEffect(() => {
         if (isOnline) {

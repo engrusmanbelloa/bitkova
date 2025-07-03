@@ -1,11 +1,13 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import ShareIcon from "@mui/icons-material/Share"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos"
 import ReactPlayer from "react-player/lazy"
 import CourseFeatures from "@/components/course/CourseFeatures"
 import CourseTabs from "@/components/course/CourseTabs"
@@ -40,7 +42,7 @@ const HeaderContainer = styled.div`
 `
 const Left = styled.div`
     flex: 3;
-    margin: 0;
+    margin: auto;
     padding: 0;
 `
 const ActionsDiv = styled.div`
@@ -93,15 +95,32 @@ const PlayerBtn = styled(PlayCircleIcon)`
     `,
     )}
 `
-const MobileTabs = styled.div`
-    display: none:
-    margin: 0;
-    padding: 0;
-     ${ipad(
-         (props: any) => `
-        display: block:
+const NextBtn = styled(ArrowForwardIosIcon)`
+    position: absolute;
+    color: #fff;
+    right: 2%;
+    top: 45%;
+    font-size: 40px;
+    cursor: pointer;
+    z-index: 99;
+    ${mobile(
+        (props: any) => `
+        font-size: 20px;
     `,
-     )}
+    )}
+`
+const PrevBtn = styled(ArrowBackIosIcon)`
+    position: absolute;
+    color: #fff;
+    left: 2%;
+    top: 45%;
+    font-size: 40px;
+    cursor: pointer;
+    ${mobile(
+        (props: any) => `
+        font-size: 20px;
+    `,
+    )}
 `
 const DeskTabs = styled.div`
     display: block;
@@ -158,15 +177,57 @@ export default function CourseHeader({ course }: CourseProps) {
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
-
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+    const [certificateReady, setCertificateReady] = useState(true)
+    // All course videos array
+    const videoList = course.modules.flatMap((module) =>
+        Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
+    )
     const courses = featuredCourses
     const limit = 8
-    const previewVideoUrl = extractPreviewVideo(course.modules)
+    const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
 
+    // Player functions play, next video, prev video and video selection logics
     const handlePlay = () => {
         setShowPlayer(true)
-        console.log(previewVideoUrl)
+        // console.log(previewVideoUrl)
     }
+    const handleSelectVideo = (index: number) => {
+        const selected = videoList[index]
+        // console.log("Videos list: ", selected)
+        if (selected) {
+            setSelectedVideo(selected.url)
+            setSelectedTitle(selected.title)
+            setSelectedIndex(index)
+            setShowPlayer(true)
+        }
+    }
+    const handleNext = () => {
+        if (selectedIndex !== null && selectedIndex < videoList.length - 1) {
+            handleSelectVideo(selectedIndex + 1)
+        }
+    }
+    const handlePrev = () => {
+        if (selectedIndex !== null && selectedIndex > 0) {
+            handleSelectVideo(selectedIndex - 1)
+        }
+    }
+    const handleCompletedVideos = () => {
+        if (!completedVideos.includes(selectedTitle)) {
+            setCompletedVideos((prev) => [...prev, selectedTitle])
+        }
+        // console.log("Completed video titles: ", completedVideos)
+        console.log("Completed videos", completedVideos.length)
+        console.log("Completed videos", videoList.length)
+    }
+
+    useEffect(() => {
+        if (completedVideos.length === videoList.length) {
+            setCertificateReady(true)
+        }
+        console.log("Completed videos", completedVideos.length)
+        console.log("Completed videos", videoList.length)
+    }, [completedVideos])
 
     return (
         <>
@@ -208,9 +269,8 @@ export default function CourseHeader({ course }: CourseProps) {
                                 width="100%"
                                 height="100%"
                                 onEnded={() => {
-                                    if (!completedVideos.includes(selectedTitle)) {
-                                        setCompletedVideos((prev) => [...prev, selectedTitle])
-                                    }
+                                    handleCompletedVideos()
+                                    handleNext()
                                 }}
                                 config={{
                                     youtube: {
@@ -244,19 +304,26 @@ export default function CourseHeader({ course }: CourseProps) {
                                 No preview video available.
                             </div>
                         )}
+                        {selectedVideo && (
+                            <>
+                                <NextBtn onClick={handleNext} />
+                                <PrevBtn onClick={handlePrev} />
+                            </>
+                        )}
                     </CourseImage>
                     {enrolled ? (
                         <CourseTabs
-                            setSelectedTitle={setSelectedTitle}
-                            setSelectedVideo={setSelectedVideo}
+                            handleSelectVideo={handleSelectVideo}
                             enrolled={enrolled}
                             course={course}
                             completedVideos={completedVideos}
+                            user={"Usman Bello Abdullahi"}
+                            completed={certificateReady}
+                            id={1234567}
                         />
                     ) : (
                         <GuestCourseTabs
-                            setSelectedTitle={setSelectedTitle}
-                            setSelectedVideo={setSelectedVideo}
+                            handleSelectVideo={handleSelectVideo}
                             enrolled={enrolled}
                             course={course}
                             completedVideos={completedVideos}
@@ -269,15 +336,7 @@ export default function CourseHeader({ course }: CourseProps) {
                     ) : (
                         <DeskTabs>
                             <CourseModules
-                                // setSelectedTitle={setSelectedTitle}
-                                setSelectedVideo={(url) => {
-                                    setSelectedVideo(url)
-                                    setShowPlayer(true)
-                                }}
-                                setSelectedTitle={(title) => {
-                                    setSelectedTitle(title)
-                                    setShowPlayer(true)
-                                }}
+                                handleSelectVideo={handleSelectVideo}
                                 enrolled={enrolled}
                                 course={course}
                                 completedVideos={completedVideos}

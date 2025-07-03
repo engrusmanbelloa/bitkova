@@ -30,6 +30,37 @@ export interface User {
     cart: UserCourseProgress[]
 }
 
+export interface EnrolledCourse {
+    id: string // Optional: custom ID like `${userId}_${courseId}`
+    userId: string // UID from Firebase Auth
+    courseId: string // Document ID from the `courses` collection
+    completedLessons: number
+    progress: number // e.g. 0 to 100
+    status: "in-progress" | "completed"
+    enrolledAt: FirebaseFirestore.Timestamp
+    updatedAt: FirebaseFirestore.Timestamp
+}
+export interface WishListItem {
+    id: string // `${userId}_${courseId}`
+    userId: string
+    courseId: string
+    addedAt: FirebaseFirestore.Timestamp
+}
+export interface ArchivedCourse {
+    id: string // `${userId}_${courseId}`
+    userId: string
+    courseId: string
+    archivedAt: FirebaseFirestore.Timestamp
+    reason?: string
+}
+export interface Certificate {
+    id: string // `${userId}_${courseId}`
+    userId: string
+    courseId: string
+    certificateUrl: string
+    issuedAt: FirebaseFirestore.Timestamp
+}
+
 export const users: User[] = [
     {
         id: "user1",

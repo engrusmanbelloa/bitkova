@@ -6,8 +6,11 @@ import Rating from "@mui/material/Rating"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
+import LockIcon from "@mui/icons-material/Lock"
+import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
+import PersonIcon from "@mui/icons-material/Person"
 import { formatPrice } from "@/config/FormatPrice"
-import { mobile, ipad } from "@/responsive"
 import { CourseType } from "@/types"
 
 const Top = styled.div`
@@ -145,20 +148,35 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
                 <FeaturesTitle>Course Features</FeaturesTitle>
                 <FeatureList>
                     <FeatureItem>
-                        <span>📚</span> {course.onDemandVideos} Lessons ({course.duration.hours}:
+                        <span>
+                            <SignalCellularAltIcon />
+                        </span>
+                        {course.onDemandVideos} Lessons ({course.duration.hours}:
                         {course.duration.minutes} Hours)
                     </FeatureItem>
                     <FeatureItem>
-                        <span>👨‍🎓</span> {course.students} Students
+                        <span>
+                            <PersonIcon />
+                        </span>
+                        {course.students} Students
                     </FeatureItem>
                     <FeatureItem>
-                        <span>🔒</span> Lifetime access to course
+                        <span>
+                            <LockIcon />
+                        </span>
+                        Lifetime access to course
                     </FeatureItem>
                     <FeatureItem>
-                        <span>📜</span> Certificate of Completion
+                        <span>
+                            <WorkspacePremiumIcon />
+                        </span>
+                        Certificate of Completion
                     </FeatureItem>
                     <FeatureItem>
-                        <span>📈</span> Skill Level: {course.skillLevel}
+                        <span>
+                            <SignalCellularAltIcon />
+                        </span>
+                        Skill Level: {course.skillLevel}
                     </FeatureItem>
                     <FeatureItem>
                         <StarBorderIcon /> Rated: {course.rating}

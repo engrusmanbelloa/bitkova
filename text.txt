@@ -150,3 +150,32 @@ payWithPaystack = () => {
   });
   handler.openIframe();
 }
+
+                    {module.links &&
+                        Object.entries(module.links).map(([title, url], subIndex) => (
+                            <AccordionDetails key={subIndex}>
+                                <ModuleContent>
+                                    {!enrolled ? (
+                                        <LockIcon />
+                                    ) : (
+                                        <Playbtn
+                                            onClick={() => {
+                                                if (enrolled) {
+                                                    // setSelectedVideo(url)
+                                                    // setSelectedTitle(title)
+                                                    console.log()
+                                                }
+                                            }}
+                                        />
+                                    )}
+                                    {title}
+                                    {completedVideos.includes(title) ? (
+                                        <RoundCheckBox style={{ color: "#0072ff" }} />
+                                    ) : (
+                                        <RoundCheckBox />
+                                    )}
+
+                                    {/* <RoundCheckBox /> */}
+                                </ModuleContent>
+                            </AccordionDetails>
+                        ))}
