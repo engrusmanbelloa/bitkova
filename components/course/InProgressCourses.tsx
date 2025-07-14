@@ -3,6 +3,7 @@ import Rating from "@mui/material/Rating"
 import NoDataAvailable from "@/components/dashboard/NoData"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
+import { useUserEnrolledCourses } from "@/hooks/user/useUserCount"
 
 const Container = styled.div`
     margin-top: 20px;
@@ -103,7 +104,9 @@ interface DashboardProps {
 }
 export default function InProgressCourses({ user }: DashboardProps) {
     // Filter only courses with status "in-progress"
-    const inProgressCourses = user.enrolledCourses
+    // const inProgressCourses = user.enrolledCourses
+    const { enrolledCourses, loading } = useUserEnrolledCourses(user.id)
+    const inProgressCourses = enrolledCourses.filter((c) => c.status === "in progress")
     // console.log("Courses in progress", inProgressCourses)
     const comment = " you have no enrolled courses"
 

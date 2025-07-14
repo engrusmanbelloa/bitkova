@@ -6,7 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import LoginIcon from "@mui/icons-material/Login"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { initializeApp } from "firebase/app"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 
 const DropdownContent = styled.ul<{ $isVisible: boolean }>`
     position: absolute;

@@ -2,7 +2,7 @@ import React from "react"
 import { redirect } from "next/navigation"
 import Dashboard from "@/components/dashboard/Dashoard"
 import { users } from "@/userType"
-import { adminAuth } from "@/app/utils/admin"
+import { adminAuth } from "@/lib/firebase/admin"
 
 export default function page() {
     const id = "user1"

@@ -15,7 +15,7 @@ import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
 import { checkSessionValid } from "@/app/api/auth/session/checkSession"
 import useSessionRefresh from "@/hooks/useSessionRefresh"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 
 const Container = styled.div`
     width: 1440px;

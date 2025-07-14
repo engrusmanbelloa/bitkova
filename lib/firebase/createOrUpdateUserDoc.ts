@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore"
 import { User as FirebaseUser } from "firebase/auth"
 import { User, UserCourseProgress } from "@/userType"
-import { app } from "@/firebase/firebaseConfig"
+import { app } from "@/lib/firebase/firebaseConfig"
 
 const db = getFirestore(app)
 
@@ -72,11 +72,6 @@ export default async function createUserIfNotExists(user: FirebaseUser) {
             skill: "",
             bio: "",
             registrationDate: new Date().toISOString(),
-            enrolledCourses: [],
-            completedCourses: [],
-            archivedCourses: [],
-            wishList: [],
-            cart: [],
         }
         await setDoc(userRef, newUser)
         console.log("New user document created")

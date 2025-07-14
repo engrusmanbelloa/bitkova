@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { adminAuth } from "@/utils/admin"
+import { adminAuth } from "@/lib/firebase/admin"
 import { cookies } from "next/headers"
 
 const FIVE_DAYS = 60 * 60 * 24 * 5 * 1000

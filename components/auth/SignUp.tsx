@@ -5,8 +5,8 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
-import { auth } from "@/firebase/firebaseConfig"
+import createOrUpdateUserDoc from "@/lib/firebase/createOrUpdateUserDoc"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import {
     getAdditionalUserInfo,
     createUserWithEmailAndPassword,

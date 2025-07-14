@@ -1,9 +1,22 @@
 "use client"
+import { useState } from "react"
 import styled from "styled-components"
 import SchoolIcon from "@mui/icons-material/School"
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import InProgressCoursesMock from "@/hooks/mocks/InProgressCoursesMock"
+import {
+    useUserCompletedCourses,
+    useUserEnrolledCourses,
+    useUserArchivedCourses,
+} from "@/hooks/user/useUserCount"
+import {
+    getUserEnrollments,
+    getUserArchivedCourses,
+    getUserCompletedCourses,
+} from "@/lib/firebase/queries/userCourses"
+import { db } from "@/lib/firebase/firebaseConfig"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
@@ -92,6 +105,9 @@ interface DashboardProps {
 }
 
 export default function DashboardOverview({ user }: DashboardProps) {
+    const { completedCourses } = useUserCompletedCourses(user.id)
+    const { enrolledCourses } = useUserEnrolledCourses(user.id)
+    const { archiveCourses } = useUserArchivedCourses(user.id)
     return (
         <Container>
             <ProfileSetupContainer>
@@ -104,25 +120,26 @@ export default function DashboardOverview({ user }: DashboardProps) {
                     <IconWrapper color="#3b82f6">
                         <SchoolIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{user.enrolledCourses.length}</Count>
+                    <Count>{enrolledCourses.length}</Count>
                     <Label>Enrolled Courses</Label>
                 </OverviewBox>
                 <OverviewBox>
                     <IconWrapper color="#10b981">
                         <PlayCircleFilledIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{user.archivedCourses.length}</Count>
+                    <Count>{archiveCourses.length}</Count>
                     <Label>Active Courses</Label>
                 </OverviewBox>
                 <OverviewBox>
                     <IconWrapper color="#f59e0b">
                         <EmojiEventsIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{user.completedCourses.length}</Count>
+                    <Count>{completedCourses.length}</Count>
                     <Label>Completed Courses</Label>
                 </OverviewBox>
             </OverviewContainer>
             <InProgressCourses user={user} />
+            {/* <InProgressCoursesMock /> */}
         </Container>
     )
 }

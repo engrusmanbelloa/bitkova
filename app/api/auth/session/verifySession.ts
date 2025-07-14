@@ -1,4 +1,4 @@
-import { adminAuth } from "@/utils/admin"
+import { adminAuth } from "@/lib/firebase/admin"
 import { cookies } from "next/headers"
 
 export async function verifySession() {

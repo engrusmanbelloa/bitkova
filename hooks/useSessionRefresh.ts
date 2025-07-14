@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { checkSessionValid } from "@/app/api/auth/session/checkSession"

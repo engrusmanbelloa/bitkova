@@ -13,7 +13,7 @@ export interface UserCourseProgress {
     status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
 }
 
-export interface User {
+export interface Users {
     id: string
     name: string
     email: string
@@ -29,39 +29,61 @@ export interface User {
     wishList: UserCourseProgress[]
     cart: UserCourseProgress[]
 }
-
+export interface User {
+    id: string // Firebase UID
+    name: string
+    email: string
+    role: "guest" | "student" | "instructor" | "admin"
+    username: string
+    bio: string
+    skill: string
+    phoneNumber: string
+    registrationDate: string // Can use Timestamp in Firestore
+}
 export interface EnrolledCourse {
     id: string // Optional: custom ID like `${userId}_${courseId}`
     userId: string // UID from Firebase Auth
     courseId: string // Document ID from the `courses` collection
     completedLessons: number
     progress: number // e.g. 0 to 100
-    status: "in-progress" | "completed"
-    enrolledAt: FirebaseFirestore.Timestamp
-    updatedAt: FirebaseFirestore.Timestamp
+    status: "in progress" | "completed"
+    enrolledAt: Date
+    updatedAt: Date
 }
 export interface WishListItem {
     id: string // `${userId}_${courseId}`
     userId: string
     courseId: string
-    addedAt: FirebaseFirestore.Timestamp
+    addedAt: Date
 }
 export interface ArchivedCourse {
     id: string // `${userId}_${courseId}`
     userId: string
     courseId: string
-    archivedAt: FirebaseFirestore.Timestamp
+    archivedAt: Date
     reason?: string
 }
 export interface Certificate {
     id: string // `${userId}_${courseId}`
     userId: string
     courseId: string
-    certificateUrl: string
-    issuedAt: FirebaseFirestore.Timestamp
+    issuedAt: Date
+}
+export interface Cart {
+    courseId: string
+    // courseTitle: string
+    // priceAtTime: number
+    addedAt: Date
+}
+export interface CompletedCourse {
+    id: string
+    userId: string
+    courseId: string
+    completedAt: Date
+    // any other fields you store
 }
 
-export const users: User[] = [
+export const users: Users[] = [
     {
         id: "user1",
         name: "Usman Bello Abdullahi",

@@ -14,7 +14,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`

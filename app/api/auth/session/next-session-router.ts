@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { NextRequest, NextResponse } from "next/server"
-import { adminAuth, adminDb } from "@/utils/admin"
+import { adminAuth, adminDb } from "@/lib/firebase/admin"
 
 export async function POST(req: Request) {
     const body = await req.json()

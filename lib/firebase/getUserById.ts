@@ -1,4 +1,4 @@
-import { adminDb } from "@/utils/admin"
+import { adminDb } from "@/lib/firebase/admin"
 
 export async function getUserById(uid: string) {
     const docRef = adminDb.collection("users").doc(uid)
