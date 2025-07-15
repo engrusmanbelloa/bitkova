@@ -21,20 +21,6 @@ export function useFullCourse(courseId: string) {
                     collection(db, "courseModules"),
                     where("courseId", "==", courseId),
                 )
-                // const modulesSnap = await getDocs(modulesQuery)
-                // const modules: Module[] = await Promise.all(
-                //   modulesSnap.docs.map(async (modDoc) => {
-                //     const modData = modDoc.data()
-                //     const lessonsSnap = await getDocs(
-                //       collection(db, "courseModules", modDoc.id, "lessons")
-                //     )
-                //     const lessons = lessonsSnap.docs.map((d) => d.data())
-                //     return {
-                //       ...modData,
-                //       lessons,
-                //     }
-                //   })
-                // )
                 const modulesSnap = await getDocs(modulesQuery)
                 const modules: (Module & { lessons: Lesson[] })[] = await Promise.all(
                     modulesSnap.docs.map(async (modDoc) => {

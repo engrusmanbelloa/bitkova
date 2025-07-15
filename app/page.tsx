@@ -16,6 +16,7 @@ import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/Testimonials"
 import StatsSection from "@/components/StatsSection"
 import CarrierCard from "@/components/CarrierCard"
+import { auth } from "@/lib/firebase/firebaseConfig"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
