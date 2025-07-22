@@ -1,85 +1,74 @@
 "use client"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { onAuthStateChanged } from "firebase/auth"
-import { toast } from "sonner"
 
 export default function RoleManager() {
-    const [uid, setUid] = useState<string>("")
+    const [userEmail, setUserEmail] = useState<string | null>(null)
+    const [targetEmail, setTargetEmail] = useState("")
     const [role, setRole] = useState<"admin" | "instructor" | "none">("instructor")
     const [loading, setLoading] = useState(true)
 
-    async function assignRole(uid: string, role: "admin" | "instructor" | "none") {
-        if (!auth.currentUser?.uid) {
-            console.error("User UID is not available")
-            return
-        }
-        try {
-            const res = await fetch("/api/setRole", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    uid,
-                    role: role === "none" ? null : role,
-                }),
-            })
-            const data = await res.json()
-            if (!res.ok) throw new Error(data.error || "Failed to assign role")
-
-            await auth.currentUser.getIdToken(true)
-            const token = await auth.currentUser?.getIdTokenResult()
-            // console.log("Custom Claims:", token?.claims)
-            toast.success(
-                role === "none" ? "Role removed successfully" : `Role "${role}" assigned to user`,
-            )
-        } catch (error) {
-            // console.error("Error assigning/removing role:", error)
-            // alert("Failed to assign or remove role")
-            toast.error("Error assigning/removing role:")
-        }
-    }
-
-    const handleAssign = () => {
-        if (!uid) {
-            alert("Please enter a UID")
-            return
-        }
-        assignRole(uid, role)
-    }
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setUid(user.uid)
+                setUserEmail(user.email ?? null)
             } else {
-                setUid("")
+                setUserEmail(null)
             }
             setLoading(false)
         })
 
         return () => unsubscribe()
     }, [])
-    if (loading) return <p>🔄 Checking auth...</p>
-    if (!auth.currentUser) return <>No user</>
+
+    async function assignRole() {
+        if (!targetEmail || !userEmail) {
+            alert("Please enter an email and be logged in")
+            return
+        }
+
+        try {
+            const res = await fetch("/api/setRole", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: targetEmail, role, requesterEmail: userEmail }),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) throw new Error(data.error || "Failed to assign role")
+
+            await auth.currentUser?.getIdToken(true)
+            const token = await auth.currentUser?.getIdTokenResult()
+            console.log("Custom Claims:", token?.claims)
+
+            alert(data.message)
+        } catch (error) {
+            console.error("Error:", error)
+            alert("Failed to assign or remove role")
+        }
+    }
+
+    if (loading) return <p>🔄 Loading...</p>
+    if (!userEmail) return <p> Not authenticated</p>
 
     return (
         <div>
-            <p>{auth.currentUser?.uid}</p>
             <input
-                type="text"
-                placeholder="Firebase UID"
-                value={uid}
-                onChange={(e) => setUid(e.target.value)}
+                type="email"
+                placeholder="Target User Email"
+                value={targetEmail}
+                onChange={(e) => setTargetEmail(e.target.value)}
             />
             <select value={role} onChange={(e) => setRole(e.target.value as any)}>
                 <option value="instructor">Instructor</option>
                 <option value="admin">Admin</option>
-                <option value="none"> Remove All Roles</option>
+                <option value="none">Remove Role</option>
             </select>
-            <button onClick={handleAssign}>
-                {role === "none" ? "Remove Role" : "Assign Role"}
-            </button>
+            <button onClick={assignRole}>{role === "none" ? "Remove Role" : "Assign Role"}</button>
         </div>
     )
 }

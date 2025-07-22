@@ -19,6 +19,7 @@ export function useUserDoc() {
                 const userSnap = await getDoc(userRef)
                 if (userSnap.exists()) {
                     setUserDoc(userSnap.data() as User)
+                    // console.log("User doc fetched successfully")
                 } else {
                     setUserDoc(null)
                 }

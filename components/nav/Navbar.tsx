@@ -25,9 +25,10 @@ import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { auth, app } from "@/lib/firebase/firebaseConfig"
 import { getFirestore, doc, getDoc } from "firebase/firestore"
-import createOrUpdateUserDoc from "@/lib/firebase/createOrUpdateUserDoc"
-import { useUserDoc } from "@/hooks/useUserDoc"
+import createUserIfNotExists from "@/lib/firebase/createOrUpdateUserDoc"
+import { useUserDoc } from "@/hooks/user/useUserDoc"
 import { toast } from "sonner"
+import { useAuthReady } from "@/hooks/useAuthReady"
 
 // containers section
 const Container = styled.section`
@@ -196,8 +197,8 @@ export default function Navbar() {
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-    const [initials, setInitials] = useState("GU")
     const { userDoc, loading } = useUserDoc()
+    const { authReady, user } = useAuthReady()
     const main = "true"
     let login
 
@@ -279,50 +280,93 @@ export default function Navbar() {
 
     // Handle user email verification
     const handleSendVerification = async () => {
+        if (!authReady) return // Wait until auth state is ready
         try {
-            if (auth.currentUser && !auth.currentUser.emailVerified) {
+            if (!user) {
+                toast.error("User not authenticated.")
+                return
+            }
+            await user.reload() // Always refresh to get up-to-date emailVerified status
+            // console.log("the user is verified? ", auth.currentUser?.emailVerified)
+            if (user.emailVerified) {
+                // Verified, proceed
+                setVerificationChecked(true)
+                setSentVerification(false)
+                setUserLoggedIn(true)
+                setNotifyModalOpen(false)
+                toast.success("Email already verified")
+
+                // create user document if verified but not created
+                await createUserIfNotExists(user)
+
+                const idToken = await user.getIdToken() // force refresh
+                // Create session
+                await fetch("/api/auth/session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idToken }),
+                    credentials: "include",
+                })
+                toast.success("Email verification successful")
+            } else {
                 if (!sentVerification) {
-                    await sendEmailVerification(auth.currentUser)
+                    await sendEmailVerification(user)
                     setSentVerification(true)
-                    toast.success("Verification email sent check your inbox")
+                    toast.success("Verification email sent check your inbox/spam")
                 } else {
-                    toast.success("Verification email already sent, check your inbox")
+                    toast.success("Verification email already sent to your inbox/spam")
                 }
             }
         } catch (error: any) {
-            // console.log("Error resending verification email:", error.message)
-            toast.error("Failed to resend verification email. Please try again later.")
+            console.log("Faild:", error.message)
+            toast.error("Failed to resend verification email. Please try again later.", error)
         }
     }
     // Check if the user confirmed their email
     const handleCheckVerification = async () => {
+        if (!authReady) return // Wait until Firebase auth is ready
+
         try {
-            if (auth.currentUser) {
-                await auth.currentUser.reload()
-                if (auth.currentUser.emailVerified) {
-                    setVerificationChecked(true)
-                    setSentVerification(false)
-                    setUserLoggedIn(true)
-                    setNotifyModalOpen(false)
-                    await createOrUpdateUserDoc(auth.currentUser)
-                    const idToken = await auth.currentUser.getIdToken()
-                    await fetch("/api/auth/session", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ idToken }),
-                        credentials: "include",
-                    })
-                    toast.success("Email verification successful")
-                    // console.log(auth.currentUser)
-                } else {
-                    toast.success("Email not verified. Please verify your email")
-                    // console.log(auth.currentUser.emailVerified)
-                }
+            if (!user) {
+                toast.error("User not authenticated")
+                return
             }
+
+            await user.reload()
+            const isVerified = user.emailVerified
+
+            if (!isVerified) {
+                toast.info("Email not verified. Please verify your email.")
+                return
+            }
+
+            // Proceed after successful verification
+            setVerificationChecked(true)
+            setSentVerification(false)
+            setUserLoggedIn(true)
+            setNotifyModalOpen(false)
+
+            // create user document after being verified
+            await createUserIfNotExists(user)
+
+            const idToken = await user.getIdToken() // force refresh
+            const res = await fetch("/api/auth/session", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idToken }),
+                credentials: "include",
+            })
+
+            if (!res.ok) {
+                const { error } = await res.json()
+                throw new Error(error || "Session creation failed")
+            }
+            toast.success("Email verification successful")
         } catch (error: any) {
-            // console.error("Error checking email verification:", error.message)
-            // alert("Failed to check verification status. Please try again later.")
-            toast.error("Failed to check verification status. Please try again lat")
+            console.error("Verification error:", error)
+            setNotifyModalOpen(true)
+            setSentVerification(false)
+            toast.error("Failed to check verification status. Please try again later.")
         }
     }
     // close the notification modal
@@ -340,6 +384,7 @@ export default function Navbar() {
     }
 
     useEffect(() => {
+        if (!authReady) return // Wait for Firebase to be ready
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user !== null) {
@@ -357,16 +402,13 @@ export default function Navbar() {
                 }
                 setSignin(false)
                 setSignUp(false)
-                const uid = user.uid
+                // const uid = user.uid
                 login = true
                 // console.log("user id is : " + uid)
             } else {
                 setUserLoggedIn(false)
             }
         })
-        if (auth.currentUser && auth.currentUser.emailVerified) {
-            setUserLoggedIn(true)
-        }
 
         return () => {
             setIsLoading(false)

@@ -1,17 +1,14 @@
 import styled from "styled-components"
-import Link from "next/link"
-import DashboardIcon from "@mui/icons-material/Dashboard"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import SchoolIcon from "@mui/icons-material/School"
-import StarIcon from "@mui/icons-material/Star"
-import QuizIcon from "@mui/icons-material/Quiz"
-import HistoryIcon from "@mui/icons-material/History"
-import HelpIcon from "@mui/icons-material/Help"
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle"
-import RedeemIcon from "@mui/icons-material/Redeem"
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
+import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload"
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
+import HistoryIcon from "@mui/icons-material/History"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { mobile, ipad } from "@/responsive"
 
 const SidebarContainer = styled.div`
@@ -57,16 +54,14 @@ const NavItem = styled.a<{ $active?: boolean }>`
 `
 
 export default function Sidebar({ activeItem, setActiveItem }: any) {
+    const router = useRouter()
     const menuItems = [
-        { id: "dashboard", icon: <DashboardIcon />, label: "Dashboard" },
-        { id: "profile", icon: <AccountCircleIcon />, label: "My Profile" },
-        { id: "learning", icon: <SchoolIcon />, label: "My Learning" },
-        { id: "certificate", icon: <SchoolIcon />, label: "My Certificates" },
-        { id: "wishlist", icon: <StarIcon />, label: "Wishlist" },
-        { id: "quiz", icon: <QuizIcon />, label: "My Quiz Attempts" },
-        { id: "history", icon: <HistoryIcon />, label: "Order History" },
-        { id: "qa", icon: <HelpIcon />, label: "Question & Answer" },
-        { id: "RedeemIcon", icon: <RedeemIcon />, label: "Referal Reward" },
+        { id: "panel", icon: <AdminPanelSettingsIcon />, label: "Panel" },
+        { id: "performance", icon: <SignalCellularAltIcon />, label: "Performance" },
+        { id: "course", icon: <DriveFolderUploadIcon />, label: "Upload course" },
+        { id: "student", icon: <PersonAddAltIcon />, label: "Add student" },
+        { id: "instructor", icon: <PersonAddAltIcon />, label: "Add instructor" },
+        { id: "history", icon: <HistoryIcon />, label: "Payment History" },
         { id: "settings", icon: <SettingsIcon />, label: "Settings" },
     ]
 
@@ -82,9 +77,11 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
                 </NavItem>
             ))}
             <Hr />
-            <NavItem href="/console">
-                <ChangeCircleIcon /> Admin panel
-            </NavItem>
+            <Link href="/dashboard">
+                <NavItem>
+                    <ChangeCircleIcon /> Switch to user
+                </NavItem>
+            </Link>
             <NavItem>
                 <ExitToAppIcon /> Logout
             </NavItem>
