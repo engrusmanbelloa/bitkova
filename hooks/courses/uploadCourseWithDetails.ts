@@ -54,7 +54,7 @@ export async function uploadNewCourse({ course, modules, reviews }: UploadCourse
     // Commit all batched writes
     try {
         await batch.commit()
-        console.log("✅ Course uploaded successfully")
+        console.log(" Course uploaded successfully")
     } catch (error) {
         console.error("Failed to upload course:", error)
         throw error

@@ -77,11 +77,9 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
                 </NavItem>
             ))}
             <Hr />
-            <Link href="/dashboard">
-                <NavItem>
-                    <ChangeCircleIcon /> Switch to user
-                </NavItem>
-            </Link>
+            <NavItem href="/dashboard">
+                <ChangeCircleIcon /> Switch to user
+            </NavItem>
             <NavItem>
                 <ExitToAppIcon /> Logout
             </NavItem>

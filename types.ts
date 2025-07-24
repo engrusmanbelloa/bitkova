@@ -46,7 +46,7 @@ export interface Course {
     title: string
     category: string
     skillLevel: string
-    facilitatorId: string // link to a facilitator
+    facilitatorEmail: string // link to a facilitator
     rating: number
     image: string
     shortDesc: string

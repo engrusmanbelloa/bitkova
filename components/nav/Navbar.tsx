@@ -448,7 +448,7 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {auth.currentUser && auth.currentUser.emailVerified ? (
+                        {authReady && user && user.emailVerified ? (
                             <>
                                 <CartsContainer>
                                     <IconButton
@@ -567,7 +567,7 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
-                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified
+                            {toggleMenu && authReady && user && user.emailVerified
                                 ? !loading
                                     ? userDoc && (
                                           <DropdownMenu

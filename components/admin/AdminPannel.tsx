@@ -6,9 +6,11 @@ import Sidebar from "@/components/admin/SideBar"
 import DashboardOverview from "@/components/admin/DashboardOverview"
 import ProfileSection from "@/components/admin/ProfileSection"
 import ProfileForm from "@/components/admin/Settings"
+import RoleManager from "@/components/auth/RoleManager"
 import NoDataAvailable from "./NoData"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
+import UploadCourse from "@/components/admin/UploadCourse"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -58,7 +60,7 @@ interface DashboardProps {
 
 export default function Panel({ user }: DashboardProps) {
     // setting active menu item defaults to dashboard
-    const [activeItem, setActiveItem] = useState("dashboard")
+    const [activeItem, setActiveItem] = useState("panel")
 
     const getInitials = (name: string): string => {
         const words = name.split(" ")
@@ -80,48 +82,36 @@ export default function Panel({ user }: DashboardProps) {
                 {/* Main Content Area */}
                 <ContentContainer>
                     {/* Dashboard Overview */}
-                    {activeItem === "dashboard" && <DashboardOverview user={user} />}
-                    {activeItem === "profile" && <ProfileSection user={user} />}
+                    {activeItem === "panel" && <DashboardOverview user={user} />}
+                    {activeItem === "performance" && <ProfileSection user={user} />}
 
-                    {activeItem === "learning" && (
+                    {activeItem === "course" && (
                         <>
-                            <Title>My Learning</Title>
+                            <Title>Upload Course</Title>
+                            <UploadCourse />
+                        </>
+                    )}
+                    {activeItem === "student" && (
+                        <>
+                            <Title>Add Student</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
-                    {activeItem === "certificate" && (
+                    {activeItem === "instructor" && (
                         <>
-                            <Title>My Certificates</Title>
-                            <NoDataAvailable comment="Comming Soon" />
+                            <Title>Add Instructor</Title>
+                            <RoleManager />
                         </>
                     )}
-                    {activeItem === "wishlist" && (
+                    {activeItem === "history" && (
                         <>
-                            <Title>Wishlist</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "quiz" && (
-                        <>
-                            <Title>My Quiz Attempts</Title>
+                            <Title>Payment History</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
                     {activeItem === "history" && (
                         <>
                             <Title>Order History</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "qa" && (
-                        <>
-                            <Title>Question & Answer</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "RedeemIcon" && (
-                        <>
-                            <Title>Referal Reward</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}

@@ -1,8 +1,6 @@
 import React from "react"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
-import Dashboard from "@/components/dashboard/Dashoard"
-import RoleManager from "@/components/auth/RoleManager"
 import Panel from "@/components/admin/AdminPannel"
 import { User } from "@/userType"
 import { getUserById } from "@/lib/firebase/getUserById"
@@ -36,7 +34,6 @@ export default async function page() {
     return (
         <div>
             <Panel user={user} />
-            <RoleManager />
         </div>
     )
 }
