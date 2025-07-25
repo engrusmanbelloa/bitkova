@@ -344,7 +344,9 @@ export default function CourseUploadForm() {
                 ))}
 
                 <Divider />
-                <Button onClick={submitCourse}>Submit Full Course</Button>
+                <Button onClick={submitCourse} disabled={uploading}>
+                    {uploading ? "uploading..." : "Submit Full Course"}
+                </Button>
             </FormWrapper>
         </Container>
     )
