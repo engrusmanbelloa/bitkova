@@ -1,6 +1,6 @@
 import { collection, doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { CourseWithExtras, Course, Module, Lesson, Facilitator, Review } from "@/types"
+import { Course, Module, Lesson, Facilitator, Review } from "@/types"
 
 interface UploadCourseInput {
     course: Course

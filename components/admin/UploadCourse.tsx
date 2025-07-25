@@ -2,48 +2,32 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { v4 as uuidv4 } from "uuid"
 import { Course, Module, Lesson } from "@/types"
+import { toast } from "react-toastify"
 import { uploadNewCourse } from "@/hooks/courses/uploadCourseWithDetails"
+import CourseUploadForm from "@/components/admin/CourseUploadForm"
 import { data_package } from "@/data"
-
+const Container = styled.div`
+    max-width: 800px;
+    margin: auto;
+`
 const FormWrapper = styled.div`
     max-width: 800px;
     margin: auto;
-    padding: 2rem;
+    padding: 10px;
 `
 const TextArea = styled.textarea`
     width: 100%;
     padding: 0.5rem;
-    margin: 0.5rem 0;
+    margin: 5px 0;
 `
 const Divider = styled.hr`
-    margin: 2rem 0;
-`
-const ModuleContainer = styled.div`
-    margin-top: 1rem;
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 8px;
-`
-const FormContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-`
-const Textarea = styled.textarea`
-    padding: 0.5rem;
-    font-size: 1rem;
-`
-const LessonContainer = styled.div`
-    margin-top: 1rem;
-    padding: 0.5rem;
-    border-left: 2px solid #007bff;
-    background: #f9f9f9;
+    margin: 10px 0;
 `
 const Input = styled.input`
     width: 100%;
-    margin-top: 0.25rem;
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
+    margin-top: 5px;
+    margin-bottom: 7px;
+    padding: 5px;
 `
 const Button = styled.button`
     padding: 0.5rem 1rem;
@@ -57,6 +41,22 @@ const Button = styled.button`
     &:hover {
         background: #0056b3;
     }
+`
+const Tab = styled.button<{ $isActive: boolean }>`
+    background: none;
+    border: none;
+    padding: 12px 0;
+    font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
+    color: ${({ $isActive, theme }) => ($isActive ? theme.palette.primary.main : "#555")};
+    border-bottom: ${({ $isActive }) => ($isActive ? "2px solid #3b82f6" : "none")};
+    cursor: pointer;
+    font-size: 16px;
+`
+const TabsWrapper = styled.div`
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
 `
 
 // export default function UploadCourse() {
@@ -567,6 +567,8 @@ const Button = styled.button`
 // }
 
 export default function UploadCourse() {
+    const [activeTab, setActiveTab] = useState<"upload" | "update">("upload")
+    const [uploadError, setUploadError] = useState("")
     const [course, setCourse] = useState<Partial<Course>>({ whatYoullLearn: [] })
     const [newLearningItem, setNewLearningItem] = useState("")
     const [modules, setModules] = useState<(Module & { lessons: Lesson[] })[]>([])
@@ -664,147 +666,116 @@ export default function UploadCourse() {
         setNewLearningItem("")
     }
 
-    const submitCourse = () => {
-        const fullCourse = { ...course, modules }
-        console.log("Submitting course:", fullCourse)
-        // Post to Firestore here
+    // const submitCourse = () => {
+    //     const fullCourse = { ...course, modules }
+    //     console.log("Submitting course:", fullCourse)
+    //     // Post to Firestore here
+    // }
+    // const submitCourse = async () => {
+    //     const fullCourse = { ...course, modules }
+    //     // Validate required fields
+
+    //     try {
+    //         const courseId = uuidv4()
+    //         const finalizedCourse = {
+    //             ...fullCourse,
+    //             id: courseId,
+    //         }
+
+    //         const finalizedModules = modules.map((mod, modIndex) => ({
+    //             ...mod,
+    //             id: uuidv4(),
+    //             position: modIndex,
+    //             lessons: mod.lessons.map((lesson, lessonIndex) => ({
+    //                 ...lesson,
+    //                 id: lesson.id || uuidv4(),
+    //                 position: lessonIndex,
+    //             })),
+    //         }))
+
+    //         await uploadNewCourse({
+    //             course: finalizedCourse,
+    //             modules: finalizedModules,
+    //             reviews: [], // add review logic later
+    //         })
+
+    //         toast.success("Course uploaded successfully!")
+    //     } catch (err) {
+    //         console.error(err)
+    //         toast.error("Failed to upload course.")
+    //     }
+    // }
+    const submitCourse = async () => {
+        if (
+            !course.title ||
+            !course.category ||
+            !course.skillLevel ||
+            !course.facilitatorEmail ||
+            !course.image ||
+            !course.shortDesc ||
+            !course.courseDesc ||
+            course.price === undefined ||
+            course.onDemandVideos === undefined ||
+            !Array.isArray(course.whatYoullLearn)
+        ) {
+            toast.error("Please fill in all required course fields.")
+            return
+        }
+
+        try {
+            const courseId = uuidv4()
+
+            const finalizedCourse: Course = {
+                id: courseId,
+                title: course.title,
+                category: course.category,
+                skillLevel: course.skillLevel,
+                facilitatorEmail: course.facilitatorEmail,
+                rating: 0,
+                image: course.image,
+                shortDesc: course.shortDesc,
+                courseDesc: course.courseDesc,
+                students: 0,
+                price: course.price,
+                onDemandVideos: course.onDemandVideos,
+                downloadableFiles: course.downloadableFiles || 0,
+                whatYoullLearn: course.whatYoullLearn,
+            }
+
+            const finalizedModules = modules.map((mod, modIndex) => ({
+                ...mod,
+                id: mod.id || uuidv4(),
+                position: modIndex,
+                lessons: mod.lessons.map((lesson, lessonIndex) => ({
+                    ...lesson,
+                    id: lesson.id || uuidv4(),
+                    position: lessonIndex,
+                })),
+            }))
+
+            await uploadNewCourse({
+                course: finalizedCourse,
+                modules: finalizedModules,
+                reviews: [],
+            })
+
+            toast.success("Course uploaded successfully!")
+        } catch (err) {
+            console.error(err)
+            toast.error("Failed to upload course.")
+        }
     }
-
     return (
-        <FormWrapper>
-            {/* Course Info */}
-            <h3>Course Details</h3>
-            <Input
-                placeholder="Title"
-                onChange={(e) => handleCourseChange("title", e.target.value)}
-            />
-            <label htmlFor="category">Category</label>
-            <select
-                id="category"
-                value={course.category}
-                onChange={(e) => handleCourseChange("category", e.target.value)}
-            >
-                <option value="Cryptocurrency">Cryptocurrency</option>
-                <option value="UIUX">UI/UX</option>
-                <option value="Programming">Blockchain Development</option>
-                <option value="Web Development">Web Development</option>
-                <option value="Social Media Marketing">Social Media Marketing</option>
-                <option value="Content Creation">Content Creation</option>
-            </select>
-            <label htmlFor="skillLevel">Skill Level</label>
-            <select
-                id="skillLevel"
-                value={course.skillLevel}
-                onChange={(e) => handleCourseChange("skillLevel", e.target.value)}
-            >
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-            </select>
-            <Input
-                placeholder="Facilitator email"
-                onChange={(e) => handleCourseChange("facilitatorEmail", e.target.value)}
-            />
-            <Input
-                placeholder="Image URL"
-                onChange={(e) => handleCourseChange("image", e.target.value)}
-            />
-            <TextArea
-                placeholder="Short Description"
-                onChange={(e) => handleCourseChange("shortDesc", e.target.value)}
-            />
-            <TextArea
-                placeholder="Full Course Description"
-                onChange={(e) => handleCourseChange("courseDesc", e.target.value)}
-            />
-            <Input
-                placeholder="Price"
-                type="number"
-                min="0"
-                onChange={(e) => handleCourseChange("price", parseFloat(e.target.value))}
-            />
-            <Input
-                placeholder="On Demand Videos"
-                type="number"
-                min="1"
-                onChange={(e) => handleCourseChange("onDemandVideos", parseInt(e.target.value))}
-            />
-
-            <h3>What You'll Learn</h3>
-            <ul>{course.whatYoullLearn?.map((item, index) => <li key={index}>{item}</li>)}</ul>
-            <Input
-                placeholder="Add a learning outcome"
-                value={newLearningItem}
-                onChange={(e) => setNewLearningItem(e.target.value)}
-            />
-            <Button type="button" onClick={addLearningItem}>
-                Add
-            </Button>
-
-            <Divider />
-            <h2>{editingModuleIndex !== null ? "Edit Module" : "Add Module"}</h2>
-            <Input
-                placeholder="Module Title"
-                value={currentModule.title}
-                onChange={(e) => setCurrentModule((prev) => ({ ...prev, title: e.target.value }))}
-            />
-
-            <h3>Lessons</h3>
-            {currentLessons.map((lesson, index) => (
-                <div key={index}>
-                    <p>
-                        {lesson.title} ({lesson.durationMinutes} mins)
-                    </p>
-                    <Button onClick={() => editLesson(index)}>Edit</Button>
-                    <Button onClick={() => deleteLesson(index)}>Delete</Button>
-                </div>
-            ))}
-
-            <Input
-                placeholder="Lesson Title"
-                value={newLesson.title}
-                onChange={(e) => handleLessonChange("title", e.target.value)}
-            />
-            <Input
-                placeholder="Video URL"
-                value={newLesson.videoUrl}
-                onChange={(e) => handleLessonChange("videoUrl", e.target.value)}
-            />
-            <Input
-                placeholder="Duration (minutes)"
-                type="number"
-                min="1"
-                value={newLesson.durationMinutes?.toString() || ""}
-                onChange={(e) => handleLessonChange("durationMinutes", parseInt(e.target.value))}
-            />
-            <TextArea
-                placeholder="Content"
-                value={newLesson.content}
-                onChange={(e) => handleLessonChange("content", e.target.value)}
-            />
-            <Button type="button" onClick={addLessonToCurrentModule}>
-                {editingLessonIndex !== null ? "Update Lesson" : "Add Lesson"}
-            </Button>
-            <Button type="button" onClick={saveCurrentModule}>
-                Save Module
-            </Button>
-            {editingModuleIndex !== null && (
-                <Button type="button" onClick={cancelEdit}>
-                    Cancel Editing
-                </Button>
-            )}
-
-            <Divider />
-            <h3>Saved Modules</h3>
-            {modules.map((mod, index) => (
-                <div key={mod.id} className="border p-2 my-2">
-                    <strong>{mod.title}</strong> ({mod.lessons.length} lessons)
-                    <Button onClick={() => editModule(index)}>Edit</Button>
-                </div>
-            ))}
-
-            <Divider />
-            <Button onClick={submitCourse}>Submit Full Course</Button>
-        </FormWrapper>
+        <Container>
+            <TabsWrapper>
+                <Tab $isActive={activeTab === "upload"} onClick={() => setActiveTab("upload")}>
+                    Upload
+                </Tab>
+                <Tab $isActive={activeTab === "update"} onClick={() => setActiveTab("update")}>
+                    Update
+                </Tab>
+            </TabsWrapper>
+            {activeTab === "upload" && <CourseUploadForm />}
+        </Container>
     )
 }
