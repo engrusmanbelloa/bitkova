@@ -195,7 +195,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                     {result && (
                         <ResultBox>
                             {result.notFound ? (
-                                <p>❌ Certificate not found.</p>
+                                <p> Certificate not found.</p>
                             ) : (
                                 <Certificate
                                     handleClose={handleClose}

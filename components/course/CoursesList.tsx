@@ -17,6 +17,7 @@ import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 import CourseRating from "@/components/course/Review"
+import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
 
 import { fetchCourses } from "@/lib/firebase/queries/courses"
 
@@ -219,7 +220,18 @@ export default function CoursesList(props: {
     })
     const main = true
 
-    if (isLoading) return <p>Loading courses...</p>
+    if (isLoading)
+        return (
+            <>
+                <Box>
+                    {[...Array(3)].map((_, i) => (
+                        <Box key={i}>
+                            <CourseCardSkeleton />
+                        </Box>
+                    ))}
+                </Box>
+            </>
+        )
     if (error) return <p>Failed to load courses</p>
     return (
         <Container>
