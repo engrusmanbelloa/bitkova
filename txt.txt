@@ -1,3 +1,8 @@
+now good, i want to fetch from firebase using react query or useeffect which one is better? remember  I normalized (Course → Modules → Lessons) so they are all document themselves: 
+
+```
+yes: here is what i am pushing using normalized structure:
+```
 import React, { useState } from "react"
 import styled from "styled-components"
 import { v4 as uuidv4 } from "uuid"
@@ -381,3 +386,160 @@ export default function CourseUploadForm() {
         </Container>
     )
 }
+```
+upload functionality:
+```
+import { collection, doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
+import { db } from "@/lib/firebase/firebaseConfig"
+import { Course, Module, Lesson, Facilitator, Review } from "@/types"
+
+interface UploadCourseInput {
+    course: Course
+    modules: (Module & { lessons: Lesson[] })[]
+    reviews: Review[]
+}
+
+export async function uploadNewCourse({ course, modules, reviews }: UploadCourseInput) {
+    const batch = writeBatch(db)
+
+    // Create the course document
+    const courseRef = doc(db, "courses", course.id)
+    batch.set(courseRef, {
+        ...course,
+        createdAt: serverTimestamp(),
+    })
+
+    // Upload modules and nested lessons
+    for (const module of modules) {
+        const moduleRef = doc(db, "courseModules", `${course.id}_module_${module.id}`)
+        batch.set(moduleRef, {
+            id: module.id,
+            courseId: course.id,
+            title: module.title,
+            position: module.position,
+        })
+
+        for (const lesson of module.lessons) {
+            const lessonRef = doc(
+                db,
+                "courseLessons",
+                `${course.id}_module_${module.id}_lesson_${lesson.id}`,
+            )
+            batch.set(lessonRef, {
+                ...lesson,
+                courseId: course.id,
+                moduleId: module.id,
+            })
+        }
+    }
+
+    // Upload reviews
+    for (const review of reviews) {
+        const reviewRef = doc(db, "courseReviews", review.id)
+        batch.set(reviewRef, {
+            ...review,
+            createdAt: review.createdAt || serverTimestamp(),
+        })
+    }
+
+    // Commit all batched writes
+    try {
+        await batch.commit()
+        console.log(" Course uploaded successfully")
+    } catch (error) {
+        console.error("Failed to upload course:", error)
+        throw error
+    }
+}
+```
+the types:
+```
+export interface Course {
+    id: string
+    title: string
+    category: string
+    skillLevel: string
+    facilitatorEmail: string // link to a facilitator
+    rating: number
+    image: string
+    about: string
+    shortDesc: string
+    courseDesc: string
+    students: number
+    price: number
+    onDemandVideos: number
+    downloadableFiles?: number
+    whatYoullLearn: string[]
+}
+export interface Module {
+    id: string
+    title: string
+    position: number // order of module in course
+}
+export interface Lesson {
+    id: string
+    title: string
+    videoUrl: string
+    content: string
+    position: number // order of lesson in module
+    durationMinutes: number
+    resources?: string[] // optional links or files
+}
+export interface Review {
+    id: string // Firestore document ID (can be same as `${userId}_${courseId}`)
+    userId: string
+    courseId: string
+    stars: number // 1 to 5
+    comment: string
+    createdAt: string // ISO string or Firestore Timestamp
+}
+```
+
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { db } from "@/lib/firebase/firebaseConfig"
+import { Course, Review } from "@/types"
+
+export const fetchCoursesWithReviews = async (): Promise<
+    (Course & { reviews: Review[] })[]
+> => {
+    const courseSnap = await getDocs(collection(db, "courses"))
+    const courses = courseSnap.docs.map((doc) => ({
+        ...(doc.data() as Course),
+        id: doc.id,
+    }))
+
+    // Fetch reviews for each course
+    const allCoursesWithReviews = await Promise.all(
+        courses.map(async (course) => {
+            const reviewSnap = await getDocs(
+                query(
+                    collection(db, "courseReviews"),
+                    where("courseId", "==", course.id),
+                ),
+            )
+            const reviews: Review[] = reviewSnap.docs.map((doc) => doc.data() as Review)
+            return {
+                ...course,
+                reviews,
+            }
+        }),
+    )
+
+    return allCoursesWithReviews
+}
+
+<Box>
+    <Time>
+        <StarHalfIcon />
+        <span style={{ margin: "10px" }}>
+            {course.reviews.length > 0
+                ? (
+                      course.reviews.reduce(
+                          (total, review) => total + review.stars,
+                          0,
+                      ) / course.reviews.length
+                  ).toFixed(1)
+                : "0"}
+        </span>
+    </Time>
+</Box>

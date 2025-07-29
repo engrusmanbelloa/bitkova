@@ -45,6 +45,20 @@ const Wrapper = styled.section`
   `,
     )}
 `
+const CoursesContainer = styled.section`
+    width: ${(props) => props.theme.widths.heroWidth};
+    margin: auto;
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
+    )}
+`
 const ImageContainer = styled.div`
     flex: 1;
     margin: 0 auto;
@@ -107,18 +121,6 @@ export default function Courses(href: any) {
     const [count, setCount] = useState(0)
     const [skip, setSkip] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
-
-    //  useEffect(() => {
-    //      setIsLoading(true)
-    //      async function fetchCourses() {
-    //          const response = await fetch("/api/courses/getCourses")
-    //          const data = await response.json()
-    //          setCourses(data)
-    //          setCount(data.count)
-    //          setIsLoading(false)
-    //      }
-    //      fetchCourses()
-    //  }, [])
     const courses = featuredCourses
     const limit = 8
 
@@ -147,14 +149,14 @@ export default function Courses(href: any) {
                     <Image src="/chd.jpg" alt="courses image" />
                 </ImageContainer>
             </Wrapper>
-            <div id="courses">
+            <CoursesContainer id="courses">
                 <CoursesList
                     title="Featured courses"
                     coursesPg={false}
                     courses={courses}
                     limit={limit}
                 />
-            </div>
+            </CoursesContainer>
             <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />
             <Newsletter />

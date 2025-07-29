@@ -4,6 +4,13 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { Toaster, toast } from "sonner"
 import { signOut } from "firebase/auth"
@@ -24,6 +31,7 @@ const Container = styled.div`
 `
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()
+    const queryClient = new QueryClient()
     // Handle session expiration every 30 minutes
     useSessionRefresh()
     // Network status handler
@@ -78,23 +86,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <StyledComponentsRegistry>
                     <ThemeProvider theme={theme}>
                         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-                            <Suspense fallback={<IsLoading />}>
-                                <Container>
-                                    <Announcement />
-                                    <Navbar />
-                                    {children}
-                                    <Footer />
-                                </Container>
-                                <Toaster
-                                    position="top-center"
-                                    toastOptions={{
-                                        style: {
-                                            background: "#356DF1",
-                                            color: "#fff",
-                                        },
-                                    }}
-                                />
-                            </Suspense>
+                            <QueryClientProvider client={queryClient}>
+                                <Suspense fallback={<IsLoading />}>
+                                    <Container>
+                                        <Announcement />
+                                        <Navbar />
+                                        {children}
+                                        <Footer />
+                                    </Container>
+                                    <Toaster
+                                        position="top-center"
+                                        toastOptions={{
+                                            style: {
+                                                background: "#356DF1",
+                                                color: "#fff",
+                                            },
+                                        }}
+                                    />
+                                </Suspense>
+                            </QueryClientProvider>
                         </AppRouterCacheProvider>
                     </ThemeProvider>
                 </StyledComponentsRegistry>

@@ -34,6 +34,16 @@ export interface CourseType {
         Name: string
     }[]
 }
+export interface Facilitator {
+    id: string // Firestore document ID
+    name: string
+    bio: string
+    email: string
+    profileUrl?: string
+    expertise: string[] // e.g. ["Blockchain", "Web3"]
+    createdAt: string
+    courses: string[] // Array of course IDs
+}
 
 export interface VideoSelectionProps {
     url: string
@@ -49,6 +59,7 @@ export interface Course {
     facilitatorEmail: string // link to a facilitator
     rating: number
     image: string
+    about: string
     shortDesc: string
     courseDesc: string
     students: number
@@ -70,16 +81,6 @@ export interface Lesson {
     position: number // order of lesson in module
     durationMinutes: number
     resources?: string[] // optional links or files
-}
-export interface Facilitator {
-    id: string // Firestore document ID
-    name: string
-    bio: string
-    email: string
-    profileUrl?: string
-    expertise: string[] // e.g. ["Blockchain", "Web3"]
-    createdAt: string
-    courses: string[] // Array of course IDs
 }
 export interface Review {
     id: string // Firestore document ID (can be same as `${userId}_${courseId}`)
