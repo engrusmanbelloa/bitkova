@@ -174,16 +174,13 @@ interface CourseProps {
 
 export default function CourseHeader({ course }: CourseProps) {
     const [showPlayer, setShowPlayer] = useState(false)
-    const [enrolled, setEnrolled] = useState(true)
+    const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [certificateReady, setCertificateReady] = useState(true)
     // All course videos array
-    // const videoList = course.modules.flatMap((module) =>
-    //     Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
-    // )
     const videoList = course.modules.flatMap((module) =>
         module.lessons.map((lesson) => ({
             title: lesson.title,
@@ -225,8 +222,8 @@ export default function CourseHeader({ course }: CourseProps) {
             setCompletedVideos((prev) => [...prev, selectedTitle])
         }
         // console.log("Completed video titles: ", completedVideos)
-        console.log("Completed videos", completedVideos.length)
-        console.log("Completed videos", videoList.length)
+        // console.log("Completed videos", completedVideos.length)
+        // console.log("Completed videos", videoList.length)
     }
 
     useEffect(() => {

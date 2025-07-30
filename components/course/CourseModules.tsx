@@ -73,7 +73,6 @@ export default function CourseModules({
                         const currentIndex = globalIndex
                         globalIndex++
                         // console.log("Mapped lesson : ", lesson.title)
-
                         return (
                             <AccordionDetails key={subIndex}>
                                 <ModuleContent>

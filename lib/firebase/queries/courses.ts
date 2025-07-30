@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { Course, Review, Module, Lesson, CourseWithExtras } from "@/types"
+import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types"
 import {} from "@/types"
 
 export const fetchCourses = async (): Promise<Course[]> => {
@@ -42,6 +42,38 @@ export const fetchCourseById = async (
     if (!docSnap.exists()) return null
 
     const courseData = docSnap.data()
+    const facilitatorEmail = courseData?.facilitatorEmail
+
+    // Fetch facilitator by email
+    // let facilitatorProfile: Partial<Facilitator> | undefined
+    // if (facilitatorEmail) {
+    //     const facilitatorSnap = await getDocs(
+    //         query(collection(db, "users"), where("email", "==", facilitatorEmail)),
+    //     )
+
+    //     if (!facilitatorSnap.empty) {
+    //         const userDoc = facilitatorSnap.docs[0]
+    //         const { name, profileUrl } = userDoc.data() as Facilitator
+    //         facilitatorProfile = { name, profileUrl }
+    //     }
+    // }
+    const facilitatorSnap = await getDocs(
+        query(collection(db, "users"), where("email", "==", courseData.facilitatorEmail)),
+    )
+    const facilitator: Facilitator = facilitatorSnap.docs.length
+        ? {
+              ...(facilitatorSnap.docs[0].data() as Facilitator),
+          }
+        : {
+              id: "default",
+              name: courseData.facilitatorEmail.split("@")[0],
+              bio: "",
+              email: courseData.facilitatorEmail,
+              profileUrl: "",
+              expertise: [],
+              createdAt: new Date().toISOString(),
+              courses: [],
+          }
 
     // Fetch related modules and lessons
     const modulesSnap = await getDocs(
@@ -84,6 +116,7 @@ export const fetchCourseById = async (
         modules,
         reviews,
         duration: { hours, minutes },
+        facilitator,
     })
 
     // return {

@@ -200,7 +200,7 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
             <Bottom>
                 <Facilitator>
                     <FacilitatorInfo>A course by</FacilitatorInfo>
-                    <FacilitatorRight>
+                    {/* <FacilitatorRight>
                         <FacilitatorImage>
                             <Image
                                 src={course.facilitatorImage}
@@ -209,6 +209,16 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
                             />
                         </FacilitatorImage>
                         <FacilitatorName>{course.facilitator}</FacilitatorName>
+                    </FacilitatorRight> */}
+                    <FacilitatorRight>
+                        <FacilitatorImage>
+                            <Image
+                                src={course.facilitator.profileUrl || "/avatar.png"}
+                                alt={course.facilitator.name}
+                                fill
+                            />
+                        </FacilitatorImage>
+                        <FacilitatorName>{course.facilitator.name}</FacilitatorName>
                     </FacilitatorRight>
                 </Facilitator>
             </Bottom>

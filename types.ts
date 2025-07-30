@@ -99,4 +99,5 @@ export type CourseWithExtras = Course & {
         hours: number
         minutes: number
     }
+    facilitator: Facilitator
 }
