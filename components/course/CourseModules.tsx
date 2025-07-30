@@ -60,7 +60,7 @@ export default function CourseModules({
     let globalIndex = 0 // Track flat video index across modules
     return (
         <div>
-            {course.modules.map((module, index) => (
+            {/* {course.modules.map((module, index) => (
                 <Accordion key={index}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
@@ -92,7 +92,92 @@ export default function CourseModules({
                         )
                     })}
                 </Accordion>
-            ))}
+            ))} */}
+            {/* {course.modules
+                .sort((a, b) => a.position - b.position)
+                .map((module, index) => {
+                    const sortedLessons = [...module.lessons].sort(
+                        (a, b) => a.position - b.position,
+                    )
+
+                    return (
+                        <Accordion key={index}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls={`panel${index}-content`}
+                                id={`panel${index}-header`}
+                            >
+                                <ModuleHeader>{module.title}</ModuleHeader>
+                            </AccordionSummary>
+
+                            {sortedLessons.map((lesson, subIndex) => {
+                                const currentIndex = globalIndex++
+
+                                return (
+                                    <AccordionDetails key={subIndex}>
+                                        <ModuleContent>
+                                            {!enrolled ? (
+                                                <LockIcon />
+                                            ) : (
+                                                <Playbtn
+                                                    onClick={() => handleSelectVideo(currentIndex)}
+                                                />
+                                            )}
+                                            {lesson.title}
+                                            {completedVideos.includes(lesson.title) ? (
+                                                <RoundCheckBox style={{ color: "#0072ff" }} />
+                                            ) : (
+                                                <RoundCheckBox />
+                                            )}
+                                        </ModuleContent>
+                                    </AccordionDetails>
+                                )
+                            })}
+                        </Accordion>
+                    )
+                })} */}
+            {[...course.modules]
+                .sort((a, b) => a.position - b.position)
+                .map((module, moduleIndex) => {
+                    const sortedLessons = [...module.lessons].sort(
+                        (a, b) => a.position - b.position,
+                    )
+
+                    return (
+                        <Accordion key={module.id || moduleIndex}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls={`panel${moduleIndex}-content`}
+                                id={`panel${moduleIndex}-header`}
+                            >
+                                <ModuleHeader>{module.title}</ModuleHeader>
+                            </AccordionSummary>
+
+                            {sortedLessons.map((lesson, lessonIndex) => {
+                                const currentIndex = globalIndex++
+                                return (
+                                    <AccordionDetails key={lesson.id || lessonIndex}>
+                                        <ModuleContent>
+                                            {!enrolled ? (
+                                                <LockIcon />
+                                            ) : (
+                                                <Playbtn
+                                                    onClick={() => handleSelectVideo(currentIndex)}
+                                                />
+                                            )}
+                                            {lesson.title}
+                                            {completedVideos.includes(lesson.title) ? (
+                                                <RoundCheckBox style={{ color: "#0072ff" }} />
+                                            ) : (
+                                                <RoundCheckBox />
+                                            )}
+                                        </ModuleContent>
+                                    </AccordionDetails>
+                                )
+                            })}
+                        </Accordion>
+                    )
+                })}
         </div>
     )
 }

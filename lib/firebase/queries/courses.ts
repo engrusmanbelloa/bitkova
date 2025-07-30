@@ -42,21 +42,8 @@ export const fetchCourseById = async (
     if (!docSnap.exists()) return null
 
     const courseData = docSnap.data()
-    const facilitatorEmail = courseData?.facilitatorEmail
 
     // Fetch facilitator by email
-    // let facilitatorProfile: Partial<Facilitator> | undefined
-    // if (facilitatorEmail) {
-    //     const facilitatorSnap = await getDocs(
-    //         query(collection(db, "users"), where("email", "==", facilitatorEmail)),
-    //     )
-
-    //     if (!facilitatorSnap.empty) {
-    //         const userDoc = facilitatorSnap.docs[0]
-    //         const { name, profileUrl } = userDoc.data() as Facilitator
-    //         facilitatorProfile = { name, profileUrl }
-    //     }
-    // }
     const facilitatorSnap = await getDocs(
         query(collection(db, "users"), where("email", "==", courseData.facilitatorEmail)),
     )
@@ -118,14 +105,4 @@ export const fetchCourseById = async (
         duration: { hours, minutes },
         facilitator,
     })
-
-    // return {
-    //     id: docSnap.id,
-    //     ...(courseData as any),
-    //     modules,
-    //     reviews,
-    //     duration: { hours, minutes },
-    // } as CourseWithExtras & {
-    //     duration: { hours: number; minutes: number }
-    // }
 }
