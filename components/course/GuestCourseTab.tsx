@@ -7,6 +7,7 @@ import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
 import { formatPrice } from "@/config/FormatPrice"
 import { CourseType } from "@/types"
+import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Box)`
@@ -53,7 +54,7 @@ const BulletListLi = styled.li`
     margin-bottom: 20px;
 `
 interface CourseProps {
-    course: CourseType
+    course: CourseWithExtras
     enrolled: boolean
     // setSelectedVideo: (url: string) => void
     // setSelectedTitle: (title: string) => void
@@ -135,10 +136,10 @@ export default function GuestCourseTab({
                 ))}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-                {course.review.map((item, i) => (
+                {course.reviews.map((item, i) => (
                     <div key={i}>
                         <p>
-                            <strong>{item.Name}</strong> - {item.stars} stars
+                            <strong>{item.name}</strong> - {item.stars} stars
                         </p>
                         <p>{item.comment}</p>
                     </div>

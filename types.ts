@@ -85,6 +85,7 @@ export interface Lesson {
 export interface Review {
     id: string // Firestore document ID (can be same as `${userId}_${courseId}`)
     userId: string
+    name: string
     courseId: string
     stars: number // 1 to 5
     comment: string
@@ -94,4 +95,8 @@ export interface Review {
 export type CourseWithExtras = Course & {
     modules: (Module & { lessons: Lesson[] })[]
     reviews: Review[]
+    duration: {
+        hours: number
+        minutes: number
+    }
 }

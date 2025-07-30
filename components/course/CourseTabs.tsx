@@ -7,6 +7,7 @@ import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
 import CertificateVerifier from "@/components/course/CertificateVerifier"
 import { CourseType } from "@/types"
+import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Box)`
@@ -47,7 +48,7 @@ interface TabPanelProps {
     value: number
 }
 interface CourseProps {
-    course: CourseType
+    course: CourseWithExtras
     enrolled: boolean
     completedVideos: string[]
     handleSelectVideo: (index: number) => void

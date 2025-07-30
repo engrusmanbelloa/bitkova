@@ -12,6 +12,7 @@ import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
 import PersonIcon from "@mui/icons-material/Person"
 import { formatPrice } from "@/config/FormatPrice"
 import { CourseType } from "@/types"
+import { CourseWithExtras } from "@/types"
 
 const Top = styled.div`
     border-width: 1px;
@@ -131,7 +132,7 @@ const BottomBtn = styled.div`
 `
 
 interface CourseProps {
-    course: CourseType
+    course: CourseWithExtras
     handlePlay: () => void
 }
 

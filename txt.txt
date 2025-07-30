@@ -543,3 +543,101 @@ export const fetchCoursesWithReviews = async (): Promise<
         </span>
     </Time>
 </Box>
+
+// export const fetchCourseById = async (courseId: string): Promise<Course | null> => {
+//     const docRef = doc(db, "courses", courseId)
+//     const docSnap = await getDoc(docRef)
+
+//     if (!docSnap.exists()) return null
+
+//     return { id: docSnap.id, ...docSnap.data() } as Course
+// }
+
+// export const fetchCourseById = async (courseId: string): Promise<CourseWithExtras | null> => {
+//     const docRef = doc(db, "courses", courseId)
+//     const docSnap = await getDoc(docRef)
+
+//     if (!docSnap.exists()) return null
+
+//     const courseData = docSnap.data()
+
+//     // Fetch related modules
+//     const modulesSnap = await getDocs(
+//         query(collection(db, "modules"), where("courseId", "==", courseId)),
+//     )
+//     const modules = await Promise.all(
+//         modulesSnap.docs.map(async (moduleDoc) => {
+//             const module = { id: moduleDoc.id, ...moduleDoc.data() }
+//             const lessonsSnap = await getDocs(
+//                 query(collection(db, "lessons"), where("moduleId", "==", module.id)),
+//             )
+//             const lessons = lessonsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
+//             return { ...module, lessons }
+//         }),
+//     )
+
+//     // Fetch reviews
+//     const reviewsSnap = await getDocs(
+//         query(collection(db, "reviews"), where("courseId", "==", courseId)),
+//     )
+//     const reviews = reviewsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
+
+//     return {
+//         id: docSnap.id,
+//         ...(courseData as any),
+//         modules,
+//         reviews,
+//     } as CourseWithExtras
+// }
+
+// export const fetchCourseById = async (courseId: string): Promise<CourseWithExtras | null> => {
+//     const docRef = doc(db, "courses", courseId)
+//     const docSnap = await getDoc(docRef)
+
+//     if (!docSnap.exists()) return null
+
+//     const courseData = docSnap.data()
+
+//     let totalMinutes = 0
+//     let onDemandVideos = 0
+
+//     // Fetch related modules and lessons
+//     const modulesSnap = await getDocs(
+//         query(collection(db, "modules"), where("courseId", "==", courseId)),
+//     )
+//     const modules = await Promise.all(
+//         modulesSnap.docs.map(async (moduleDoc) => {
+//             const module = { id: moduleDoc.id, ...moduleDoc.data() }
+//             const lessonsSnap = await getDocs(
+//                 query(collection(db, "lessons"), where("moduleId", "==", module.id)),
+//             )
+//             const lessons = lessonsSnap.docs.map((d) => {
+//                 const data = d.data()
+//                 const duration = typeof data.duration === "number" ? data.duration : 0
+//                 totalMinutes += duration
+//                 onDemandVideos += 1
+//                 return { id: d.id, ...data }
+//             })
+//             return { ...module, lessons }
+//         }),
+//     )
+
+//     // Fetch reviews
+//     const reviewsSnap = await getDocs(
+//         query(collection(db, "reviews"), where("courseId", "==", courseId)),
+//     )
+//     const reviews = reviewsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
+
+//     // Convert totalMinutes to hours & minutes
+//     const hours = Math.floor(totalMinutes / 60)
+//     const minutes = totalMinutes % 60
+
+//     return {
+//         id: docSnap.id,
+//         ...(courseData as any),
+//         modules,
+//         reviews,
+//         onDemandVideos,
+//         duration: { hours, minutes },
+//     } as CourseWithExtras
+// }

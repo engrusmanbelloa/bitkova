@@ -1,25 +1,23 @@
 import React from "react"
 import { redirect } from "next/navigation"
 import { featuredCourses } from "@/data"
+import { fetchCourseById } from "@/lib/firebase/queries/courses"
+// import { Course } from "@/types"
 import CourseHeader from "@/components/course/CourseHeader"
+import { useCourse } from "@/hooks/courses/useFetchCourseById"
+import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
-export default async function Course({ params }: { params: Promise<{ id: string }> }) {
-    const courses = featuredCourses
-    const limit = 8
-    const id = (await params).id
-    if (!id) {
-        redirect("/")
-    } else {
-        console.log(id)
-    }
+export default async function CoursePage({ params }: { params: Promise<{ id: string }> }) {
+    // export default async function CoursePage({ params }: { params: { id: string } }) {
+    // const id = params.id
+    const { id } = await params
 
-    const course = featuredCourses.find((course) => course._id.toString() === id)
-    if (!course) {
-        redirect("/")
-    }
-    // get the course for the user using the id
-    // const course = await fetchCourse(id)
+    if (!id) redirect("/")
+
+    const course: CourseWithExtras | null = await fetchCourseById(id)
+
+    if (!course) redirect("/")
 
     return <CourseHeader course={course} />
 }

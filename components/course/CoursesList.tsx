@@ -6,20 +6,17 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Card from "@mui/material/Card"
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt"
-import StarHalfIcon from "@mui/icons-material/StarHalf"
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
 import PreviewIcon from "@mui/icons-material/Preview"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
-import "animate.css/animate.min.css"
-import { featuredCourses } from "@/data"
 import { formatPrice } from "@/config/FormatPrice"
-import { CourseType } from "@/types"
+import { Course } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 import CourseRating from "@/components/course/Review"
 import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
-
 import { fetchCourses } from "@/lib/firebase/queries/courses"
+import "animate.css/animate.min.css"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -199,7 +196,7 @@ const BtnLink = styled(Link)`
     font-weight: 400;
 `
 export default function CoursesList(props: {
-    courses: CourseType[]
+    courses: Course[]
     limit: number
     title: string
     $display?: string

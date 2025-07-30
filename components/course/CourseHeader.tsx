@@ -16,6 +16,7 @@ import CourseModules from "@/components/course/CourseModules"
 import extractPreviewVideo from "@/config/ExtractPreview"
 import { featuredCourses } from "@/data"
 import { CourseType } from "@/types"
+import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`
@@ -168,7 +169,7 @@ const Actions = styled.div`
 `
 
 interface CourseProps {
-    course: CourseType
+    course: CourseWithExtras
 }
 
 export default function CourseHeader({ course }: CourseProps) {
@@ -180,9 +181,16 @@ export default function CourseHeader({ course }: CourseProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [certificateReady, setCertificateReady] = useState(true)
     // All course videos array
+    // const videoList = course.modules.flatMap((module) =>
+    //     Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
+    // )
     const videoList = course.modules.flatMap((module) =>
-        Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
+        module.lessons.map((lesson) => ({
+            title: lesson.title,
+            url: lesson.videoUrl,
+        })),
     )
+
     const courses = featuredCourses
     const limit = 8
     const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
