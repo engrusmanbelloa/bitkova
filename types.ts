@@ -91,6 +91,13 @@ export interface Review {
     comment: string
     createdAt: string // ISO string or Firestore Timestamp
 }
+// types/wishlist.ts
+export interface WishlistItem {
+    id: string // `${userId}_${courseId}`
+    userId: string
+    courseId: string
+    addedAt: string
+}
 
 export type CourseWithExtras = Course & {
     modules: (Module & { lessons: Lesson[] })[]

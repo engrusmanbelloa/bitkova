@@ -5,14 +5,6 @@ import {
     getUserEnrollments,
 } from "@/lib/firebase/queries/userCourses"
 import { DocumentData } from "firebase/firestore"
-import {
-    EnrolledCourse,
-    WishListItem,
-    ArchivedCourse,
-    Certificate,
-    Cart,
-    CompletedCourse,
-} from "@/userType"
 
 export function useUserArchivedCourses(userId: string) {
     const [archiveCourses, setarchiveCourses] = useState<DocumentData[]>([])

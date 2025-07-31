@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import ShareIcon from "@mui/icons-material/Share"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
@@ -14,8 +13,9 @@ import CourseTabs from "@/components/course/CourseTabs"
 import GuestCourseTabs from "@/components/course/GuestCourseTab"
 import CourseModules from "@/components/course/CourseModules"
 import extractPreviewVideo from "@/config/ExtractPreview"
-import { featuredCourses } from "@/data"
-import { CourseType } from "@/types"
+import WishlistButton from "@/components/payments/WishlistButton"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import IsLoading from "@/components/IsLoading"
 import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
@@ -173,6 +173,7 @@ interface CourseProps {
 }
 
 export default function CourseHeader({ course }: CourseProps) {
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const [showPlayer, setShowPlayer] = useState(false)
     const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
@@ -180,6 +181,7 @@ export default function CourseHeader({ course }: CourseProps) {
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [certificateReady, setCertificateReady] = useState(true)
+
     // All course videos array
     const videoList = course.modules.flatMap((module) =>
         module.lessons.map((lesson) => ({
@@ -187,9 +189,6 @@ export default function CourseHeader({ course }: CourseProps) {
             url: lesson.videoUrl,
         })),
     )
-
-    const courses = featuredCourses
-    const limit = 8
     const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
 
     // Player functions play, next video, prev video and video selection logics
@@ -230,9 +229,11 @@ export default function CourseHeader({ course }: CourseProps) {
         if (completedVideos.length === videoList.length) {
             setCertificateReady(true)
         }
-        console.log("Completed videos", completedVideos.length)
-        console.log("Completed videos", videoList.length)
+        // console.log("Completed videos", completedVideos.length)
+        // console.log("Completed videos", videoList.length)
     }, [completedVideos])
+
+    if (isLoadingUserDoc || !authReady) return <IsLoading />
 
     return (
         <>
@@ -250,10 +251,8 @@ export default function CourseHeader({ course }: CourseProps) {
                             Categories: <span>{course.category}</span>
                         </Category>
                         <Actions>
-                            {!enrolled && (
-                                <button>
-                                    <BookmarkBorderIcon /> Wishlist
-                                </button>
+                            {authReady && user && !enrolled && (
+                                <WishlistButton courseId={course.id.toString()} />
                             )}
                             <button>
                                 <ShareIcon /> Share
@@ -316,13 +315,13 @@ export default function CourseHeader({ course }: CourseProps) {
                             </>
                         )}
                     </CourseImage>
-                    {enrolled ? (
+                    {enrolled && user ? (
                         <CourseTabs
                             handleSelectVideo={handleSelectVideo}
                             enrolled={enrolled}
                             course={course}
                             completedVideos={completedVideos}
-                            user={"Usman Bello Abdullahi"}
+                            user={user.name}
                             completed={certificateReady}
                             id={1234567}
                         />
@@ -336,8 +335,8 @@ export default function CourseHeader({ course }: CourseProps) {
                     )}
                 </Left>
                 <Right>
-                    {!enrolled ? (
-                        <CourseFeatures course={course} handlePlay={handlePlay} />
+                    {!enrolled && user ? (
+                        <CourseFeatures user={user} course={course} handlePlay={handlePlay} />
                     ) : (
                         <DeskTabs>
                             <CourseModules

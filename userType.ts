@@ -13,7 +13,7 @@ export interface UserCourseProgress {
     status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
 }
 export interface User {
-    id: string // Firebase UID
+    id: string
     name: string
     email: string
     role: "guest" | "student" | "instructor" | "admin"
@@ -21,7 +21,9 @@ export interface User {
     bio: string
     skill: string
     phoneNumber: string
-    registrationDate: string // Can use Timestamp in Firestore
+    registrationDate: string
+    wishList: string[]
+    cart: string[]
 }
 export interface EnrolledCourse {
     id: string // Optional: custom ID like `${userId}_${courseId}`

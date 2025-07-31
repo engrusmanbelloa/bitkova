@@ -154,7 +154,8 @@ export default function CourseUploadForm() {
         }))
         setNewLearningItem("")
     }
-    const submitCourse = async () => {
+    const submitCourse = async (e: any) => {
+        e.preventDefault()
         if (uploading) return
         if (
             !course.title ||
@@ -170,11 +171,15 @@ export default function CourseUploadForm() {
             !Array.isArray(course.whatYoullLearn)
         ) {
             console.log("Please fill in all required course fields.")
+            toast.error("Please add at least one module.")
+            return
+        }
+        if (modules.length === 0) {
+            console.log("You must add at least one module before submitting the course.")
+            toast.error("Please add at least one module.")
             return
         }
         setUploading(true)
-        toast.loading("Uploading the course...")
-
         try {
             const courseId = uuidv4()
 
@@ -198,7 +203,7 @@ export default function CourseUploadForm() {
 
             const finalizedModules = modules.map((mod, modIndex) => ({
                 ...mod,
-                id: mod.id || uuidv4(),
+                id: uuidv4(),
                 position: modIndex,
                 lessons: mod.lessons.map((lesson, lessonIndex) => ({
                     ...lesson,
@@ -375,7 +380,7 @@ export default function CourseUploadForm() {
 
                 <Divider />
                 <Button onClick={submitCourse} disabled={uploading}>
-                    {uploading ? "uploading..." : "Submit Full Course"}
+                    {uploading ? "Uploading..." : "Submit Full Course"}
                 </Button>
             </FormWrapper>
         </Container>

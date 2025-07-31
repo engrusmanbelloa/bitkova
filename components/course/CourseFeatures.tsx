@@ -10,9 +10,11 @@ import LockIcon from "@mui/icons-material/Lock"
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
 import PersonIcon from "@mui/icons-material/Person"
+import CartButton from "@/components/payments/CartButton"
 import { formatPrice } from "@/config/FormatPrice"
-import { CourseType } from "@/types"
+import { useUserStore } from "@/lib/store/useUserStore"
 import { CourseWithExtras } from "@/types"
+import { User } from "@/userType"
 
 const Top = styled.div`
     border-width: 1px;
@@ -134,13 +136,13 @@ const BottomBtn = styled.div`
 interface CourseProps {
     course: CourseWithExtras
     handlePlay: () => void
+    user: User
 }
 
-export default function CourseFeatures({ course, handlePlay }: CourseProps) {
+export default function CourseFeatures({ user, course, handlePlay }: CourseProps) {
     return (
         <>
             <Top>
-                {/* <Price>{course.price}</Price> */}
                 <Price>{formatPrice(course.price)}</Price>
                 <Button>Buy Now</Button>
             </Top>
@@ -184,13 +186,7 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
                     </FeatureItem>
                 </FeatureList>
                 {/* Actions */}
-
-                <Button $background="#fdb913">
-                    <BottomBtn>
-                        <AddShoppingCartIcon /> Add to Cart
-                    </BottomBtn>
-                </Button>
-
+                <CartButton courseId={course.id.toString()} />
                 <Button $background="#eee" $color="#000">
                     <BottomBtn onClick={handlePlay}>
                         <PlayCircleIcon /> Watch Preview
@@ -200,16 +196,6 @@ export default function CourseFeatures({ course, handlePlay }: CourseProps) {
             <Bottom>
                 <Facilitator>
                     <FacilitatorInfo>A course by</FacilitatorInfo>
-                    {/* <FacilitatorRight>
-                        <FacilitatorImage>
-                            <Image
-                                src={course.facilitatorImage}
-                                alt={course.facilitator}
-                                fill={true}
-                            />
-                        </FacilitatorImage>
-                        <FacilitatorName>{course.facilitator}</FacilitatorName>
-                    </FacilitatorRight> */}
                     <FacilitatorRight>
                         <FacilitatorImage>
                             <Image
