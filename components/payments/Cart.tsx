@@ -1,12 +1,12 @@
 import "animate.css/animate.min.css"
 import styled from "styled-components"
-import { mobile, ipad } from "../responsive"
-import useStore from "../config/store"
+import { mobile, ipad } from "@/responsive"
+import { useUserStore } from "@/lib/store/useUserStore"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
-import {
-    useSession,
-} from "next-auth/react"
+import { fetchCourseById } from "@/lib/firebase/queries/courses"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import IsLoading from "@/components/IsLoading"
 
 const Container = styled.div``
 
@@ -16,21 +16,18 @@ const Wrapper = styled.div`
     border-radius: 5px;
     ${ipad({ padding: "10px" })}
 `
-
 const Title = styled.h1`
     font-weight: 400;
     text-align: center;
     ${ipad({ fontSize: "18px" })}
     ${mobile({ fontSize: "14px" })}
 `
-
 const Top = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px;
 `
-
 const TopButton = styled.button`
     padding: 10px;
     font-size: 20px;
@@ -43,7 +40,6 @@ const TopButton = styled.button`
     ${ipad({ margin: 5 })}
     ${mobile({ fontSize: 15 })}
 `
-
 const TopTexts = styled.div`
     ${ipad({ display: "none" })}
 `
@@ -53,23 +49,19 @@ const TopText = styled.span`
     margin: 0px 10px;
     color: #1c3879;
 `
-
 const Bottom = styled.div`
     display: flex;
     justify-content: space-between;
     ${ipad({ flexDirection: "column" })}
 `
-
 const Info = styled.div`
     flex: 3;
 `
-
 const Course = styled.div`
     display: flex;
     justify-content: space-between;
     ${ipad({})}
 `
-
 const CourseDetail = styled.div`
     flex: ${(props) => (props.ipad ? "1" : "2")};
     justify-content: ${(props) => (props.ipad ? "flex-start" : "")};
@@ -78,14 +70,12 @@ const CourseDetail = styled.div`
     padding: 0;
     ${ipad({ alignItems: "center", flexDirection: "column" })}
 `
-
 const Image = styled.img`
     width: 300px;
     height: 200px;
     ${ipad({ height: "150px", width: "100%" })}
     ${mobile({ height: "100px", width: "100%" })}
 `
-
 const Details = styled.div`
     padding: 0px 20px;
     margin: 0px;
@@ -94,7 +84,6 @@ const Details = styled.div`
     justify-content: space-around;
     ${ipad({ padding: "0 5px" })}
 `
-
 const CourseName = styled.span`
     font-size: 20px;
     font-weight: bold;
@@ -102,20 +91,16 @@ const CourseName = styled.span`
     ${ipad({ padding: "5px 0" })}
     ${mobile({ fontSize: "16px" })}
 `
-
 const CourseId = styled.span`
     ${ipad({ padding: "5px 0" })}
 `
-
 const Duration = styled.span`
     ${ipad({ padding: "5px 0" })}
 `
-
 const ChangeContainer = styled.div`
     margin: 0 20px 0;
     ${ipad({ margin: 0, padding: 0, position: "relative", top: 50 })}
 `
-
 const Price = styled.p`
     font-size: 20px;
     font-weight: 700;
@@ -123,7 +108,6 @@ const Price = styled.p`
     ${ipad({ fontSize: "18px", margin: "0 auto" })}
     ${mobile({ fontSize: "17px", margin: "0 auto" })}
 `
-
 const Remove = styled.p`
     font-size: 28px;
     font-weight: 300;
@@ -132,13 +116,11 @@ const Remove = styled.p`
     ${ipad({ fontSize: "18px", margin: "0, auto" })}
     ${mobile({ fontSize: "17px", margin: "0, auto" })}
 `
-
 const Hr = styled.hr`
     background-color: #cddeff;
     border: none;
     height: 1px;
 `
-
 const Summary = styled.div`
     flex: 1;
     border: 0.5px solid #cddeff;
@@ -148,11 +130,9 @@ const Summary = styled.div`
     animation: pulse;
     animation-duration: 2s;
 `
-
 const SummaryTitle = styled.h1`
     font-weight: 200;
 `
-
 const SummaryItem = styled.div`
     margin: 30px 0px;
     display: flex;
@@ -160,17 +140,14 @@ const SummaryItem = styled.div`
     font-weight: ${(props) => props.type === "total" && "500"};
     font-size: ${(props) => props.type === "total" && "24px"};
 `
-
 const SummaryItemText = styled.span`
     ${ipad({ fontSize: 20 })}
     ${mobile({ fontSize: 30 })}
 `
-
 const SummaryItemPrice = styled.span`
     ${ipad({ fontSize: 20 })}
     ${mobile({ fontSize: 30 })}
 `
-
 const Button = styled.button`
     width: 100%;
     padding: 10px;
@@ -183,7 +160,6 @@ const Button = styled.button`
     font-weight: 600;
     ${mobile({ fontSize: 15 })}
 `
-
 const SetUpdate = styled.div`
     font-size: 18px;
     margin: 10px auto;
@@ -201,13 +177,13 @@ const SetUpdate = styled.div`
 `
 
 const Cart = () => {
-    const { cart, removeFromCart } = useStore()
+    const { cart, removeFromCart, isInCart } = useUserStore()
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const router = useRouter()
     const [success, setSuccess] = useState()
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [update, setUpdate] = useState(false)
-    const { data: session, status } = useSession()
 
     // // hydration function
     // const hasHydrated = useStore(state => state._hasHydrated)
@@ -218,24 +194,31 @@ const Cart = () => {
 
     // Calculate the total amount
     const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
+
     console.log("Total amount in your cart", totalAmount)
 
     // remove course from cart
-    const remove = async () => {
-        try {
-            const existingCourse = cart.find((item) => item._id)
-            if (!existingCourse) {
-                // Course already exists in the cart, do nothing
-                return
-            }
-            removeFromCart(existingCourse)
-        } catch (err) {
-            console.log(err)
-        }
+    const remove = (courseId: string) => {
+        removeFromCart(courseId)
     }
+
+    //  const remove = async () => {
+    //      try {
+    //          const existingCourse = cart.find((item) => item._id)
+    //          if (!existingCourse) {
+    //              // Course already exists in the cart, do nothing
+    //              return
+    //          }
+    //          removeFromCart(existingCourse)
+    //      } catch (err) {
+    //          console.log(err)
+    //      }
+    //  }
+
+    if (isLoadingUserDoc || !authReady) return <IsLoading />
     return (
         <Container>
-            {session ? (
+            {firebaseUser ? (
                 <Wrapper>
                     <Title>YOUR CART</Title>
                     <Top>
@@ -246,13 +229,22 @@ const Cart = () => {
                             <TopText>Your Cart ({cart.length})</TopText>
                             <TopText>Your Wishlist (0)</TopText>
                         </TopTexts>
-                        <TopButton type="filled" onClick={() => router.push("/payment")}>
-                            CHECKOUT NOW
-                        </TopButton>
+                        <TopButton onClick={() => router.push("/payment")}>CHECKOUT NOW</TopButton>
                     </Top>
                     <Bottom>
                         <Info>
-                            {cart.map((course) => (
+                            {cart.map((courseId) => {
+                                const course = fetchCourseById(courseId)
+
+                                return (
+                                    <div key={courseId}>
+                                        ...
+                                        <Remove onClick={() => remove(courseId)}>Remove</Remove>
+                                    </div>
+                                )
+                            })}
+
+                            {/* {cart.map((course) => (
                                 <div key={course._id}>
                                     <Course>
                                         <CourseDetail>
@@ -284,7 +276,7 @@ const Cart = () => {
                                     </Course>
                                     <Hr />
                                 </div>
-                            ))}
+                            ))} */}
                         </Info>
                         <Summary>
                             <SummaryTitle>CHECKOUT SUMMARY</SummaryTitle>
