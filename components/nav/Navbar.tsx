@@ -14,8 +14,6 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
 import { Badge } from "@mui/material"
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
-import BookmarkIcon from "@mui/icons-material/Bookmark"
 import Logo from "@/components/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
@@ -495,7 +493,7 @@ export default function Navbar() {
                                             />
                                         </Badge>
                                     )}
-                                    <Badge badgeContent={user.wishList.length} color="error">
+                                    <Badge badgeContent={0} color="error">
                                         <CircleNotificationsIcon
                                             fontSize="medium"
                                             color="info"
@@ -575,7 +573,7 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
-                            <IconButton
+                            {/* <IconButton
                                 type="button"
                                 sx={{ m: 0, pr: "10px", color: "#356DF1" }}
                                 aria-label="search"
@@ -583,7 +581,50 @@ export default function Navbar() {
                                 <AddShoppingCartIcon sx={{ fontSize: 20, m: 0.5 }} />
                                 <FavoriteBorderIcon sx={{ fontSize: 20, m: 0.5 }} />
                                 <CircleNotificationsIcon sx={{ fontSize: 20, m: 0.5 }} />
-                            </IconButton>
+                            </IconButton> */}
+                            {cartCount > 0 && (
+                                <Badge badgeContent={cartCount} color="error">
+                                    <AddShoppingCartIcon
+                                        fontSize="small"
+                                        color="info"
+                                        sx={{
+                                            m: 1,
+                                            cursor: "pointer",
+                                            ":hover": {
+                                                color: "#ABD0ED",
+                                            },
+                                        }}
+                                    />
+                                </Badge>
+                            )}
+                            {wishlistCount > 0 && (
+                                <Badge badgeContent={wishlistCount} color="error">
+                                    <FavoriteBorderIcon
+                                        fontSize="small"
+                                        color="info"
+                                        sx={{
+                                            m: 1,
+                                            cursor: "pointer",
+                                            ":hover": {
+                                                color: "#ABD0ED",
+                                            },
+                                        }}
+                                    />
+                                </Badge>
+                            )}
+                            <Badge badgeContent={0} color="error">
+                                <CircleNotificationsIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
                             {!toggleMenu ? (
                                 <MenuIcon
                                     sx={{ p: 0, m: 0, fontSize: 25 }}
