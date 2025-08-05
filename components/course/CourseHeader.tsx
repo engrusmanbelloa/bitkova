@@ -16,6 +16,8 @@ import extractPreviewVideo from "@/config/ExtractPreview"
 import WishlistButton from "@/components/payments/WishlistButton"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import IsLoading from "@/components/IsLoading"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import { useCourseById } from "@/hooks/courses/useFetchCourseById"
 import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
@@ -168,12 +170,13 @@ const Actions = styled.div`
     }
 `
 
-interface CourseProps {
-    course: CourseWithExtras
+interface CourseId {
+    id: string
 }
 
-export default function CourseHeader({ course }: CourseProps) {
+export default function CourseHeader({ id }: CourseId) {
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
+    // const { data: courses, isLoading, error } = useFetchCourses()
     const [showPlayer, setShowPlayer] = useState(false)
     const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
@@ -181,15 +184,18 @@ export default function CourseHeader({ course }: CourseProps) {
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [certificateReady, setCertificateReady] = useState(true)
+    const { data: course, isLoading, error } = useCourseById(id)
 
     // All course videos array
-    const videoList = course.modules.flatMap((module) =>
-        module.lessons.map((lesson) => ({
-            title: lesson.title,
-            url: lesson.videoUrl,
-        })),
-    )
-    const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
+    const videoList =
+        course?.modules?.flatMap((module) =>
+            module.lessons.map((lesson) => ({
+                title: lesson.title,
+                url: lesson.videoUrl,
+            })),
+        ) || []
+
+    const previewVideoUrl = course && extractPreviewVideo(course.modules) // Course preview url
 
     // Player functions play, next video, prev video and video selection logics
     const handlePlay = () => {
@@ -197,7 +203,7 @@ export default function CourseHeader({ course }: CourseProps) {
         // console.log(previewVideoUrl)
     }
     const handleSelectVideo = (index: number) => {
-        const selected = videoList[index]
+        const selected = videoList && videoList[index]
         // console.log("Videos list: ", selected)
         if (selected) {
             setSelectedVideo(selected.url)
@@ -207,7 +213,7 @@ export default function CourseHeader({ course }: CourseProps) {
         }
     }
     const handleNext = () => {
-        if (selectedIndex !== null && selectedIndex < videoList.length - 1) {
+        if (selectedIndex !== null && selectedIndex < (videoList?.length ?? 0) - 1) {
             handleSelectVideo(selectedIndex + 1)
         }
     }
@@ -226,14 +232,15 @@ export default function CourseHeader({ course }: CourseProps) {
     }
 
     useEffect(() => {
-        if (completedVideos.length === videoList.length) {
+        if (videoList && completedVideos.length === videoList.length) {
             setCertificateReady(true)
         }
         // console.log("Completed videos", completedVideos.length)
-        // console.log("Completed videos", videoList.length)
+        // console.log("Completed videos", videoList && videoList.length)
     }, [completedVideos])
 
-    if (isLoadingUserDoc || !authReady) return <IsLoading />
+    if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
+    if (error || !course) return <p>Something went wrong or course not found.</p>
 
     return (
         <>

@@ -11,10 +11,5 @@ export default async function CoursePage({ params }: { params: Promise<{ id: str
 
     if (!id) redirect("/")
 
-    const courseQuery = useCourseById(id)
-    const course = courseQuery.data
-
-    if (!course) redirect("/")
-
-    return <CourseHeader course={course} />
+    return <CourseHeader id={id} />
 }

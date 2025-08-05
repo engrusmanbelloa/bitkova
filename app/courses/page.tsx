@@ -115,14 +115,11 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-export default async function Courses(href: any) {
-    //  const [courses, setCourses] = useState([])
+export default function Courses(href: any) {
     const [count, setCount] = useState(0)
     const [skip, setSkip] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
     const limit = 8
-
-    const courses = await fetchCourses()
 
     if (isLoading) {
         return <SetUpdate>Loading....</SetUpdate>
@@ -150,12 +147,7 @@ export default async function Courses(href: any) {
                 </ImageContainer>
             </Wrapper>
             <CoursesContainer id="courses">
-                <CoursesList
-                    title="Featured courses"
-                    coursesPg={false}
-                    courses={courses}
-                    limit={limit}
-                />
+                <CoursesList title="Featured courses" coursesPg={false} limit={limit} />
             </CoursesContainer>
             <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />

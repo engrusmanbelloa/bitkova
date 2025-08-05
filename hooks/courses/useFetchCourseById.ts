@@ -8,10 +8,9 @@ import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@
 const fetchCourseById = async (
     courseId: string,
 ): Promise<
-    | (CourseWithExtras & {
-          duration: { hours: number; minutes: number }
-      })
-    | null
+    CourseWithExtras & {
+        duration: { hours: number; minutes: number }
+    }
 > => {
     // serialize data ready for the client side
     function serializeDoc<T extends object>(data: T): any {
@@ -28,7 +27,7 @@ const fetchCourseById = async (
     const docRef = doc(db, "courses", courseId)
     const docSnap = await getDoc(docRef)
 
-    if (!docSnap.exists()) return null
+    if (!docSnap.exists()) throw new Error("Course not found")
 
     const courseData = docSnap.data()
 
