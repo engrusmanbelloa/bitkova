@@ -1,10 +1,11 @@
+"use client"
 import "animate.css/animate.min.css"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
-import { fetchCourseById } from "@/lib/firebase/queries/courses"
+import { CourseWithExtras } from "@/types"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import IsLoading from "@/components/IsLoading"
 
@@ -28,15 +29,15 @@ const Top = styled.div`
     justify-content: space-between;
     padding: 20px;
 `
-const TopButton = styled.button`
+const TopButton = styled.button<{ $type?: string }>`
     padding: 10px;
     font-size: 20px;
     font-weight: 600;
     cursor: pointer;
-    border: ${(props) => (props.type === "filled" ? "none" : "solid 1px #CDDEFF")};
-    background-color: ${(props) => (props.type === "filled" ? "#1C3879" : "transparent")};
+    border: ${(props) => (props.$type === "filled" ? "none" : "solid 1px #CDDEFF")};
+    background-color: ${(props) => (props.$type === "filled" ? "#1C3879" : "transparent")};
     border-radius: 5px;
-    color: ${(props) => props.type === "filled" && "white"};
+    color: ${(props) => props.$type === "filled" && "white"};
     ${ipad({ margin: 5 })}
     ${mobile({ fontSize: 15 })}
 `
@@ -62,9 +63,9 @@ const Course = styled.div`
     justify-content: space-between;
     ${ipad({})}
 `
-const CourseDetail = styled.div`
-    flex: ${(props) => (props.ipad ? "1" : "2")};
-    justify-content: ${(props) => (props.ipad ? "flex-start" : "")};
+const CourseDetail = styled.div<{ $ipad?: boolean }>`
+    flex: ${(props) => (props.$ipad ? "1" : "2")};
+    justify-content: ${(props) => (props.$ipad ? "flex-start" : "")};
     display: flex;
     margin: 5px 10px 0 0;
     padding: 0;
@@ -133,12 +134,12 @@ const Summary = styled.div`
 const SummaryTitle = styled.h1`
     font-weight: 200;
 `
-const SummaryItem = styled.div`
+const SummaryItem = styled.div<{ $type?: string }>`
     margin: 30px 0px;
     display: flex;
     justify-content: space-between;
-    font-weight: ${(props) => props.type === "total" && "500"};
-    font-size: ${(props) => props.type === "total" && "24px"};
+    font-weight: ${(props) => props.$type === "total" && "500"};
+    font-size: ${(props) => props.$type === "total" && "24px"};
 `
 const SummaryItemText = styled.span`
     ${ipad({ fontSize: 20 })}
@@ -176,7 +177,11 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-const Cart = () => {
+interface CartProps {
+    courses: CourseWithExtras[]
+}
+export default function Cart({ courses }: CartProps) {
+    // const Cart = ({ courses }: CartProps) => {
     const { cart, removeFromCart, isInCart } = useUserStore()
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const router = useRouter()
@@ -185,15 +190,13 @@ const Cart = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [update, setUpdate] = useState(false)
 
-    // // hydration function
-    // const hasHydrated = useStore(state => state._hasHydrated)
-    // if (!hasHydrated) {
-    //   console.log("i am not hydrated")
-    //   return <SetUpdate>Loading....</SetUpdate>
-    // }
-
     // Calculate the total amount
-    const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
+    // const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
+
+    const totalAmount = courses
+        .filter((course) => cart.includes(course.id))
+        .reduce((acc, course) => acc + course.price, 0)
+        .toFixed(2)
 
     console.log("Total amount in your cart", totalAmount)
 
@@ -233,16 +236,43 @@ const Cart = () => {
                     </Top>
                     <Bottom>
                         <Info>
-                            {cart.map((courseId) => {
-                                const course = fetchCourseById(courseId)
-
-                                return (
-                                    <div key={courseId}>
-                                        ...
-                                        <Remove onClick={() => remove(courseId)}>Remove</Remove>
+                            {courses
+                                .filter((course) => cart.includes(course.id))
+                                .map((course) => (
+                                    <div key={course.id}>
+                                        <Course>
+                                            <CourseDetail>
+                                                <Image src={course.image} alt={course.title} />
+                                                <Details>
+                                                    <CourseName>{course.title}</CourseName>
+                                                    <CourseId>
+                                                        <b>ID: </b>
+                                                        {course.id}
+                                                    </CourseId>
+                                                    <Duration>
+                                                        <b>Duration: </b>
+                                                        {course.duration.hours > 0
+                                                            ? `${course.duration.hours} hours ${course.duration.minutes} mins`
+                                                            : `${course.duration.minutes} mins`}
+                                                    </Duration>
+                                                    <Duration>
+                                                        <b>{course.onDemandVideos} </b>Lectures
+                                                    </Duration>
+                                                </Details>
+                                            </CourseDetail>
+                                            <CourseDetail $ipad={true}>
+                                                <Price>₦ {course.price.toFixed(2)}</Price>
+                                                <ChangeContainer>
+                                                    <Remove onClick={() => remove(course.id)}>
+                                                        Remove
+                                                    </Remove>
+                                                    <Remove>Move to Wishlist</Remove>
+                                                </ChangeContainer>
+                                            </CourseDetail>
+                                        </Course>
+                                        <Remove onClick={() => remove(course.id)}>Remove</Remove>
                                     </div>
-                                )
-                            })}
+                                ))}
 
                             {/* {cart.map((course) => (
                                 <div key={course._id}>
@@ -280,7 +310,7 @@ const Cart = () => {
                         </Info>
                         <Summary>
                             <SummaryTitle>CHECKOUT SUMMARY</SummaryTitle>
-                            <SummaryItem type="total">
+                            <SummaryItem $type="total">
                                 <SummaryItemText>Total</SummaryItemText>
                                 <SummaryItemPrice>&#8358; {totalAmount}</SummaryItemPrice>
                             </SummaryItem>
@@ -295,4 +325,4 @@ const Cart = () => {
     )
 }
 
-export default Cart
+// export default Cart

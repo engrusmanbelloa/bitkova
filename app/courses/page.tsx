@@ -6,7 +6,6 @@ import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
 import Testimonials from "@/components/Testimonials"
 import Newsletter from "@/components/Newsletter"
-import { featuredCourses } from "@/data"
 import Button from "@/components/Button"
 
 const Container = styled.section`
@@ -116,13 +115,14 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-export default function Courses(href: any) {
+export default async function Courses(href: any) {
     //  const [courses, setCourses] = useState([])
     const [count, setCount] = useState(0)
     const [skip, setSkip] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
-    const courses = featuredCourses
     const limit = 8
+
+    const courses = await fetchCourses()
 
     if (isLoading) {
         return <SetUpdate>Loading....</SetUpdate>

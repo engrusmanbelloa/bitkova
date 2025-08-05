@@ -1,4 +1,4 @@
-"use cleint"
+"use client"
 import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
 import { useQuery } from "@tanstack/react-query"
@@ -15,7 +15,7 @@ import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 import CourseRating from "@/components/course/Review"
 import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
-import { fetchCourses } from "@/lib/firebase/queries/courses"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import "animate.css/animate.min.css"
 
 const Container = styled.section`
@@ -196,7 +196,6 @@ const BtnLink = styled(Link)`
     font-weight: 400;
 `
 export default function CoursesList(props: {
-    courses: Course[]
     limit: number
     title: string
     $display?: string
@@ -206,15 +205,7 @@ export default function CoursesList(props: {
 }) {
     const router = useRouter()
     const { limit, title, coursesPg, $display } = props
-    const [coursesToDisplay, setCoursesToDisplay] = useState([])
-    const {
-        data: courses,
-        isLoading,
-        error,
-    } = useQuery({
-        queryKey: ["courses"],
-        queryFn: fetchCourses,
-    })
+    const { data: courses, isLoading, error } = useFetchCourses()
     const main = true
 
     if (isLoading)
