@@ -116,14 +116,8 @@ const SetUpdate = styled.div`
 `
 
 export default function Courses(href: any) {
-    const [count, setCount] = useState(0)
     const [skip, setSkip] = useState(0)
-    const [isLoading, setIsLoading] = useState(false)
     const limit = 8
-
-    if (isLoading) {
-        return <SetUpdate>Loading....</SetUpdate>
-    }
 
     return (
         <Container>

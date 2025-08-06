@@ -2,16 +2,9 @@ import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types"
-// import { fetchCourseById } from "@/lib/firebase/queries/courses"
 
 // fetchCourses by course id
-const fetchCourseById = async (
-    courseId: string,
-): Promise<
-    CourseWithExtras & {
-        duration: { hours: number; minutes: number }
-    }
-> => {
+const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
     // serialize data ready for the client side
     function serializeDoc<T extends object>(data: T): any {
         return JSON.parse(

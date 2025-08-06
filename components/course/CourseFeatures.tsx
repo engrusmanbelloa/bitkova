@@ -136,10 +136,9 @@ const BottomBtn = styled.div`
 interface CourseProps {
     course: CourseWithExtras
     handlePlay: () => void
-    user: User
 }
 
-export default function CourseFeatures({ user, course, handlePlay }: CourseProps) {
+export default function CourseFeatures({ course, handlePlay }: CourseProps) {
     return (
         <>
             <Top>

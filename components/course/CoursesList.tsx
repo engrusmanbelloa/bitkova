@@ -195,16 +195,16 @@ const BtnLink = styled(Link)`
     color: ${(props) => props.theme.palette.common.white};
     font-weight: 400;
 `
-export default function CoursesList(props: {
+interface CoursesListProps {
     limit: number
     title: string
     $display?: string
     priceBtn?: string
     coursesPg?: boolean
     onClick?: () => void
-}) {
+}
+export default function CoursesList({ limit, title, coursesPg, $display }: CoursesListProps) {
     const router = useRouter()
-    const { limit, title, coursesPg, $display } = props
     const { data: courses, isLoading, error } = useFetchCourses()
     const main = true
 

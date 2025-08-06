@@ -171,12 +171,11 @@ const Actions = styled.div`
 `
 
 interface CourseId {
-    id: string
+    courseId: string
 }
 
-export default function CourseHeader({ id }: CourseId) {
+export default function CourseHeader({ courseId }: CourseId) {
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
-    // const { data: courses, isLoading, error } = useFetchCourses()
     const [showPlayer, setShowPlayer] = useState(false)
     const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
@@ -184,7 +183,7 @@ export default function CourseHeader({ id }: CourseId) {
     const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [certificateReady, setCertificateReady] = useState(true)
-    const { data: course, isLoading, error } = useCourseById(id)
+    const { data: course, isLoading, error } = useCourseById(courseId)
 
     // All course videos array
     const videoList =
@@ -343,7 +342,7 @@ export default function CourseHeader({ id }: CourseId) {
                 </Left>
                 <Right>
                     {!enrolled && user ? (
-                        <CourseFeatures user={user} course={course} handlePlay={handlePlay} />
+                        <CourseFeatures course={course} handlePlay={handlePlay} />
                     ) : (
                         <DeskTabs>
                             <CourseModules

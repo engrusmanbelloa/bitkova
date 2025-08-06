@@ -5,8 +5,5 @@ import { getCartCourses } from "@/lib/firebase/queries/getCartCourses"
 export default async function CartPage() {
     //  const courses = useFetchCourses()
 
-    const courseQuery = useFetchCourses()
-    const course = courseQuery.data
-
-    return <Cart courses={course} />
+    return <Cart />
 }
