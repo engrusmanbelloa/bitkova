@@ -26,23 +26,19 @@ const ModalButton = styled(Button)`
     ${ipad({ height: 35, fontSize: 16, marginTop: 40 })}
     ${mobile({ width: "70%", marginLeft: "80%" })}
 `
-
 const ModalCloseBTN = styled(ModalClose)`
     margin: 5px;
     color: #fff;
     background: rgba(28, 56, 121, 1);
 `
-
 const ModalDiv = styled(Modal)`
     background: rgba(28, 56, 121, 0.5);
 `
-
 const ModalDialogDiv = styled(ModalDialog)`
     display: flex;
     flex-direction: column;
     background: rgba(28, 56, 121, 0.3);
 `
-
 const ModalOptionsBtn = styled.button`
     margin: 5px auto;
     height: 40px;

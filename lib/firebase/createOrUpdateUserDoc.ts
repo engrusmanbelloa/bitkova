@@ -1,4 +1,3 @@
-import { getAuth } from "firebase/auth"
 import {
     getFirestore,
     doc,
@@ -43,6 +42,8 @@ export default async function createUserIfNotExists(user: FirebaseUser) {
                 skill: "",
                 bio: "",
                 registrationDate: new Date().toISOString(),
+                wishList: [],
+                cart: [],
             }
 
             await setDoc(userRef, newUser, { merge: true })

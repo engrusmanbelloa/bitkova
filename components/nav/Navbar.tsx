@@ -464,7 +464,11 @@ export default function Navbar() {
                             <>
                                 <CartsContainer>
                                     {cartCount > 0 && (
-                                        <Badge badgeContent={cartCount} color="error">
+                                        <Badge
+                                            onClick={() => router.push("/cart")}
+                                            badgeContent={cartCount}
+                                            color="error"
+                                        >
                                             <AddShoppingCartIcon
                                                 fontSize="medium"
                                                 color="info"
@@ -573,17 +577,12 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
-                            {/* <IconButton
-                                type="button"
-                                sx={{ m: 0, pr: "10px", color: "#356DF1" }}
-                                aria-label="search"
-                            >
-                                <AddShoppingCartIcon sx={{ fontSize: 20, m: 0.5 }} />
-                                <FavoriteBorderIcon sx={{ fontSize: 20, m: 0.5 }} />
-                                <CircleNotificationsIcon sx={{ fontSize: 20, m: 0.5 }} />
-                            </IconButton> */}
                             {cartCount > 0 && (
-                                <Badge badgeContent={cartCount} color="error">
+                                <Badge
+                                    onClick={() => router.push("/cart")}
+                                    badgeContent={cartCount}
+                                    color="error"
+                                >
                                     <AddShoppingCartIcon
                                         fontSize="small"
                                         color="info"

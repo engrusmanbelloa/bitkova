@@ -14,9 +14,9 @@ const SetUpdate = styled.div`
     padding: 10px;
     border-radius: 5px;
     border: 0.5px solid;
-    box-shadow: 5px 5px #cddeff;
+    box-shadow: 5px 5px ${(props) => props.theme.mobile.offWhite};
     text-align: center;
-    background: rgba(28, 56, 121, 1);
+    background: ${(props) => props.theme.palette.primary.main};
     ${ipad({ width: "80%" })}
     ${mobile({})}
 `
@@ -25,7 +25,7 @@ export default function IsLoading() {
     return (
         <SetUpdate>
             Loading
-            <CircularProgress size={18} sx={{ ml: 2 }} />
+            <CircularProgress size={18} sx={{ ml: 2, color: "seashell" }} />
         </SetUpdate>
     )
 }
