@@ -14,7 +14,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
 import { Badge } from "@mui/material"
-import Logo from "@/components/Logo"
+import Logo from "@/components/nav/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
@@ -30,6 +30,7 @@ import { useUserDoc } from "@/hooks/user/useUserDoc"
 import { toast } from "sonner"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
+import { syncUserStore } from "@/lib/store/syncUserStore"
 
 // containers section
 const Container = styled.section`
@@ -425,6 +426,13 @@ export default function Navbar() {
                 cart: user.cart || [],
                 wishlist: user.wishList || [],
             })
+            syncUserStore(user.id)
+                .then(() => {
+                    console.log("User store synced successfully")
+                })
+                .catch((error) => {
+                    console.error("Error syncing user store:", error)
+                })
         }
     }, [user])
 

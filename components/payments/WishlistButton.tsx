@@ -1,19 +1,15 @@
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
-import { useState } from "react"
-import { addToWishlist, removeFromWishlist } from "@/lib/firebase/queries/Wishlist"
+import { useState, useEffect } from "react"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { addToWishlistDb, removeFromWishlistDb } from "@/lib/firebase/queries/Wishlist"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { toast } from "sonner"
-
-interface Props {
-    userId: string
-    courseId: string
-    isInWishlist: boolean
-}
 
 export default function WishlistButton({ courseId }: { courseId: string }) {
     // const [inWishlist, setInWishlist] = useState(isInWishlist)
     const { addToWishlist, removeFromWishlist, isInWishlist } = useUserStore()
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const [loading, setLoading] = useState(false)
 
     const isWishlisted = isInWishlist(courseId)
@@ -21,10 +17,12 @@ export default function WishlistButton({ courseId }: { courseId: string }) {
     const toggleWishlist = async () => {
         setLoading(true)
         try {
-            if (isWishlisted) {
+            if (user && isWishlisted) {
+                await removeFromWishlistDb(user.id, courseId)
                 removeFromWishlist(courseId)
                 toast.success("Removed from wishlist")
-            } else {
+            } else if (user && !isWishlisted) {
+                await addToWishlistDb(user.id, courseId)
                 addToWishlist(courseId)
                 toast.success("Added to wishlist")
             }
@@ -34,6 +32,9 @@ export default function WishlistButton({ courseId }: { courseId: string }) {
             setLoading(false)
         }
     }
+    useEffect(() => {
+        if (isLoadingUserDoc || loading || !authReady) return
+    }, [])
 
     return (
         <button onClick={toggleWishlist} disabled={loading}>

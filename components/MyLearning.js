@@ -8,21 +8,18 @@ const Container = styled.div`
     margin-top: 0px;
     ${ipad({ marginLeft: 0 })}
 `
-
 const Title = styled.h1`
     margin: 2% 0 0 0;
     line-height: 1.5;
     font-size: 25px;
     ${ipad({ fontSize: 18 })}
 `
-
 const Heading = styled.h1`
     margin: 2% 0 0 0;
     line-height: 1.5;
     font-size: 25px;
     ${mobile({ fontSize: 18 })}
 `
-
 const DashBox = styled.div`
     ${"" /* margin: 0 0 0 100px; */}
     margin: ${(props) => (props.display === "grid" ? "0 100px" : "0 0 0 100px")};
@@ -46,7 +43,6 @@ const DashBox = styled.div`
         gridTemplateColumns: (props) => (props.display === "grid" ? "auto" : "none"),
     })}
 `
-
 const DashItemsBox = styled.div`
     margin-right: 10px;
     border: 1px solid #cddeff;
@@ -68,17 +64,14 @@ const DashItemsBox = styled.div`
     ${ipad({ left: 0, marginRight: 5 })}
     ${ipad({ left: 0, top: 0, marginRight: 5 })}
 `
-
 const ImageBox = styled.img`
     width: 100%;
     height: 200px;
     ${ipad({ width: (props) => (props.display === "grid" ? "100%" : "240px") })}
 `
-
 const Box = styled.div`
     margin-bottom: 10px;
 `
-
 const Paragraph = styled.div`
     margin: 10px;
     font-size: 20px;
@@ -86,7 +79,6 @@ const Paragraph = styled.div`
     line-height: 1.5;
     letter-spacing: 1.5;
 `
-
 const EnrollBtn = styled.button`
     height: 30px;
     width: 200px;

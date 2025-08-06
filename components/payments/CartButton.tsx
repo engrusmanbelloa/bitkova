@@ -1,9 +1,10 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import { useAuthReady } from "@/hooks/useAuthReady"
 import styled from "styled-components"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import { toast } from "sonner"
-import { addToCart, removeFromCart } from "@/lib/firebase/queries/cart"
+import { addToCartDb, removeFromCartDb } from "@/lib/firebase/queries/cart"
 import { useUserStore } from "@/lib/store/useUserStore"
 
 const Button = styled.button<{ $color?: string; $background?: string }>`
@@ -32,15 +33,27 @@ interface Props {
 }
 
 export default function CartButton({ courseId }: Props) {
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const [loading, setLoading] = useState(false)
     const { addToCart, removeFromCart, isInCart } = useUserStore()
     const isInUserCart = isInCart(courseId)
 
-    const handleToggle = () => {
-        if (isInUserCart) {
-            removeFromCart(courseId)
-        } else {
-            addToCart(courseId)
+    const handleCartToggle = async () => {
+        setLoading(true)
+        try {
+            if (user && isInUserCart) {
+                await removeFromCartDb(user.id, courseId)
+                removeFromCart(courseId)
+                toast.success("Removed from wishlist")
+            } else if (user && !isInUserCart) {
+                await addToCartDb(user.id, courseId)
+                addToCart(courseId)
+                toast.success("Added to wishlist")
+            }
+        } catch (err) {
+            toast.error("Failed to update wishlist")
+        } finally {
+            setLoading(false)
         }
     }
     // const handleCartToggle = async () => {
@@ -62,11 +75,7 @@ export default function CartButton({ courseId }: Props) {
     // }
 
     return (
-        // <button onClick={handleCartToggle} disabled={loading}>
-        //     <ShoppingCartIcon />
-        //     {inCart ? "Remove from Cart" : "Add to Cart"}
-        // </button>
-        <Button $background="#fdb913" onClick={handleToggle} disabled={loading}>
+        <Button $background="#fdb913" onClick={handleCartToggle} disabled={loading}>
             <BottomBtn>
                 <ShoppingCartIcon />
                 {isInUserCart ? "Remove from Cart" : "Add to Cart"}

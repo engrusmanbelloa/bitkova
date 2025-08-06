@@ -13,7 +13,7 @@ import {
 } from "@mui/icons-material"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import Logo from "@/components/Logo"
+import Logo from "@/components/nav/Logo"
 
 const Container = styled.section`
     color: ${(props) => props.theme.palette.common.white};

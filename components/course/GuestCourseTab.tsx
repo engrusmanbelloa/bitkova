@@ -5,8 +5,6 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
-import { formatPrice } from "@/config/FormatPrice"
-import { CourseType } from "@/types"
 import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 

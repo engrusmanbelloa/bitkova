@@ -16,9 +16,7 @@ import extractPreviewVideo from "@/config/ExtractPreview"
 import WishlistButton from "@/components/payments/WishlistButton"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import IsLoading from "@/components/IsLoading"
-import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useCourseById } from "@/hooks/courses/useFetchCourseById"
-import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`

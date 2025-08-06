@@ -3,7 +3,6 @@ import "animate.css/animate.min.css"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useUserStore } from "@/lib/store/useUserStore"
-import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { CourseWithExtras } from "@/types"
 import { useAuthReady } from "@/hooks/useAuthReady"
@@ -189,8 +188,6 @@ export default function Cart() {
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const router = useRouter()
     const { data: courses, isLoading, error } = useFetchCourses()
-    const [success, setSuccess] = useState()
-    const [update, setUpdate] = useState(false)
 
     // Calculate the total amount
     const totalAmount = (courses ?? [])
@@ -219,7 +216,7 @@ export default function Cart() {
                             <TopText>Your Cart ({cart.length})</TopText>
                             <TopText>Your Wishlist (0)</TopText>
                         </TopTexts>
-                        <CheckOutBtn onClick={() => router.push("/payment")}>
+                        <CheckOutBtn onClick={() => router.push("/checkout")}>
                             CHECKOUT NOW
                         </CheckOutBtn>
                     </TopDiv>
@@ -259,7 +256,6 @@ export default function Cart() {
                                                 </ChangeContainer>
                                             </CourseDetail>
                                         </Course>
-                                        {/* <Remove onClick={() => remove(course.id)}>Remove</Remove> */}
                                     </div>
                                 ))}
 
@@ -303,7 +299,7 @@ export default function Cart() {
                                 <SummaryItemText>Total:&nbsp;&nbsp;</SummaryItemText>
                                 <SummaryItemPrice>&#8358;{totalAmount}</SummaryItemPrice>
                             </SummaryItem>
-                            <CheckOutBtn $type="filled" onClick={() => router.push("/payment")}>
+                            <CheckOutBtn $type="filled" onClick={() => router.push("/checkout")}>
                                 CHECKOUT NOW
                             </CheckOutBtn>
                         </Summary>

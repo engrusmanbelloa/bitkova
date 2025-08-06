@@ -1,6 +1,6 @@
 "use client"
 import styled from "styled-components"
-import { mobile, ipad } from "../responsive"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled.div`
     height: 40px;

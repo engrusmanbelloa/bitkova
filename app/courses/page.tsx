@@ -4,8 +4,8 @@ import styled, { keyframes } from "styled-components"
 import CoursesList from "@/components/course/CoursesList"
 import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
-import Testimonials from "@/components/Testimonials"
-import Newsletter from "@/components/Newsletter"
+import Testimonials from "@/components/nav/Testimonials"
+import Newsletter from "@/components/home/Newsletter"
 import Button from "@/components/Button"
 
 const Container = styled.section`
@@ -115,7 +115,7 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-export default function Courses(href: any) {
+export default function Courses() {
     const [skip, setSkip] = useState(0)
     const limit = 8
 

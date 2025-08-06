@@ -1,10 +1,10 @@
 "use client"
 import Announcement from "./Announcement"
-import Meta from "./Meta"
-import Navbar from "./nav/Navbar"
+import Meta from "../Meta"
+import Navbar from "../nav/Navbar"
 import Footer from "./Footer"
 import styled from "styled-components"
-import { ipad } from "../responsive"
+import { ipad } from "../../responsive"
 
 const Container = styled.div`
   width 95%;

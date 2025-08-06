@@ -6,16 +6,13 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
 import CertificateVerifier from "@/components/course/CertificateVerifier"
-import { CourseType } from "@/types"
 import { CourseWithExtras } from "@/types"
-import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Box)`
     display: flex;
     flex-direction: column;
     margin: 10px auto 0px;
 `
-// width: ${props.theme.widths.mobileWidth};
 const TabContainer = styled(Box)`
     border-bottom: 1px solid ${(props) => props.theme.mobile.horizontalrule};
 `

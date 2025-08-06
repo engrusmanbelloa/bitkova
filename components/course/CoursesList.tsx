@@ -1,7 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
 import styled, { keyframes } from "styled-components"
-import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Card from "@mui/material/Card"
@@ -10,7 +8,6 @@ import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
 import PreviewIcon from "@mui/icons-material/Preview"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import { formatPrice } from "@/config/FormatPrice"
-import { Course } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
 import CourseRating from "@/components/course/Review"
@@ -190,11 +187,7 @@ const WishlistBtn = styled.button<{ $priceBtn?: string }>`
     }
     ${ipad({ height: 35 })};
 `
-const BtnLink = styled(Link)`
-    text-decoration: none;
-    color: ${(props) => props.theme.palette.common.white};
-    font-weight: 400;
-`
+
 interface CoursesListProps {
     limit: number
     title: string

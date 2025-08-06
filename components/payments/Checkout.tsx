@@ -78,7 +78,6 @@ const Hr = styled.hr`
     border: none;
     height: 1px;
 `
-
 const SetUpdate = styled.div`
     font-size: 18px;
     margin: 10px auto;

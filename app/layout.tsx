@@ -4,19 +4,11 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
-import {
-    useQuery,
-    useMutation,
-    useQueryClient,
-    QueryClient,
-    QueryClientProvider,
-} from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster, toast } from "sonner"
-import { signOut } from "firebase/auth"
-import Announcement from "@/components/Announcement"
+import Announcement from "@/components/home/Announcement"
 import Navbar from "@/components/nav/Navbar"
-import Footer from "@/components/Footer"
+import Footer from "@/components/home/Footer"
 import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
