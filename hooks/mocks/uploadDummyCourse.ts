@@ -1,4 +1,4 @@
-import { uploadNewCourse } from "@/hooks/courses/uploadCourseWithDetails"
+import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
 import { data_package } from "@/data"
 
 export async function uploadDummyCourse() {

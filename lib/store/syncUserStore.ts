@@ -9,5 +9,6 @@ export const syncUserStore = async (userId: string) => {
         const userData = userSnap.data()
         useUserStore.getState().setWishlist(userData.wishList || [])
         useUserStore.getState().setCart(userData.cart || [])
+        useUserStore.getState().setEnrolledCourses(userData.enrolledCourses || [])
     }
 }

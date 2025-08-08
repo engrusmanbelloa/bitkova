@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useEffect } from "react"
 import { onAuthStateChanged, getAuth } from "firebase/auth"
-import createOrUpdateUserDoc from "@/lib/firebase/createOrUpdateUserDoc"
+import createOrUpdateUserDoc from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 
 const HeaderContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};

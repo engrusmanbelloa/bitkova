@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Dashboard from "@/components/dashboard/Dashoard"
 import { User } from "@/userType"
-import { getUserById } from "@/lib/firebase/getUserById"
+import { getUserById } from "@/lib/firebase/queries/getUserById"
 import { verifySession } from "@/session/verifySession"
 import { toast } from "sonner"
 

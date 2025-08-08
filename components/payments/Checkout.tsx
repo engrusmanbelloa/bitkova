@@ -1,17 +1,14 @@
-import { PaystackButton } from "react-paystack"
+"use client"
+import { PaystackButton, usePaystackPayment } from "react-paystack"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
-import useStore from "@/config/old-store"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/router"
-import {
-    getProviders,
-    useSession,
-    signIn,
-    signOut,
-    getCsrfToken,
-    getSession,
-} from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { enrollCourses } from "@/lib/firebase/uploads/enrollCourses"
+import { toast } from "sonner"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import { EnrolledCourse } from "@/userType"
 
 const Container = styled.div``
 
@@ -33,9 +30,9 @@ const Course = styled.div`
     justify-content: space-between;
     ${ipad({})}
 `
-const CourseDetail = styled.div`
-    flex: ${(props) => (props.ipad ? "1" : "2")};
-    justify-content: ${(props) => (props.ipad ? "flex-start" : "")};
+const CourseDetail = styled.div<{ $ipad?: boolean }>`
+    flex: ${(props) => (props.$ipad ? "1" : "2")};
+    justify-content: ${(props) => (props.$ipad ? "flex-start" : "")};
     display: flex;
     margin: 5px 10px 0 0;
     padding: 0;
@@ -67,11 +64,10 @@ const CourseId = styled.span`
     ${mobile({ textAlign: "center" })}
 `
 const Price = styled.p`
-    font-size: 20px;
     font-weight: 500;
-    color: ##1c3879;
-    ${ipad({ fontSize: "18px", margin: "0, auto" })}
-    ${mobile({ fontSize: "17px", margin: "0, auto" })}
+    color: ${(props) => props.theme.palette.primary.main};
+    ${ipad({ fontSize: "18px", margin: "0, auto" })};
+    ${mobile({ fontSize: "17px", margin: "0, auto" })};
 `
 const Hr = styled.hr`
     background-color: #cddeff;
@@ -93,13 +89,13 @@ const SetUpdate = styled.div`
     ${ipad({ width: "80%" })}
     ${mobile({})}
 `
-const PayButton = styled(PaystackButton)`
+const PayButton = styled.button`
     width: 150px;
     padding: 10px;
     border: none;
     border-radius: 5px;
     box-shadow: 5px 5px #cddeff;
-    background-color: #1c3879;
+    background-color: ${(props) => props.theme.palette.primary.main};
     color: white;
     font-size: 20px;
     font-weight: 600;
@@ -107,111 +103,180 @@ const PayButton = styled(PaystackButton)`
 `
 
 export default function Checkout() {
-    // hydration function
-    const hasHydrated = useStore((state) => state._hasHydrated)
-    const router = useRouter()
-    const {
-        enrolledCourses,
-        cart,
-        activeCourse,
-        completedCourses,
-        wishlist,
-        ownCourses,
-        points,
-        lessonSteps,
-        addToEnrolledCourses,
-        addToActiveCourse,
-        addToCompletedCourses,
-        addToWishlist,
-        addToOwnCourses,
-        addToCart,
-        removeFromCart,
-        clearCart,
-    } = useStore()
-    const { data: session, status } = useSession()
+    // const {
+    //     enrolledCourses,
+    //     cart,
+    //     activeCourse,
+    //     completedCourses,
+    //     wishlist,
+    //     ownCourses,
+    //     points,
+    //     lessonSteps,
+    //     addToEnrolledCourses,
+    //     addToActiveCourse,
+    //     addToCompletedCourses,
+    //     addToWishlist,
+    //     addToOwnCourses,
+    //     addToCart,
+    //     removeFromCart,
+    //     clearCart,
+    // } = useStore()
 
-    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY
+    const router = useRouter()
+    const { cart, enrolledCourses, removeFromCart, addToEnrolledCourses } = useUserStore()
+    const { user, authReady } = useAuthReady()
+    const { data: courses, isLoading, error } = useFetchCourses()
+
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!
     // "pk_test_6d1156302a45948dbc8116471bbea4ccacdcc550"
     console.log("PAYSTACK_PUBLIC_KEY: ", process.env.PAYSTACK_PUBLIC_KEY)
 
-    const totalAmount = cart.reduce((acc, course) => acc + course.price, 0).toFixed(2)
-    const email = session?.user.email
-    const name = session?.user.name
-    const phone = session?.user.phone
+    const cartCourses = (courses ?? []).filter((course) => cart.includes(course.id))
+    const totalAmount = cartCourses.reduce((acc, course) => acc + course.price, 0)
+
     const amount = totalAmount * 100
+    const email = user && user.email
+
+    const onSuccess = async () => {
+        if (!user) return
+
+        const courseIds = cartCourses.map((c) => c.id)
+        const newEnrollments: EnrolledCourse[] = cartCourses.map((course) => ({
+            userId: user.id,
+            courseId: course.id,
+            completedLessons: 0,
+            progress: 0,
+            status: "in progress",
+            enrolledAt: new Date(),
+            updatedAt: new Date(),
+        }))
+
+        try {
+            await enrollCourses(user.id, courseIds) // Enroll the user in the courses in firebase
+            newEnrollments.forEach(addToEnrolledCourses) // Update the user store with new enrollments
+            courseIds.forEach((id) => removeFromCart(id))
+            toast.success("Payment successful! Courses added.")
+            router.push("/success")
+        } catch (err) {
+            console.error(err)
+            toast.error("Payment succeeded but enrollment failed!")
+        }
+    }
+
+    const onClose = () => {
+        toast("Payment cancelled.")
+    }
+
+    // const componentProps = {
+    //     email,
+    //     amount,
+    //     metadata: {
+    //         name,
+    //         phone,
+    //     },
+    //     publicKey: publicKey,
+    //     text: "Pay Now",
+    //     onSuccess: () => {
+    //         const success = async () => {
+    //             try {
+    //                 const courseIds = cart.map((course) => course._id)
+    //                 const response = await Promise.all(
+    //                     courseIds.map((id) =>
+    //                         fetch(`/api/courses/${id}`, {
+    //                             method: "POST",
+    //                             headers: {
+    //                                 "Content-Type": "application/json",
+    //                             },
+    //                         }),
+    //                     ),
+    //                 )
+    //                 if (response.every(async (res) => res.ok)) {
+    //                     console.log("ids posts are successful")
+    //                     await addToEnrolledCourses(courseIds)
+    //                     await addToActiveCourse(courseIds)
+    //                     await clearCart()
+    //                     setTimeout(() => {
+    //                         router.push("/success")
+    //                     }, 1000)
+    //                     console.log(" the purchased courses: ", enrolledCourses)
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error adding courses to enrolledCourses: ", error)
+    //                 alert("Error adding courses to enrolledCourses")
+    //             }
+    //         }
+    //         success()
+    //     },
+    //     onClose: () => alert("Wait! Don't leave :("),
+    // }
 
     const componentProps = {
-        email,
-        amount,
-        metadata: {
-            name,
-            phone,
-        },
+        email: user?.email || "",
+        amount: amount,
+        reference: new Date().getTime().toString(),
+        // metadata: {
+        //     custom_fields: [{ display_name: user?.name || "Guest", value: user?.phoneNumber || "N/A" }],
+        // },
         publicKey: publicKey,
         text: "Pay Now",
-        onSuccess: () => {
-            const success = async () => {
-                try {
-                    const courseIds = cart.map((course) => course._id)
-                    const response = await Promise.all(
-                        courseIds.map((id) =>
-                            fetch(`/api/courses/${id}`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                },
-                            }),
-                        ),
-                    )
-                    if (response.every(async (res) => res.ok)) {
-                        console.log("ids posts are successful")
-                        await addToEnrolledCourses(courseIds)
-                        await addToActiveCourse(courseIds)
-                        await clearCart()
-                        setTimeout(() => {
-                            router.push("/success")
-                        }, 1000)
-                        console.log(" the purchased courses: ", enrolledCourses)
-                    }
-                } catch (error) {
-                    console.error("Error adding courses to enrolledCourses: ", error)
-                    alert("Error adding courses to enrolledCourses")
-                }
-            }
-            success()
-        },
-        onClose: () => alert("Wait! Don't leave :("),
+        // onSuccess: handlePaymentSuccess,
+        // onClose: handlePaymentClose,
     }
+
+    const PaystackHook = () => {
+        const initializePayment = usePaystackPayment(componentProps)
+        return (
+            <div>
+                <PayButton
+                    onClick={() => {
+                        // initializePayment(onSuccess, onClose)
+                        initializePayment({
+                            onSuccess,
+                            onClose: onClose,
+                            ...componentProps,
+                        })
+                    }}
+                >
+                    Pay now
+                </PayButton>
+            </div>
+        )
+    }
+
+    if (!authReady || isLoading) return <p>Loading</p>
+    if (error) return <p>Failed to load courses</p>
 
     return (
         <Container>
-            {session ? (
+            {user ? (
                 <Wrapper>
                     <Info>
-                        {cart.map((course) => (
-                            <div key={course._id}>
-                                <Course>
-                                    <CourseDetail>
-                                        <Image src={course.image} alt={course.title} />
-                                        <Details>
-                                            <CourseName>{course.title}</CourseName>
-                                            <CourseId>
-                                                <b>ID: </b>
-                                                {course._id}
-                                            </CourseId>
-                                        </Details>
-                                        <Price style={{ color: "#1C3879" }}>
-                                            Price: &#8358; {course.price.toFixed(2)}
-                                        </Price>
-                                    </CourseDetail>
-                                </Course>
-                                <Hr />
-                            </div>
-                        ))}
+                        {courses
+                            ?.filter((course) => cart.includes(course.id))
+                            .map((course) => (
+                                <div key={course.id}>
+                                    <Course>
+                                        <CourseDetail>
+                                            <Image src={course.image} alt={course.title} />
+                                            <Details>
+                                                <CourseName>{course.title}</CourseName>
+                                                <CourseId>
+                                                    <b>ID: </b>
+                                                    {course.id}
+                                                </CourseId>
+                                            </Details>
+                                            <Price style={{ color: "#1C3879" }}>
+                                                Price: &#8358; {course.price.toFixed(2)}
+                                            </Price>
+                                        </CourseDetail>
+                                    </Course>
+                                    <Hr />
+                                </div>
+                            ))}
                     </Info>
-                    <Price style={{ color: "#1C3879" }}>Total: &#8358; {totalAmount}</Price>
+                    <Price>Total: &#8358; {totalAmount}</Price>
                     <div>
-                        <PayButton {...componentProps} />
+                        <PaystackHook />
                     </div>
                 </Wrapper>
             ) : (

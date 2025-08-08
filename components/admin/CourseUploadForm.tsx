@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { v4 as uuidv4 } from "uuid"
 import { Course, Module, Lesson } from "@/types"
 import { toast } from "react-toastify"
-import { uploadNewCourse } from "@/hooks/courses/uploadCourseWithDetails"
+import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
 
 const Container = styled.div`
     max-width: 800px;

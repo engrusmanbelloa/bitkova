@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { useQuery } from "@tanstack/react-query"
-import { getUserById } from "@/lib/firebase/getUserById"
+import { getUserById } from "@/lib/firebase/queries/getUserById"
 import { User } from "@/userType"
 
 // export function useAuthReady() {

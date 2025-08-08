@@ -6,7 +6,7 @@ import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
 import { auth } from "@/lib/firebase/firebaseConfig"
-import createUserIfNotExists from "@/lib/firebase/createOrUpdateUserDoc"
+import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 import {
     getAdditionalUserInfo,
     createUserWithEmailAndPassword,

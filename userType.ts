@@ -1,10 +1,8 @@
 import { CourseType } from "@/types"
 import { featuredCourses } from "@/data"
-
 const getCourseDetailsById = (courseId: number): CourseType | undefined => {
     return featuredCourses.find((course) => course._id === courseId)
 }
-
 // Represents user-specific progress for a course
 export interface UserCourseProgress {
     course: CourseType
@@ -26,7 +24,7 @@ export interface User {
     cart: string[]
 }
 export interface EnrolledCourse {
-    id: string // Optional: custom ID like `${userId}_${courseId}`
+    // id: string // Optional: custom ID like `${userId}_${courseId}`
     userId: string // UID from Firebase Auth
     courseId: string // Document ID from the `courses` collection
     completedLessons: number

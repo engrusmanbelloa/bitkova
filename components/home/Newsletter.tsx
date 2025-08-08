@@ -1,7 +1,7 @@
 "use client"
 import SendIcon from "@mui/icons-material/Send"
 import styled from "styled-components"
-import { mobile, ipad } from "../responsive"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled.div`
     height: 300px;
