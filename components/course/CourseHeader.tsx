@@ -17,7 +17,7 @@ import WishlistButton from "@/components/payments/WishlistButton"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import IsLoading from "@/components/IsLoading"
 import { useCourseById } from "@/hooks/courses/useFetchCourseById"
-import { doc, setDoc, updateDoc } from "firebase/firestore"
+import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
@@ -223,43 +223,6 @@ export default function CourseHeader({ courseId }: CourseId) {
             handleSelectVideo(selectedIndex - 1)
         }
     }
-    // const handleCompletedVideos = () => {
-    //     if (!completedVideos.includes(selectedTitle)) {
-    //         setCompletedVideos((prev) => [...prev, selectedTitle])
-    //     }
-    //     // console.log("Completed video titles: ", completedVideos)
-    //     // console.log("Completed videos", completedVideos.length)
-    //     // console.log("Completed videos", videoList.length)
-    // }
-
-    //     const handleCompletedVideos = async () => {
-    //     if (!completedVideos.includes(selectedTitle)) {
-    //         setCompletedVideos((prev) => [...prev, selectedTitle])
-    //     }
-
-    //     if (videoList && completedVideos.length + 1 === videoList.length) {
-    //         setCertificateReady(true)
-
-    //         // Add to completedCourses in store + Firestore
-    //         const store = useUserStore.getState()
-    //         const isAlreadyCompleted = store.isCompleted(courseId)
-    //         if (!isAlreadyCompleted) {
-    //             const completedCourse = {
-    //                 courseId,
-    //                 title: course?.title,
-    //                 status: "completed",
-    //                 enrolledAt: new Date(),
-    //                 updatedAt: new Date(),
-    //             }
-    //             store.addToCompletedCourses(completedCourse)
-    //             await setDoc(
-    //                 doc(db, "users", firebaseUser.uid, "completedCourses", courseId),
-    //                 { ...completedCourse }
-    //             )
-    //         }
-    //     }
-    // }
-
     const handleCompletedVideos = async () => {
         if (!completedVideos.includes(selectedTitle)) {
             const updatedList = [...completedVideos, selectedTitle]
@@ -270,7 +233,11 @@ export default function CourseHeader({ courseId }: CourseId) {
 
             // Sync videos watched to Firestore
             const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-            await updateDoc(courseRef, { completedLessons: updatedList.length })
+            // await updateDoc(courseRef, { completedLessons: updatedList.length })
+            await updateDoc(courseRef, {
+                completedLessons: updatedList.length,
+                completedVideos: updatedList,
+            })
 
             // Ensure enrolled status in Zustand
             if (!useUserStore.getState().isEnrolled(courseId)) {
@@ -301,12 +268,65 @@ export default function CourseHeader({ courseId }: CourseId) {
         }
     }
     // useEffect(() => {
-    //     if (videoList && completedVideos.length === videoList.length) {
-    //         setCertificateReady(true)
+    //     if (course) {
+    //         const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
+    //         const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
+    //         setEnrolled(isEnrolled)
+    //         if (isCompleted) {
+    //             setCertificateReady(true)
+    //         }
+    //         console.log("Is enrolled: ", isEnrolled)
+    //         console.log("Is Certifcate ready: ", isCompleted)
+    //         console.log("Complete lessons: ", completedVideos)
+    //         // if (isEnrolled) {
+    //         //     const userId = firebaseUser?.uid
+    //         //     if (userId) {
+    //         //         const enrolledCourse = useUserStore
+    //         //             .getState()
+    //         //             .enrolledCourses.find((c) => c.courseId === course.id.toString())
+    //         //         if (enrolledCourse) {
+    //         //             setCompletedVideos(enrolledCourse.completedLessons)
+    //         //             // setCompletedVideos((prev) => [...prev, enrolledCourse.completedLessons])
+    //         //         }
+    //         //     }
+    //         // }
     //     }
-    //     // console.log("Completed videos", completedVideos.length)
-    //     // console.log("Completed videos", videoList && videoList.length)
-    // }, [completedVideos])
+    // }, [course, firebaseUser])
+
+    useEffect(() => {
+        const fetchCompletedVideos = async () => {
+            if (!firebaseUser?.uid || !courseId) return
+
+            const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
+            const snap = await getDoc(courseRef)
+
+            if (snap.exists()) {
+                const data = snap.data()
+
+                if (data.completedVideos && Array.isArray(data.completedVideos)) {
+                    setCompletedVideos(data.completedVideos)
+                } else {
+                    setCompletedVideos([]) // no saved progress
+                }
+            }
+        }
+
+        if (course) {
+            const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
+            const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
+            setEnrolled(isEnrolled)
+
+            if (isEnrolled) {
+                fetchCompletedVideos()
+            }
+            if (isCompleted) {
+                setCertificateReady(true)
+            }
+            console.log("Is enrolled: ", isEnrolled)
+            console.log("Is Certifcate ready: ", isCompleted)
+            console.log("Complete lessons: ", completedVideos)
+        }
+    }, [course, firebaseUser, courseId])
 
     if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
     if (error || !course) return <p>Something went wrong or course not found.</p>

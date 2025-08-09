@@ -6,10 +6,8 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import LaptopIcon from "@mui/icons-material/Laptop"
 import LanguageIcon from "@mui/icons-material/Language"
 import { mobile, ipad } from "@/responsive"
-import { doc, getDoc } from "firebase/firestore"
 import { toast } from "sonner"
 import Certificate from "@/components/course/Certificate"
-import { CourseType } from "@/types"
 
 const Container = styled.div`
     max-width: 800px;
@@ -174,7 +172,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
             <TopContainer>
                 <Left>
                     <Title>
-                        Now that your <span>certificate</span> is in your <span>hands</span>
+                        Now your <span>certificate</span> is in your <span>hands</span>
                     </Title>
                     <Description>
                         Type your Certificate ID here to authenticate your skill certificates and
@@ -182,14 +180,12 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                     </Description>
                     <InputContainer>
                         <Input
-                            placeholder="Enter your Certificate ID here"
-                            value={certificateId}
-                            onChange={(e) => setCertificateId(e.target.value)}
+                            value={title}
+                            // onChange={(e) => setCertificateId(e.target.value)}
+                            disabled
                         />
                         {/* <Button onClick={handleVerify}> */}
-                        <Button onClick={openModal}>
-                            {loading ? "Verifying..." : "Verify ID"}
-                        </Button>
+                        <Button onClick={openModal}>{loading ? "Verifying..." : "Download"}</Button>
                     </InputContainer>
 
                     {result && (
