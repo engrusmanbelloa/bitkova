@@ -22,7 +22,6 @@ export interface User {
     registrationDate: string
     wishList: string[]
     cart: string[]
-    enrolledCourses: EnrolledCourse
 }
 export interface EnrolledCourse {
     // id: string // Optional: custom ID like `${userId}_${courseId}`

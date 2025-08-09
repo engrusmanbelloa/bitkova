@@ -158,7 +158,7 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
                     <Label>Completed Courses</Label>
                 </OverviewBox>
             </OverviewContainer>
-            <InProgressCourses userData={user} />
+            <InProgressCourses userData={userData} />
         </Container>
     )
 }

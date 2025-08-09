@@ -5,10 +5,14 @@ type UserStore = {
     cart: string[]
     wishlist: string[]
     enrolledCourses: EnrolledCourse[]
+    completedCourses: EnrolledCourse[]
+    archivedCourses: EnrolledCourse[]
 
     setCart: (cart: string[]) => void
     setWishlist: (wishlist: string[]) => void
     setEnrolledCourses: (courses: EnrolledCourse[]) => void
+    setCompletedCourses: (courses: EnrolledCourse[]) => void
+    setArchivedCourses: (courses: EnrolledCourse[]) => void
 
     addToCart: (courseId: string) => void
     removeFromCart: (courseId: string) => void
