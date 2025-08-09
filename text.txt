@@ -179,3 +179,74 @@ payWithPaystack = () => {
                                 </ModuleContent>
                             </AccordionDetails>
                         ))}
+
+
+
+
+// export default function InProgressCourses({ userData, limit }: DashboardProps) {
+//     // Filter only courses with status "in-progress"
+//     // const inProgressCourses = user.enrolledCourses
+//     // const { enrolledCourses, loading } = useUserEnrolledCourses(userData.id)
+//     // const inProgressCourses = enrolledCourses.filter((c) => c.status === "in progress")
+
+//         const { data: courses, isLoading, error } = useFetchCourses()
+//         const { enrolledCourses } = useUserStore()
+//         const { user, authReady } = useAuthReady()
+
+//         const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
+//         const coursesToDisplay = (courses ?? [])
+//             .filter((course) => enrolledCourseIds.includes(course.id))
+//             .slice(0, limit ?? enrolledCourseIds.length)
+
+//         // const coursesToDisplay = (courses ?? [])
+//         // .filter((course) => enrolledCourses.some((ec) => ec.courseId === course.id))
+//         // .slice(0, limit ?? enrolledCourses.length)
+
+//         console.log("Courses to display: ", coursesToDisplay)
+//         console.log("Enrolled course ids to display: ", enrolledCourseIds)
+//     // console.log("Courses in progress", inProgressCourses)
+//     const comment = " you have no enrolled courses"
+
+//     if (isLoading || !authReady) return <p>Loading...</p>
+//     if (error) return <p>Failed to load courses.</p>
+//     if (!user) return <p>Please log in to view your learning progress.</p>
+
+//     return (
+//         <Container>
+//             <CourseList>
+//                 {coursesToDisplay &&
+//                     coursesToDisplay.map((course) => (
+//                         <CourseCard key={course.id}>
+//                             <CourseImage
+//                                 src={course.image}
+//                                 alt={course.title}
+//                             />
+//                             <CourseInfo>
+//                                 <Rating
+//                                     name="half-rating-read"
+//                                     defaultValue={course.rating}
+//                                     precision={1}
+//                                     readOnly
+//                                 />
+//                                 <CourseTitle>{course.title}</CourseTitle>
+
+//                                 <ProgressText>
+//                                     Completed Lessons: {.completedLessons} of
+//                                     {course.onDemandVideos}
+//                                 </ProgressText>
+//                                 <ProgressContainer>
+//                                     <ProgressBarContainer>
+//                                         <ProgressBar $progress={.} />
+//                                     </ProgressBarContainer>
+//                                     <span>{.progress}% completed</span>
+//                                 </ProgressContainer>
+//                             </CourseInfo>
+//                         </CourseCard>
+//                     ))
+//                 ) : (
+//                     <NoDataAvailable comment={user.name + " " + "sir," + comment} />
+//                 )}
+//             </CourseList>
+//         </Container>
+//     )
+// }

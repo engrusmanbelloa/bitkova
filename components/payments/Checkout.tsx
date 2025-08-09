@@ -9,9 +9,9 @@ import { enrollCourses } from "@/lib/firebase/uploads/enrollCourses"
 import { toast } from "sonner"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { EnrolledCourse } from "@/userType"
+import { removeFromCartDb } from "@/lib/firebase/queries/cart"
 
 const Container = styled.div``
-
 const Wrapper = styled.div`
     padding: 10px;
     margin: auto;
@@ -135,7 +135,6 @@ export default function Checkout() {
     const totalAmount = cartCourses.reduce((acc, course) => acc + course.price, 0)
 
     const amount = totalAmount * 100
-    const email = user && user.email
 
     const onSuccess = async () => {
         if (!user) return
@@ -154,7 +153,8 @@ export default function Checkout() {
         try {
             await enrollCourses(user.id, courseIds) // Enroll the user in the courses in firebase
             newEnrollments.forEach(addToEnrolledCourses) // Update the user store with new enrollments
-            courseIds.forEach((id) => removeFromCart(id))
+            courseIds.forEach((id) => removeFromCart(id)) // Remove courses from the cart in the user store
+            courseIds.forEach((id) => removeFromCartDb(user.id, id)) // Remove courses from cart in the database
             toast.success("Payment successful! Courses added.")
             router.push("/success")
         } catch (err) {
@@ -167,60 +167,26 @@ export default function Checkout() {
         toast("Payment cancelled.")
     }
 
-    // const componentProps = {
-    //     email,
-    //     amount,
-    //     metadata: {
-    //         name,
-    //         phone,
-    //     },
-    //     publicKey: publicKey,
-    //     text: "Pay Now",
-    //     onSuccess: () => {
-    //         const success = async () => {
-    //             try {
-    //                 const courseIds = cart.map((course) => course._id)
-    //                 const response = await Promise.all(
-    //                     courseIds.map((id) =>
-    //                         fetch(`/api/courses/${id}`, {
-    //                             method: "POST",
-    //                             headers: {
-    //                                 "Content-Type": "application/json",
-    //                             },
-    //                         }),
-    //                     ),
-    //                 )
-    //                 if (response.every(async (res) => res.ok)) {
-    //                     console.log("ids posts are successful")
-    //                     await addToEnrolledCourses(courseIds)
-    //                     await addToActiveCourse(courseIds)
-    //                     await clearCart()
-    //                     setTimeout(() => {
-    //                         router.push("/success")
-    //                     }, 1000)
-    //                     console.log(" the purchased courses: ", enrolledCourses)
-    //                 }
-    //             } catch (error) {
-    //                 console.error("Error adding courses to enrolledCourses: ", error)
-    //                 alert("Error adding courses to enrolledCourses")
-    //             }
-    //         }
-    //         success()
-    //     },
-    //     onClose: () => alert("Wait! Don't leave :("),
-    // }
-
     const componentProps = {
         email: user?.email || "",
         amount: amount,
         reference: new Date().getTime().toString(),
-        // metadata: {
-        //     custom_fields: [{ display_name: user?.name || "Guest", value: user?.phoneNumber || "N/A" }],
-        // },
+        metadata: {
+            custom_fields: [
+                {
+                    display_name: "Email",
+                    value: user?.email || "",
+                    variable_name: "CUSTOM_EMAIL",
+                },
+                {
+                    display_name: "Phone",
+                    value: user?.phoneNumber || "N/A",
+                    variable_name: "CUSTOM_PHONE",
+                },
+            ],
+        },
         publicKey: publicKey,
         text: "Pay Now",
-        // onSuccess: handlePaymentSuccess,
-        // onClose: handlePaymentClose,
     }
 
     const PaystackHook = () => {
@@ -229,7 +195,6 @@ export default function Checkout() {
             <div>
                 <PayButton
                     onClick={() => {
-                        // initializePayment(onSuccess, onClose)
                         initializePayment({
                             onSuccess,
                             onClose: onClose,

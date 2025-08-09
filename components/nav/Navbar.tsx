@@ -225,7 +225,7 @@ export default function Navbar() {
         },
         {
             id: 4,
-            href: "#",
+            href: "/mylearning",
             title: "My Learning",
         },
     ]
@@ -425,6 +425,7 @@ export default function Navbar() {
             useUserStore.setState({
                 cart: user.cart || [],
                 wishlist: user.wishList || [],
+                enrolledCourses: [],
             })
             syncUserStore(user.id)
                 .then(() => {

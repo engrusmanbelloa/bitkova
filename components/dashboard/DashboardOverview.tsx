@@ -6,6 +6,9 @@ import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import InProgressCourses from "@/components/course/InProgressCourses"
 import InProgressCoursesMock from "@/hooks/mocks/InProgressCoursesMock"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { useAuthReady } from "@/hooks/useAuthReady"
 import {
     useUserCompletedCourses,
     useUserEnrolledCourses,
@@ -101,13 +104,30 @@ const Title = styled.h3`
     color: ${(props) => props.theme.palette.common.black};
 `
 interface DashboardProps {
-    user: User
+    userData: User
+    limit?: number
 }
 
-export default function DashboardOverview({ user }: DashboardProps) {
-    const { completedCourses } = useUserCompletedCourses(user.id)
-    const { enrolledCourses } = useUserEnrolledCourses(user.id)
-    const { archiveCourses } = useUserArchivedCourses(user.id)
+export default function DashboardOverview({ userData, limit }: DashboardProps) {
+    const { data: courses, isLoading, error } = useFetchCourses()
+    const { enrolledCourses } = useUserStore()
+    const { user, authReady } = useAuthReady()
+
+    const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
+    const coursesToDisplay = (courses ?? [])
+        .filter((course) => enrolledCourseIds.includes(course.id))
+        .slice(0, limit ?? enrolledCourseIds.length)
+
+    console.log("Courses to display: ", coursesToDisplay)
+    console.log("Enrolled course ids to display: ", enrolledCourseIds)
+
+    // const { completedCourses } = useUserCompletedCourses(userData.id)
+    // const { enrolledCourses } = useUserEnrolledCourses(user.id)
+    // const { archiveCourses } = useUserArchivedCourses(userData.id)
+
+    if (isLoading || !authReady) return <p>Loading...</p>
+    if (error) return <p>Failed to load courses.</p>
+    if (!user) return <p>Please log in to view your learning progress.</p>
     return (
         <Container>
             <ProfileSetupContainer>
@@ -127,19 +147,18 @@ export default function DashboardOverview({ user }: DashboardProps) {
                     <IconWrapper color="#10b981">
                         <PlayCircleFilledIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{archiveCourses.length}</Count>
+                    {/* <Count>{archiveCourses.length}</Count> */}
                     <Label>Active Courses</Label>
                 </OverviewBox>
                 <OverviewBox>
                     <IconWrapper color="#f59e0b">
                         <EmojiEventsIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{completedCourses.length}</Count>
+                    {/* <Count>{completedCourses.length}</Count> */}
                     <Label>Completed Courses</Label>
                 </OverviewBox>
             </OverviewContainer>
-            <InProgressCourses user={user} />
-            {/* <InProgressCoursesMock /> */}
+            <InProgressCourses userData={user} />
         </Container>
     )
 }

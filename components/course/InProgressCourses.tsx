@@ -1,9 +1,13 @@
 import styled from "styled-components"
 import Rating from "@mui/material/Rating"
+import { useRouter } from "next/navigation"
 import NoDataAvailable from "@/components/dashboard/NoData"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
-import { useUserEnrolledCourses } from "@/hooks/user/useUserCount"
+import CircularProgress from "@mui/material/CircularProgress"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { useAuthReady } from "@/hooks/useAuthReady"
 
 const Container = styled.div`
     margin-top: 20px;
@@ -18,6 +22,7 @@ const CourseCard = styled.div`
     padding: 0px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
     ${mobile(
         (props: any) => `
         flex-direction: column;
@@ -100,50 +105,71 @@ const ProgressBar = styled.div<{ $progress: number }>`
 `
 
 interface DashboardProps {
-    user: User
+    userData: User
+    limit?: number
 }
-export default function InProgressCourses({ user }: DashboardProps) {
-    // Filter only courses with status "in-progress"
-    // const inProgressCourses = user.enrolledCourses
-    const { enrolledCourses, loading } = useUserEnrolledCourses(user.id)
-    const inProgressCourses = enrolledCourses.filter((c) => c.status === "in progress")
-    // console.log("Courses in progress", inProgressCourses)
-    const comment = " you have no enrolled courses"
+
+export default function InProgressCourses({ userData, limit }: DashboardProps) {
+    const { data: courses, isLoading, error } = useFetchCourses()
+    const { enrolledCourses } = useUserStore()
+    const { user, authReady } = useAuthReady()
+    const router = useRouter()
+
+    // Limit to courses the user is enrolled in
+    const coursesToDisplay = (courses ?? [])
+        .filter((course) => enrolledCourses.some((ec) => ec.courseId === course.id))
+        .slice(0, limit ?? enrolledCourses.length)
+
+    if (isLoading || !authReady) return <CircularProgress />
+    if (error) return <p>Failed to load courses.</p>
+    if (!user) return <p>Please log in to view your learning progress.</p>
 
     return (
         <Container>
             <CourseList>
-                {inProgressCourses.length > 0 ? (
-                    inProgressCourses.map((userCourse: any) => (
-                        <CourseCard key={userCourse.course._id}>
-                            <CourseImage
-                                src={userCourse.course.image}
-                                alt={userCourse.course.title}
-                            />
-                            <CourseInfo>
-                                <Rating
-                                    name="half-rating-read"
-                                    defaultValue={userCourse.course.rating}
-                                    precision={1}
-                                    readOnly
-                                />
-                                <CourseTitle>{userCourse.course.title}</CourseTitle>
+                {coursesToDisplay.length > 0 ? (
+                    coursesToDisplay.map((course) => {
+                        // Find matching enrollment data
+                        const enrollment = enrolledCourses.find((ec) => ec.courseId === course.id)
 
-                                <ProgressText>
-                                    Completed Lessons: {userCourse.completedLessons} of
-                                    {userCourse.course.onDemandVideos}
-                                </ProgressText>
-                                <ProgressContainer>
-                                    <ProgressBarContainer>
-                                        <ProgressBar $progress={userCourse.progress} />
-                                    </ProgressBarContainer>
-                                    <span>{userCourse.progress}% completed</span>
-                                </ProgressContainer>
-                            </CourseInfo>
-                        </CourseCard>
-                    ))
+                        // Fallbacks in case of missing data
+                        const completedLessons = enrollment?.completedLessons ?? 0
+                        const totalLessons = course.onDemandVideos ?? 0
+                        const progress =
+                            totalLessons > 0
+                                ? Math.round((completedLessons / totalLessons) * 100)
+                                : 0
+
+                        return (
+                            <CourseCard
+                                key={course.id}
+                                onClick={() => router.push(`/courses/${course.id}`)}
+                            >
+                                <CourseImage src={course.image} alt={course.title} />
+                                <CourseInfo>
+                                    <Rating
+                                        name="half-rating-read"
+                                        defaultValue={course.rating}
+                                        precision={1}
+                                        readOnly
+                                    />
+                                    <CourseTitle>{course.title}</CourseTitle>
+
+                                    <ProgressText>
+                                        Completed Lessons: {completedLessons} of {totalLessons}
+                                    </ProgressText>
+                                    <ProgressContainer>
+                                        <ProgressBarContainer>
+                                            <ProgressBar $progress={progress} />
+                                        </ProgressBarContainer>
+                                        <span>{progress}% completed</span>
+                                    </ProgressContainer>
+                                </CourseInfo>
+                            </CourseCard>
+                        )
+                    })
                 ) : (
-                    <NoDataAvailable comment={user.name + " " + "sir," + comment} />
+                    <NoDataAvailable comment={`${user.name} sir, you have no enrolled courses`} />
                 )}
             </CourseList>
         </Container>
