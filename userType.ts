@@ -24,14 +24,12 @@ export interface User {
     cart: string[]
 }
 export interface EnrolledCourse {
-    // id: string // Optional: custom ID like `${userId}_${courseId}`
     userId: string // UID from Firebase Auth
     courseId: string // Document ID from the `courses` collection
     completedLessons: number
     progress: number // e.g. 0 to 100
     status: "in progress" | "completed"
     enrolledAt: Date
-    updatedAt: Date
 }
 export interface WishListItem {
     id: string // `${userId}_${courseId}`
@@ -40,7 +38,6 @@ export interface WishListItem {
     addedAt: Date
 }
 export interface ArchivedCourse {
-    id: string // `${userId}_${courseId}`
     userId: string
     courseId: string
     archivedAt: Date
@@ -59,9 +56,7 @@ export interface Cart {
     addedAt: Date
 }
 export interface CompletedCourse {
-    id: string
     userId: string
     courseId: string
     completedAt: Date
-    // any other fields you store
 }
