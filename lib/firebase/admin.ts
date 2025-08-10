@@ -2,7 +2,6 @@ import { initializeApp, applicationDefault, getApps, cert } from "firebase-admin
 import { getFirestore } from "firebase-admin/firestore"
 import { getAuth as getAdminAuth } from "firebase-admin/auth"
 
-// ?.replace(/\\n/g, "\n"),
 const adminApp = getApps().length
     ? getApps()[0]
     : initializeApp({

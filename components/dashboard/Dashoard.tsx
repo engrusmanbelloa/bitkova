@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
@@ -9,6 +9,8 @@ import ProfileForm from "@/components/dashboard/Settings"
 import NoDataAvailable from "./NoData"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import CircularProgress from "@mui/material/CircularProgress"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -52,13 +54,15 @@ const Title = styled.h3`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
 `
-interface DashboardProps {
-    user: User
-}
+// interface DashboardProps {
+//     user: User
+// }
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard() {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
+    const [isLoading, setIsLoading] = useState(false)
 
     const getInitials = (name: string): string => {
         const words = name.split(" ")
@@ -66,8 +70,14 @@ export default function Dashboard({ user }: DashboardProps) {
             ? `${words[0][0]}${words[1][0]}`.toUpperCase()
             : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
-    const initials = getInitials(user.name)
-    const userData = { name: user.name, initials: initials }
+    // const initials = getInitials(user.name)
+    const initials = user && user.name ? getInitials(user.name) : ""
+    // const userData = { name: user.name, initials: initials }
+    const userData = user ? { name: user.name, initials: initials } : "GU"
+
+    if (!authReady) return <CircularProgress />
+    if (!user) return <p>Please log in to view your dashboard.</p>
+
     return (
         <>
             <DashboardHeader user={userData} />
@@ -80,7 +90,7 @@ export default function Dashboard({ user }: DashboardProps) {
                 {/* Main Content Area */}
                 <ContentContainer>
                     {/* Dashboard Overview */}
-                    {activeItem === "dashboard" && <DashboardOverview user={user} />}
+                    {activeItem === "dashboard" && <DashboardOverview userData={user} />}
                     {activeItem === "profile" && <ProfileSection user={user} />}
 
                     {activeItem === "learning" && (

@@ -36,13 +36,7 @@ const Playbtn = styled(YouTubeIcon)`
     font-size: 30px;
     cursor: pointer;
 `
-// interface CourseProps {
-//     course: CourseType
-//     enrolled: boolean
-//     setSelectedVideo: (url: string) => void
-//     setSelectedTitle: (title: string) => void
-//     completedVideos: string[]
-// }
+
 interface CourseProps {
     course: CourseWithExtras
     enrolled: boolean
@@ -59,82 +53,6 @@ export default function CourseModules({
     let globalIndex = 0 // Track flat video index across modules
     return (
         <div>
-            {/* {course.modules.map((module, index) => (
-                <Accordion key={index}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={`panel${index}-content`}
-                        id={`panel${index}-header`}
-                    >
-                        <ModuleHeader>{module.title}</ModuleHeader>
-                    </AccordionSummary>
-                    {module.lessons.map((lesson, subIndex) => {
-                        const currentIndex = globalIndex
-                        globalIndex++
-                        // console.log("Mapped lesson : ", lesson.title)
-                        return (
-                            <AccordionDetails key={subIndex}>
-                                <ModuleContent>
-                                    {!enrolled ? (
-                                        <LockIcon />
-                                    ) : (
-                                        <Playbtn onClick={() => handleSelectVideo(currentIndex)} />
-                                    )}
-                                    {lesson.title}
-                                    {completedVideos.includes(lesson.title) ? (
-                                        <RoundCheckBox style={{ color: "#0072ff" }} />
-                                    ) : (
-                                        <RoundCheckBox />
-                                    )}
-                                </ModuleContent>
-                            </AccordionDetails>
-                        )
-                    })}
-                </Accordion>
-            ))} */}
-            {/* {course.modules
-                .sort((a, b) => a.position - b.position)
-                .map((module, index) => {
-                    const sortedLessons = [...module.lessons].sort(
-                        (a, b) => a.position - b.position,
-                    )
-
-                    return (
-                        <Accordion key={index}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls={`panel${index}-content`}
-                                id={`panel${index}-header`}
-                            >
-                                <ModuleHeader>{module.title}</ModuleHeader>
-                            </AccordionSummary>
-
-                            {sortedLessons.map((lesson, subIndex) => {
-                                const currentIndex = globalIndex++
-
-                                return (
-                                    <AccordionDetails key={subIndex}>
-                                        <ModuleContent>
-                                            {!enrolled ? (
-                                                <LockIcon />
-                                            ) : (
-                                                <Playbtn
-                                                    onClick={() => handleSelectVideo(currentIndex)}
-                                                />
-                                            )}
-                                            {lesson.title}
-                                            {completedVideos.includes(lesson.title) ? (
-                                                <RoundCheckBox style={{ color: "#0072ff" }} />
-                                            ) : (
-                                                <RoundCheckBox />
-                                            )}
-                                        </ModuleContent>
-                                    </AccordionDetails>
-                                )
-                            })}
-                        </Accordion>
-                    )
-                })} */}
             {[...course.modules]
                 .sort((a, b) => a.position - b.position)
                 .map((module, moduleIndex) => {

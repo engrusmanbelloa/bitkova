@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const isOnline = useNetworkStatus()
     const queryClient = new QueryClient()
     // Handle session expiration every 30 minutes
-    useSessionRefresh()
+    // useSessionRefresh()
     // Network status handler
     useEffect(() => {
         if (isOnline) {

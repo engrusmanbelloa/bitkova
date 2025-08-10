@@ -251,7 +251,7 @@ export default function Certificate({
             <Icon onClick={handleClose} />
             <ResponsivePreview>
                 <Image
-                    src="/certificate-bitkova.jpg"
+                    src="/BitkovaCert.jpg"
                     alt="Certificate"
                     priority
                     fill
@@ -259,7 +259,7 @@ export default function Certificate({
                 />
 
                 <Name>{user}</Name>
-                <Duration>has successfully completed all requirements for the</Duration>
+                {/* <Duration>has successfully completed all requirements for the</Duration> */}
                 <CourseTitle>{title}</CourseTitle>
                 <Desc>
                     This student has successfully completed more than {duration} Credit hours of

@@ -216,12 +216,12 @@ export default function SignUp({
             //         setSignUpStatus("Sign Up error")
             //     }
             // }
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+            // await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
             setSignUpStatus("success")
             toast.success(user.email + " Account created successfully")
             setTimeout(() => {

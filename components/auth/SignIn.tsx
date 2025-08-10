@@ -157,12 +157,12 @@ export default function SignIn({
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
             const idToken = await user.getIdToken()
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+            // await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()
@@ -188,12 +188,12 @@ export default function SignIn({
             const user = userCredential.user
             const idToken = await user.getIdToken()
             // console.log("id token is: ", idToken)
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+            // await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
             // await res.json() //the res deleted after debug just the await
             // console.log("SESSION SET:", data)
             setSignInStatus("success")

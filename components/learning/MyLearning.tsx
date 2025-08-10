@@ -8,6 +8,7 @@ import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import CircularProgress from "@mui/material/CircularProgress"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -108,20 +109,10 @@ const EnrollBtn = styled.button`
 `
 
 export default function MyLearning(props: any) {
-    const { data: courses, isLoading, error } = useFetchCourses()
-    const { enrolledCourses } = useUserStore()
     const { user, authReady } = useAuthReady()
-    const { title, display, limit } = props
+    const { limit } = props
 
-    // Filter to only show enrolled courses
-    const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
-    const coursesToDisplay = (courses ?? [])
-        .filter((course) => enrolledCourseIds.includes(course.id))
-        .slice(0, limit ?? enrolledCourseIds.length)
-
-    // console.log("Courses to display: ", coursesToDisplay)
-    // console.log("Enrolled course ids to display: ", enrolledCourseIds)
-
+    if (!authReady) return <CircularProgress />
     if (!user) return <p>Please log in to view your learning progress.</p>
 
     return (

@@ -305,12 +305,12 @@ export default function Navbar() {
 
                 const idToken = await firebaseUser.getIdToken() // force refresh
                 // Create session
-                await fetch("/api/auth/session", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idToken }),
-                    credentials: "include",
-                })
+                // await fetch("/api/auth/session", {
+                //     method: "POST",
+                //     headers: { "Content-Type": "application/json" },
+                //     body: JSON.stringify({ idToken }),
+                //     credentials: "include",
+                // })
                 toast.success("Email verification successful")
             } else {
                 if (!sentVerification) {
@@ -354,17 +354,17 @@ export default function Navbar() {
             await createUserIfNotExists(firebaseUser)
 
             const idToken = await firebaseUser.getIdToken() // force refresh
-            const res = await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+            // const res = await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
 
-            if (!res.ok) {
-                const { error } = await res.json()
-                throw new Error(error || "Session creation failed")
-            }
+            // if (!res.ok) {
+            //     const { error } = await res.json()
+            //     throw new Error(error || "Session creation failed")
+            // }
             toast.success("Email verification successful")
         } catch (error: any) {
             console.error("Verification error:", error)
@@ -388,7 +388,7 @@ export default function Navbar() {
     }
 
     useEffect(() => {
-        if (!authReady) return // Wait for Firebase to be ready
+        if (!authReady || isLoadingUserDoc) return // Wait for Firebase to be ready
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user !== null) {
@@ -472,40 +472,36 @@ export default function Navbar() {
                         {authReady && user && firebaseUser && firebaseUser.emailVerified ? (
                             <>
                                 <CartsContainer>
-                                    {cartCount > 0 && (
-                                        <Badge
-                                            onClick={() => router.push("/cart")}
-                                            badgeContent={cartCount}
-                                            color="error"
-                                        >
-                                            <AddShoppingCartIcon
-                                                fontSize="medium"
-                                                color="info"
-                                                sx={{
-                                                    m: 1,
-                                                    cursor: "pointer",
-                                                    ":hover": {
-                                                        color: "#ABD0ED",
-                                                    },
-                                                }}
-                                            />
-                                        </Badge>
-                                    )}
-                                    {wishlistCount > 0 && (
-                                        <Badge badgeContent={wishlistCount} color="error">
-                                            <FavoriteBorderIcon
-                                                fontSize="medium"
-                                                color="info"
-                                                sx={{
-                                                    m: 1,
-                                                    cursor: "pointer",
-                                                    ":hover": {
-                                                        color: "#ABD0ED",
-                                                    },
-                                                }}
-                                            />
-                                        </Badge>
-                                    )}
+                                    <Badge
+                                        onClick={() => router.push("/cart")}
+                                        badgeContent={cartCount}
+                                        color="error"
+                                    >
+                                        <AddShoppingCartIcon
+                                            fontSize="medium"
+                                            color="info"
+                                            sx={{
+                                                m: 1,
+                                                cursor: "pointer",
+                                                ":hover": {
+                                                    color: "#ABD0ED",
+                                                },
+                                            }}
+                                        />
+                                    </Badge>
+                                    <Badge badgeContent={wishlistCount} color="error">
+                                        <FavoriteBorderIcon
+                                            fontSize="medium"
+                                            color="info"
+                                            sx={{
+                                                m: 1,
+                                                cursor: "pointer",
+                                                ":hover": {
+                                                    color: "#ABD0ED",
+                                                },
+                                            }}
+                                        />
+                                    </Badge>
                                     <Badge badgeContent={0} color="error">
                                         <CircleNotificationsIcon
                                             fontSize="medium"
@@ -586,40 +582,36 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
-                            {cartCount > 0 && (
-                                <Badge
-                                    onClick={() => router.push("/cart")}
-                                    badgeContent={cartCount}
-                                    color="error"
-                                >
-                                    <AddShoppingCartIcon
-                                        fontSize="small"
-                                        color="info"
-                                        sx={{
-                                            m: 1,
-                                            cursor: "pointer",
-                                            ":hover": {
-                                                color: "#ABD0ED",
-                                            },
-                                        }}
-                                    />
-                                </Badge>
-                            )}
-                            {wishlistCount > 0 && (
-                                <Badge badgeContent={wishlistCount} color="error">
-                                    <FavoriteBorderIcon
-                                        fontSize="small"
-                                        color="info"
-                                        sx={{
-                                            m: 1,
-                                            cursor: "pointer",
-                                            ":hover": {
-                                                color: "#ABD0ED",
-                                            },
-                                        }}
-                                    />
-                                </Badge>
-                            )}
+                            <Badge
+                                onClick={() => router.push("/cart")}
+                                badgeContent={cartCount}
+                                color="error"
+                            >
+                                <AddShoppingCartIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
+                            <Badge badgeContent={wishlistCount} color="error">
+                                <FavoriteBorderIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
                             <Badge badgeContent={0} color="error">
                                 <CircleNotificationsIcon
                                     fontSize="small"

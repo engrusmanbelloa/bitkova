@@ -1,25 +1,13 @@
 "use client"
-import { useState } from "react"
 import styled from "styled-components"
 import SchoolIcon from "@mui/icons-material/School"
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
+import CircularProgress from "@mui/material/CircularProgress"
 import InProgressCourses from "@/components/course/InProgressCourses"
-import InProgressCoursesMock from "@/hooks/mocks/InProgressCoursesMock"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
-import {
-    useUserCompletedCourses,
-    useUserEnrolledCourses,
-    useUserArchivedCourses,
-} from "@/hooks/user/useUserCount"
-import {
-    getUserEnrollments,
-    getUserArchivedCourses,
-    getUserCompletedCourses,
-} from "@/lib/firebase/queries/userCourses"
-import { db } from "@/lib/firebase/firebaseConfig"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 
@@ -118,14 +106,10 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
         .filter((course) => enrolledCourseIds.includes(course.id))
         .slice(0, limit ?? enrolledCourseIds.length)
 
-    console.log("Courses to display: ", coursesToDisplay)
-    console.log("Enrolled course ids to display: ", enrolledCourseIds)
+    // console.log("Courses to display: ", coursesToDisplay)
+    // console.log("Enrolled course ids to display: ", enrolledCourseIds)
 
-    // const { completedCourses } = useUserCompletedCourses(userData.id)
-    // const { enrolledCourses } = useUserEnrolledCourses(user.id)
-    // const { archiveCourses } = useUserArchivedCourses(userData.id)
-
-    if (isLoading || !authReady) return <p>Loading...</p>
+    if (isLoading || !authReady) return <CircularProgress />
     if (error) return <p>Failed to load courses.</p>
     if (!user) return <p>Please log in to view your learning progress.</p>
     return (
