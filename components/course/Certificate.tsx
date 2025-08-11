@@ -50,6 +50,7 @@ const Name = styled.div`
         (props: any) => `
             font-size: 25px;
             text-align: center;
+            top: 47%;
         `,
     )}
     ${mobile(
@@ -59,38 +60,17 @@ const Name = styled.div`
         `,
     )}
 `
-const Duration = styled.div`
-    position: absolute;
-    top: 52%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 18px;
-    color: #36a9e1;
-    ${ipad(
-        (props: any) => `
-            top: 51%;
-            left: 51%;
-            font-size: 12px;
-            text-align: center;
-        `,
-    )}
-    ${mobile(
-        (props: any) => `
-        font-size: 6px;
-        `,
-    )}
-`
 const CourseTitle = styled.div`
     position: absolute;
-    top: 56%;
+    top: 57%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
     font-size: 28px;
-    color: #021d41;
+    color: #000;
     ${ipad(
         (props: any) => `
-            top: 54%;
+            top: 55%;
             font-size: 15px;
             text-align: center;
             width: 400px;
@@ -98,21 +78,21 @@ const CourseTitle = styled.div`
     )}
     ${mobile(
         (props: any) => `
-        top: 52%;
+        top: 53%;
         font-size: 10px;
         `,
     )}
 `
 const Desc = styled.div`
     position: absolute;
-    top: 64%;
+    top: 65%;
     left: 50%;
     width: 550px;
     transform: translate(-50%, -50%);
     font-size: 20px;
     width: 800px;
     line-height: 1.5;
-    color: #36a9e1;
+    color: #000;
     text-align: center;
     ${ipad(
         (props: any) => `
@@ -126,29 +106,29 @@ const Desc = styled.div`
     ${mobile(
         (props: any) => `
         font-size: 8px;
-        bottom: 15%;
+        bottom: 14%;
         width: 280px;
         `,
     )}
 `
 const DateIssued = styled.div`
     position: absolute;
-    bottom: 16%;
-    right: 29%;
+    bottom: 17%;
+    right: 27%;
     transform: translateX(-50%);
     font-size: 20px;
     font-weight: bold;
-    color: #36a9e1;
+    color: #000;
     ${ipad(
         (props: any) => `
-            right: 15%;
-            bottom: 28%;
+            right: 10%;
+            bottom: 26%;
             font-size: 16px;
         `,
     )}
     ${mobile(
         (props: any) => `
-        bottom: 39%;
+        bottom: 38%;
         font-size: 8px;
         `,
     )}
@@ -162,15 +142,15 @@ const Id = styled.div`
     color: #000;
     ${ipad(
         (props: any) => `
-            left: 20%;
-            top: 28%;
+            left: 10%;
+            top: 20%;
             font-size: 12px;
         `,
     )}
     ${mobile(
         (props: any) => `
-        left: 20%;
-            top: 38%;
+        left: 15%;
+            top: 36%;
             font-size: 8px;
         `,
     )}
@@ -183,7 +163,7 @@ const DownloadBtn = styled.div`
     ${ipad(
         (props: any) => `
             left: 40%;
-            bottom: 12%;
+            bottom: 10%;
         `,
     )}
     ${mobile(
@@ -197,20 +177,20 @@ const Icon = styled(CloseIcon)`
     z-index: 9999;
     font-size: 50px;
     position: fixed;
-    right: 12%;
+    right: 15%;
     top: 0;
     color: red;
     ${ipad(
         (props: any) => `
             left: 96%;
-            top: 13%;
+            top: 10%;
             font-size: 35px;
         `,
     )}
     ${mobile(
         (props: any) => `
             left: 93%;
-            top: 30%;
+            top: 29%;
             font-size: 30px;
         `,
     )}
@@ -221,6 +201,7 @@ interface CertProf {
     title: any
     id: any
     duration: any
+    desc: any
     handleClose: () => void
     $visible?: boolean
 }
@@ -231,19 +212,68 @@ export default function Certificate({
     title,
     id,
     duration,
+    desc,
     handleClose,
 }: CertProf) {
     const certRef = useRef<HTMLDivElement>(null)
 
+    // const handleDownload = async () => {
+    //     if (!certRef.current) return
+    //     const canvas = await html2canvas(certRef.current, { scale: 2 })
+    //     const imgData = canvas.toDataURL("image/png")
+    //     const pdf = new jsPDF("landscape", "pt", "a4")
+    //     const width = pdf.internal.pageSize.getWidth()
+    //     const height = pdf.internal.pageSize.getHeight()
+    //     pdf.addImage(imgData, "PNG", 0, 0, width, height)
+    //     pdf.save(`Bitkova_Certificate_${user}.pdf`)
+    // }
+
     const handleDownload = async () => {
         if (!certRef.current) return
-        const canvas = await html2canvas(certRef.current, { scale: 2 })
-        const imgData = canvas.toDataURL("image/png")
-        const pdf = new jsPDF("landscape", "pt", "a4")
-        const width = pdf.internal.pageSize.getWidth()
-        const height = pdf.internal.pageSize.getHeight()
-        pdf.addImage(imgData, "PNG", 0, 0, width, height)
-        pdf.save(`Bitkova_Certificate_${user}.pdf`)
+
+        try {
+            // Make sure all images are loaded
+            const images = certRef.current.querySelectorAll("img")
+            await Promise.all(
+                Array.from(images).map((img) => {
+                    if (img.complete) return Promise.resolve()
+                    return new Promise((resolve, reject) => {
+                        img.onload = resolve
+                        img.onerror = reject
+                    })
+                }),
+            )
+
+            // Wait a bit more to ensure everything is rendered
+            await new Promise((resolve) => setTimeout(resolve, 500))
+
+            const canvas = await html2canvas(certRef.current, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: false,
+                backgroundColor: "#ffffff",
+                logging: true, // Enable logging to debug
+                width: 842,
+                height: 595,
+            })
+
+            const imgData = canvas.toDataURL("image/png")
+
+            // Check if imgData is valid
+            if (!imgData || imgData === "data:," || imgData.length < 100) {
+                throw new Error("Failed to generate image data")
+            }
+
+            const pdf = new jsPDF("landscape", "pt", "a4")
+            const width = pdf.internal.pageSize.getWidth()
+            const height = pdf.internal.pageSize.getHeight()
+
+            pdf.addImage(imgData, "PNG", 0, 0, width, height)
+            pdf.save(`Bitkova_Certificate_${user}.pdf`)
+        } catch (error) {
+            console.error("Error generating certificate:", error)
+            alert("Failed to generate certificate. Please try again.")
+        }
     }
 
     return (
@@ -251,7 +281,7 @@ export default function Certificate({
             <Icon onClick={handleClose} />
             <ResponsivePreview>
                 <Image
-                    src="/BitkovaCert.jpg"
+                    src="/BitkovaCert.png"
                     alt="Certificate"
                     priority
                     fill
@@ -263,8 +293,7 @@ export default function Certificate({
                 <CourseTitle>{title}</CourseTitle>
                 <Desc>
                     This student has successfully completed more than {duration} Credit hours of
-                    theory and practice courses in Blockchain studies, Decentralized Finance,
-                    Fundamental Analysis, Onchain analysis and Cryptocurrency Trading.
+                    theory and practice courses in {desc}.
                 </Desc>
                 <DateIssued>
                     {new Date().toLocaleDateString("en-US", {
@@ -278,13 +307,14 @@ export default function Certificate({
                     {id}
                 </Id>
             </ResponsivePreview>
-            <HiddenCertificate
+            {/* <HiddenCertificate
                 certRef={certRef}
                 user={user}
                 title={title}
                 id={id}
                 duration={duration}
-            />
+                desc={desc}
+            /> */}
             <DownloadBtn>
                 <Button $main={true} title="Download" onClick={handleDownload} />
             </DownloadBtn>

@@ -11,6 +11,7 @@ import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import CircularProgress from "@mui/material/CircularProgress"
+import InProgressCourses from "@/components/course/InProgressCourses"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -72,7 +73,6 @@ export default function Dashboard() {
     }
     // const initials = getInitials(user.name)
     const initials = user && user.name ? getInitials(user.name) : ""
-    // const userData = { name: user.name, initials: initials }
     const userData = user ? { name: user.name, initials: initials } : "GU"
 
     if (!authReady) return <CircularProgress />
@@ -96,7 +96,8 @@ export default function Dashboard() {
                     {activeItem === "learning" && (
                         <>
                             <Title>My Learning</Title>
-                            <NoDataAvailable comment="Comming Soon" />
+                            <InProgressCourses userData={user} />
+                            {/* <NoDataAvailable comment="Comming Soon" /> */}
                         </>
                     )}
                     {activeItem === "certificate" && (

@@ -52,6 +52,7 @@ interface CourseProps {
     user: any
     completed: boolean
     id: any
+    desc: any
 }
 function CustomTabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props
@@ -82,6 +83,7 @@ export default function CourseTabs({
     enrolled,
     completedVideos,
     handleSelectVideo,
+    desc,
     id,
 }: CourseProps) {
     const [value, setValue] = useState(0)
@@ -126,6 +128,7 @@ export default function CourseTabs({
                     title={course.title}
                     id={id}
                     duration={course.duration.hours}
+                    desc={course.shortDesc}
                 />
             </CustomTabPanel>
         </Container>

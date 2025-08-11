@@ -8,6 +8,7 @@ import LanguageIcon from "@mui/icons-material/Language"
 import { mobile, ipad } from "@/responsive"
 import { toast } from "sonner"
 import Certificate from "@/components/course/Certificate"
+import CertificateDownload from "@/components/course/DownloadCert"
 
 const Container = styled.div`
     max-width: 800px;
@@ -118,9 +119,17 @@ interface CertProf {
     id: any
     duration: any
     completed: boolean
+    desc: any
 }
 
-export default function CertificateVerifier({ user, completed, title, duration, id }: CertProf) {
+export default function CertificateVerifier({
+    user,
+    completed,
+    title,
+    duration,
+    id,
+    desc,
+}: CertProf) {
     const [certificateId, setCertificateId] = useState("")
     const [result, setResult] = useState<any>(null)
     const [loading, setLoading] = useState(false)
@@ -141,7 +150,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
         setOpen(true)
         setVisible(true)
         toast.success("Congratulations>>> download your certificate")
-        console.log(result, id, title, user)
+        console.log(visible, id, title, user)
     }
 
     const handleClose = () => {
@@ -185,7 +194,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                             disabled
                         />
                         {/* <Button onClick={handleVerify}> */}
-                        <Button onClick={openModal}>{loading ? "Verifying..." : "Download"}</Button>
+                        <Button onClick={openModal}>{loading ? "Checking..." : "Check"}</Button>
                     </InputContainer>
 
                     {result && (
@@ -193,13 +202,14 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                             {result.notFound ? (
                                 <p> Certificate not found.</p>
                             ) : (
-                                <Certificate
+                                <CertificateDownload
                                     handleClose={handleClose}
                                     user={user}
                                     title={title}
                                     duration={duration}
                                     id={id}
                                     $visible={visible}
+                                    desc={desc}
                                 />
                             )}
                         </ResultBox>
