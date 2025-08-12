@@ -172,5 +172,6 @@ export const useCourseCompletion = ({
         handleCompletedVideos,
         isLoading,
         certificateId: status?.certificateId,
+        issuedAt: status?.issuedAt ?? new Date(), // Include issuedAt if available
     }
 }

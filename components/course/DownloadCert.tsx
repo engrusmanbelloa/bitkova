@@ -249,6 +249,7 @@ interface CertProf {
     desc: any
     handleClose: () => void
     $visible?: boolean
+    issuedAt: any
 }
 
 export default function CertificateDownload({
@@ -259,6 +260,7 @@ export default function CertificateDownload({
     duration,
     desc,
     handleClose,
+    issuedAt,
 }: CertProf) {
     const certRef = useRef<HTMLDivElement>(null)
 
@@ -342,6 +344,18 @@ export default function CertificateDownload({
         }
     }
 
+    const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
+        const date = new Date(firebaseTimestamp.toMillis())
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            // hour: "2-digit",
+            // minute: "2-digit",
+            // second: "2-digit",
+        })
+    }
+
     return (
         <Container $visible={$visible}>
             <Icon onClick={handleClose} />
@@ -360,13 +374,7 @@ export default function CertificateDownload({
                     This student has successfully completed more than {duration} Credit hours of
                     theory and practice courses in {desc}.
                 </PreviewDesc>
-                <PreviewDateIssued>
-                    {new Date().toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })}
-                </PreviewDateIssued>
+                <PreviewDateIssued>{formatDate(issuedAt)}</PreviewDateIssued>
                 <PreviewId>
                     <span style={{ color: "#36A9E1" }}>Certificate id: </span>
                     {id}
@@ -411,6 +419,7 @@ export default function CertificateDownload({
                 desc={desc}
                 handleClose={handleClose}
                 certRef={certRef}
+                issuedAt={issuedAt}
             />
             <DownloadBtn>
                 <Button $main={true} title="Download" onClick={handleDownload} />

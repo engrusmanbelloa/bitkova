@@ -7,6 +7,7 @@ interface CertificateStatus {
     certificateExists: boolean
     completedVideos: string[]
     certificateId?: string
+    issuedAt: Date
 }
 
 const fetchCertificateStatus = async ({
@@ -25,6 +26,7 @@ const fetchCertificateStatus = async ({
 
     const certificateExists = !certSnap.empty
     const certificateId = certSnap.docs[0]?.id // Get the first result's ID, if it exists
+    const issuedAt = certSnap.docs[0]?.data()?.issuedAt // Get issuedAt if available
 
     //  const userCertRef = doc(db, "users", userId, "certificates", `${userId}_${courseId}`)
     //  const userCertSnap = await getDoc(userCertRef)
@@ -44,7 +46,7 @@ const fetchCertificateStatus = async ({
         ? courseSnap.data()?.completedVideos || []
         : []
 
-    return { certificateExists, completedVideos, certificateId }
+    return { certificateExists, completedVideos, certificateId, issuedAt }
 }
 
 // export const useFetchCertificateStatus = (userId: string | undefined, courseId: string) => {

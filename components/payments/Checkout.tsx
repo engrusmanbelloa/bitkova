@@ -99,7 +99,7 @@ const SetUpdate = styled.div`
     border: 0.5px solid;
     box-shadow: 5px 5px #cddeff;
     text-align: center;
-    background: rgba(28, 56, 121, 1);
+    background: ${(props) => props.theme.palette.primary.main};
     ${ipad({ width: "80%" })}
     ${mobile({})}
 `
@@ -161,7 +161,6 @@ export default function Checkout() {
             progress: 0,
             status: "in progress",
             enrolledAt: new Date(),
-            updatedAt: new Date(),
         }))
 
         try {

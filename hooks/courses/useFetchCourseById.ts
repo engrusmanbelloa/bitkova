@@ -74,9 +74,9 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
 
     const hours = Math.floor(totalMinutes / 60)
     const minutes = totalMinutes % 60
-    console.log("Modules for this course: ", modules)
-    console.log("Duration of this course: ", hours)
-    console.log("Data of this course: ", courseData)
+    // console.log("Modules for this course: ", modules)
+    // console.log("Duration of this course: ", hours)
+    // console.log("Data of this course: ", courseData)
     // console.log("Lessons of this course: ", lesson)
     return serializeDoc({
         id: docSnap.id,

@@ -120,6 +120,7 @@ interface CertProf {
     duration: any
     completed: boolean
     desc: any
+    issuedAt: Date
 }
 
 export default function CertificateVerifier({
@@ -129,6 +130,7 @@ export default function CertificateVerifier({
     duration,
     id,
     desc,
+    issuedAt,
 }: CertProf) {
     const [certificateId, setCertificateId] = useState("")
     const [result, setResult] = useState<any>(null)
@@ -150,7 +152,7 @@ export default function CertificateVerifier({
         setOpen(true)
         setVisible(true)
         toast.success("Congratulations>>> download your certificate")
-        console.log(visible, id, title, user)
+        // console.log(visible, id, title, user)
     }
 
     const handleClose = () => {
@@ -210,6 +212,7 @@ export default function CertificateVerifier({
                                     id={id}
                                     $visible={visible}
                                     desc={desc}
+                                    issuedAt={issuedAt}
                                 />
                             )}
                         </ResultBox>

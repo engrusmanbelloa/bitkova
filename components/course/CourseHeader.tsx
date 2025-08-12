@@ -270,7 +270,7 @@ export default function CourseHeader({ courseId }: CourseId) {
     //     }
     // }
 
-    const { completedVideos, certificateReady, handleCompletedVideos, certificateId } =
+    const { completedVideos, certificateReady, handleCompletedVideos, certificateId, issuedAt } =
         useCourseCompletion({
             courseId,
             firebaseUser,
@@ -279,40 +279,40 @@ export default function CourseHeader({ courseId }: CourseId) {
             selectedTitle,
         })
 
-    // useEffect(() => {
-    //     const fetchCompletedVideos = async () => {
-    //         if (!firebaseUser?.uid || !courseId) return
+    useEffect(() => {
+        // const fetchCompletedVideos = async () => {
+        //     if (!firebaseUser?.uid || !courseId) return
 
-    //         const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
-    //         const snap = await getDoc(courseRef)
+        //     const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
+        //     const snap = await getDoc(courseRef)
 
-    //         if (snap.exists()) {
-    //             const data = snap.data()
+        //     if (snap.exists()) {
+        //         const data = snap.data()
 
-    //             if (data.completedVideos && Array.isArray(data.completedVideos)) {
-    //                 setCompletedVideos(data.completedVideos)
-    //             } else {
-    //                 setCompletedVideos([]) // no saved progress
-    //             }
-    //         }
-    //     }
+        //         if (data.completedVideos && Array.isArray(data.completedVideos)) {
+        //             setCompletedVideos(data.completedVideos)
+        //         } else {
+        //             setCompletedVideos([]) // no saved progress
+        //         }
+        //     }
+        // }
 
-    //     if (course) {
-    //         const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
-    //         const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
-    //         setEnrolled(isEnrolled)
+        if (course) {
+            const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
+            const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
+            setEnrolled(isEnrolled)
 
-    //         if (isEnrolled) {
-    //             fetchCompletedVideos()
-    //         }
-    //         if (isCompleted) {
-    //             setCertificateReady(true)
-    //         }
-    //         // console.log("Is enrolled: ", isEnrolled)
-    //         // console.log("Is Certifcate ready: ", isCompleted)
-    //         // console.log("Complete lessons: ", completedVideos)
-    //     }
-    // }, [course, firebaseUser, courseId])
+            // if (isEnrolled) {
+            //     fetchCompletedVideos()
+            // }
+            // if (isCompleted) {
+            //     setCertificateReady(true)
+            // }
+            // console.log("Is enrolled: ", isEnrolled)
+            // console.log("Is Certifcate ready: ", isCompleted)
+            // console.log("Complete lessons: ", completedVideos)
+        }
+    }, [course, firebaseUser, courseId])
 
     if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
     if (error || !course) return <p>Something went wrong or course not found.</p>
@@ -406,7 +406,8 @@ export default function CourseHeader({ courseId }: CourseId) {
                             completedVideos={completedVideos}
                             user={user.name}
                             completed={certificateReady}
-                            id={1234567}
+                            id={certificateId}
+                            issuedAt={issuedAt}
                         />
                     ) : (
                         <GuestCourseTabs
