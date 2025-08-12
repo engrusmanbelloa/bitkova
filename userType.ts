@@ -32,7 +32,7 @@ export interface EnrolledCourse {
     enrolledAt: Date
 }
 export interface WishListItem {
-    id: string // `${userId}_${courseId}`
+    id: string
     userId: string
     courseId: string
     addedAt: Date

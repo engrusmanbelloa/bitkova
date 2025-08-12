@@ -33,7 +33,7 @@ export default async function page() {
     }
     return (
         <div>
-            <Dashboard user={user} />
+            <Dashboard />
         </div>
     )
 }

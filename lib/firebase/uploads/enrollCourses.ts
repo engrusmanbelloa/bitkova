@@ -16,7 +16,6 @@ export const enrollCourses = async (userId: string, courseId: string[]) => {
             progress: 0,
             status: "in progress",
             enrolledAt: now,
-            updatedAt: now,
         }
         batch.set(enrolledCourseRef, enrolledCourse)
     })

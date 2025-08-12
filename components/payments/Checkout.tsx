@@ -11,7 +11,21 @@ import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { EnrolledCourse } from "@/userType"
 import { removeFromCartDb } from "@/lib/firebase/queries/cart"
 
-const Container = styled.div``
+const Container = styled.div`
+    width: ${(props) => props.theme.widths.dsktopWidth};
+    margin: 0 auto;
+    ${ipad(
+        (props: any) => `
+            display: block;
+            width: ${props.theme.widths.ipadWidth};
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+        `,
+    )}
+`
 const Wrapper = styled.div`
     padding: 10px;
     margin: auto;

@@ -21,6 +21,8 @@ import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
+import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
+import { useCourseCompletion } from "@/hooks/courses/useCourseCompletion"
 import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`
@@ -182,9 +184,9 @@ export default function CourseHeader({ courseId }: CourseId) {
     const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
-    const [completedVideos, setCompletedVideos] = useState<string[]>([])
+    // const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-    const [certificateReady, setCertificateReady] = useState(true)
+    // const [certificateReady, setCertificateReady] = useState(true)
     const { data: course, isLoading, error } = useCourseById(courseId)
 
     // All course videos array
@@ -223,110 +225,94 @@ export default function CourseHeader({ courseId }: CourseId) {
             handleSelectVideo(selectedIndex - 1)
         }
     }
-    const handleCompletedVideos = async () => {
-        if (!completedVideos.includes(selectedTitle)) {
-            const updatedList = [...completedVideos, selectedTitle]
-            setCompletedVideos(updatedList)
+    // const handleCompletedVideos = async () => {
+    //     if (!completedVideos.includes(selectedTitle)) {
+    //         const updatedList = [...completedVideos, selectedTitle]
+    //         setCompletedVideos(updatedList)
 
-            const userId = firebaseUser?.uid
-            if (!userId) return
+    //         const userId = firebaseUser?.uid
+    //         if (!userId) return
 
-            // Sync videos watched to Firestore
-            const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-            // await updateDoc(courseRef, { completedLessons: updatedList.length })
-            await updateDoc(courseRef, {
-                completedLessons: updatedList.length,
-                completedVideos: updatedList,
-            })
+    //         // Sync videos watched to Firestore
+    //         const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
+    //         // await updateDoc(courseRef, { completedLessons: updatedList.length })
+    //         await updateDoc(courseRef, {
+    //             completedLessons: updatedList.length,
+    //             completedVideos: updatedList,
+    //         })
 
-            // Ensure enrolled status in Zustand
-            if (!useUserStore.getState().isEnrolled(courseId)) {
-                useUserStore.getState().addToEnrolledCourses({
-                    userId,
-                    courseId,
-                    completedLessons: updatedList.length,
-                    progress: (updatedList.length / videoList.length) * 100,
-                    status: "in progress",
-                    enrolledAt: new Date(),
-                })
-            }
+    //         // Ensure enrolled status in Zustand
+    //         if (!useUserStore.getState().isEnrolled(courseId)) {
+    //             useUserStore.getState().addToEnrolledCourses({
+    //                 userId,
+    //                 courseId,
+    //                 completedLessons: updatedList.length,
+    //                 progress: (updatedList.length / videoList.length) * 100,
+    //                 status: "in progress",
+    //                 enrolledAt: new Date(),
+    //             })
+    //         }
 
-            // If completed all videos
-            if (updatedList.length === videoList.length) {
-                const completedCourse: CompletedCourse = {
-                    userId,
-                    courseId,
-                    completedAt: new Date(),
-                }
-                await setDoc(
-                    doc(db, "users", userId, "completedCourses", courseId),
-                    completedCourse,
-                )
-                useUserStore.getState().addToCompletedCourses(completedCourse)
-                setCertificateReady(true)
-            }
-        }
-    }
+    //         // If completed all videos
+    //         if (updatedList.length === videoList.length) {
+    //             const completedCourse: CompletedCourse = {
+    //                 userId,
+    //                 courseId,
+    //                 completedAt: new Date(),
+    //             }
+    //             await setDoc(
+    //                 doc(db, "users", userId, "completedCourses", courseId),
+    //                 completedCourse,
+    //             )
+    //             useUserStore.getState().addToCompletedCourses(completedCourse)
+    //             setCertificateReady(true)
+    //         }
+    //     }
+    // }
+
+    const { completedVideos, certificateReady, handleCompletedVideos, certificateId } =
+        useCourseCompletion({
+            courseId,
+            firebaseUser,
+            course,
+            videoList,
+            selectedTitle,
+        })
+
     // useEffect(() => {
+    //     const fetchCompletedVideos = async () => {
+    //         if (!firebaseUser?.uid || !courseId) return
+
+    //         const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
+    //         const snap = await getDoc(courseRef)
+
+    //         if (snap.exists()) {
+    //             const data = snap.data()
+
+    //             if (data.completedVideos && Array.isArray(data.completedVideos)) {
+    //                 setCompletedVideos(data.completedVideos)
+    //             } else {
+    //                 setCompletedVideos([]) // no saved progress
+    //             }
+    //         }
+    //     }
+
     //     if (course) {
     //         const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
     //         const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
     //         setEnrolled(isEnrolled)
+
+    //         if (isEnrolled) {
+    //             fetchCompletedVideos()
+    //         }
     //         if (isCompleted) {
     //             setCertificateReady(true)
     //         }
-    //         console.log("Is enrolled: ", isEnrolled)
-    //         console.log("Is Certifcate ready: ", isCompleted)
-    //         console.log("Complete lessons: ", completedVideos)
-    //         // if (isEnrolled) {
-    //         //     const userId = firebaseUser?.uid
-    //         //     if (userId) {
-    //         //         const enrolledCourse = useUserStore
-    //         //             .getState()
-    //         //             .enrolledCourses.find((c) => c.courseId === course.id.toString())
-    //         //         if (enrolledCourse) {
-    //         //             setCompletedVideos(enrolledCourse.completedLessons)
-    //         //             // setCompletedVideos((prev) => [...prev, enrolledCourse.completedLessons])
-    //         //         }
-    //         //     }
-    //         // }
+    //         // console.log("Is enrolled: ", isEnrolled)
+    //         // console.log("Is Certifcate ready: ", isCompleted)
+    //         // console.log("Complete lessons: ", completedVideos)
     //     }
-    // }, [course, firebaseUser])
-
-    useEffect(() => {
-        const fetchCompletedVideos = async () => {
-            if (!firebaseUser?.uid || !courseId) return
-
-            const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
-            const snap = await getDoc(courseRef)
-
-            if (snap.exists()) {
-                const data = snap.data()
-
-                if (data.completedVideos && Array.isArray(data.completedVideos)) {
-                    setCompletedVideos(data.completedVideos)
-                } else {
-                    setCompletedVideos([]) // no saved progress
-                }
-            }
-        }
-
-        if (course) {
-            const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
-            const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
-            setEnrolled(isEnrolled)
-
-            if (isEnrolled) {
-                fetchCompletedVideos()
-            }
-            if (isCompleted) {
-                setCertificateReady(true)
-            }
-            console.log("Is enrolled: ", isEnrolled)
-            console.log("Is Certifcate ready: ", isCompleted)
-            console.log("Complete lessons: ", completedVideos)
-        }
-    }, [course, firebaseUser, courseId])
+    // }, [course, firebaseUser, courseId])
 
     if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
     if (error || !course) return <p>Something went wrong or course not found.</p>
@@ -413,6 +399,7 @@ export default function CourseHeader({ courseId }: CourseId) {
                     </CourseImage>
                     {enrolled && user ? (
                         <CourseTabs
+                            desc={course.shortDesc}
                             handleSelectVideo={handleSelectVideo}
                             enrolled={enrolled}
                             course={course}

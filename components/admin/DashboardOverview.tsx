@@ -5,7 +5,6 @@ import SchoolIcon from "@mui/icons-material/School"
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import InProgressCourses from "@/components/course/InProgressCourses"
-import InProgressCoursesMock from "@/hooks/mocks/InProgressCoursesMock"
 import {
     useUserCompletedCourses,
     useUserEnrolledCourses,
@@ -138,8 +137,7 @@ export default function DashboardOverview({ user }: DashboardProps) {
                     <Label>Completed Courses</Label>
                 </OverviewBox>
             </OverviewContainer>
-            <InProgressCourses user={user} />
-            {/* <InProgressCoursesMock /> */}
+            {/* <InProgressCourses user={user} /> */}
         </Container>
     )
 }

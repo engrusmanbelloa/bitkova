@@ -1,5 +1,9 @@
-import Checkout from "@/components/payments/Checkout"
+import CheckoutWrapper from "@/components/payments/CheckoutWrapper"
 
-export default async function CheckoutPage() {
-    return <Checkout />
+export default function Page() {
+    return (
+        <div>
+            <CheckoutWrapper />
+        </div>
+    )
 }

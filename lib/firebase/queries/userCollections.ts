@@ -8,14 +8,12 @@ export async function enrollUserInCourse(userId: string, courseId: string) {
     const id = `${userId}_${courseId}`
     const ref = doc(db, "enrollments", id)
     const data: EnrolledCourse = {
-        id,
         userId,
         courseId,
         completedLessons: 0,
         progress: 0,
         status: "in progress",
         enrolledAt: new Date(),
-        updatedAt: new Date(),
     }
     await setDoc(ref, data)
 }
@@ -61,7 +59,6 @@ export async function archiveCourse(userId: string, courseId: string) {
     const id = `${userId}_${courseId}`
     const ref = doc(db, "archivedCourses", id)
     const data: ArchivedCourse = {
-        id,
         userId,
         courseId,
         archivedAt: new Date(),
