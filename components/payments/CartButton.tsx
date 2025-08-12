@@ -35,23 +35,55 @@ interface Props {
 export default function CartButton({ courseId }: Props) {
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const [loading, setLoading] = useState(false)
-    const { addToCart, removeFromCart, isInCart } = useUserStore()
+    const { addToCart, removeFromCart, isInCart, isEnrolled } = useUserStore()
     const isInUserCart = isInCart(courseId)
+    const isUserEnrolled = isEnrolled(courseId)
 
     const handleCartToggle = async () => {
         setLoading(true)
+        // try {
+        //     if (user && isInUserCart) {
+        //         if (isUserEnrolled) {
+        //             toast.error("You are already enrolled in this course!")
+        //             return // Exit the function
+        //         }
+        //         await removeFromCartDb(user.id, courseId)
+        //         removeFromCart(courseId)
+        //         toast.success("Removed from wishlist")
+        //     } else if (user && !isInUserCart) {
+        //         await addToCartDb(user.id, courseId)
+        //         addToCart(courseId)
+        //         toast.success("Added to wishlist")
+        //     }
+        // } catch (err) {
+        //     toast.error("Failed to update wishlist")
+        // } finally {
+        //     setLoading(false)
+        // }
+        setLoading(true)
         try {
-            if (user && isInUserCart) {
-                await removeFromCartDb(user.id, courseId)
-                removeFromCart(courseId)
-                toast.success("Removed from wishlist")
-            } else if (user && !isInUserCart) {
-                await addToCartDb(user.id, courseId)
-                addToCart(courseId)
-                toast.success("Added to wishlist")
+            if (user) {
+                // If the user is already enrolled, show an error and do nothing else
+                if (isUserEnrolled) {
+                    toast.error("You are already enrolled in this course!")
+                    return // Exit the function
+                }
+
+                // If not enrolled, proceed with adding/removing from cart
+                if (isInUserCart) {
+                    await removeFromCartDb(user.id, courseId)
+                    removeFromCart(courseId)
+                    toast.success("Removed from cart")
+                } else {
+                    await addToCartDb(user.id, courseId)
+                    addToCart(courseId)
+                    toast.success("Added to cart")
+                }
+            } else {
+                toast.error("Please log in to add courses to your cart.")
             }
         } catch (err) {
-            toast.error("Failed to update wishlist")
+            toast.error("Failed to update cart")
         } finally {
             setLoading(false)
         }
