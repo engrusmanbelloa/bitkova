@@ -7,7 +7,6 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
 import HistoryIcon from "@mui/icons-material/History"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { mobile, ipad } from "@/responsive"
 
@@ -53,7 +52,7 @@ const NavItem = styled.a<{ $active?: boolean }>`
     }
 `
 
-export default function Sidebar({ activeItem, setActiveItem }: any) {
+export default function Sidebar({ activeItem, setActiveItem, isAuthorized }: any) {
     const router = useRouter()
     const menuItems = [
         { id: "panel", icon: <AdminPanelSettingsIcon />, label: "Panel" },
@@ -77,9 +76,11 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
                 </NavItem>
             ))}
             <Hr />
-            <NavItem href="/dashboard">
-                <ChangeCircleIcon /> Switch to user
-            </NavItem>
+            {isAuthorized && (
+                <NavItem href="/dashboard">
+                    <ChangeCircleIcon /> Switch to user
+                </NavItem>
+            )}
             <NavItem>
                 <ExitToAppIcon /> Logout
             </NavItem>

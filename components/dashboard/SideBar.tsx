@@ -56,7 +56,7 @@ const NavItem = styled.a<{ $active?: boolean }>`
     }
 `
 
-export default function Sidebar({ activeItem, setActiveItem }: any) {
+export default function Sidebar({ activeItem, setActiveItem, isAdmin }: any) {
     const menuItems = [
         { id: "dashboard", icon: <DashboardIcon />, label: "Dashboard" },
         { id: "profile", icon: <AccountCircleIcon />, label: "My Profile" },
@@ -82,9 +82,11 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
                 </NavItem>
             ))}
             <Hr />
-            <NavItem href="/console">
-                <ChangeCircleIcon /> Admin panel
-            </NavItem>
+            {isAdmin && (
+                <NavItem href="/console">
+                    <ChangeCircleIcon /> Admin panel
+                </NavItem>
+            )}
             <NavItem>
                 <ExitToAppIcon /> Logout
             </NavItem>

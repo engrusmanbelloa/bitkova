@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import AdminHeader from "@/components/admin/AdminHeader"
 import Sidebar from "@/components/admin/SideBar"
@@ -8,9 +8,14 @@ import ProfileSection from "@/components/admin/ProfileSection"
 import ProfileForm from "@/components/admin/Settings"
 import RoleManager from "@/components/auth/RoleManager"
 import NoDataAvailable from "./NoData"
+import IsLoading from "@/components/IsLoading"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/userType"
 import UploadCourse from "@/components/admin/UploadCourse"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import CircularProgress from "@mui/material/CircularProgress"
+import { redirect } from "next/navigation"
+import { toast } from "sonner"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -54,13 +59,17 @@ const Title = styled.h3`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
 `
-interface DashboardProps {
-    user: User
-}
+// interface DashboardProps {
+//     user: User
+// }
 
-export default function Panel({ user }: DashboardProps) {
-    // setting active menu item defaults to dashboard
+const authorizedEmails = ["usmanbelloa@gmail.com"]
+
+export default function Panel() {
+    // setting active menu item defaults to panel
     const [activeItem, setActiveItem] = useState("panel")
+    const { user, claims, firebaseUser, error, authReady, isLoadingUserDoc } = useAuthReady()
+    const [isAuthorized, setIsAuthorized] = useState(false)
 
     const getInitials = (name: string): string => {
         const words = name.split(" ")
@@ -68,8 +77,48 @@ export default function Panel({ user }: DashboardProps) {
             ? `${words[0][0]}${words[1][0]}`.toUpperCase()
             : `${words[0][0]}${words[0][1]}`.toUpperCase()
     }
-    const initials = getInitials(user.name)
-    const userData = { name: user.name, initials: initials }
+    // const initials = getInitials(user.name)
+    const initials = user && user.name ? getInitials(user.name) : ""
+    const userData = user ? { name: user.name, initials: initials } : "GU"
+
+    useEffect(() => {
+        if (!authReady || isLoadingUserDoc) {
+            return
+        }
+
+        // Handle the error state first
+        if (error) {
+            toast.error(error)
+            redirect("/")
+        }
+
+        // Check for authorization based on custom claims and specific email
+        const userEmail = user?.email || ""
+        const isEmailAuthorized = authorizedEmails.includes(userEmail)
+        const isClaimAuthorized = claims?.admin || claims?.instructor
+
+        // console.log("The claims:...", claims)
+
+        if (user && (isEmailAuthorized || isClaimAuthorized)) {
+            setIsAuthorized(true)
+        } else {
+            // Not authorized, handle redirect and feedback
+            setIsAuthorized(false)
+            toast.error("You are not authorized to access this page.")
+            redirect("/")
+        }
+    }, [user, claims, authReady, isLoadingUserDoc, error])
+
+    if (!authReady || isLoadingUserDoc) {
+        return <IsLoading />
+    }
+
+    if (!user) return <p>Please log in to view your dashboard.</p>
+
+    if (!isAuthorized) {
+        return <p>Checking authorization...</p>
+    }
+
     return (
         <>
             <AdminHeader user={userData} />
@@ -77,7 +126,11 @@ export default function Panel({ user }: DashboardProps) {
             <DashboardContainer>
                 {/* Sidebar (Navigation) */}
                 <SidebarContainer>
-                    <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
+                    <Sidebar
+                        activeItem={activeItem}
+                        setActiveItem={setActiveItem}
+                        isAuthorized={isAuthorized}
+                    />
                 </SidebarContainer>
                 {/* Main Content Area */}
                 <ContentContainer>

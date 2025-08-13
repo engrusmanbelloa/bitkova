@@ -8,10 +8,11 @@ import ProfileSection from "@/components/dashboard/ProfileSection"
 import ProfileForm from "@/components/dashboard/Settings"
 import NoDataAvailable from "./NoData"
 import { mobile, ipad } from "@/responsive"
-import { User } from "@/userType"
 import { useAuthReady } from "@/hooks/useAuthReady"
-import CircularProgress from "@mui/material/CircularProgress"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import { redirect } from "next/navigation"
+import { toast } from "sonner"
+import IsLoading from "@/components/IsLoading"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -59,11 +60,13 @@ const Title = styled.h3`
 //     user: User
 // }
 
+const authorizedEmails = ["usmanbello@gmail.com"]
+
 export default function Dashboard() {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")
-    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
-    const [isLoading, setIsLoading] = useState(false)
+    const { user, claims, firebaseUser, error, authReady, isLoadingUserDoc } = useAuthReady()
+    const [isAuthorized, setIsAuthorized] = useState(false)
 
     const getInitials = (name: string): string => {
         const words = name.split(" ")
@@ -75,8 +78,41 @@ export default function Dashboard() {
     const initials = user && user.name ? getInitials(user.name) : ""
     const userData = user ? { name: user.name, initials: initials } : "GU"
 
-    if (!authReady) return <CircularProgress />
+    useEffect(() => {
+        if (!authReady || isLoadingUserDoc) {
+            return
+        }
+
+        // Handle the error state first
+        if (error) {
+            toast.error(error)
+            redirect("/")
+        }
+
+        // Check for authorization based on custom claims and specific email
+        const userEmail = user?.email || ""
+        const isEmailAuthorized = authorizedEmails.includes(userEmail)
+        const isClaimAuthorized = claims?.admin || claims?.instructor
+
+        // console.log("The claims:...", claims)
+
+        if (user && (isEmailAuthorized || isClaimAuthorized)) {
+            setIsAuthorized(true)
+        } else {
+            // Not authorized, handle redirect and feedback
+            setIsAuthorized(false)
+            toast.error("You are not authorized to access this page.")
+            redirect("/")
+        }
+    }, [user, claims, authReady, isLoadingUserDoc, error])
+
+    if (!authReady || isLoadingUserDoc) {
+        return <IsLoading />
+    }
     if (!user) return <p>Please log in to view your dashboard.</p>
+    if (!isAuthorized) {
+        return <p>Checking authorization...</p>
+    }
 
     return (
         <>
@@ -85,7 +121,11 @@ export default function Dashboard() {
             <DashboardContainer>
                 {/* Sidebar (Navigation) */}
                 <SidebarContainer>
-                    <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
+                    <Sidebar
+                        activeItem={activeItem}
+                        setActiveItem={setActiveItem}
+                        isAuthorized={isAuthorized}
+                    />
                 </SidebarContainer>
                 {/* Main Content Area */}
                 <ContentContainer>
