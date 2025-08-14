@@ -44,7 +44,7 @@ export interface ArchivedCourse {
     reason?: string
 }
 export interface Certificate {
-    id: string // `${userId}_${courseId}`
+    id: string
     userId: string
     courseId: string
     issuedAt: Date

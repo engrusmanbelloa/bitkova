@@ -56,7 +56,7 @@ const NavItem = styled.a<{ $active?: boolean }>`
     }
 `
 
-export default function Sidebar({ activeItem, setActiveItem, isAdmin }: any) {
+export default function Sidebar({ activeItem, setActiveItem, isAuthorized }: any) {
     const menuItems = [
         { id: "dashboard", icon: <DashboardIcon />, label: "Dashboard" },
         { id: "profile", icon: <AccountCircleIcon />, label: "My Profile" },
@@ -82,7 +82,7 @@ export default function Sidebar({ activeItem, setActiveItem, isAdmin }: any) {
                 </NavItem>
             ))}
             <Hr />
-            {isAdmin && (
+            {isAuthorized && (
                 <NavItem href="/console">
                     <ChangeCircleIcon /> Admin panel
                 </NavItem>

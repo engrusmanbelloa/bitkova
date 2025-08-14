@@ -56,11 +56,8 @@ const Title = styled.h3`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
 `
-// interface DashboardProps {
-//     user: User
-// }
 
-const authorizedEmails = ["usmanbello@gmail.com"]
+const authorizedEmails = ["usmanbelloa@gmail.com"]
 
 export default function Dashboard() {
     // setting active menu item defaults to dashboard
@@ -101,8 +98,8 @@ export default function Dashboard() {
         } else {
             // Not authorized, handle redirect and feedback
             setIsAuthorized(false)
-            toast.error("You are not authorized to access this page.")
-            redirect("/")
+            // toast.error("You are not authorized to access this page.")
+            // redirect("/")
         }
     }, [user, claims, authReady, isLoadingUserDoc, error])
 
@@ -110,9 +107,9 @@ export default function Dashboard() {
         return <IsLoading />
     }
     if (!user) return <p>Please log in to view your dashboard.</p>
-    if (!isAuthorized) {
-        return <p>Checking authorization...</p>
-    }
+    // if (!isAuthorized) {
+    //     return <p>Checking authorization...</p>
+    // }
 
     return (
         <>

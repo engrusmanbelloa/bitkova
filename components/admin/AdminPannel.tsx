@@ -7,6 +7,7 @@ import DashboardOverview from "@/components/admin/DashboardOverview"
 import ProfileSection from "@/components/admin/ProfileSection"
 import ProfileForm from "@/components/admin/Settings"
 import RoleManager from "@/components/auth/RoleManager"
+import EnrollStudent from "@/components/admin/AddStudent"
 import NoDataAvailable from "./NoData"
 import IsLoading from "@/components/IsLoading"
 import { mobile, ipad } from "@/responsive"
@@ -59,9 +60,6 @@ const Title = styled.h3`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
 `
-// interface DashboardProps {
-//     user: User
-// }
 
 const authorizedEmails = ["usmanbelloa@gmail.com"]
 
@@ -147,7 +145,8 @@ export default function Panel() {
                     {activeItem === "student" && (
                         <>
                             <Title>Add Student</Title>
-                            <NoDataAvailable comment="Comming Soon" />
+                            <EnrollStudent />
+                            {/* <NoDataAvailable comment="Comming Soon" /> */}
                         </>
                     )}
                     {activeItem === "instructor" && (

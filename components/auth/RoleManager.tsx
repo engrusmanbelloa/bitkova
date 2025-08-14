@@ -43,7 +43,7 @@ export default function RoleManager() {
 
             await auth.currentUser?.getIdToken(true)
             const token = await auth.currentUser?.getIdTokenResult()
-            console.log("Custom Claims:", token?.claims)
+            // console.log("Custom Claims:", token?.claims)
 
             alert(data.message)
         } catch (error) {
