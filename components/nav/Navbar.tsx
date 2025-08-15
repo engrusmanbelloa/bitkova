@@ -31,6 +31,7 @@ import { toast } from "sonner"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
+import { redirect } from "next/navigation"
 
 // containers section
 const Container = styled.section`
@@ -200,7 +201,7 @@ export default function Navbar() {
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
     const { userDoc, loading } = useUserDoc()
-    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
+    const { user, firebaseUser, authReady, error, isLoadingUserDoc } = useAuthReady()
     const cartCount = useUserStore((s) => s.cart.length)
     const wishlistCount = useUserStore((s) => s.wishlist.length)
     const main = "true"
@@ -389,6 +390,10 @@ export default function Navbar() {
 
     useEffect(() => {
         if (!authReady || isLoadingUserDoc) return // Wait for Firebase to be ready
+        if (error) {
+            toast.error(error)
+            redirect("/")
+        }
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user !== null) {
