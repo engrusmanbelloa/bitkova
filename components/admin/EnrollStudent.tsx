@@ -80,10 +80,17 @@ export default function EnrollStudent() {
 
         setLoading(true)
         try {
+            // 1. Get fresh Firebase ID token for the current user
+            const idToken = await auth.currentUser?.getIdToken()
+            if (!idToken) {
+                throw new Error("User is not authenticated.")
+            }
+
             const res = await fetch("/api/enrollStudent", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`,
                 },
                 body: JSON.stringify({
                     targetEmail,
