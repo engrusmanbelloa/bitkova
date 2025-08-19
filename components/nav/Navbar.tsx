@@ -423,7 +423,7 @@ export default function Navbar() {
             setIsLoading(false)
             unsubscribe()
         }
-    }, [userLoggedIn, signin])
+    }, [userLoggedIn, signin, error])
 
     useEffect(() => {
         if (user) {

@@ -133,7 +133,7 @@ export default function Panel() {
                 {/* Main Content Area */}
                 <ContentContainer>
                     {/* Dashboard Overview */}
-                    {activeItem === "panel" && <DashboardOverview user={user} />}
+                    {activeItem === "panel" && <DashboardOverview />}
                     {activeItem === "performance" && <ProfileSection user={user} />}
 
                     {activeItem === "course" && (
@@ -158,12 +158,6 @@ export default function Panel() {
                     {activeItem === "history" && (
                         <>
                             <Title>Payment History</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "history" && (
-                        <>
-                            <Title>Order History</Title>
                             <NoDataAvailable comment="Comming Soon" />
                         </>
                     )}
