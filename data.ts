@@ -1,5 +1,4 @@
 import { CourseType } from "@/types"
-
 export const featuredCourses: CourseType[] = [
     {
         _id: 1,
@@ -509,3 +508,89 @@ export const testimonials = [
     //   comment: "I started Bitkova with zero knowledge about what I am transitioning into and not being sure about my decision. Now, based on what I’ve learnt I am taking things head on with UI Designing. I mean from not knowing what whitespace was to knowing my left and right in what I’ve been taught with all passion..",
     // },
 ]
+
+// # Dummy data based on the provided structure, simplified for clarity
+export const dummy_course = {
+    id: "course_1",
+    title: "Certified Blockchain Developer",
+    category: "Cryptocurrency",
+    skillLevel: "All Levels",
+    facilitatorId: "facilitator_1",
+    rating: 4.5,
+    image: "/courses/blockchain.jpg",
+    shortDesc: "Learn to build decentralized applications.",
+    courseDesc: "This course covers blockchain fundamentals to advanced DApp development.",
+    students: 150,
+    price: 20000,
+    onDemandVideos: 60,
+    downloadableFiles: 10,
+    whatYoullLearn: ["Smart contracts", "Ethereum development", "Web3.js integration"],
+}
+
+export const dummy_modules = [
+    {
+        id: "mod1",
+        title: "Introduction to Blockchain",
+        position: 1,
+        lessons: [
+            {
+                id: "les1",
+                title: "Psychology I",
+                videoUrl: "https://www.youtube.com/embed/ut7-hKybwHI?si=pixs7YIuWz5-f2XX",
+                content: "An intro to blockchain concepts.",
+                position: 1,
+                durationMinutes: 5,
+            },
+            {
+                id: "les2",
+                title: "Psychology II",
+                videoUrl: "https://youtu.be/kl1lgnbjUX8",
+                content: "Use cases of blockchain.",
+                position: 2,
+                durationMinutes: 6,
+            },
+        ],
+    },
+    {
+        id: "mod2",
+        title: "Introduction to Blockchain",
+        position: 2,
+        lessons: [
+            {
+                id: "les1",
+                title: "Psychology III",
+                videoUrl: "https://youtu.be/bptUgdcUbic",
+                content: "An intro to blockchain concepts.",
+                position: 1,
+                durationMinutes: 5,
+            },
+            {
+                id: "les2",
+                title: "Pole & flag",
+                videoUrl: "https://youtu.be/TmplpLQ3d0M",
+                content: "Use cases of blockchain.",
+                position: 2,
+                durationMinutes: 6,
+            },
+        ],
+    },
+]
+
+export const dummy_reviews = [
+    {
+        id: "review_user1_course1",
+        userId: "user1",
+        courseId: "course_1",
+        stars: 5,
+        comment: "Great course!",
+        createdAt: "2025-07-15T10:00:00Z",
+    },
+]
+
+export const data_package = {
+    course: dummy_course,
+    modules: dummy_modules,
+    reviews: dummy_reviews,
+}
+
+// # Show the resulting JSON to be uploaded via the uploadNewCourse helper

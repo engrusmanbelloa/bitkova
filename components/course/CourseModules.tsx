@@ -7,7 +7,7 @@ import Accordion from "@mui/material/Accordion"
 import AccordionSummary from "@mui/material/AccordionSummary"
 import AccordionDetails from "@mui/material/AccordionDetails"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import { CourseType } from "@/types"
+import { CourseWithExtras } from "@/types"
 import { mobile, ipad } from "@/responsive"
 
 const ModuleHeader = styled.div`
@@ -36,15 +36,9 @@ const Playbtn = styled(YouTubeIcon)`
     font-size: 30px;
     cursor: pointer;
 `
-// interface CourseProps {
-//     course: CourseType
-//     enrolled: boolean
-//     setSelectedVideo: (url: string) => void
-//     setSelectedTitle: (title: string) => void
-//     completedVideos: string[]
-// }
+
 interface CourseProps {
-    course: CourseType
+    course: CourseWithExtras
     enrolled: boolean
     completedVideos: string[]
     handleSelectVideo: (index: number) => void
@@ -52,58 +46,55 @@ interface CourseProps {
 
 export default function CourseModules({
     course,
-    // setSelectedTitle,
-    // setSelectedVideo,
     completedVideos,
     enrolled,
     handleSelectVideo,
 }: CourseProps) {
-    // const handleSelectVideo = (url: string, title: string) => {
-    //     // setSelectedVideo(url)
-    //     // setSelectedTitle(title)
-
-    //     console.log("Selected:", title, url)
-    // }
     let globalIndex = 0 // Track flat video index across modules
     return (
         <div>
-            {course.modules.map((module, index) => (
-                <Accordion key={index}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={`panel${index}-content`}
-                        id={`panel${index}-header`}
-                        // aria-controls="panel1-content"
-                        // id="panel1-header"
-                    >
-                        <ModuleHeader>{module.title}</ModuleHeader>
-                    </AccordionSummary>
-                    {module.links &&
-                        Object.entries(module.links).map(([title, url], subIndex) => {
-                            const currentIndex = globalIndex
-                            globalIndex++ // move to next video index
-                            return (
-                                <AccordionDetails key={subIndex}>
-                                    <ModuleContent>
-                                        {!enrolled ? (
-                                            <LockIcon />
-                                        ) : (
-                                            <Playbtn
-                                                onClick={() => handleSelectVideo(currentIndex)}
-                                            />
-                                        )}
-                                        {title}
-                                        {completedVideos.includes(title) ? (
-                                            <RoundCheckBox style={{ color: "#0072ff" }} />
-                                        ) : (
-                                            <RoundCheckBox />
-                                        )}
-                                    </ModuleContent>
-                                </AccordionDetails>
-                            )
-                        })}
-                </Accordion>
-            ))}
+            {[...course.modules]
+                .sort((a, b) => a.position - b.position)
+                .map((module, moduleIndex) => {
+                    const sortedLessons = [...module.lessons].sort(
+                        (a, b) => a.position - b.position,
+                    )
+
+                    return (
+                        <Accordion key={module.id || moduleIndex}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls={`panel${moduleIndex}-content`}
+                                id={`panel${moduleIndex}-header`}
+                            >
+                                <ModuleHeader>{module.title}</ModuleHeader>
+                            </AccordionSummary>
+
+                            {sortedLessons.map((lesson, lessonIndex) => {
+                                const currentIndex = globalIndex++
+                                return (
+                                    <AccordionDetails key={lesson.id || lessonIndex}>
+                                        <ModuleContent>
+                                            {!enrolled ? (
+                                                <LockIcon />
+                                            ) : (
+                                                <Playbtn
+                                                    onClick={() => handleSelectVideo(currentIndex)}
+                                                />
+                                            )}
+                                            {lesson.title}
+                                            {completedVideos.includes(lesson.title) ? (
+                                                <RoundCheckBox style={{ color: "#0072ff" }} />
+                                            ) : (
+                                                <RoundCheckBox />
+                                            )}
+                                        </ModuleContent>
+                                    </AccordionDetails>
+                                )
+                            })}
+                        </Accordion>
+                    )
+                })}
         </div>
     )
 }

@@ -1,9 +1,9 @@
-export default function extractPreviewVideo(modules: any[]): string {
-    if (modules?.length > 0 && modules[0]?.links) {
-        const firstLinkEntries = Object.entries(modules[0].links)
-        if (firstLinkEntries.length > 0) {
-            return firstLinkEntries[0][1] as string // return the first URL
-        }
+import { Course, Module, Lesson, Review } from "@/types"
+
+export default function extractPreviewVideo(modules: (Module & { lessons: Lesson[] })[]): string {
+    if (modules?.length > 0 && modules[0]?.lessons?.length > 0) {
+        // console.log("This is preview url:... ", modules[0].lessons[0].videoUrl)
+        return modules[0].lessons[0].videoUrl || ""
     }
     return ""
 }

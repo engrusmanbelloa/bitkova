@@ -5,12 +5,7 @@ import useStore from "../config/store"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
-    getProviders,
     useSession,
-    signIn,
-    signOut,
-    getCsrfToken,
-    getSession,
 } from "next-auth/react"
 
 const Container = styled.div``

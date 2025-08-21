@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import Rating from "@mui/material/Rating"
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import ShareIcon from "@mui/icons-material/Share"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
@@ -14,8 +13,16 @@ import CourseTabs from "@/components/course/CourseTabs"
 import GuestCourseTabs from "@/components/course/GuestCourseTab"
 import CourseModules from "@/components/course/CourseModules"
 import extractPreviewVideo from "@/config/ExtractPreview"
-import { featuredCourses } from "@/data"
-import { CourseType } from "@/types"
+import WishlistButton from "@/components/payments/WishlistButton"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import IsLoading from "@/components/IsLoading"
+import { useCourseById } from "@/hooks/courses/useFetchCourseById"
+import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore"
+import { db } from "@/lib/firebase/firebaseConfig"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
+import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
+import { useCourseCompletion } from "@/hooks/courses/useCourseCompletion"
 import { mobile, ipad } from "@/responsive"
 
 const HeaderContainer = styled.div`
@@ -167,25 +174,31 @@ const Actions = styled.div`
     }
 `
 
-interface CourseProps {
-    course: CourseType
+interface CourseId {
+    courseId: string
 }
 
-export default function CourseHeader({ course }: CourseProps) {
+export default function CourseHeader({ courseId }: CourseId) {
+    const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
     const [showPlayer, setShowPlayer] = useState(false)
-    const [enrolled, setEnrolled] = useState(true)
+    const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
-    const [completedVideos, setCompletedVideos] = useState<string[]>([])
+    // const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-    const [certificateReady, setCertificateReady] = useState(true)
+    // const [certificateReady, setCertificateReady] = useState(true)
+    const { data: course, isLoading, error } = useCourseById(courseId)
+
     // All course videos array
-    const videoList = course.modules.flatMap((module) =>
-        Object.entries(module.links || {}).map(([title, url]) => ({ title, url })),
-    )
-    const courses = featuredCourses
-    const limit = 8
-    const previewVideoUrl = extractPreviewVideo(course.modules) // Course preview url
+    const videoList =
+        course?.modules?.flatMap((module) =>
+            module.lessons.map((lesson) => ({
+                title: lesson.title,
+                url: lesson.videoUrl,
+            })),
+        ) || []
+
+    const previewVideoUrl = course && extractPreviewVideo(course.modules) // Course preview url
 
     // Player functions play, next video, prev video and video selection logics
     const handlePlay = () => {
@@ -193,7 +206,7 @@ export default function CourseHeader({ course }: CourseProps) {
         // console.log(previewVideoUrl)
     }
     const handleSelectVideo = (index: number) => {
-        const selected = videoList[index]
+        const selected = videoList && videoList[index]
         // console.log("Videos list: ", selected)
         if (selected) {
             setSelectedVideo(selected.url)
@@ -203,7 +216,7 @@ export default function CourseHeader({ course }: CourseProps) {
         }
     }
     const handleNext = () => {
-        if (selectedIndex !== null && selectedIndex < videoList.length - 1) {
+        if (selectedIndex !== null && selectedIndex < (videoList?.length ?? 0) - 1) {
             handleSelectVideo(selectedIndex + 1)
         }
     }
@@ -212,22 +225,97 @@ export default function CourseHeader({ course }: CourseProps) {
             handleSelectVideo(selectedIndex - 1)
         }
     }
-    const handleCompletedVideos = () => {
-        if (!completedVideos.includes(selectedTitle)) {
-            setCompletedVideos((prev) => [...prev, selectedTitle])
-        }
-        // console.log("Completed video titles: ", completedVideos)
-        console.log("Completed videos", completedVideos.length)
-        console.log("Completed videos", videoList.length)
-    }
+    // const handleCompletedVideos = async () => {
+    //     if (!completedVideos.includes(selectedTitle)) {
+    //         const updatedList = [...completedVideos, selectedTitle]
+    //         setCompletedVideos(updatedList)
+
+    //         const userId = firebaseUser?.uid
+    //         if (!userId) return
+
+    //         // Sync videos watched to Firestore
+    //         const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
+    //         // await updateDoc(courseRef, { completedLessons: updatedList.length })
+    //         await updateDoc(courseRef, {
+    //             completedLessons: updatedList.length,
+    //             completedVideos: updatedList,
+    //         })
+
+    //         // Ensure enrolled status in Zustand
+    //         if (!useUserStore.getState().isEnrolled(courseId)) {
+    //             useUserStore.getState().addToEnrolledCourses({
+    //                 userId,
+    //                 courseId,
+    //                 completedLessons: updatedList.length,
+    //                 progress: (updatedList.length / videoList.length) * 100,
+    //                 status: "in progress",
+    //                 enrolledAt: new Date(),
+    //             })
+    //         }
+
+    //         // If completed all videos
+    //         if (updatedList.length === videoList.length) {
+    //             const completedCourse: CompletedCourse = {
+    //                 userId,
+    //                 courseId,
+    //                 completedAt: new Date(),
+    //             }
+    //             await setDoc(
+    //                 doc(db, "users", userId, "completedCourses", courseId),
+    //                 completedCourse,
+    //             )
+    //             useUserStore.getState().addToCompletedCourses(completedCourse)
+    //             setCertificateReady(true)
+    //         }
+    //     }
+    // }
+
+    const { completedVideos, certificateReady, handleCompletedVideos, certificateId, issuedAt } =
+        useCourseCompletion({
+            courseId,
+            firebaseUser,
+            course,
+            videoList,
+            selectedTitle,
+        })
 
     useEffect(() => {
-        if (completedVideos.length === videoList.length) {
-            setCertificateReady(true)
+        // const fetchCompletedVideos = async () => {
+        //     if (!firebaseUser?.uid || !courseId) return
+
+        //     const courseRef = doc(db, "users", firebaseUser.uid, "enrolledCourses", courseId)
+        //     const snap = await getDoc(courseRef)
+
+        //     if (snap.exists()) {
+        //         const data = snap.data()
+
+        //         if (data.completedVideos && Array.isArray(data.completedVideos)) {
+        //             setCompletedVideos(data.completedVideos)
+        //         } else {
+        //             setCompletedVideos([]) // no saved progress
+        //         }
+        //     }
+        // }
+
+        if (course) {
+            const isEnrolled = useUserStore.getState().isEnrolled(course.id.toString())
+            const isCompleted = useUserStore.getState().isCompleted(course.id.toString())
+            setEnrolled(isEnrolled)
+
+            // if (isEnrolled) {
+            //     fetchCompletedVideos()
+            // }
+            // if (isCompleted) {
+            //     setCertificateReady(true)
+            // }
+            // console.log("Is enrolled: ", isEnrolled)
+            // console.log("Is Certifcate ready: ", isCompleted)
+            // console.log("Complete lessons: ", completedVideos)
         }
-        console.log("Completed videos", completedVideos.length)
-        console.log("Completed videos", videoList.length)
-    }, [completedVideos])
+    }, [course, firebaseUser, courseId])
+
+    if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
+    if (error || !course) return <p>Something went wrong or course not found.</p>
 
     return (
         <>
@@ -245,10 +333,8 @@ export default function CourseHeader({ course }: CourseProps) {
                             Categories: <span>{course.category}</span>
                         </Category>
                         <Actions>
-                            {!enrolled && (
-                                <button>
-                                    <BookmarkBorderIcon /> Wishlist
-                                </button>
+                            {authReady && user && !enrolled && (
+                                <WishlistButton courseId={course.id.toString()} />
                             )}
                             <button>
                                 <ShareIcon /> Share
@@ -311,15 +397,17 @@ export default function CourseHeader({ course }: CourseProps) {
                             </>
                         )}
                     </CourseImage>
-                    {enrolled ? (
+                    {enrolled && user ? (
                         <CourseTabs
+                            desc={course.shortDesc}
                             handleSelectVideo={handleSelectVideo}
                             enrolled={enrolled}
                             course={course}
                             completedVideos={completedVideos}
-                            user={"Usman Bello Abdullahi"}
+                            user={user.name}
                             completed={certificateReady}
-                            id={1234567}
+                            id={certificateId}
+                            issuedAt={issuedAt}
                         />
                     ) : (
                         <GuestCourseTabs
@@ -331,7 +419,7 @@ export default function CourseHeader({ course }: CourseProps) {
                     )}
                 </Left>
                 <Right>
-                    {!enrolled ? (
+                    {!enrolled && user ? (
                         <CourseFeatures course={course} handlePlay={handlePlay} />
                     ) : (
                         <DeskTabs>

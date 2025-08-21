@@ -13,7 +13,8 @@ import InputBase from "@mui/material/InputBase"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
-import Logo from "@/components/Logo"
+import { Badge } from "@mui/material"
+import Logo from "@/components/nav/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
 import SignUp from "@/components/auth/SignUp"
@@ -23,11 +24,15 @@ import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth, app } from "@/firebase/firebaseConfig"
-import { getFirestore, doc, getDoc } from "firebase/firestore"
-import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
-import { useUserDoc } from "@/hooks/useUserDoc"
+import { auth, app } from "@/lib/firebase/firebaseConfig"
+import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
+import { useUserDoc } from "@/hooks/user/useUserDoc"
 import { toast } from "sonner"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { syncUserStore } from "@/lib/store/syncUserStore"
+import { redirect } from "next/navigation"
+import NavSkeleton from "./NavSkeleton"
 
 // containers section
 const Container = styled.section`
@@ -196,8 +201,10 @@ export default function Navbar() {
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-    const [initials, setInitials] = useState("GU")
     const { userDoc, loading } = useUserDoc()
+    const { user, firebaseUser, authReady, error, isLoadingUserDoc } = useAuthReady()
+    const cartCount = useUserStore((s) => s.cart.length)
+    const wishlistCount = useUserStore((s) => s.wishlist.length)
     const main = "true"
     let login
 
@@ -220,7 +227,7 @@ export default function Navbar() {
         },
         {
             id: 4,
-            href: "#",
+            href: "/mylearning",
             title: "My Learning",
         },
     ]
@@ -279,50 +286,93 @@ export default function Navbar() {
 
     // Handle user email verification
     const handleSendVerification = async () => {
+        if (!authReady) return // Wait until auth state is ready
         try {
-            if (auth.currentUser && !auth.currentUser.emailVerified) {
+            if (!firebaseUser) {
+                toast.error("User not authenticated.")
+                return
+            }
+            await firebaseUser.reload() // Always refresh to get up-to-date emailVerified status
+            // console.log("the user is verified? ", auth.currentUser?.emailVerified)
+            if (firebaseUser.emailVerified) {
+                // Verified, proceed
+                setVerificationChecked(true)
+                setSentVerification(false)
+                setUserLoggedIn(true)
+                setNotifyModalOpen(false)
+                toast.success("Email already verified")
+
+                // create user document if verified but not created
+                await createUserIfNotExists(firebaseUser)
+
+                const idToken = await firebaseUser.getIdToken() // force refresh
+                // Create session
+                // await fetch("/api/auth/session", {
+                //     method: "POST",
+                //     headers: { "Content-Type": "application/json" },
+                //     body: JSON.stringify({ idToken }),
+                //     credentials: "include",
+                // })
+                toast.success("Email verification successful")
+            } else {
                 if (!sentVerification) {
-                    await sendEmailVerification(auth.currentUser)
+                    await sendEmailVerification(firebaseUser)
                     setSentVerification(true)
-                    toast.success("Verification email sent check your inbox")
+                    toast.success("Verification email sent check your inbox/spam")
                 } else {
-                    toast.success("Verification email already sent, check your inbox")
+                    toast.success("Verification email already sent to your inbox/spam")
                 }
             }
         } catch (error: any) {
-            // console.log("Error resending verification email:", error.message)
-            toast.error("Failed to resend verification email. Please try again later.")
+            console.log("Faild:", error.message)
+            toast.error("Failed to resend verification email. Please try again later.", error)
         }
     }
     // Check if the user confirmed their email
     const handleCheckVerification = async () => {
+        if (!authReady) return // Wait until Firebase auth is ready
+
         try {
-            if (auth.currentUser) {
-                await auth.currentUser.reload()
-                if (auth.currentUser.emailVerified) {
-                    setVerificationChecked(true)
-                    setSentVerification(false)
-                    setUserLoggedIn(true)
-                    setNotifyModalOpen(false)
-                    await createOrUpdateUserDoc(auth.currentUser)
-                    const idToken = await auth.currentUser.getIdToken()
-                    await fetch("/api/auth/session", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ idToken }),
-                        credentials: "include",
-                    })
-                    toast.success("Email verification successful")
-                    // console.log(auth.currentUser)
-                } else {
-                    toast.success("Email not verified. Please verify your email")
-                    // console.log(auth.currentUser.emailVerified)
-                }
+            if (!firebaseUser) {
+                toast.error("User not authenticated")
+                return
             }
+
+            await firebaseUser.reload()
+            const isVerified = firebaseUser.emailVerified
+
+            if (!isVerified) {
+                toast.info("Email not verified. Please verify your email.")
+                return
+            }
+
+            // Proceed after successful verification
+            setVerificationChecked(true)
+            setSentVerification(false)
+            setUserLoggedIn(true)
+            setNotifyModalOpen(false)
+
+            // create user document after being verified
+            await createUserIfNotExists(firebaseUser)
+
+            const idToken = await firebaseUser.getIdToken() // force refresh
+            // const res = await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
+
+            // if (!res.ok) {
+            //     const { error } = await res.json()
+            //     throw new Error(error || "Session creation failed")
+            // }
+            toast.success("Email verification successful")
         } catch (error: any) {
-            // console.error("Error checking email verification:", error.message)
-            // alert("Failed to check verification status. Please try again later.")
-            toast.error("Failed to check verification status. Please try again lat")
+            console.error("Verification error:", error)
+            setNotifyModalOpen(true)
+            setSentVerification(false)
+            toast.error("Failed to check verification status. Please try again later.")
         }
     }
     // close the notification modal
@@ -340,6 +390,11 @@ export default function Navbar() {
     }
 
     useEffect(() => {
+        if (!authReady || isLoadingUserDoc) return // Wait for Firebase to be ready
+        if (error) {
+            toast.error(error)
+            redirect("/")
+        }
         setIsLoading(true)
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user !== null) {
@@ -357,22 +412,48 @@ export default function Navbar() {
                 }
                 setSignin(false)
                 setSignUp(false)
-                const uid = user.uid
+                // const uid = user.uid
                 login = true
                 // console.log("user id is : " + uid)
             } else {
                 setUserLoggedIn(false)
             }
         })
-        if (auth.currentUser && auth.currentUser.emailVerified) {
-            setUserLoggedIn(true)
-        }
 
         return () => {
             setIsLoading(false)
             unsubscribe()
         }
-    }, [userLoggedIn, signin])
+    }, [userLoggedIn, signin, error])
+
+    useEffect(() => {
+        if (user) {
+            useUserStore.setState({
+                cart: user.cart || [],
+                wishlist: user.wishList || [],
+                enrolledCourses: [],
+            })
+            syncUserStore(user.id)
+                .then(() => {
+                    console.log("User store synced successfully")
+                })
+                .catch((error) => {
+                    console.error("Error syncing user store:", error)
+                })
+        }
+    }, [user])
+
+    if (isLoadingUserDoc || isLoading) {
+        return (
+            <Container>
+                <NavSkeleton />
+            </Container>
+        )
+    }
+
+    if (error) {
+        return <p>Error Fetching data.</p>
+    }
 
     return (
         <>
@@ -406,36 +487,55 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {auth.currentUser && auth.currentUser.emailVerified ? (
+                        {authReady && user && firebaseUser && firebaseUser.emailVerified ? (
                             <>
                                 <CartsContainer>
-                                    <IconButton
-                                        type="button"
-                                        sx={{
-                                            m: 0,
-                                            pr: "10px",
-                                            color: "#356DF1",
-                                            hover: {
-                                                backgroundColor: "#776",
-                                            },
-                                        }}
-                                        aria-label="search"
+                                    <Badge
+                                        onClick={() => router.push("/cart")}
+                                        badgeContent={cartCount}
+                                        color="error"
                                     >
                                         <AddShoppingCartIcon
+                                            fontSize="medium"
+                                            color="info"
                                             sx={{
-                                                fontSize: 30,
                                                 m: 1,
-                                                hover: {
-                                                    background: "red",
+                                                cursor: "pointer",
+                                                ":hover": {
+                                                    color: "#ABD0ED",
                                                 },
                                             }}
                                         />
-                                        <FavoriteBorderIcon sx={{ fontSize: 30, m: 1 }} />
-                                        <CircleNotificationsIcon sx={{ fontSize: 30, m: 1 }} />
-                                    </IconButton>
+                                    </Badge>
+                                    <Badge badgeContent={wishlistCount} color="error">
+                                        <FavoriteBorderIcon
+                                            fontSize="medium"
+                                            color="info"
+                                            sx={{
+                                                m: 1,
+                                                cursor: "pointer",
+                                                ":hover": {
+                                                    color: "#ABD0ED",
+                                                },
+                                            }}
+                                        />
+                                    </Badge>
+                                    <Badge badgeContent={0} color="error">
+                                        <CircleNotificationsIcon
+                                            fontSize="medium"
+                                            color="info"
+                                            sx={{
+                                                m: 1,
+                                                cursor: "pointer",
+                                                ":hover": {
+                                                    color: "#ABD0ED",
+                                                },
+                                            }}
+                                        />
+                                    </Badge>
                                 </CartsContainer>
                                 {!loading
-                                    ? userDoc && <NavAvatar user={userDoc.name || userDoc.email} />
+                                    ? user && <NavAvatar user={user.name || user.email} />
                                     : null}
                             </>
                         ) : (
@@ -500,15 +600,49 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
-                            <IconButton
-                                type="button"
-                                sx={{ m: 0, pr: "10px", color: "#356DF1" }}
-                                aria-label="search"
+                            <Badge
+                                onClick={() => router.push("/cart")}
+                                badgeContent={cartCount}
+                                color="error"
                             >
-                                <AddShoppingCartIcon sx={{ fontSize: 20, m: 0.5 }} />
-                                <FavoriteBorderIcon sx={{ fontSize: 20, m: 0.5 }} />
-                                <CircleNotificationsIcon sx={{ fontSize: 20, m: 0.5 }} />
-                            </IconButton>
+                                <AddShoppingCartIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
+                            <Badge badgeContent={wishlistCount} color="error">
+                                <FavoriteBorderIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
+                            <Badge badgeContent={0} color="error">
+                                <CircleNotificationsIcon
+                                    fontSize="small"
+                                    color="info"
+                                    sx={{
+                                        m: 1,
+                                        cursor: "pointer",
+                                        ":hover": {
+                                            color: "#ABD0ED",
+                                        },
+                                    }}
+                                />
+                            </Badge>
                             {!toggleMenu ? (
                                 <MenuIcon
                                     sx={{ p: 0, m: 0, fontSize: 25 }}
@@ -525,7 +659,7 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
-                            {toggleMenu && auth.currentUser && auth.currentUser.emailVerified
+                            {toggleMenu && authReady && firebaseUser && firebaseUser.emailVerified
                                 ? !loading
                                     ? userDoc && (
                                           <DropdownMenu

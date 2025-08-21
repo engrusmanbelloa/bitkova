@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import Link from "next/link"
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import SchoolIcon from "@mui/icons-material/School"
@@ -7,6 +8,7 @@ import QuizIcon from "@mui/icons-material/Quiz"
 import HistoryIcon from "@mui/icons-material/History"
 import HelpIcon from "@mui/icons-material/Help"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle"
 import RedeemIcon from "@mui/icons-material/Redeem"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
@@ -54,7 +56,7 @@ const NavItem = styled.a<{ $active?: boolean }>`
     }
 `
 
-export default function Sidebar({ activeItem, setActiveItem }: any) {
+export default function Sidebar({ activeItem, setActiveItem, isAuthorized }: any) {
     const menuItems = [
         { id: "dashboard", icon: <DashboardIcon />, label: "Dashboard" },
         { id: "profile", icon: <AccountCircleIcon />, label: "My Profile" },
@@ -80,6 +82,11 @@ export default function Sidebar({ activeItem, setActiveItem }: any) {
                 </NavItem>
             ))}
             <Hr />
+            {isAuthorized && (
+                <NavItem href="/console">
+                    <ChangeCircleIcon /> Admin panel
+                </NavItem>
+            )}
             <NavItem>
                 <ExitToAppIcon /> Logout
             </NavItem>

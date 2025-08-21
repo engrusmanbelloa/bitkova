@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { adminAuth } from "@/utils/admin"
+import { adminAuth } from "@/lib/firebase/admin"
+// import { createSessionCookieWithRetry } from "@/lib/firebase/admin"
 import { cookies } from "next/headers"
 
 const FIVE_DAYS = 60 * 60 * 24 * 5 * 1000
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
     try {
         const expiresIn = FIVE_DAYS
         const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn })
+        // const sessionCookie = await createSessionCookieWithRetry(idToken, expiresIn)
 
         const response = NextResponse.json({ status: "success" })
         response.cookies.set("session", sessionCookie, {

@@ -4,9 +4,8 @@ import styled, { keyframes } from "styled-components"
 import CoursesList from "@/components/course/CoursesList"
 import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
-import Testimonials from "@/components/Testimonials"
-import Newsletter from "@/components/Newsletter"
-import { featuredCourses } from "@/data"
+import Testimonials from "@/components/nav/Testimonials"
+import Newsletter from "@/components/home/Newsletter"
 import Button from "@/components/Button"
 
 const Container = styled.section`
@@ -43,6 +42,20 @@ const Wrapper = styled.section`
         (props: any) => `
       width: ${props.theme.widths.mobileWidth};
   `,
+    )}
+`
+const CoursesContainer = styled.section`
+    width: ${(props) => props.theme.widths.heroWidth};
+    margin: auto;
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
     )}
 `
 const ImageContainer = styled.div`
@@ -102,29 +115,9 @@ const SetUpdate = styled.div`
     ${mobile({})}
 `
 
-export default function Courses(href: any) {
-    //  const [courses, setCourses] = useState([])
-    const [count, setCount] = useState(0)
+export default function Courses() {
     const [skip, setSkip] = useState(0)
-    const [isLoading, setIsLoading] = useState(false)
-
-    //  useEffect(() => {
-    //      setIsLoading(true)
-    //      async function fetchCourses() {
-    //          const response = await fetch("/api/courses/getCourses")
-    //          const data = await response.json()
-    //          setCourses(data)
-    //          setCount(data.count)
-    //          setIsLoading(false)
-    //      }
-    //      fetchCourses()
-    //  }, [])
-    const courses = featuredCourses
     const limit = 8
-
-    if (isLoading) {
-        return <SetUpdate>Loading....</SetUpdate>
-    }
 
     return (
         <Container>
@@ -147,14 +140,9 @@ export default function Courses(href: any) {
                     <Image src="/chd.jpg" alt="courses image" />
                 </ImageContainer>
             </Wrapper>
-            <div id="courses">
-                <CoursesList
-                    title="Featured courses"
-                    coursesPg={false}
-                    courses={courses}
-                    limit={limit}
-                />
-            </div>
+            <CoursesContainer id="courses">
+                <CoursesList title="Featured courses" coursesPg={false} limit={limit} />
+            </CoursesContainer>
             <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />
             <Newsletter />

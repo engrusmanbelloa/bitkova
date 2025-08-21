@@ -1,6 +1,6 @@
 // app/api/set-claims/route.ts
 import { NextRequest, NextResponse } from "next/server"
-import { adminAuth, adminDb } from "@/utils/admin"
+import { adminAuth, adminDb } from "@/lib/firebase/admin"
 
 const SUPER_ADMIN_EMAIL = "usmanbelloa@gmail.com"
 

@@ -34,10 +34,77 @@ export interface CourseType {
         Name: string
     }[]
 }
+export interface Facilitator {
+    id: string // Firestore document ID
+    name: string
+    bio: string
+    email: string
+    profileUrl?: string
+    expertise: string[] // e.g. ["Blockchain", "Web3"]
+    createdAt: string
+    courses: string[] // Array of course IDs
+}
 
 export interface VideoSelectionProps {
     url: string
     title: string
     setSelectedVideo: (url: string) => void
     setSelectedTitle: (title: string) => void
+}
+export interface Course {
+    id: string
+    title: string
+    category: string
+    skillLevel: string
+    facilitatorEmail: string // link to a facilitator
+    rating: number
+    image: string
+    about: string
+    shortDesc: string
+    courseDesc: string
+    students: number
+    price: number
+    onDemandVideos: number
+    downloadableFiles?: number
+    whatYoullLearn: string[]
+}
+export interface Module {
+    id: string
+    title: string
+    position: number // order of module in course
+}
+export interface Lesson {
+    id: string
+    title: string
+    videoUrl: string
+    content: string
+    position: number // order of lesson in module
+    durationMinutes: number
+    resources?: string[] // optional links or files
+}
+export interface Review {
+    id: string // Firestore document ID (can be same as `${userId}_${courseId}`)
+    userId: string
+    name: string
+    courseId: string
+    stars: number // 1 to 5
+    comment: string
+    createdAt: string // ISO string or Firestore Timestamp
+}
+// types/wishlist.ts
+export interface WishlistItem {
+    id: string // `${userId}_${courseId}`
+    userId: string
+    courseId: string
+    addedAt: string
+}
+
+export type CourseWithExtras = Course & {
+    modules: (Module & { lessons: Lesson[] })[]
+    reviews: Review[]
+    duration: {
+        hours: number
+        minutes: number
+    }
+    facilitator: Facilitator
 }

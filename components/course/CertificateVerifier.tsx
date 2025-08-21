@@ -6,10 +6,9 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import LaptopIcon from "@mui/icons-material/Laptop"
 import LanguageIcon from "@mui/icons-material/Language"
 import { mobile, ipad } from "@/responsive"
-import { doc, getDoc } from "firebase/firestore"
 import { toast } from "sonner"
 import Certificate from "@/components/course/Certificate"
-import { CourseType } from "@/types"
+import CertificateDownload from "@/components/course/DownloadCert"
 
 const Container = styled.div`
     max-width: 800px;
@@ -120,9 +119,19 @@ interface CertProf {
     id: any
     duration: any
     completed: boolean
+    desc: any
+    issuedAt: Date
 }
 
-export default function CertificateVerifier({ user, completed, title, duration, id }: CertProf) {
+export default function CertificateVerifier({
+    user,
+    completed,
+    title,
+    duration,
+    id,
+    desc,
+    issuedAt,
+}: CertProf) {
     const [certificateId, setCertificateId] = useState("")
     const [result, setResult] = useState<any>(null)
     const [loading, setLoading] = useState(false)
@@ -143,7 +152,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
         setOpen(true)
         setVisible(true)
         toast.success("Congratulations>>> download your certificate")
-        console.log(result, id, title, user)
+        // console.log(visible, id, title, user)
     }
 
     const handleClose = () => {
@@ -174,7 +183,7 @@ export default function CertificateVerifier({ user, completed, title, duration, 
             <TopContainer>
                 <Left>
                     <Title>
-                        Now that your <span>certificate</span> is in your <span>hands</span>
+                        Now your <span>certificate</span> is in your <span>hands</span>
                     </Title>
                     <Description>
                         Type your Certificate ID here to authenticate your skill certificates and
@@ -182,28 +191,28 @@ export default function CertificateVerifier({ user, completed, title, duration, 
                     </Description>
                     <InputContainer>
                         <Input
-                            placeholder="Enter your Certificate ID here"
-                            value={certificateId}
-                            onChange={(e) => setCertificateId(e.target.value)}
+                            value={title}
+                            // onChange={(e) => setCertificateId(e.target.value)}
+                            disabled
                         />
                         {/* <Button onClick={handleVerify}> */}
-                        <Button onClick={openModal}>
-                            {loading ? "Verifying..." : "Verify ID"}
-                        </Button>
+                        <Button onClick={openModal}>{loading ? "Checking..." : "Check"}</Button>
                     </InputContainer>
 
                     {result && (
                         <ResultBox>
                             {result.notFound ? (
-                                <p>❌ Certificate not found.</p>
+                                <p> Certificate not found.</p>
                             ) : (
-                                <Certificate
+                                <CertificateDownload
                                     handleClose={handleClose}
                                     user={user}
                                     title={title}
                                     duration={duration}
                                     id={id}
                                     $visible={visible}
+                                    desc={desc}
+                                    issuedAt={issuedAt}
                                 />
                             )}
                         </ResultBox>

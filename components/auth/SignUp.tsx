@@ -5,14 +5,15 @@ import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import createOrUpdateUserDoc from "@/firebase/createOrUpdateUserDoc"
-import { auth } from "@/firebase/firebaseConfig"
+import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 import {
     getAdditionalUserInfo,
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+import { auth, db } from "@/lib/firebase/firebaseConfig"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`
@@ -109,18 +110,14 @@ const SignUpLink = styled.a`
     color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
 `
-
-export default function SignUp({
-    handleClose,
-    open,
-    Transition,
-    handleSignInOpen,
-}: {
+interface SignUpProps {
     handleClose: () => void
     open: boolean
     Transition: ComponentType<any>
     handleSignInOpen: () => void
-}) {
+}
+
+export default function SignUp({ handleClose, open, Transition, handleSignInOpen }: SignUpProps) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
@@ -193,6 +190,58 @@ export default function SignUp({
             setIsLoading(false)
         }
     }
+    // const handleSignInWithGoogle = async () => {
+    //     setIsLoading(true)
+    //     try {
+    //         const provider = new GoogleAuthProvider()
+    //         const userCredential = await signInWithPopup(auth, provider)
+    //         const user = userCredential.user
+
+    //         // Check if it's a new user
+    //         const info = getAdditionalUserInfo(userCredential)
+    //         await user.getIdToken(true) // force refresh
+    //         const idToken = await user.getIdToken()
+    //         console.log("Checking if user is new...", info?.isNewUser)
+    //         // if (info?.isNewUser) {
+    //         // create user document if it is new and not created
+    //         // try {
+    //         await createUserIfNotExists(user)
+
+    //         //     } catch (createUserError: any) {
+    //         //         console.error("Failed to create user document:", createUserError)
+    //         //         toast.error("Account verified, but failed to store user details.")
+    //         //         setSignUpStatus("Sign Up error")
+    //         //     }
+    //         // }
+    //         // await fetch("/api/auth/session", {
+    //         //     method: "POST",
+    //         //     headers: { "Content-Type": "application/json" },
+    //         //     body: JSON.stringify({ idToken }),
+    //         //     credentials: "include",
+    //         // })
+    //         setSignUpStatus("success")
+    //         toast.success(user.email + " Account created successfully")
+    //         setTimeout(() => {
+    //             handleClose()
+    //         }, 1000)
+    //         // console.log(userCredential, info)
+    //     } catch (error: any) {
+    //         console.error("Error during Google sign-in:", error)
+    //         if (error?.code === "auth/account-exists-with-different-credential") {
+    //             toast.error("Account already exists with different provider.")
+    //         } else if (error?.message?.includes("permission-denied")) {
+    //             toast.error("Permission denied when saving user. Contact admin.")
+    //         } else {
+    //             toast.error("Failed to sign in. Try again later.")
+    //         }
+    //         setTimeout(() => {
+    //             setSignUpStatus("initial")
+    //         }, 1000)
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
         try {
@@ -200,33 +249,45 @@ export default function SignUp({
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
 
-            // Check if it's a new user
+            // force refresh ID token
+            await user.getIdToken(true)
             const info = getAdditionalUserInfo(userCredential)
-            await user.getIdToken(true) // force refresh
-            const idToken = await user.getIdToken()
-            // console.log("Checking if user is new...", info?.isNewUser)
-            if (info?.isNewUser) {
-                await createOrUpdateUserDoc(user)
-                toast.success(user.email + " Account created successfully")
+
+            // check Firestore users collection
+            const userRef = doc(db, "users", user.uid)
+            const userSnap = await getDoc(userRef)
+
+            if (userSnap.exists()) {
+                // user already exists in Firestore → ask them to login instead
+                toast.error("Account already exists, please login.")
+                setSignUpStatus("duplicate")
+                await auth.signOut() // optional: sign them out again
+                return
             }
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+
+            // if not exists → create user doc
+            await createUserIfNotExists(user)
+            // await setDoc(userRef, {
+            //   uid: user.uid,
+            //   name: user.displayName,
+            //   email: user.email,
+            //   photoURL: user.photoURL,
+            //   provider: user.providerData[0]?.providerId,
+            //   createdAt: new Date().toISOString(),
+            // })
+
             setSignUpStatus("success")
+            toast.success(`${user.email} Account created successfully`)
+
             setTimeout(() => {
                 handleClose()
             }, 1000)
-            // console.log(userCredential, info)
         } catch (error: any) {
-            const errorCode = error.code
-            const errorMessage = error.message
-            if (error.code === "auth/account-exists-with-different-credential") {
-                setSignUpStatus("Sign In error")
-                toast.error("error:", errorMessage)
-                // console.log("error:", errorMessage, " ", errorCode)
+            console.error("Error during Google sign-in:", error)
+            if (error?.code === "auth/account-exists-with-different-credential") {
+                toast.error("Account already exists with different provider.")
+            } else {
+                toast.error("Failed to sign in. Try again later.")
             }
             setTimeout(() => {
                 setSignUpStatus("initial")

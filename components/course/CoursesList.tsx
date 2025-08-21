@@ -1,18 +1,19 @@
-"use cleint"
-import { useState, useEffect } from "react"
+"use client"
 import styled, { keyframes } from "styled-components"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Card from "@mui/material/Card"
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt"
-import StarHalfIcon from "@mui/icons-material/StarHalf"
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo"
-import "animate.css/animate.min.css"
-import { featuredCourses } from "@/data"
+import PreviewIcon from "@mui/icons-material/Preview"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import { formatPrice } from "@/config/FormatPrice"
-import { CourseType } from "@/types"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
+import CourseRating from "@/components/course/Review"
+import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import "animate.css/animate.min.css"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -20,8 +21,8 @@ const Container = styled.section`
     margin: 50px auto 0;
     padding: 0px;
     border-radius: 8px;
-    ${ipad({ width: "665px", height: 1020, marginTop: 20 })};
-    ${mobile({ width: "360px", height: 1460, marginTop: 20 })};
+    ${ipad({ width: "665px", height: "100%", marginTop: 20 })};
+    ${mobile({ width: "360px", marginTop: 20 })};
 `
 const Wrapper = styled.div<{ $display?: string }>`
     display: flex;
@@ -29,6 +30,7 @@ const Wrapper = styled.div<{ $display?: string }>`
     padding: 0;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     height: 100%;
     width: 100%;
     gap: 25px;
@@ -69,8 +71,14 @@ const InfoContainer = styled.div`
     background-color: ${(props) => props.theme.palette.common.white};
     borderradius: 3px;
 `
+const TitleSection = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    ${mobile({})}
+`
 const Title = styled.h3`
-    font-weight: 700;
+    font-weight: 600;
     margin: 0px;
     text-align: start;
     ${mobile({
@@ -95,7 +103,7 @@ const Time = styled.p`
     ${mobile({})};
 `
 const Price = styled.p`
-    flex: 0.8;
+    flex: 0.5;
     margin: 5px auto;
     font-weight: bold;
 `
@@ -110,26 +118,31 @@ const Box = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    gap: 10px;
 `
-const PriceBox = styled.div`
+const PreviewContainer = styled.div`
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
-    font-weight: 600;
-`
-const PriceBtn = styled.button<{ $priceBtn?: string }>`
-    flex: 1;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     height: 40px;
-    align-items: center;
-    justify-content: center;
-    font-size: ${(props) => (props.$priceBtn ? "16px" : "25px")};
+    background-color: ${(props) => props.theme.palette.primary.main};
     margin: 5px auto;
+    ${ipad({ height: 35 })};
+`
+const PreviewBtn = styled.button<{ $priceBtn?: string }>`
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    font-size: ${(props) => (props.$priceBtn ? "16px" : "25px")};
     color: ${(props) => props.theme.palette.common.white};
     background-color: ${(props) => props.theme.palette.primary.main};
+    background-color: ${(props) =>
+        props.$priceBtn ? props.theme.palette.primary.main : props.theme.palette.white};
     &::first-letter {
         text-transform: uppercase;
     }
@@ -137,90 +150,131 @@ const PriceBtn = styled.button<{ $priceBtn?: string }>`
         animation: pulse;
         animation-duration: 1s;
         background-color: ${(props) => props.theme.palette.action.hover};
+        color: ${(props) => props.theme.palette.common.white};
+    }
+    ${ipad({ height: 35 })};
+`
+const WhishlistContainer = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    background-color: ${(props) => props.theme.palette.common.white};
+    margin: 5px auto;
+    ${ipad({ height: 35 })};
+`
+const WishlistBtn = styled.button<{ $priceBtn?: string }>`
+    border: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    font-size: 16px;
+    color: ${(props) => props.theme.palette.primary.main};
+    background-color: ${(props) => props.theme.palette.common.white};
+    background-color: ${(props) =>
+        props.$priceBtn ? props.theme.palette.primary.main : props.theme.palette.white};
+    &::first-letter {
+        text-transform: uppercase;
+    }
+    &:hover {
+        animation: pulse;
+        animation-duration: 1s;
         color: ${(props) => props.theme.palette.primary.main};
     }
     ${ipad({ height: 35 })};
 `
-const BtnLink = styled(Link)`
-    text-decoration: none;
-    color: ${(props) => props.theme.palette.common.white};
-    font-weight: 400;
-`
-export default function CoursesList(props: {
-    courses: CourseType[]
-    limit: number
-    title: string
+
+interface CoursesListProps {
+    limit?: number
+    title?: string
     $display?: string
     priceBtn?: string
     coursesPg?: boolean
     onClick?: () => void
-}) {
+}
+export default function CoursesList({ limit, title, coursesPg, $display }: CoursesListProps) {
     const router = useRouter()
-    const { courses, limit, title, coursesPg, $display } = props
-    const [coursesToDisplay, setCoursesToDisplay] = useState([])
+    const { data: courses, isLoading, error } = useFetchCourses()
     const main = true
 
+    if (isLoading)
+        return (
+            <>
+                <Box>
+                    {[...Array(3)].map((_, i) => (
+                        <Box key={i}>
+                            <CourseCardSkeleton />
+                        </Box>
+                    ))}
+                </Box>
+            </>
+        )
+    if (error) return <p>Failed to load courses</p>
     return (
         <Container>
             <Wrapper>
-                {featuredCourses &&
-                    featuredCourses.map((course) => (
-                        <div key={course._id}>
-                            <StyledCard variant="elevation" elevation={1}>
-                                <CourseImg src={course.image} alt={course.title} />
-                                <InfoContainer>
+                {courses?.slice(0, limit).map((course) => (
+                    <div key={course.id}>
+                        <StyledCard variant="elevation" elevation={1}>
+                            <CourseImg src={course.image} alt={course.title} />
+                            <InfoContainer>
+                                <TitleSection>
                                     <Title>{course.title}</Title>
-                                    <Desc>{course.shortDesc}</Desc>
-                                    <DurationContainer>
-                                        <Box>
-                                            <Time>
-                                                <OndemandVideoIcon />
-                                                <span style={{ margin: "10px" }}>
-                                                    {course.onDemandVideos > 0
-                                                        ? `${course.onDemandVideos} Videos`
-                                                        : 0}
-                                                </span>
-                                            </Time>
-                                        </Box>
-                                        <Box>
-                                            <Time>
-                                                <PeopleAltIcon />
-                                                <span style={{ margin: "10px" }}>
-                                                    {course.students} Students
-                                                </span>
-                                            </Time>
-                                        </Box>
-                                        <Box>
-                                            <Time>
-                                                <StarHalfIcon />
-                                                <span style={{ margin: "10px" }}>
-                                                    {course.review.length > 0
-                                                        ? `${(
-                                                              course.review.reduce(
-                                                                  (total, review) =>
-                                                                      total + review.stars,
-                                                                  0,
-                                                              ) / course.review.length
-                                                          ).toFixed(1)}`
-                                                        : "0"}
-                                                </span>
-                                            </Time>
-                                        </Box>
-                                    </DurationContainer>
+                                    <Price>{formatPrice(course.price)}</Price>
+                                </TitleSection>
+                                <Desc>{course.shortDesc}</Desc>
+                                <DurationContainer>
                                     <Box>
-                                        <Price>{formatPrice(course.price)}</Price>
-                                        <PriceBtn
+                                        <Time>
+                                            <OndemandVideoIcon />
+                                            <span style={{ margin: "10px" }}>
+                                                {course.onDemandVideos > 0
+                                                    ? `${course.onDemandVideos} Videos`
+                                                    : 0}
+                                            </span>
+                                        </Time>
+                                    </Box>
+                                    <Box>
+                                        <Time>
+                                            <PeopleAltIcon />
+                                            <span style={{ margin: "10px" }}>
+                                                {course.students} Students
+                                            </span>
+                                        </Time>
+                                    </Box>
+                                    <Box>
+                                        <CourseRating courseId={course.id} />
+                                    </Box>
+                                </DurationContainer>
+                                <Box>
+                                    <WhishlistContainer>
+                                        <FavoriteBorderIcon sx={{ color: "#356DF1" }} />
+                                        <WishlistBtn
+                                            type="button"
+                                            onClick={() => router.push(`/courses/${course.id}`)}
+                                        >
+                                            Wishlist
+                                        </WishlistBtn>
+                                    </WhishlistContainer>
+                                    <PreviewContainer>
+                                        <PreviewIcon sx={{ color: "white" }} />
+                                        <PreviewBtn
                                             $priceBtn="PriceBtn"
                                             type="button"
-                                            onClick={() => router.push(`/courses/${course._id}`)}
+                                            onClick={() => router.push(`/courses/${course.id}`)}
                                         >
-                                            Learn more
-                                        </PriceBtn>
-                                    </Box>
-                                </InfoContainer>
-                            </StyledCard>
-                        </div>
-                    ))}
+                                            Preview
+                                        </PreviewBtn>
+                                    </PreviewContainer>
+                                </Box>
+                            </InfoContainer>
+                        </StyledCard>
+                    </div>
+                ))}
             </Wrapper>
             <Top $coursesPg={coursesPg}>
                 <Button

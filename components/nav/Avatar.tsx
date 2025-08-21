@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Link from "next/link"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import { mobile, ipad } from "@/responsive"
 
 const AvatarContainer = styled.div`

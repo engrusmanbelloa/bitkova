@@ -1,25 +1,11 @@
 import React from "react"
 import { redirect } from "next/navigation"
-import { featuredCourses } from "@/data"
 import CourseHeader from "@/components/course/CourseHeader"
-import { mobile, ipad } from "@/responsive"
 
-export default async function Course({ params }: { params: Promise<{ id: string }> }) {
-    const courses = featuredCourses
-    const limit = 8
-    const id = (await params).id
-    if (!id) {
-        redirect("/")
-    } else {
-        console.log(id)
-    }
+export default async function CoursePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
 
-    const course = featuredCourses.find((course) => course._id.toString() === id)
-    if (!course) {
-        redirect("/")
-    }
-    // get the course for the user using the id
-    // const course = await fetchCourse(id)
+    if (!id) redirect("/")
 
-    return <CourseHeader course={course} />
+    return <CourseHeader courseId={id} />
 }

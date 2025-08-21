@@ -13,8 +13,9 @@ import {
     setPersistence,
     signInWithPopup,
     GoogleAuthProvider,
+    fetchSignInMethodsForEmail,
 } from "firebase/auth"
-import { auth } from "@/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`
@@ -127,6 +128,13 @@ const SignUpLink = styled.a`
     color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
 `
+interface SignInProps {
+    handleClose: () => void
+    open: boolean
+    Transition: ComponentType<any>
+    handleSingUpOpen: () => void
+    handleForgotPasswordOpen: () => void
+}
 
 export default function SignIn({
     handleClose,
@@ -134,13 +142,7 @@ export default function SignIn({
     Transition,
     handleSingUpOpen,
     handleForgotPasswordOpen,
-}: {
-    handleClose: () => void
-    open: boolean
-    Transition: ComponentType<any>
-    handleSingUpOpen: () => void
-    handleForgotPasswordOpen: () => void
-}) {
+}: SignInProps) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -157,12 +159,12 @@ export default function SignIn({
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
             const idToken = await user.getIdToken()
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
+            // await fetch("/api/auth/session", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ idToken }),
+            //     credentials: "include",
+            // })
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()
@@ -180,44 +182,89 @@ export default function SignIn({
             setIsLoading(false)
         }
     }
+    // const handleSignInWithGoogle = async () => {
+    //     setIsLoading(true)
+    //     try {
+    //         const provider = new GoogleAuthProvider()
+    //         const userCredential = await signInWithPopup(auth, provider)
+    //         const user = userCredential.user
+    //         const idToken = await user.getIdToken()
+    //         // console.log("id token is: ", idToken)
+    //         // await fetch("/api/auth/session", {
+    //         //     method: "POST",
+    //         //     headers: { "Content-Type": "application/json" },
+    //         //     body: JSON.stringify({ idToken }),
+    //         //     credentials: "include",
+    //         // })
+    //         // await res.json() //the res deleted after debug just the await
+    //         // console.log("SESSION SET:", data)
+    //         setSignInStatus("success")
+    //         setTimeout(() => {
+    //             handleClose()
+    //         }, 1000)
+    //         // alert(user.email + " Account created successfully")
+    //         // console.log(user)
+    //     } catch (error: any) {
+    //         const errorCode = error.code
+    //         const errorMessage = error.message
+    //         if (error.code === "auth/account-exists-with-different-credential") {
+    //             // The pending Google credential.
+    //             // let pendingCred = error.credential
+    //             setSignInStatus("Sign In error")
+    //             // console.log("error:", errorMessage, " ", errorCode)
+    //         }
+    //         setTimeout(() => {
+    //             setSignInStatus("initial")
+    //         }, 1000)
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
         try {
             const provider = new GoogleAuthProvider()
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
-            const idToken = await user.getIdToken()
-            // console.log("id token is: ", idToken)
-            await fetch("/api/auth/session", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idToken }),
-                credentials: "include",
-            })
-            // await res.json() //the res deleted after debug just the await
-            // console.log("SESSION SET:", data)
-            setSignInStatus("success")
-            setTimeout(() => {
-                handleClose()
-            }, 1000)
-            // alert(user.email + " Account created successfully")
-            // console.log(user)
-        } catch (error: any) {
-            const errorCode = error.code
-            const errorMessage = error.message
-            if (error.code === "auth/account-exists-with-different-credential") {
-                // The pending Google credential.
-                // let pendingCred = error.credential
-                setSignInStatus("Sign In error")
-                // console.log("error:", errorMessage, " ", errorCode)
+
+            // Check if user already exists
+            const signInMethods = await fetchSignInMethodsForEmail(auth, user.email!)
+
+            if (signInMethods.length === 0) {
+                // No user exists, reject sign-in
+                await user.delete() // delete the auto-created Firebase account
+                throw new Error("No account found. Please sign up first.")
             }
-            setTimeout(() => {
-                setSignInStatus("initial")
-            }, 1000)
+
+            // If account exists, proceed
+            const idToken = await user.getIdToken()
+
+            // Send token to backend if you’re managing sessions
+            // await fetch("/api/auth/session", {
+            //   method: "POST",
+            //   headers: { "Content-Type": "application/json" },
+            //   body: JSON.stringify({ idToken }),
+            //   credentials: "include",
+            // })
+
+            setSignInStatus("success")
+            setTimeout(() => handleClose(), 1000)
+        } catch (error: any) {
+            console.error("Google Sign-In error:", error.message)
+
+            if (error.code === "auth/account-exists-with-different-credential") {
+                setSignInStatus("Sign In error - Try another method")
+            } else {
+                setSignInStatus("Sign In failed")
+            }
+
+            setTimeout(() => setSignInStatus("initial"), 2000)
         } finally {
             setIsLoading(false)
         }
     }
+
     return (
         <Container
             open={open}
