@@ -443,7 +443,7 @@ export default function Navbar() {
         }
     }, [user])
 
-    if (isLoadingUserDoc || isLoading) {
+    if (isLoadingUserDoc) {
         return (
             <Container>
                 <NavSkeleton />

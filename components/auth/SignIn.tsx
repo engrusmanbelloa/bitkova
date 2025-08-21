@@ -225,16 +225,34 @@ export default function SignIn({
         setIsLoading(true)
         try {
             const provider = new GoogleAuthProvider()
+            // const email = await getEmailFromGoogleProvider(provider)
+
+            // if (email) {
+            //     const userExists = await checkIfUserExists(email)
+            //     if (!userExists) {
+            //         throw new Error("No account found. Please sign up first.")
+            //     }
+            // }
+
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
 
             // Check if user already exists
-            const signInMethods = await fetchSignInMethodsForEmail(auth, user.email!)
+            const response = await fetch("api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: user.email,
+                    uid: user.uid,
+                }),
+            })
 
-            if (signInMethods.length === 0) {
-                // No user exists, reject sign-in
-                await user.delete() // delete the auto-created Firebase account
-                throw new Error("No account found. Please sign up first.")
+            if (!response.ok) {
+                const errorData = await response.json()
+                // Sign them out since they shouldn't be signed in
+                toast.error("Login failed, make sure you signed up first")
+                await auth.signOut()
+                throw new Error(errorData.message || "Account verification failed")
             }
 
             // If account exists, proceed
@@ -251,7 +269,7 @@ export default function SignIn({
             setSignInStatus("success")
             setTimeout(() => handleClose(), 1000)
         } catch (error: any) {
-            console.error("Google Sign-In error:", error.message)
+            console.log("Google Sign-In error:", error.message)
 
             if (error.code === "auth/account-exists-with-different-credential") {
                 setSignInStatus("Sign In error - Try another method")
