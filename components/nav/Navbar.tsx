@@ -32,6 +32,7 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
 import { redirect } from "next/navigation"
+import NavSkeleton from "./NavSkeleton"
 
 // containers section
 const Container = styled.section`
@@ -441,6 +442,18 @@ export default function Navbar() {
                 })
         }
     }, [user])
+
+    if (isLoadingUserDoc || isLoading) {
+        return (
+            <Container>
+                <NavSkeleton />
+            </Container>
+        )
+    }
+
+    if (error) {
+        return <p>Error Fetching data.</p>
+    }
 
     return (
         <>

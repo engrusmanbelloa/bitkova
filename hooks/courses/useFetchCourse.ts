@@ -3,15 +3,6 @@ import { db } from "@/lib/firebase/firebaseConfig"
 import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 
-// const fetchCourses = async (): Promise<CourseWithExtras[]> => {
-//     const querySnap = await getDocs(collection(db, "courses"))
-//     console.log(
-//         "fetchCourses called: ",
-//         querySnap.docs.map((doc) => doc.data() as CourseWithExtras),
-//     )
-//     return querySnap.docs.map((doc) => doc.data() as CourseWithExtras)
-// }
-
 const fetchCourses = async (): Promise<CourseWithExtras[]> => {
     // Serialize function to handle Date fields
     function serializeDoc<T extends object>(data: T): any {
@@ -26,6 +17,9 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
     }
 
     const courseSnap = await getDocs(collection(db, "courses"))
+    if (courseSnap.empty) {
+        return []
+    }
 
     const courses = await Promise.all(
         courseSnap.docs.map(async (docSnap) => {
@@ -100,8 +94,14 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
     return courses
 }
 
+// export const useFetchCourses = () =>
+//     useQuery({
+//         queryKey: ["courses"],
+//         queryFn: fetchCourses,
+//     })
+
 export const useFetchCourses = () =>
-    useQuery({
+    useQuery<CourseWithExtras[], unknown>({
         queryKey: ["courses"],
         queryFn: fetchCourses,
     })

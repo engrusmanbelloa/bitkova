@@ -189,8 +189,8 @@ const WishlistBtn = styled.button<{ $priceBtn?: string }>`
 `
 
 interface CoursesListProps {
-    limit: number
-    title: string
+    limit?: number
+    title?: string
     $display?: string
     priceBtn?: string
     coursesPg?: boolean

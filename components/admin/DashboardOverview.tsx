@@ -143,7 +143,6 @@ const PartnerLocation = styled.div`
 `
 
 export default function DashboardOverview() {
-    // const DashboardContent: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<"7d" | "30d" | "90d">("7d")
 
     // Dummy data for chart
@@ -194,7 +193,6 @@ export default function DashboardOverview() {
             bank: "Chase",
         },
     ]
-
     // Dummy data for new partners
     const partners = [
         { id: 1, name: "John Doe", email: "john@example.com", location: "New York" },

@@ -8,15 +8,12 @@ import ComputerIcon from "@mui/icons-material/Computer"
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { mobile, ipad } from "@/responsive"
-import IsLoading from "@/components/IsLoading"
 import HomeHero from "@/components/home/HomeHero"
-import Button from "@/components/Button"
 import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/nav/Testimonials"
 import StatsSection from "@/components/home/StatsSection"
 import CarrierCard from "@/components/home/CarrierCard"
-import { CourseWithExtras, Course, Module, Review, Lesson } from "@/types"
-import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import CoursesSection from "@/components/home/CoursesSection"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -224,6 +221,7 @@ export default function HomeComponent() {
                     </Description>
                 </Intro>
                 <CoursesList coursesPg={true} title="Featured courses" limit={limit} />
+                {/* <CoursesSection /> */}
                 <Recomendations>
                     <Title>Hear what they say about us</Title>
                     <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
