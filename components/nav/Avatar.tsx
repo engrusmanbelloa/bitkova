@@ -2,6 +2,7 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"
@@ -94,11 +95,11 @@ export default function NavAvatar({ user }: any) {
         try {
             setIsOpen(!isOpen)
             signOut(auth)
-            await fetch("/api/session", {
-                method: "DELETE",
-            })
-            console.log("Session deleted")
-            window.location.href = "/"
+            // await fetch("/api/session", {
+            //     method: "DELETE",
+            // })
+            // console.log("Session deleted")
+            redirect("/")
         } catch (error) {
             console.error("Error signing out:", error)
         }

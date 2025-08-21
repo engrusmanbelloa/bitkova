@@ -26,7 +26,6 @@ import { mobile, ipad } from "@/responsive"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { auth, app } from "@/lib/firebase/firebaseConfig"
 import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
-import { useUserDoc } from "@/hooks/user/useUserDoc"
 import { toast } from "sonner"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
@@ -201,7 +200,6 @@ export default function Navbar() {
     const [verificationChecked, setVerificationChecked] = useState(false)
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
-    const { userDoc, loading } = useUserDoc()
     const { user, firebaseUser, authReady, error, isLoadingUserDoc } = useAuthReady()
     const cartCount = useUserStore((s) => s.cart.length)
     const wishlistCount = useUserStore((s) => s.wishlist.length)
@@ -266,6 +264,7 @@ export default function Navbar() {
     const handleSignInClose = () => {
         setTimeout(() => {
             setSignin(false)
+            user && setUserLoggedIn(true)
         }, 1000)
     }
     // SingUp Modal transition, open and close functions
@@ -396,8 +395,10 @@ export default function Navbar() {
             redirect("/")
         }
         setIsLoading(true)
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        // console.log(`Auth is ready state: ${authReady}, checking user state...`)
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user !== null) {
+                await user.reload()
                 if (user.emailVerified) {
                     setUserLoggedIn(true)
                     // console.log(
@@ -424,7 +425,7 @@ export default function Navbar() {
             setIsLoading(false)
             unsubscribe()
         }
-    }, [userLoggedIn, signin, error])
+    }, [authReady, isLoadingUserDoc])
 
     useEffect(() => {
         if (user) {
@@ -443,7 +444,7 @@ export default function Navbar() {
         }
     }, [user])
 
-    if (isLoadingUserDoc) {
+    if (!authReady || isLoadingUserDoc) {
         return (
             <Container>
                 <NavSkeleton />
@@ -487,7 +488,7 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {authReady && user && firebaseUser && firebaseUser.emailVerified ? (
+                        {authReady && userLoggedIn && firebaseUser && firebaseUser.emailVerified ? (
                             <>
                                 <CartsContainer>
                                     <Badge
@@ -534,7 +535,7 @@ export default function Navbar() {
                                         />
                                     </Badge>
                                 </CartsContainer>
-                                {!loading
+                                {!isLoadingUserDoc
                                     ? user && <NavAvatar user={user.name || user.email} />
                                     : null}
                             </>
@@ -558,14 +559,14 @@ export default function Navbar() {
                                 <NavBtn onClick={() => router.push("/courses")}>
                                     Browse Courses
                                 </NavBtn>
-                                <LoginBtn $login={userLoggedIn} onClick={handleSignInOpen} />
+                                <LoginBtn $login={false} onClick={handleSignInOpen} />
                             </>
                         )}
                         {/* Modal for signup  */}
                         {singUp && (
                             <SignUp
-                                open={singUp}
                                 handleClose={handleSignUpClose}
+                                open={singUp}
                                 Transition={Transition}
                                 handleSignInOpen={handleSignInOpen}
                             />
@@ -660,12 +661,12 @@ export default function Navbar() {
                                 />
                             )}
                             {toggleMenu && authReady && firebaseUser && firebaseUser.emailVerified
-                                ? !loading
-                                    ? userDoc && (
+                                ? !isLoadingUserDoc
+                                    ? user && (
                                           <DropdownMenu
                                               handleSingUpOpen={handleSignInOpen}
                                               closeMenu={() => setToggleMenu(false)}
-                                              user={userDoc.name || userDoc.email}
+                                              user={user.name || user.email}
                                           />
                                       )
                                     : null

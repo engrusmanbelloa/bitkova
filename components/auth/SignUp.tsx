@@ -117,7 +117,7 @@ interface SignUpProps {
     handleSignInOpen: () => void
 }
 
-export default function SignUp({ handleClose, open, Transition, handleSignInOpen }: SignUpProps) {
+export default function SignUp({ open, Transition, handleSignInOpen, handleClose }: SignUpProps) {
     const [email, setEmail] = useState("")
     const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
@@ -277,6 +277,7 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
             // })
 
             setSignUpStatus("success")
+
             toast.success(`${user.email} Account created successfully`)
 
             setTimeout(() => {
@@ -369,9 +370,6 @@ export default function SignUp({ handleClose, open, Transition, handleSignInOpen
                     <TrustedBy>Trusted by 10,000+ Learners</TrustedBy>
                 </Footer>
             </RightSide>
-            {/* <DialogActions>
-                <CloseIcon onClick={handleClose}>Disagree</CloseIcon>
-            </DialogActions> */}
         </Container>
     )
 }
