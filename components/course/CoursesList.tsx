@@ -21,8 +21,18 @@ const Container = styled.section`
     margin: 50px auto 0;
     padding: 0px;
     border-radius: 8px;
-    ${ipad({ width: "665px", height: "100%", marginTop: 20 })};
-    ${mobile({ width: "360px", marginTop: 20 })};
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+            height: 100%;
+            margin-top: 20px;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+        `,
+    )}
 `
 const Wrapper = styled.div<{ $display?: string }>`
     display: flex;
@@ -119,6 +129,17 @@ const Box = styled.div`
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+            overflow: hidden;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+        `,
+    )}
 `
 const PreviewContainer = styled.div`
     flex: 1;
