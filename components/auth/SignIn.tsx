@@ -6,14 +6,12 @@ import AppleIcon from "@mui/icons-material/Apple"
 import { mobile, ipad } from "@/responsive"
 import AuthButton from "@/components/auth/AuthButton"
 import {
-    getAuth,
     signInWithEmailAndPassword,
     browserSessionPersistence,
     browserLocalPersistence,
     setPersistence,
     signInWithPopup,
     GoogleAuthProvider,
-    fetchSignInMethodsForEmail,
 } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { toast } from "sonner"
@@ -225,15 +223,6 @@ export default function SignIn({
         setIsLoading(true)
         try {
             const provider = new GoogleAuthProvider()
-            // const email = await getEmailFromGoogleProvider(provider)
-
-            // if (email) {
-            //     const userExists = await checkIfUserExists(email)
-            //     if (!userExists) {
-            //         throw new Error("No account found. Please sign up first.")
-            //     }
-            // }
-
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
 
@@ -252,6 +241,7 @@ export default function SignIn({
                 // Sign them out since they shouldn't be signed in
                 toast.error("Login failed, make sure you signed up first")
                 await auth.signOut()
+                // user.delete() // Delete the user created by Google Sign-In
                 throw new Error(errorData.message || "Account verification failed")
             }
 

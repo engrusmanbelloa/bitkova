@@ -7,6 +7,7 @@ import LoginIcon from "@mui/icons-material/Login"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
 import { initializeApp } from "firebase/app"
 import { auth } from "@/lib/firebase/firebaseConfig"
+import { redirect } from "next/navigation"
 
 const DropdownContent = styled.ul<{ $isVisible: boolean }>`
     position: absolute;
@@ -75,11 +76,11 @@ export default function DropdownMenu({
         try {
             setIsOpen(!isOpen)
             signOut(auth)
-            await fetch("/api/auth/session", {
-                method: "DELETE",
-            })
-            console.log("Session deleted")
-            window.location.href = "/"
+            // await fetch("/api/auth/session", {
+            //     method: "DELETE",
+            // })
+            // console.log("Session deleted")
+            redirect("/")
         } catch (error) {
             console.error("Error signing out:", error)
         }
