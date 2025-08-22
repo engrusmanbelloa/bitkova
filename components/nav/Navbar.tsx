@@ -660,23 +660,21 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
-                            {toggleMenu && authReady && firebaseUser && firebaseUser.emailVerified
-                                ? !isLoadingUserDoc
-                                    ? user && (
-                                          <DropdownMenu
-                                              handleSingUpOpen={handleSignInOpen}
-                                              closeMenu={() => setToggleMenu(false)}
-                                              user={user.name || user.email}
-                                          />
-                                      )
-                                    : null
-                                : toggleMenu && (
-                                      <DropdownMenu
-                                          user={false}
-                                          handleSingUpOpen={handleSignInOpen}
-                                          closeMenu={() => setToggleMenu(false)}
-                                      />
-                                  )}
+                            {toggleMenu && user && firebaseUser && firebaseUser.emailVerified ? (
+                                <DropdownMenu
+                                    handleSingUpOpen={handleSignInOpen}
+                                    closeMenu={() => setToggleMenu(false)}
+                                    user={user.name || user.email}
+                                />
+                            ) : (
+                                toggleMenu && (
+                                    <DropdownMenu
+                                        user={false}
+                                        handleSingUpOpen={handleSignInOpen}
+                                        closeMenu={() => setToggleMenu(false)}
+                                    />
+                                )
+                            )}
                         </Toggle>
                     </Right>
                 </Wrapper>

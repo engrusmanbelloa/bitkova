@@ -21,12 +21,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
         // Parse and validate request body
         const { email, uid } = await request.json()
-        console.log("Received email:", email, "and uid:", uid)
+        // console.log("Received email:", email, "and uid:", uid)
 
         // Check if user exists in database
         //   const userExists = await checkUserInDatabaseSafe(email)
         const userExists = await getUserByEmail(email)
-        console.log("User exists:", userExists)
+        // console.log("User exists:", userExists)
 
         if (!userExists) {
             return NextResponse.json(
