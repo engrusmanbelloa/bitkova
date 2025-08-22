@@ -488,7 +488,8 @@ export default function Navbar() {
                     </Center>
                     {/* nav right items container  */}
                     <Right>
-                        {authReady && userLoggedIn && firebaseUser && firebaseUser.emailVerified ? (
+                        {/* Right side nav When user is logged in */}
+                        {authReady && user && firebaseUser && firebaseUser.emailVerified && (
                             <>
                                 <CartsContainer>
                                     <Badge
@@ -535,33 +536,36 @@ export default function Navbar() {
                                         />
                                     </Badge>
                                 </CartsContainer>
-                                {!isLoadingUserDoc
-                                    ? user && <NavAvatar user={user.name || user.email} />
-                                    : null}
-                            </>
-                        ) : (
-                            <>
-                                {/* Mobile middle search bar */}
-                                <MobileNavMiddle>
-                                    <InputBase
-                                        sx={{ ml: 1, flex: 1 }}
-                                        placeholder="Search courses"
-                                        inputProps={{ "aria-label": "search bitkova" }}
-                                    />
-                                    <IconButton
-                                        type="button"
-                                        sx={{ m: 0, pr: "0" }}
-                                        aria-label="search"
-                                    >
-                                        <SearchIcon />
-                                    </IconButton>
-                                </MobileNavMiddle>
-                                <NavBtn onClick={() => router.push("/courses")}>
-                                    Browse Courses
-                                </NavBtn>
-                                <LoginBtn $login={false} onClick={handleSignInOpen} />
+
+                                <NavAvatar user={user.name || user.email} />
                             </>
                         )}
+                        <>
+                            {/* Mobile middle search bar */}
+                            <MobileNavMiddle>
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1 }}
+                                    placeholder="Search courses"
+                                    inputProps={{ "aria-label": "search bitkova" }}
+                                />
+                                <IconButton
+                                    type="button"
+                                    sx={{ m: 0, pr: "0" }}
+                                    aria-label="search"
+                                >
+                                    <SearchIcon />
+                                </IconButton>
+                            </MobileNavMiddle>
+                            {/* Right side nav When user is not logged in */}
+                            {!user && (
+                                <>
+                                    <NavBtn onClick={() => router.push("/courses")}>
+                                        Browse Courses
+                                    </NavBtn>
+                                    <LoginBtn $login={false} onClick={handleSignInOpen} />
+                                </>
+                            )}
+                        </>
                         {/* Modal for signup  */}
                         {singUp && (
                             <SignUp
@@ -601,6 +605,7 @@ export default function Navbar() {
                         )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
+                            {/* cart icon badge */}
                             <Badge
                                 onClick={() => router.push("/cart")}
                                 badgeContent={cartCount}
@@ -618,6 +623,7 @@ export default function Navbar() {
                                     }}
                                 />
                             </Badge>
+                            {/* wishlist icon badge */}
                             <Badge badgeContent={wishlistCount} color="error">
                                 <FavoriteBorderIcon
                                     fontSize="small"
@@ -631,6 +637,7 @@ export default function Navbar() {
                                     }}
                                 />
                             </Badge>
+                            {/* Notification icon badge */}
                             <Badge badgeContent={0} color="error">
                                 <CircleNotificationsIcon
                                     fontSize="small"
@@ -644,6 +651,7 @@ export default function Navbar() {
                                     }}
                                 />
                             </Badge>
+                            {/* toggle menu icons open and close */}
                             {!toggleMenu ? (
                                 <MenuIcon
                                     sx={{ p: 0, m: 0, fontSize: 25 }}
@@ -660,6 +668,7 @@ export default function Navbar() {
                                     }}
                                 />
                             )}
+                            {/* Drop down menu for mobile users when successfully logged in */}
                             {toggleMenu && user && firebaseUser && firebaseUser.emailVerified ? (
                                 <DropdownMenu
                                     handleSingUpOpen={handleSignInOpen}
@@ -667,6 +676,7 @@ export default function Navbar() {
                                     user={user.name || user.email}
                                 />
                             ) : (
+                                // {/* Drop down menu for mobile users when not logged in */}
                                 toggleMenu && (
                                     <DropdownMenu
                                         user={false}
