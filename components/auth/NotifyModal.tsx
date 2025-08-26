@@ -16,10 +16,10 @@ const Container = styled(Dialog)`
     border-radius: 8px;
 `
 const VerifyBtn = styled.button`
-    font-size: 18px;
-    margin: auto;
-    width: 250px;
-    height: 50px;
+    font-size: 14px;
+    margin: 8px auto;
+    width: 150px;
+    height: 35px;
     color: #fff;
     padding: 10px;
     border-radius: 5px;
@@ -34,16 +34,17 @@ const VerifyBtn = styled.button`
     ${ipad({})}
     ${mobile({})}
 `
-
-export default function NotifyModal({
-    handleNotifyModalClose,
-    open,
-    Transition,
-    sentVerification,
-    handleCheckVerification,
-    handleSendVerification,
-    verificationChecked,
-}: {
+const VerificationContainer = styled.div`
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 250px;
+    height: 150px;
+`
+interface NotifyModalProps {
     handleNotifyModalClose: () => void
     open: boolean
     Transition: ComponentType<any>
@@ -51,7 +52,15 @@ export default function NotifyModal({
     handleCheckVerification: () => void
     handleSendVerification: () => void
     verificationChecked: boolean
-}) {
+}
+
+export default function NotifyModal({
+    handleNotifyModalClose,
+    open,
+    Transition,
+    handleCheckVerification,
+    handleSendVerification,
+}: NotifyModalProps) {
     return (
         <div>
             <Container
@@ -62,10 +71,13 @@ export default function NotifyModal({
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                {auth.currentUser && sentVerification ? (
-                    <VerifyBtn onClick={handleCheckVerification}>Confirm verification</VerifyBtn>
-                ) : (
-                    <VerifyBtn onClick={handleSendVerification}>Verify your email</VerifyBtn>
+                {auth.currentUser && (
+                    <VerificationContainer>
+                        <VerifyBtn onClick={handleSendVerification}>Verify your email</VerifyBtn>
+                        <VerifyBtn onClick={handleCheckVerification}>
+                            Confirm verification
+                        </VerifyBtn>
+                    </VerificationContainer>
                 )}
             </Container>
         </div>

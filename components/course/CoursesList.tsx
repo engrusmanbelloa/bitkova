@@ -31,6 +31,7 @@ const Container = styled.section`
     ${mobile(
         (props: any) => `
             width: ${props.theme.widths.mobileWidth};
+            
         `,
     )}
 `
@@ -138,6 +139,7 @@ const Box = styled.div`
     ${mobile(
         (props: any) => `
             width: ${props.theme.widths.mobileWidth};
+            padding: 0px;
         `,
     )}
 `

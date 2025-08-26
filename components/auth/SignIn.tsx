@@ -257,6 +257,7 @@ export default function SignIn({
             // })
 
             setSignInStatus("success")
+            await user.reload()
             setTimeout(() => handleClose(), 1000)
         } catch (error: any) {
             console.log("Google Sign-In error:", error.message)

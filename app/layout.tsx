@@ -31,6 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         if (isOnline) {
             toast.dismiss("offline")
             toast.success("Back online!", { id: "online" })
+            queryClient.invalidateQueries()
+            // Refresh session or perform any necessary actions
+            // window.location.reload()
         } else {
             toast.error("You are offline", {
                 id: "offline",

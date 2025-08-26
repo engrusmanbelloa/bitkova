@@ -31,6 +31,7 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
 import { redirect } from "next/navigation"
+import { useQueryClient } from "@tanstack/react-query"
 import NavSkeleton from "./NavSkeleton"
 
 // containers section
@@ -191,8 +192,8 @@ const Toggle = styled.div`
 
 export default function Navbar() {
     const router = useRouter()
+    const queryClient = useQueryClient()
     const [toggleMenu, setToggleMenu] = useState(false)
-    const [userLoggedIn, setUserLoggedIn] = useState(false)
     const [signin, setSignin] = useState(false)
     const [singUp, setSignUp] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -201,10 +202,10 @@ export default function Navbar() {
     const [notifyModalOpen, setNotifyModalOpen] = useState(false)
     const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
     const { user, firebaseUser, authReady, error, isLoadingUserDoc } = useAuthReady()
+    const [currentUser, setCurrentUser] = useState(auth.currentUser)
     const cartCount = useUserStore((s) => s.cart.length)
     const wishlistCount = useUserStore((s) => s.wishlist.length)
     const main = "true"
-    let login
 
     // menu items array
     const menuList = [
@@ -246,14 +247,13 @@ export default function Navbar() {
         )
     }
     const handleSignInOpen = async () => {
-        if (!userLoggedIn) {
+        if (!user) {
             setSignUp(false)
             setSignin(true)
         } else {
             signOut(auth)
                 .then(() => {
-                    login = false
-                    setUserLoggedIn(false)
+                    // login = false
                 })
                 .catch((error) => {
                     toast.error(error.message)
@@ -264,15 +264,15 @@ export default function Navbar() {
     const handleSignInClose = () => {
         setTimeout(() => {
             setSignin(false)
-            user && setUserLoggedIn(true)
         }, 1000)
     }
     // SingUp Modal transition, open and close functions
     const handleSignUpOpen = () => {
-        if (!userLoggedIn) {
+        if (!user) {
             setSignin(false)
             setSignUp(true)
         } else {
+            setSignUp(false)
             toast.success("You are already logged in")
         }
     }
@@ -297,7 +297,6 @@ export default function Navbar() {
                 // Verified, proceed
                 setVerificationChecked(true)
                 setSentVerification(false)
-                setUserLoggedIn(true)
                 setNotifyModalOpen(false)
                 toast.success("Email already verified")
 
@@ -348,7 +347,6 @@ export default function Navbar() {
             // Proceed after successful verification
             setVerificationChecked(true)
             setSentVerification(false)
-            setUserLoggedIn(true)
             setNotifyModalOpen(false)
 
             // create user document after being verified
@@ -366,7 +364,10 @@ export default function Navbar() {
             //     const { error } = await res.json()
             //     throw new Error(error || "Session creation failed")
             // }
-            toast.success("Email verification successful")
+            // Invalidate the query to force a re-fetch and re-render
+            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
+            toast.success("Verification successful, You can now login")
+            // window.location.reload()
         } catch (error: any) {
             console.error("Verification error:", error)
             setNotifyModalOpen(true)
@@ -377,6 +378,14 @@ export default function Navbar() {
     // close the notification modal
     const notifyModalClose = async () => {
         setNotifyModalOpen(false)
+        // await signOut(auth)
+        //     .then(() => {
+        //         // login = false
+        //         toast.success("You have been signed out")
+        //     })
+        //     .catch((error) => {
+        //         toast.error(error.message)
+        //     })
     }
     // forgot password functions open, close the modal
     const handleForgotPasswordOpen = () => {
@@ -389,35 +398,35 @@ export default function Navbar() {
     }
 
     useEffect(() => {
-        if (!authReady || isLoadingUserDoc) return // Wait for Firebase to be ready
-        if (error) {
-            toast.error(error)
-            redirect("/")
-        }
         setIsLoading(true)
         // console.log(`Auth is ready state: ${authReady}, checking user state...`)
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user !== null) {
-                await user.reload()
-                if (user.emailVerified) {
-                    setUserLoggedIn(true)
+        const unsubscribe = onAuthStateChanged(auth, async (useEffectUser) => {
+            setCurrentUser(useEffectUser)
+            // console.log("Auth state changed, user:", useEffectUser)
+            if (useEffectUser !== null) {
+                await useEffectUser.reload()
+
+                if (!useEffectUser.emailVerified) {
                     // console.log(
                     //     "user verification is : " +
                     //         user.emailVerified +
                     //         ", User logged in :" +
                     //         userLoggedIn,
                     // )
-                } else {
-                    setUserLoggedIn(false)
+                    // toast.info("User signed in but not verified.")
                     setNotifyModalOpen(true)
+                } else {
+                    // toast.info("User account verified.")
+                    setNotifyModalOpen(false)
                 }
                 setSignin(false)
                 setSignUp(false)
                 // const uid = user.uid
-                login = true
+                // login = true
                 // console.log("user id is : " + uid)
             } else {
-                setUserLoggedIn(false)
+                // User is signed out.
+                toast.info("You are not logged in.")
             }
         })
 
@@ -425,7 +434,7 @@ export default function Navbar() {
             setIsLoading(false)
             unsubscribe()
         }
-    }, [authReady, isLoadingUserDoc])
+    }, [currentUser])
 
     useEffect(() => {
         if (user) {

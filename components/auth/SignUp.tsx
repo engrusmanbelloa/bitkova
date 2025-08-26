@@ -268,6 +268,7 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             // if not exists → create user doc
             await createUserIfNotExists(user)
             setSignUpStatus("success")
+            await user.reload()
             toast.success(`${user.email} Account created successfully`)
             setTimeout(() => {
                 handleClose()
