@@ -11,6 +11,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
+    signOut,
 } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase/firebaseConfig"
@@ -268,7 +269,9 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             // if not exists → create user doc
             await createUserIfNotExists(user)
             setSignUpStatus("success")
-            toast.success(`${user.email} Account created successfully`)
+            // await user.reload()
+            // await signOut(auth)
+            toast.success(`${user.email} Account created kindly login`)
             setTimeout(() => {
                 handleClose()
             }, 1000)
