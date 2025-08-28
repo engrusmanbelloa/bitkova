@@ -242,19 +242,8 @@ export default function SignIn({
                 toast.error("Login failed, make sure you signed up first")
                 await auth.signOut()
                 // user.delete() // Delete the user created by Google Sign-In
-                throw new Error(errorData.message || "Account verification failed")
+                throw new Error(errorData.message || "Login failed")
             }
-
-            // If account exists, proceed
-            const idToken = await user.getIdToken()
-
-            // Send token to backend if you’re managing sessions
-            // await fetch("/api/auth/session", {
-            //   method: "POST",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify({ idToken }),
-            //   credentials: "include",
-            // })
 
             setSignInStatus("success")
             await user.reload()

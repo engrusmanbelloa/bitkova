@@ -253,7 +253,7 @@ export default function Navbar() {
         } else {
             signOut(auth)
                 .then(() => {
-                    // login = false
+                    setCurrentUser(null)
                 })
                 .catch((error) => {
                     toast.error(error.message)
@@ -261,13 +261,18 @@ export default function Navbar() {
         }
     }
 
-    const handleSignInClose = () => {
+    const handleSignInClose = async () => {
+        if (firebaseUser) {
+            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
+            toast.success("Welcome back " + (firebaseUser.displayName || firebaseUser.email))
+        }
         setTimeout(() => {
             setSignin(false)
+            setCurrentUser(auth.currentUser)
         }, 1000)
     }
     // SingUp Modal transition, open and close functions
-    const handleSignUpOpen = () => {
+    const handleSignUpOpen = async () => {
         if (!user) {
             setSignin(false)
             setSignUp(true)
@@ -277,7 +282,10 @@ export default function Navbar() {
         }
     }
 
-    const handleSignUpClose = () => {
+    const handleSignUpClose = async () => {
+        if (firebaseUser) {
+            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
+        }
         setTimeout(() => {
             setSignUp(false)
         }, 2000)
@@ -405,7 +413,6 @@ export default function Navbar() {
             // console.log("Auth state changed, user:", useEffectUser)
             if (useEffectUser !== null) {
                 await useEffectUser.reload()
-
                 if (!useEffectUser.emailVerified) {
                     // console.log(
                     //     "user verification is : " +
@@ -426,7 +433,7 @@ export default function Navbar() {
                 // console.log("user id is : " + uid)
             } else {
                 // User is signed out.
-                toast.info("You are not logged in.")
+                // toast.info("You are not logged in.")
             }
         })
 
