@@ -7,6 +7,7 @@ import { mobile, ipad } from "@/responsive"
 import Testimonials from "@/components/nav/Testimonials"
 import Newsletter from "@/components/home/Newsletter"
 import Button from "@/components/Button"
+import Slider from "@/components/course/Slider"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -22,13 +23,16 @@ const Container = styled.section`
     `,
     )}
 `
+//     border-bottom: 1px solid ${(props) => props.theme.mobile.offWhite};
+// border-radius: 20px;
 const Wrapper = styled.section`
     border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
     border-bottom: 1px solid ${(props) => props.theme.mobile.offWhite};
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 310px;
+    height: 605px;
     margin: 0px;
     padding: 0px;
     ${ipad(
@@ -61,6 +65,9 @@ const CoursesContainer = styled.section`
 const ImageContainer = styled.div`
     flex: 1;
     margin: 0 auto;
+    flex-direction: column;
+    width: 100%;
+    height: 600px;
     padding: 0;
     ${ipad(
         (props: any) => `
@@ -70,10 +77,11 @@ const ImageContainer = styled.div`
 `
 const Image = styled.img`
     width: 100%;
-    height: 300px;
+    height: 600px;
     animation: pulse;
     animation-duration: 2s;
     margin: 0 auto;
+    border-radius: 20px;
     ${ipad(
         (props: any) => `
         width: 100%;
@@ -89,55 +97,41 @@ const InfoContainer = styled.div`
     animation-duration: 2s;
     ${ipad({ textAlign: "justify" })}
 `
-const Title = styled.h1`
+const Title = styled.h2`
+    font-size: 32px;
+    font-weight: 500;
     margin: 0;
 `
 const Desc = styled.p`
     margin: 15px auto;
+    font-weight: 400;
 `
 const TestimonialsTitle = styled.h2`
     margin: 50px auto 0;
     color: ${(props) => props.theme.main};
 `
-const SetUpdate = styled.div`
-    font-size: 18px;
-    margin: 10px auto;
-    font-weight: 400;
-    color: #fff;
-    width: 10%;
-    padding: 10px;
-    border-radius: 5px;
-    border: 0.5px solid;
-    box-shadow: 5px 5px #cddeff;
-    text-align: center;
-    background: rgba(28, 56, 121, 1);
-    ${ipad({ width: "80%" })}
-    ${mobile({})}
-`
-
 export default function Courses() {
     const [skip, setSkip] = useState(0)
     const limit = 8
 
     return (
         <Container>
+            <InfoContainer>
+                <Title>
+                    Welcome to <span style={{ color: "#356DF1" }}>Bitkova Academy</span>
+                </Title>
+                <Desc>
+                    At Bitkova, our primary aim is to equip you with core digital skills needed to
+                    navigate through the job market and advance in your career.
+                </Desc>
+                {/* <Link href="#courses" passHref legacyBehavior>
+                    <Button $main={true} title="View courses" />
+                </Link> */}
+            </InfoContainer>
             <Wrapper>
-                <InfoContainer>
-                    <Title>Courses</Title>
-                    <Desc>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra tristique
-                        consectetur adipiscing elit. Viverra tristique laoreet ut elementum cras
-                        cursuslaoreet ut elementum cras consectetur adipiscing elit. Viverra
-                        tristique laoreet ut elementum cras cursus cursus consectetur adipiscing
-                        elit. Viverra tristique laoreet ut elementum cras cursus. Viverra tristique
-                        laoreet ut elementum cras cursus Morbi at diam.
-                    </Desc>
-                    <Link href="#courses" passHref legacyBehavior>
-                        <Button $main={true} title="View courses" />
-                    </Link>
-                </InfoContainer>
                 <ImageContainer>
-                    <Image src="/chd.jpg" alt="courses image" />
+                    {/* <Image src="/chd.jpg" alt="courses image" /> */}
+                    <Slider />
                 </ImageContainer>
             </Wrapper>
             <CoursesContainer id="courses">

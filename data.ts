@@ -593,4 +593,18 @@ export const data_package = {
     reviews: dummy_reviews,
 }
 
+export const sliderItems = [
+    {
+        id: 1,
+        img: "/slider/1.jpg",
+    },
+    {
+        id: 2,
+        img: "/slider/2.jpg",
+    },
+    {
+        id: 3,
+        img: "/slider/3.png",
+    },
+]
 // # Show the resulting JSON to be uploaded via the uploadNewCourse helper

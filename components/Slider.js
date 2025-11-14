@@ -3,8 +3,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos"
 import { useState } from "react"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"
-import { sliderItems } from "../data"
-import { mobile, ipad } from "../responsive"
+import { sliderItems } from "@/data"
+import { mobile, ipad } from "@/responsive"
 import { AnimationOnScroll } from "react-animation-on-scroll"
 
 const Container = styled.section`

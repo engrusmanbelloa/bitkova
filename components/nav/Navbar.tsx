@@ -44,7 +44,7 @@ const Container = styled.section`
     top: 0;
     box-shadow: 0px 4px 4px 0px #00000033;
     border-radius: 5px;
-    z-index: 1;
+    z-index: 99;
     background-color: ${(props) => props.theme.palette.common.white};
     animation: pulse;
     animation-duration: 2s;
