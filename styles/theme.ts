@@ -115,7 +115,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   h2 {
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 500;
     line-height: 30px;
   }
   h4 {
@@ -125,7 +125,7 @@ export const GlobalStyle = createGlobalStyle`
   }
   p {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 300;
     line-height: 25px;
   }
   @media (max-width: 768px) {
@@ -136,6 +136,7 @@ export const GlobalStyle = createGlobalStyle`
     h2 {
       font-size: 20px;
       line-height: 17px;
+      font-weight: 500;
     }
     p {
       font-size: 14px;

@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { Pagination, Navigation, EffectFade, Autoplay } from "swiper/modules"
+import { Pagination, Navigation, Autoplay } from "swiper/modules"
 import styled from "styled-components"
 import { sliderItems } from "@/data"
 import { mobile, ipad } from "@/responsive"
@@ -19,6 +19,11 @@ const Wrapper = styled.div`
         width: 100%;
         height: 100%;
     }
+    ${ipad(
+        (props: any) => `
+        height: 350px;
+    `,
+    )}
 `
 const Slide = styled.div`
     display: flex;
@@ -60,7 +65,6 @@ const SlideContent = styled.div`
 `
 const Title = styled.h2`
     font-size: 36px;
-    font-weight: 500;
     margin-bottom: 10px;
     ${ipad(
         (props: any) => `
@@ -83,12 +87,7 @@ interface SliderItem {
     id: number
     img: string
 }
-// spaceBetween={30}
-//         effect={'fade'}
-//         navigation={true}
-//         pagination={{
-//           clickable: true,
-//         }}
+
 export default function Slider() {
     return (
         <Wrapper>

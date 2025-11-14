@@ -110,7 +110,7 @@ const Time = styled.p`
     align-items: center;
     margin: 0 5px 0 0;
     padding: 0;
-    ${ipad({ margin: "0 15px 0 0" })};
+    ${ipad({ margin: "0 0px 0 0" })};
     ${mobile({})};
 `
 const Price = styled.p`
@@ -143,6 +143,22 @@ const Box = styled.div`
         `,
     )}
 `
+const BtnBox = styled.div`
+    margin: 5px auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    ${ipad(
+        (props: any) => `
+            overflow: hidden;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+        `,
+    )}
+`
 const PreviewContainer = styled.div`
     flex: 1;
     display: flex;
@@ -164,8 +180,6 @@ const PreviewBtn = styled.button<{ $priceBtn?: string }>`
     font-size: ${(props) => (props.$priceBtn ? "16px" : "25px")};
     color: ${(props) => props.theme.palette.common.white};
     background-color: ${(props) => props.theme.palette.primary.main};
-    background-color: ${(props) =>
-        props.$priceBtn ? props.theme.palette.primary.main : props.theme.palette.white};
     &::first-letter {
         text-transform: uppercase;
     }
@@ -198,8 +212,6 @@ const WishlistBtn = styled.button<{ $priceBtn?: string }>`
     font-size: 16px;
     color: ${(props) => props.theme.palette.primary.main};
     background-color: ${(props) => props.theme.palette.common.white};
-    background-color: ${(props) =>
-        props.$priceBtn ? props.theme.palette.primary.main : props.theme.palette.white};
     &::first-letter {
         text-transform: uppercase;
     }
@@ -254,7 +266,7 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                                     <Box>
                                         <Time>
                                             <OndemandVideoIcon />
-                                            <span style={{ margin: "10px" }}>
+                                            <span style={{ margin: "3px" }}>
                                                 {course.onDemandVideos > 0
                                                     ? `${course.onDemandVideos} Videos`
                                                     : 0}
@@ -264,7 +276,7 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                                     <Box>
                                         <Time>
                                             <PeopleAltIcon />
-                                            <span style={{ margin: "10px" }}>
+                                            <span style={{ margin: "3px" }}>
                                                 {course.students} Students
                                             </span>
                                         </Time>
@@ -273,7 +285,7 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                                         <CourseRating courseId={course.id} />
                                     </Box>
                                 </DurationContainer>
-                                <Box>
+                                <BtnBox>
                                     <WhishlistContainer>
                                         <FavoriteBorderIcon sx={{ color: "#356DF1" }} />
                                         <WishlistBtn
@@ -293,7 +305,7 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                                             Preview
                                         </PreviewBtn>
                                     </PreviewContainer>
-                                </Box>
+                                </BtnBox>
                             </InfoContainer>
                         </StyledCard>
                     </div>

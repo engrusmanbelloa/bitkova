@@ -8,6 +8,7 @@ import Testimonials from "@/components/nav/Testimonials"
 import Newsletter from "@/components/home/Newsletter"
 import Button from "@/components/Button"
 import Slider from "@/components/course/Slider"
+import ExploreCourses from "@/components/course/ExploreCourses"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -23,8 +24,6 @@ const Container = styled.section`
     `,
     )}
 `
-//     border-bottom: 1px solid ${(props) => props.theme.mobile.offWhite};
-// border-radius: 20px;
 const Wrapper = styled.section`
     border-top: 1px solid ${(props) => props.theme.mobile.offWhite};
     border-bottom: 1px solid ${(props) => props.theme.mobile.offWhite};
@@ -51,6 +50,7 @@ const Wrapper = styled.section`
 const CoursesContainer = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
     margin: auto;
+    margin-top: -20px;
     ${ipad(
         (props: any) => `
         width: ${props.theme.widths.ipadWidth};
@@ -71,7 +71,7 @@ const ImageContainer = styled.div`
     padding: 0;
     ${ipad(
         (props: any) => `
-        margin-top: 20px;
+        height: 350px;
     `,
     )}
 `
@@ -99,12 +99,42 @@ const InfoContainer = styled.div`
 `
 const Title = styled.h2`
     font-size: 32px;
-    font-weight: 500;
     margin: 0;
+    ${ipad(
+        (props: any) => `
+        font-size: 28px;
+        text-align: left;
+        line-height: 1.2;
+    `,
+    )}
 `
 const Desc = styled.p`
     margin: 15px auto;
     font-weight: 400;
+`
+export const HeaderRow = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    margin-top: 10px;
+    margin-bottom: 0px;
+`
+export const CoursesHeader = styled.h3`
+    font-size: 18px;
+    color: ${(props) => props.theme.palette.primary.main};
+    margin: 0;
+`
+export const Action = styled.span`
+    font-size: 16px;
+    font-weight: 600;
+    color: ${(props) => props.theme.palette.common.back};
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.7;
+    }
 `
 const TestimonialsTitle = styled.h2`
     margin: 50px auto 0;
@@ -124,19 +154,21 @@ export default function Courses() {
                     At Bitkova, our primary aim is to equip you with core digital skills needed to
                     navigate through the job market and advance in your career.
                 </Desc>
-                {/* <Link href="#courses" passHref legacyBehavior>
-                    <Button $main={true} title="View courses" />
-                </Link> */}
             </InfoContainer>
             <Wrapper>
                 <ImageContainer>
-                    {/* <Image src="/chd.jpg" alt="courses image" /> */}
                     <Slider />
                 </ImageContainer>
             </Wrapper>
+            <TestimonialsTitle>Find your perfect Course</TestimonialsTitle>
+            <HeaderRow>
+                <CoursesHeader>Recomended Courses</CoursesHeader>
+                <Action>View All</Action>
+            </HeaderRow>
             <CoursesContainer id="courses">
                 <CoursesList title="Featured courses" coursesPg={false} limit={limit} />
             </CoursesContainer>
+            <ExploreCourses />
             <TestimonialsTitle>Hear what they say about us</TestimonialsTitle>
             <Testimonials />
             <Newsletter />

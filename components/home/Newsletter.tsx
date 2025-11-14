@@ -5,13 +5,15 @@ import { mobile, ipad } from "@/responsive"
 
 const Container = styled.div`
     height: 300px;
-    margin-top: 50px;
-    background-color: #cddeff;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    background-color: ${(props) => props.theme.mobile.offWhite};
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    ${ipad({ marginTop: 15, marginBottom: 15 })}
 `
 const Title = styled.h1`
     font-size: 70px;
@@ -48,7 +50,7 @@ const Input = styled.input`
 const Button = styled.button`
     flex: 1;
     border: none;
-    background-color: rgba(28, 56, 121);
+    background-color: ${(props) => props.theme.palette.primary.main};
     color: white;
 `
 
