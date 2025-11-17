@@ -1,16 +1,37 @@
+"use server"
+import "server-only"
+
 import { initializeApp, applicationDefault, getApps, cert } from "firebase-admin/app"
 import { getFirestore } from "firebase-admin/firestore"
 import { getAuth as getAdminAuth } from "firebase-admin/auth"
 
+const privateKey = process.env.PRIVATE_KEY
+    ? process.env.PRIVATE_KEY.replace(/\\n/g, "\n")
+    : undefined
+
+if (!process.env.PROJECT_ID || !process.env.CLIENT_EMAIL || !privateKey) {
+    console.log("❌ Missing Firebase Admin environment variables")
+    throw new Error("❌ Missing Firebase Admin environment variables")
+}
 const adminApp = getApps().length
     ? getApps()[0]
     : initializeApp({
           credential: cert({
               projectId: process.env.PROJECT_ID,
               clientEmail: process.env.CLIENT_EMAIL,
-              privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, "\n"),
+              privateKey,
           }),
       })
+
+// const adminApp = getApps().length
+//     ? getApps()[0]
+//     : initializeApp({
+//           credential: cert({
+//               projectId: process.env.PROJECT_ID,
+//               clientEmail: process.env.CLIENT_EMAIL,
+//               privateKey: process.env.PRIVATE_KEY?.replace(/\\n/g, "\n"),
+//           }),
+//       })
 const adminAuth = getAdminAuth(adminApp)
 const adminDb = getFirestore(adminApp)
 

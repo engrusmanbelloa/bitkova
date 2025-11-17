@@ -23,7 +23,6 @@ const TopContainer = styled.div`
     )}
     ${mobile(
         (props: any) => `
-           
             `,
     )}
 `

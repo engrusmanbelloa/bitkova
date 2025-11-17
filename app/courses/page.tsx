@@ -112,7 +112,7 @@ const Desc = styled.p`
     margin: 15px auto;
     font-weight: 400;
 `
-export const HeaderRow = styled.div`
+const HeadRow = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -121,12 +121,12 @@ export const HeaderRow = styled.div`
     margin-top: 10px;
     margin-bottom: 0px;
 `
-export const CoursesHeader = styled.h3`
+const CoursesHeader = styled.h3`
     font-size: 18px;
     color: ${(props) => props.theme.palette.primary.main};
     margin: 0;
 `
-export const Action = styled.span`
+const Action = styled.span`
     font-size: 16px;
     font-weight: 600;
     color: ${(props) => props.theme.palette.common.back};
@@ -161,10 +161,10 @@ export default function Courses() {
                 </ImageContainer>
             </Wrapper>
             <TestimonialsTitle>Find your perfect Course</TestimonialsTitle>
-            <HeaderRow>
+            <HeadRow>
                 <CoursesHeader>Recomended Courses</CoursesHeader>
                 <Action>View All</Action>
-            </HeaderRow>
+            </HeadRow>
             <CoursesContainer id="courses">
                 <CoursesList title="Featured courses" coursesPg={false} limit={limit} />
             </CoursesContainer>
