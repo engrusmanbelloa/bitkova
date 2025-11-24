@@ -6,10 +6,7 @@ const Wrapper = styled.div`
     margin: 40px 0;
 `
 const Title = styled.h2`
-    font-size: 22px;
-    font-weight: 700;
     margin-bottom: 20px;
-    color: ${(props) => props.theme.palette.common.black};
 `
 const TagsContainer = styled.div`
     display: flex;

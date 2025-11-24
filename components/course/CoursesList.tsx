@@ -231,7 +231,7 @@ interface CoursesListProps {
     coursesPg?: boolean
     onClick?: () => void
 }
-export default function CoursesList({ limit, title, coursesPg, $display }: CoursesListProps) {
+export default function CoursesList({ limit, coursesPg }: CoursesListProps) {
     const router = useRouter()
     const { data: courses, isLoading, error } = useFetchCourses()
     const main = true
@@ -248,7 +248,7 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                 </Box>
             </>
         )
-    if (error) return <p>Failed to load courses</p>
+    if (error) return <Container>Failed to load courses</Container>
     return (
         <Container>
             <Wrapper>
@@ -311,13 +311,6 @@ export default function CoursesList({ limit, title, coursesPg, $display }: Cours
                     </div>
                 ))}
             </Wrapper>
-            <Top $coursesPg={coursesPg}>
-                <Button
-                    onClick={() => router.push("/courses")}
-                    $main={main}
-                    title="Browse all courses"
-                />
-            </Top>
         </Container>
     )
 }

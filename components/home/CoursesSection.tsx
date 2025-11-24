@@ -35,24 +35,6 @@ const ViewAllLink = styled.a`
         text-decoration: underline;
     }
 `
-const CourseGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    ${mobile`
-        grid-auto-flow: column;
-        overflow-x: auto;
-        padding-bottom: 10px;
-        scroll-snap-type: x mandatory;
-        & > * {
-            scroll-snap-align: start;
-        }
-    `}
-`
-const CourseCard = styled.div`
-    // Your card styles from the designs
-    // e.g., border, box-shadow, padding
-`
 const Box = styled.div`
     margin: 5px auto;
     display: flex;
@@ -71,10 +53,7 @@ const Section = ({ title }: SectionProps) => (
             <SectionTitle>{title}</SectionTitle>
             <ViewAllLink>View All</ViewAllLink>
         </SectionHeader>
-        <CoursesList coursesPg={true} />
-        {/* <CourseGrid>
-            {courses?.map((course) => <CourseCard key={course.id} course={course} />)}
-        </CourseGrid> */}
+        <CoursesList />
     </SectionWrapper>
 )
 

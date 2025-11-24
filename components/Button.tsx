@@ -20,7 +20,7 @@ const Btn = styled.button<{ $main?: boolean }>`
     background-color: ${(props) =>
         props.$main ? props.theme.palette.primary.main : props.theme.palette.common.white};
     color: ${(props) =>
-        props.$main ? props.theme.mobile.offWhite : props.theme.palette.primary.main};
+        props.$main ? props.theme.palette.common.white : props.theme.palette.primary.main};
     &:hover {
         animation: pulse;
         animation-duration: 1s;

@@ -221,12 +221,12 @@ export default function Navbar() {
         },
         {
             id: 3,
-            href: "#",
+            href: "/our-hub",
             title: "Our Hub",
         },
         {
             id: 4,
-            href: "/mylearning",
+            href: "/my-learning",
             title: "My Learning",
         },
     ]

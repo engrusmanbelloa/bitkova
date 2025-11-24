@@ -6,6 +6,7 @@ import { mobile, ipad } from "@/responsive"
 // color: ${props => props.theme.main};
 const LogoTxt = styled.h2<{ $main?: string }>`
     position: relative;
+    font-weight: 700;
     &:hover {
         animation: pulse;
         animation-duration: 1s;
@@ -21,4 +22,3 @@ const LogoTxt = styled.h2<{ $main?: string }>`
 export default function Logo(props: { $main?: string }) {
     return <LogoTxt $main={props.$main}>Bitkova</LogoTxt>
 }
-// ${props => props.main ? props.theme.main : props.theme.black}?
