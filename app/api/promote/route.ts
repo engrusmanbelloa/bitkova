@@ -1,6 +1,3 @@
-export const dynamic = "force-dynamic"
-export const runtime = "nodejs"
-
 import { NextRequest, NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
 import { adminApp } from "@/lib/firebase/admin"

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 
 const Container = styled.section`
     height: 450px;
-    width: ${(props) => props.theme.heroWidth};
+    width: ${(props) => props.theme.widths.heroWidth};
     margin: 10px auto 0;
     padding: 0px;
     display: flex;

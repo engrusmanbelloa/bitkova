@@ -1,5 +1,5 @@
 "use client"
-import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from "styled-components"
 import { createTheme } from "@mui/material/styles"
 
 // custom styles types for muiTheme configuration
@@ -38,7 +38,6 @@ declare module "@mui/material/styles" {
         }
     }
 }
-
 export const theme = createTheme({
     cssVariables: true,
     colorSchemes: {
@@ -80,51 +79,11 @@ export const theme = createTheme({
         pagePadding: "5px 15px",
     },
 })
-
-// export const theme = {
-//     palette: {
-//         common: {
-//             black: "#000000B2",
-//             white: "#ffffff",
-//         },
-//         primary: {
-//             main: "#356DF1",
-//         },
-//         action: {
-//             hover: "rgb(53, 109, 241, 0.08)",
-//         },
-//         background: {
-//             default: "#ffffff",
-//         },
-//     },
-//     shape: {
-//         borderRadius: 4,
-//     },
-//     //   typography: {
-//     //     fontFamily: "var(--font-roboto)",
-//     //   },
-//     mobile: {
-//         mobileNavBg: "#EAF3FB",
-//         offWhite: "#ABD0ED",
-//         horizontalrule: "#cddeff",
-//     },
-//     widths: {
-//         dsktopWidth: "1140px",
-//         heroWidth: "1100px",
-//         ipadWidth: "665px",
-//         mobileWidth: "360px",
-//     },
-//     paddings: {
-//         pagePadding: "5px 15px",
-//     },
-// }
-
 export const GlobalStyle = createGlobalStyle`
   body {
     padding: 0px;
     margin: 0px;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-        Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
   
   a {
@@ -178,3 +137,41 @@ export const GlobalStyle = createGlobalStyle`
     }
 }
 `
+
+// export const theme = {
+//     palette: {
+//         common: {
+//             black: "#000000B2",
+//             white: "#ffffff",
+//         },
+//         primary: {
+//             main: "#356DF1",
+//         },
+//         action: {
+//             hover: "rgb(53, 109, 241, 0.08)",
+//         },
+//         background: {
+//             default: "#ffffff",
+//         },
+//     },
+//     shape: {
+//         borderRadius: 4,
+//     },
+//     //   typography: {
+//     //     fontFamily: "var(--font-roboto)",
+//     //   },
+//     mobile: {
+//         mobileNavBg: "#EAF3FB",
+//         offWhite: "#ABD0ED",
+//         horizontalrule: "#cddeff",
+//     },
+//     widths: {
+//         dsktopWidth: "1140px",
+//         heroWidth: "1100px",
+//         ipadWidth: "665px",
+//         mobileWidth: "360px",
+//     },
+//     paddings: {
+//         pagePadding: "5px 15px",
+//     },
+// }

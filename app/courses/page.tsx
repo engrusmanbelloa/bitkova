@@ -129,7 +129,7 @@ const CoursesHeader = styled.h3`
 const Action = styled.span`
     font-size: 16px;
     font-weight: 600;
-    color: ${(props) => props.theme.palette.common.back};
+    color: ${(props) => props.theme.palette.common.black};
     cursor: pointer;
 
     &:hover {
@@ -138,7 +138,7 @@ const Action = styled.span`
 `
 const TestimonialsTitle = styled.h2`
     margin: 50px auto 0;
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.palette.primary.main};
 `
 export default function Courses() {
     const [skip, setSkip] = useState(0)

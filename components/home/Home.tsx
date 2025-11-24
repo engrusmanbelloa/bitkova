@@ -45,11 +45,11 @@ const Intro = styled.section`
 `
 const Title = styled.h2`
     margin: 0;
-    color: ${(props) => props.theme.main};
+    color: ${(props) => props.theme.palette.primary.main};
 `
 const Description = styled.p`
     margin: 10px auto 0;
-    color: ${(props) => props.theme.black};
+    color: ${(props) => props.theme.palette.common.black};
 `
 const Services = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};

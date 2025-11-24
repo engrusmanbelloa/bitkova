@@ -9,7 +9,7 @@ const Title = styled.h2`
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 20px;
-    color: ${(props) => props.theme.palette.common.back};
+    color: ${(props) => props.theme.palette.common.black};
 `
 const TagsContainer = styled.div`
     display: flex;
@@ -22,7 +22,7 @@ const Tag = styled.div`
     border: 1px solid ${(props) => props.theme.mobile.horizontalrule};
     border-radius: 8px;
     font-size: 18px;
-    color: ${(props) => props.theme.palette.common.back};
+    color: ${(props) => props.theme.palette.common.black};
     font-weight: 400;
     cursor: pointer;
     transition: 0.2s ease;
