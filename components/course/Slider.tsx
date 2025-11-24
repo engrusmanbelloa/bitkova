@@ -96,7 +96,7 @@ export default function Slider() {
                 spaceBetween={30}
                 loop={true}
                 pagination={{ clickable: true }}
-                navigation={true}
+                // navigation={true}
                 autoplay={{
                     delay: 3000,
                     disableOnInteraction: false,

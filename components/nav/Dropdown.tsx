@@ -100,12 +100,12 @@ export default function DropdownMenu({
         },
         {
             id: 3,
-            href: "#",
+            href: "/our-hub",
             title: "Our Hub",
         },
         {
             id: 4,
-            href: "#",
+            href: "/my-learning",
             title: "My Learning",
         },
     ]
