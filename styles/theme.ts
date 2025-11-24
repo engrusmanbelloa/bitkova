@@ -1,17 +1,6 @@
 "use client"
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
 import { createTheme } from "@mui/material/styles"
-// export const theme = {
-//   main: "#356DF1",
-//   black: "#000000B2",
-//   white: "#ffffff",
-//   offWhite: "#ABD0ED",
-//   navHover: "rgb(53, 109, 241, 0.08)",
-//   mobileNavBg: "#EAF3FB",
-//   dsktopWidth: "1140px",
-//   heroWidth: "1100px",
-//   pagePadding: "5px 15px",
-// };
 
 // custom styles types for muiTheme configuration
 declare module "@mui/material/styles" {
@@ -92,6 +81,44 @@ export const theme = createTheme({
     },
 })
 
+// export const theme = {
+//     palette: {
+//         common: {
+//             black: "#000000B2",
+//             white: "#ffffff",
+//         },
+//         primary: {
+//             main: "#356DF1",
+//         },
+//         action: {
+//             hover: "rgb(53, 109, 241, 0.08)",
+//         },
+//         background: {
+//             default: "#ffffff",
+//         },
+//     },
+//     shape: {
+//         borderRadius: 4,
+//     },
+//     //   typography: {
+//     //     fontFamily: "var(--font-roboto)",
+//     //   },
+//     mobile: {
+//         mobileNavBg: "#EAF3FB",
+//         offWhite: "#ABD0ED",
+//         horizontalrule: "#cddeff",
+//     },
+//     widths: {
+//         dsktopWidth: "1140px",
+//         heroWidth: "1100px",
+//         ipadWidth: "665px",
+//         mobileWidth: "360px",
+//     },
+//     paddings: {
+//         pagePadding: "5px 15px",
+//     },
+// }
+
 export const GlobalStyle = createGlobalStyle`
   body {
     padding: 0px;
@@ -151,5 +178,3 @@ export const GlobalStyle = createGlobalStyle`
     }
 }
 `
-
-// export default theme;

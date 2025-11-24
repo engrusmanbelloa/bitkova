@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState, Suspense } from "react"
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components"
+// import { ThemeProvider, createTheme, useTheme, useColorScheme } from "@mui/material/styles"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"

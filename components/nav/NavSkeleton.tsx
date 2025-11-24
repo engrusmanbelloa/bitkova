@@ -1,4 +1,5 @@
-import { Box, Skeleton, Stack } from "@mui/material"
+import { Box, Skeleton } from "@mui/material"
+import Stack from "@mui/material/Stack"
 
 export default function NavSkeleton() {
     return (
