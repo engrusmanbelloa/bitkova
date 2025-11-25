@@ -8,7 +8,6 @@ export async function POST(request: Request) {
     if (!email || !role) {
         return NextResponse.json({ error: "Missing uid" }, { status: 400 })
     }
-
     try {
         const allowedAdmins = ["usmanbelloa@gmail.com"]
 

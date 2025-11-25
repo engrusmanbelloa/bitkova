@@ -28,17 +28,6 @@ const fetchCertificateStatus = async ({
     const certificateId = certSnap.docs[0]?.id // Get the first result's ID, if it exists
     const issuedAt = certSnap.docs[0]?.data()?.issuedAt // Get issuedAt if available
 
-    //  const userCertRef = doc(db, "users", userId, "certificates", `${userId}_${courseId}`)
-    //  const userCertSnap = await getDoc(userCertRef)
-    //  const certificateExists = userCertSnap.exists()
-
-    // Fetch completed videos from enrolledCourses
-    //  const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-    //  const courseSnap = await getDoc(courseRef)
-    //  const completedVideos: string[] = courseSnap.exists()
-    //      ? courseSnap.data()?.completedVideos || []
-    //      : []
-
     //  return { certificateExists, completedVideos }
     const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
     const courseSnap = await getDoc(courseRef)
@@ -48,14 +37,6 @@ const fetchCertificateStatus = async ({
 
     return { certificateExists, completedVideos, certificateId, issuedAt }
 }
-
-// export const useFetchCertificateStatus = (userId: string | undefined, courseId: string) => {
-//     return useQuery({
-//         queryKey: ["certificateStatus", userId, courseId],
-//         queryFn: () => fetchCertificateStatus({ userId: userId!, courseId }),
-//         enabled: !!userId, // This query will only run if a userId is present
-//     })
-// }
 
 export const useFetchCertificateStatus = (userId: string | undefined, courseId: string) => {
     return useQuery({

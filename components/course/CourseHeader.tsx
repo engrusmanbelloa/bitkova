@@ -17,11 +17,7 @@ import WishlistButton from "@/components/payments/WishlistButton"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import IsLoading from "@/components/IsLoading"
 import { useCourseById } from "@/hooks/courses/useFetchCourseById"
-import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
-import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
-import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
 import { useCourseCompletion } from "@/hooks/courses/useCourseCompletion"
 import HeadRow from "./HeadRow"
 import { mobile, ipad } from "@/responsive"
@@ -213,14 +209,17 @@ export default function CourseHeader({ courseId }: CourseId) {
     // const [certificateReady, setCertificateReady] = useState(true)
     const { data: course, isLoading, error } = useCourseById(courseId)
 
-    // All course videos array
     const videoList =
-        course?.modules?.flatMap((module) =>
-            module.lessons.map((lesson) => ({
-                title: lesson.title,
-                url: lesson.videoUrl,
-            })),
-        ) || []
+        course?.modules
+            ?.sort((a, b) => a.position - b.position) // Sort modules by position
+            .flatMap((module) =>
+                [...module.lessons]
+                    .sort((a, b) => a.position - b.position) // Sort lessons by position
+                    .map((lesson) => ({
+                        title: lesson.title,
+                        url: lesson.videoUrl,
+                    })),
+            ) || []
 
     const previewVideoUrl = course && extractPreviewVideo(course.modules) // Course preview url
 
@@ -268,7 +267,8 @@ export default function CourseHeader({ courseId }: CourseId) {
     }, [course, firebaseUser, courseId])
 
     if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
-    if (error || !course) return <p>Something went wrong or course not found.</p>
+    if (error || !course)
+        return <HeaderContainer>Something went wrong or course not found.</HeaderContainer>
 
     return (
         <>

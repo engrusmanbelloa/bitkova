@@ -1,5 +1,4 @@
 "use client"
-import React from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import Button from "@/components/Button"
@@ -34,14 +33,26 @@ const Left = styled.div`
     padding: 0;
     ${mobile({})}
 `
+const Title = styled.h2`
+    font-weight: 500;
+    margin-top: 50px;
+    margin-bottom: 5px;
+    ${ipad(
+        (props: any) => `
+        text-align: left;
+        line-height: 1.2;
+        margin-top: 20px;
+    `,
+    )}
+`
 const HeroHeader = styled.h1`
-    width: 640px;
+    width: 600px;
     height: 120px;
-    margin: 50px 0 20px;
+    margin: 0px 0 20px;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ width: "350px", height: "86px", margin: "30px 0 10px" })};
-    ${mobile({ margin: "15px 0 10px" })}
+    ${ipad({ width: "350px", height: "86px", margin: "10px 0" })};
+    ${mobile({})}
 `
 const HeroText = styled.p`
     margin: 0 0 20px;
@@ -68,45 +79,110 @@ const HeroImg = styled(Image)`
     ${mobile({ width: "300px", height: 340, margin: "0 0 0 20px" })}
 `
 const GreenSquare = styled.div`
-    width: 145px;
-    height: 145px;
+    width: 110px;
+    height: 110px;
     background: #00d085;
     position: relative;
     bottom: 250px;
     left: 315px;
     border-radius: 25px;
-    opacity: 0.7;
+    opacity: 0.3;
     animation: pulse;
     animation-duration: 2s;
+    z-index: -1;
     ${ipad({
-        width: "85px",
-        height: "85px",
+        width: "65px",
+        height: "65px",
         left: 230,
         bottom: 150,
         borderRadius: 15,
         opacity: 0.3,
     })};
-    ${mobile({ width: 110, height: 110, left: 250, bottom: 200 })}
+    ${mobile({ left: 250, bottom: 200 })}
+`
+const TopGreenSquare = styled.div`
+    width: 110px;
+    height: 110px;
+    background: #00d085;
+    position: absolute;
+    opacity: 0.3;
+    top: 170px;
+    right: 600px;
+    border-radius: 25px;
+    animation: pulse;
+    animation-duration: 2s;
+    z-index: -1;
+    ${ipad({
+        width: "65px",
+        height: "65px",
+        borderRadius: 15,
+        top: "100px",
+        right: "135px",
+    })};
+    ${mobile({ left: 200, top: 420 })}
 `
 const BlueSquare = styled.div`
     width: 70px;
     height: 70px;
     background: #356cf4;
     position: relative;
+    opacity: 0.3;
     bottom: 400px;
     right: 0px;
     border-radius: 12px;
     animation: pulse;
     animation-duration: 2s;
     ${ipad({
-        width: "45px",
-        height: "45px",
+        width: "35px",
+        height: "35px",
         left: 50,
         bottom: 250,
         borderRadius: 7,
         opacity: 0.3,
     })};
-    ${mobile({ width: 55, height: 55, left: 0, bottom: 300 })}
+    ${mobile({ bottom: 300 })}
+`
+const RightBlueSquare = styled.div`
+    width: 70px;
+    height: 70px;
+    background: #356cf4;
+    position: relative;
+    opacity: 0.3;
+    bottom: 500px;
+    left: 360px;
+    border-radius: 12px;
+    animation: pulse;
+    animation-duration: 2s;
+    ${ipad({
+        width: "35px",
+        height: "35px",
+        left: 260,
+        bottom: 280,
+        borderRadius: 7,
+        opacity: 0.3,
+    })};
+    ${mobile({ left: 270, bottom: 330 })}
+`
+const TopBlueSquare = styled.div`
+    width: 70px;
+    height: 70px;
+    background: #356cf4;
+    position: relative;
+    opacity: 0.3;
+    bottom: 680px;
+    left: 460px;
+    border-radius: 12px;
+    animation: pulse;
+    animation-duration: 2s;
+    ${ipad({
+        width: "35px",
+        height: "35px",
+        left: 280,
+        bottom: 380,
+        borderRadius: 7,
+        opacity: 0.3,
+    })};
+    ${mobile({ left: 300, bottom: 430 })}
 `
 export default function HomeHero() {
     const router = useRouter()
@@ -114,13 +190,16 @@ export default function HomeHero() {
     return (
         <Container>
             <Left>
+                <Title>
+                    Welcome to <span style={{ color: "#356DF1" }}>Bitkova Academy</span>
+                </Title>
                 <HeroHeader>
                     Unlock the future: <br /> Master a{" "}
                     <span style={{ color: "#356DF1" }}>digital skill</span>
                 </HeroHeader>
                 <HeroText>
                     Build the tech skills you need for your dream job. We offer affordable courses
-                    for everyone, from traders to developers and designers.
+                    for everyone, from beginners to developers, designers and entrepreneurs.
                 </HeroText>
                 <Button
                     $main={main}
@@ -137,7 +216,10 @@ export default function HomeHero() {
                     priority={true}
                 />
                 <BlueSquare />
+                <TopGreenSquare />
                 <GreenSquare />
+                <RightBlueSquare />
+                <TopBlueSquare />
             </Right>
         </Container>
     )

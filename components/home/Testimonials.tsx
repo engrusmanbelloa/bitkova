@@ -45,20 +45,6 @@ const Wrapper = styled.div`
     ${ipad({ width: 327 })};
     ${mobile({ width: 360 })};
 `
-const Button = styled.button`
-    flex: 1;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    height: 30px;
-    width: 100%;
-    font-size: 25px;
-    font-weight: 600;
-    margin: 0 10px 0 0;
-    &:hover {
-        background-color: #cddeff;
-    }
-`
 const CardBox = styled.div`
     margin: 0px;
     padding: 0px;
