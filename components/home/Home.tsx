@@ -10,7 +10,7 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
 import CoursesList from "@/components/course/CoursesList"
-import Testimonials from "@/components/nav/Testimonials"
+import Testimonials from "@/components/home/Testimonials"
 import StatsSection from "@/components/home/StatsSection"
 import CarrierCard from "@/components/home/CarrierCard"
 import CoursesSection from "@/components/home/CoursesSection"
@@ -40,12 +40,13 @@ const Intro = styled.section`
     text-align: center;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ marginTop: 40 })};
+    ${ipad({})};
     ${mobile({ width: "360px", padding: 0 })};
 `
 const Title = styled.h2`
     margin: 0;
     color: ${(props) => props.theme.palette.primary.main};
+    color: ${(props) => props.theme.palette.common.black};
 `
 const Description = styled.p`
     margin: 10px auto 0;
@@ -125,8 +126,8 @@ const Recomendations = styled.section`
     text-align: center;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ width: 665, height: 370, marginTop: 120 })};
-    ${mobile({ width: 360, height: 250, marginTop: 150 })};
+    ${ipad({ width: 665, height: 370, marginTop: 50 })};
+    ${mobile({ width: 360, height: 250 })};
 `
 const ShortClip = styled(Image)`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -178,10 +179,6 @@ export default function HomeComponent() {
         },
     ]
     const limit = 3
-
-    // if (isLoading) {
-    //   return <IsLoading />
-    // }
 
     return (
         <>
