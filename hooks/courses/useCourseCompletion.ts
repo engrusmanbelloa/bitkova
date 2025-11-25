@@ -3,16 +3,16 @@ import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
 import { useQueryClient } from "@tanstack/react-query"
-import { useFetchCertificateStatus } from "./useFetchCertificate" // Import the new hook
+import { useFetchCertificateStatus } from "./useFetchCertificate"
 import { EnrolledCourse } from "@/userType"
 
-interface UseCourseCompletionProps {
-    courseId: string
-    firebaseUser: any
-    course: any
-    videoList: { title: string; url: string }[]
-    selectedTitle: string
-}
+// interface UseCourseCompletionProps {
+//     courseId: string
+//     firebaseUser: any
+//     course: any
+//     videoList: { title: string; url: string }[]
+//     selectedTitle: string
+// }
 
 // export const useCourseCompletion = ({
 //     courseId,
