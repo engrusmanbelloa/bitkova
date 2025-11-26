@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { onAuthStateChanged } from "firebase/auth"
-import { toast } from "react-toastify"
+import { toast } from "sonner"
 import { UserRole } from "@/userType"
 
 export default function RoleManager() {
@@ -27,7 +27,7 @@ export default function RoleManager() {
     async function assignRole() {
         if (!targetEmail || !userEmail) {
             // alert("Please enter an email and be logged in")
-            toast.error("Please enter an email and be logged in")
+            toast.success("Please enter an email and be logged in")
             return
         }
 
@@ -52,18 +52,16 @@ export default function RoleManager() {
             // Refresh token to get updated claims
             await auth.currentUser?.getIdToken(true)
             const token = await auth.currentUser?.getIdTokenResult()
-            toast.success(
-                `Role ${role} ${token?.claims} claim assigned to ${targetEmail} successfully`,
-            )
             // console.log("Custom Claims:", token?.claims)
+            toast.success(data.message)
 
-            alert(data.message)
+            // alert(data.message)
             setTargetEmail("") // Clear input on success
         } catch (error) {
             console.log("Error assigning role:", error)
             const errorMessage = error instanceof Error ? error.message : "Failed to assign role"
             alert(`Error: ${errorMessage}`)
-            toast.error(`Failed to assign or remove role. Error: ${errorMessage}`)
+            toast.error(errorMessage)
         } finally {
             setAssigning(false)
         }
@@ -104,7 +102,8 @@ export default function RoleManager() {
             </select>
             <button
                 onClick={assignRole}
-                disabled={assigning}
+                type="submit"
+                disabled={assigning || !targetEmail || !userEmail}
                 style={{ padding: "10px", cursor: assigning ? "not-allowed" : "pointer" }}
             >
                 {assigning ? "⏳ Processing..." : role === "none" ? "Remove Role" : "Assign Role"}

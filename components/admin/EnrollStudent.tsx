@@ -56,7 +56,8 @@ export default function EnrollStudent() {
     const [targetEmail, setTargetEmail] = useState("")
     const [courseId, setCourseId] = useState("")
     const [loading, setLoading] = useState(true)
-    const [isEnrolling, setIsEnrolling] = useState(true)
+    const [isEnrolling, setIsEnrolling] = useState(false)
+    const [enroll, setEnroll] = useState(true)
     const [assignCertificate, setAssignCertificate] = useState(false)
 
     useEffect(() => {
@@ -78,7 +79,7 @@ export default function EnrollStudent() {
             return
         }
 
-        setLoading(true)
+        setIsEnrolling(true)
         try {
             // 1. Get fresh Firebase ID token for the current user
             const idToken = await auth.currentUser?.getIdToken()
@@ -95,7 +96,7 @@ export default function EnrollStudent() {
                 body: JSON.stringify({
                     targetEmail,
                     courseId,
-                    enroll: isEnrolling,
+                    enroll: enroll,
                     assignCertificate,
                     requesterEmail: userEmail,
                 }),
@@ -115,7 +116,7 @@ export default function EnrollStudent() {
             console.error("Error:", error)
             toast.error(error.message || "Failed to perform action.")
         } finally {
-            setLoading(false)
+            setIsEnrolling(false)
         }
     }
 
@@ -149,8 +150,8 @@ export default function EnrollStudent() {
                     <input
                         type="checkbox"
                         id="enrollCheckbox"
-                        checked={isEnrolling}
-                        onChange={(e) => setIsEnrolling(e.target.checked)}
+                        checked={enroll}
+                        onChange={(e) => setEnroll(e.target.checked)}
                     />
                     <label htmlFor="enrollCheckbox">Enroll in Course</label>
                 </CheckboxContainer>
@@ -165,8 +166,15 @@ export default function EnrollStudent() {
                         Assign Certificate (Marks course as completed)
                     </label>
                 </CheckboxContainer>
-                <Button type="submit" disabled={loading || !targetEmail || !courseId}>
-                    {loading ? "Processing..." : "Submit"}
+                <Button>
+                    {isEnrolling ? (
+                        <>
+                            <CircularProgress size={25} color="inherit" />
+                            <span> Processing...</span>
+                        </>
+                    ) : (
+                        "Submit"
+                    )}
                 </Button>
             </Form>
         </Container>
