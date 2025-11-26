@@ -7,15 +7,14 @@ import { ipad, mobile } from "@/responsive"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
-    height: 500px;
     margin: 50px auto 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     color: ${(props) => props.theme.palette.common.black};
-    ${ipad({ width: "100%", height: 290 })};
-    ${mobile({ margin: "20px 0 0 0", width: "360px" })};
+    ${ipad({ width: "100%" })};
+    ${mobile({})};
 `
 const Card = styled.div`
     width: 100%;

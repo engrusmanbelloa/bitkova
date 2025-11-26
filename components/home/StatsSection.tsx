@@ -5,7 +5,6 @@ import styled from "styled-components"
 import { ipad, mobile } from "@/responsive"
 
 const MainContainer = styled.div`
-    height: 120px;
     width: ${(props) => props.theme.widths.heroWidth};
     margin: 50px auto 0;
     padding: 0px;
