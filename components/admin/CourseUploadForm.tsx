@@ -41,19 +41,6 @@ const Button = styled.button<{ disabled?: boolean }>`
         background: ${({ disabled }) => (disabled ? "#ccc" : "#0056b3")};
     }
 `
-// const Button = styled.button`
-//     padding: 0.5rem 1rem;
-//     margin: 0.5rem 0.25rem;
-//     background: #007bff;
-//     color: white;
-//     border: none;
-//     border-radius: 4px;
-//     cursor: pointer;
-
-//     &:hover {
-//         background: #0056b3;
-//     }
-// `
 
 export default function CourseUploadForm() {
     const [uploadError, setUploadError] = useState("")

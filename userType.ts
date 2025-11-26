@@ -1,8 +1,5 @@
 import { CourseType } from "@/types"
-import { featuredCourses } from "@/data"
-const getCourseDetailsById = (courseId: number): CourseType | undefined => {
-    return featuredCourses.find((course) => course._id === courseId)
-}
+
 // Represents user-specific progress for a course
 export interface UserCourseProgress {
     course: CourseType
@@ -10,11 +7,21 @@ export interface UserCourseProgress {
     progress: number // Percentage (0-100)
     status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
 }
+export interface UserRole {
+    role:
+        | "guest"
+        | "student"
+        | "instructor"
+        | "admin"
+        | "blog_admin"
+        | "event_manager"
+        | "business_dev"
+}
 export interface User {
     id: string
     name: string
     email: string
-    role: "guest" | "student" | "instructor" | "admin"
+    role: UserRole["role"]
     username: string
     bio: string
     skill: string
