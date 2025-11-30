@@ -13,6 +13,7 @@ import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/home/Testimonials"
 import StatsSection from "@/components/home/StatsSection"
 import CarrierCard from "@/components/home/CarrierCard"
+// import CoursesSection from "@/components/home/CoursesSection"
 import CoursesSection from "@/components/home/CoursesSection"
 
 const Container = styled.div`
