@@ -13,8 +13,10 @@ import CoursesList from "@/components/course/CoursesList"
 import Testimonials from "@/components/home/Testimonials"
 import StatsSection from "@/components/home/StatsSection"
 import CarrierCard from "@/components/home/CarrierCard"
-// import CoursesSection from "@/components/home/CoursesSection"
-import CoursesSection from "@/components/home/CoursesSection"
+import HotCoursesSection from "@/components/course/sections/HotCourses"
+import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
+import { useCourseFilters } from "@/hooks/courses/useCourseFilters"
+import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -104,6 +106,7 @@ const ServicesIconBox = styled.div`
 `
 const ServicesTitle = styled.h3`
     margin: 10px 0;
+    line-height: 1.4;
     color: ${(props) => props.theme.palette.common.black};
     &::first-letter {
         text-transform: uppercase;
@@ -151,7 +154,42 @@ const PlayCircle = styled(PlayCircleIcon)`
     ${ipad({ bottom: 180 })};
     ${mobile({ bottom: 130 })};
 `
+const SkeletonBox = styled.div`
+    margin: 5px auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 0 10px;
+`
+const HotCourses = () => {
+    const { data: courses, isLoading, isError } = useFetchCourses()
+    const filteredCourses = useCourseFilters(courses)
 
+    if (isLoading) {
+        return (
+            <Container>
+                <SkeletonBox>
+                    {[...Array(3)].map((_, i) => (
+                        <CourseCardSkeleton key={i} />
+                    ))}
+                </SkeletonBox>
+            </Container>
+        )
+    }
+
+    if (isError) {
+        return (
+            <Container>
+                <p>Error loading courses.</p>
+            </Container>
+        )
+    }
+
+    if (!filteredCourses) return null
+
+    return <HotCoursesSection courses={filteredCourses.hotCourses} />
+}
 export default function HomeComponent() {
     const servicesData = [
         {
@@ -179,56 +217,52 @@ export default function HomeComponent() {
             background: "#FFCED7",
         },
     ]
-    const limit = 3
 
     return (
-        <>
-            <Container>
-                <HomeHero />
-                {/* introduction to bitkova section */}
-                <Intro>
-                    <Title>Here At Bitkova Academy,</Title>
-                    <Description>
-                        Our classes are designed to accommodate your current level matched with our
-                        unique learning process.
-                    </Description>
-                </Intro>
-                {/* servces offered by bitkova */}
-                <Services>
-                    {servicesData.map((boxData, index) => (
-                        <ServicesBox key={index} variant="elevation" elevation={0}>
-                            <ServicesInnerBox href={boxData.href}>
-                                <ServicesIconBox
-                                    style={{ background: boxData.background, opacity: 0.8 }}
-                                >
-                                    <boxData.icon
-                                        sx={{ color: boxData.color, fontSize: 40, margin: "25px" }}
-                                    />
-                                </ServicesIconBox>
-                                <ServicesTitle>{boxData.title}</ServicesTitle>
-                                <ServicesDesc>{boxData.desc}</ServicesDesc>
-                            </ServicesInnerBox>
-                        </ServicesBox>
-                    ))}
-                </Services>
-                <Intro>
-                    <Title>Find your perfect Course</Title>
-                    <Description>
-                        Learn by doing, our courses are perfect for everyone from beginners to
-                        experienced learners.
-                    </Description>
-                </Intro>
-                <CoursesList coursesPg={true} title="Featured courses" limit={limit} />
-                {/* <CoursesSection /> */}
-                <Recomendations>
-                    <Title>Hear what they say about us</Title>
-                    <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
-                    <PlayCircle />
-                </Recomendations>
-                <Testimonials />
-                <StatsSection />
-                <CarrierCard />
-            </Container>
-        </>
+        <Container>
+            <HomeHero />
+            {/* introduction to bitkova section */}
+            <Intro>
+                <Title>Here At Bitkova Academy,</Title>
+                <Description>
+                    Our classes are designed to accommodate your current level matched with our
+                    unique learning process.
+                </Description>
+            </Intro>
+            {/* servces offered by bitkova */}
+            <Services>
+                {servicesData.map((boxData, index) => (
+                    <ServicesBox key={index} variant="elevation" elevation={0}>
+                        <ServicesInnerBox href={boxData.href}>
+                            <ServicesIconBox
+                                style={{ background: boxData.background, opacity: 0.8 }}
+                            >
+                                <boxData.icon
+                                    sx={{ color: boxData.color, fontSize: 40, margin: "25px" }}
+                                />
+                            </ServicesIconBox>
+                            <ServicesTitle>{boxData.title}</ServicesTitle>
+                            <ServicesDesc>{boxData.desc}</ServicesDesc>
+                        </ServicesInnerBox>
+                    </ServicesBox>
+                ))}
+            </Services>
+            <Intro>
+                <Title>Find your perfect Course</Title>
+                <Description>
+                    Learn by doing, our courses are perfect for everyone from beginners to
+                    experienced learners.
+                </Description>
+            </Intro>
+            <HotCourses />
+            <Recomendations>
+                <Title>Hear what they say about us</Title>
+                <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
+                <PlayCircle />
+            </Recomendations>
+            <Testimonials />
+            <StatsSection />
+            <CarrierCard />
+        </Container>
     )
 }

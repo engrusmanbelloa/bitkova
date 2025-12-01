@@ -6,12 +6,10 @@ import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
 import Testimonials from "@/components/home/Testimonials"
 import Newsletter from "@/components/home/Newsletter"
-import Button from "@/components/Button"
 import Slider from "@/components/course/Slider"
-import HeadRow from "@/components/course/HeadRow"
 import ExploreCourses from "@/components/course/ExploreCourses"
 import JoinPhysicalClass from "@/components/course/JoinPhysical"
-import CoursesSection from "@/components/home/CoursesSection"
+import CoursesSection from "@/components/course/sections/CoursesSection"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -140,9 +138,7 @@ export default function Courses() {
                 </ImageContainer>
             </Wrapper>
             <TestimonialsTitle>Find your perfect Course</TestimonialsTitle>
-            {/* <HeadRow title="Recomended Courses" /> */}
             <CoursesContainer id="courses">
-                {/* <CoursesList title="Featured courses" coursesPg={false} limit={limit} /> */}
                 <CoursesSection />
             </CoursesContainer>
             <ExploreCourses />
