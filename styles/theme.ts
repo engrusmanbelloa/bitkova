@@ -101,8 +101,13 @@ export const GlobalStyle = createGlobalStyle`
   }
   h2 {
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 30px;
+  }
+  h3 {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 25px;
   }
   h4 {
     font-size: 20px;
@@ -133,6 +138,10 @@ export const GlobalStyle = createGlobalStyle`
   @media (max-width: 600px) {
     h2 {
       font-size: 20px;
+      line-height: 17px;
+    }
+    h3 {
+      font-size: 18px;
       line-height: 17px;
     }
 }

@@ -6,11 +6,10 @@ import Link from "next/link"
 import { mobile, ipad } from "@/responsive"
 import Testimonials from "@/components/home/Testimonials"
 import Newsletter from "@/components/home/Newsletter"
-import Button from "@/components/Button"
 import Slider from "@/components/course/Slider"
-import HeadRow from "@/components/course/HeadRow"
 import ExploreCourses from "@/components/course/ExploreCourses"
 import JoinPhysicalClass from "@/components/course/JoinPhysical"
+import CoursesSection from "@/components/course/sections/CoursesSection"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -115,8 +114,8 @@ const Desc = styled.p`
     font-weight: 400;
 `
 const TestimonialsTitle = styled.h2`
-    margin: 50px auto 0;
-    color: ${(props) => props.theme.palette.primary.main};
+    margin: 50px auto;
+    color: ${(props) => props.theme.palette.common.black};
 `
 export default function Courses() {
     const [skip, setSkip] = useState(0)
@@ -139,9 +138,8 @@ export default function Courses() {
                 </ImageContainer>
             </Wrapper>
             <TestimonialsTitle>Find your perfect Course</TestimonialsTitle>
-            <HeadRow title="Recomended Courses" />
             <CoursesContainer id="courses">
-                <CoursesList title="Featured courses" coursesPg={false} limit={limit} />
+                <CoursesSection />
             </CoursesContainer>
             <ExploreCourses />
             <JoinPhysicalClass />

@@ -62,12 +62,12 @@ const StyledCard = styled(Card)`
     margin: 0px;
     padding: 0;
     width: 350px;
-    height: 510px;
+    height: 515px;
     color: #fff;
     border-radius: 5px;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ margin: "0 auto", width: 325, height: 500 })}
+    ${ipad({ margin: "0 auto", width: 325, height: 510 })}
     ${mobile({ width: 360, margin: 5, height: 480 })}
 `
 const CourseImg = styled.img`
