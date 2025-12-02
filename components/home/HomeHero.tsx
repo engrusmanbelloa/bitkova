@@ -45,7 +45,7 @@ const Title = styled.h2`
     `,
     )}
 `
-const HeroHeader = styled.h1`
+const HomeHeroHeader = styled.h1`
     width: 600px;
     height: 120px;
     margin: 0px 0 20px;
@@ -53,6 +53,24 @@ const HeroHeader = styled.h1`
     animation-duration: 2s;
     ${ipad({ width: "350px", height: "86px", margin: "10px 0" })};
     ${mobile({})}
+`
+const Herocontent = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 100px 0 0;
+    ${ipad({ marginTop: 50 })}
+    ${mobile({ marginTop: 10, marginBottom: 20 })}
+`
+const HeroHeader = styled.h1`
+    width: 600px;
+    height: 60px;
+    margin: 0px 0 0px;
+    animation: pulse;
+    animation-duration: 2s;
+    ${ipad({ width: "350px", height: "40px", margin: "10px 0" })};
+    ${mobile({ height: "50px", margin: "5px 0" })}
 `
 const HeroText = styled.p`
     margin: 0 0 20px;
@@ -62,6 +80,7 @@ const HeroText = styled.p`
     animation: pulse;
     animation-duration: 2s;
     ${ipad({ width: "350px", height: "70px" })}
+    ${mobile({ height: "80px", marginBottom: 10 })}
 `
 const Right = styled.div`
     flex: 1;
@@ -184,28 +203,64 @@ const TopBlueSquare = styled.div`
     })};
     ${mobile({ left: 300, bottom: 430 })}
 `
-export default function HomeHero() {
+interface HomeHeroProps {
+    home?: boolean
+    welcome?: string
+    title?: string
+    heroHeader?: string
+    master?: string
+    headerSpan: string
+    heroText: string
+    button?: {
+        text: string
+        onClick: () => void
+        isMain?: boolean
+    }
+}
+export default function HomeHero({
+    home,
+    welcome,
+    title,
+    heroHeader,
+    master,
+    headerSpan,
+    heroText,
+    button,
+}: HomeHeroProps) {
     const router = useRouter()
     const main = true
     return (
         <Container>
             <Left>
-                <Title>
-                    Welcome to <span style={{ color: "#356DF1" }}>Bitkova Academy</span>
-                </Title>
-                <HeroHeader>
-                    Unlock the future: <br /> Master a{" "}
-                    <span style={{ color: "#356DF1" }}>digital skill</span>
-                </HeroHeader>
-                <HeroText>
-                    Build the tech skills you need for your dream job. We offer affordable courses
-                    for everyone, from beginners to developers, designers and entrepreneurs.
-                </HeroText>
-                <Button
-                    $main={main}
-                    title="Browse courses"
-                    onClick={() => router.push("/courses")}
-                />
+                {home ? (
+                    <>
+                        <Title>
+                            {welcome}
+                            <span style={{ color: "#356DF1" }}>{title}</span>
+                        </Title>
+                        <HomeHeroHeader>
+                            {heroHeader}
+                            <br />
+                            {master} <span style={{ color: "#356DF1" }}>{headerSpan}</span>
+                        </HomeHeroHeader>
+                        <HeroText>{heroText}</HeroText>
+                    </>
+                ) : (
+                    <Herocontent>
+                        <HeroHeader>
+                            {master} <span style={{ color: "#356DF1" }}>{headerSpan}</span>
+                        </HeroHeader>
+                        <HeroText>{heroText}</HeroText>
+                    </Herocontent>
+                )}
+
+                {home && (
+                    <Button
+                        $main={main}
+                        title="Browse courses"
+                        onClick={() => router.push("/courses")}
+                    />
+                )}
             </Left>
             <Right>
                 <HeroImg
