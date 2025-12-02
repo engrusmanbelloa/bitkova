@@ -1,7 +1,4 @@
+import Hub from "@/components/hub/Hub"
 export default async function OurHubPage() {
-    return (
-        <>
-            <div>Physical classes page comming soon</div>
-        </>
-    )
+    return <Hub />
 }

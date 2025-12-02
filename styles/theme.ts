@@ -138,11 +138,11 @@ export const GlobalStyle = createGlobalStyle`
   @media (max-width: 600px) {
     h2 {
       font-size: 20px;
-      line-height: 17px;
+      line-height: 24px;
     }
     h3 {
       font-size: 18px;
-      line-height: 17px;
+      line-height: 20px;
     }
     * {
     box-sizing: border-box;

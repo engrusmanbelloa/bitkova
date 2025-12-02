@@ -228,6 +228,13 @@ const HotCourses = () => {
     return <HotCoursesSection courses={filteredCourses.hotCourses} />
 }
 export default function HomeComponent() {
+    const welcome = "Welcome to"
+    const title = "Bitkova Academy"
+    const heroHeader = "Unlock the future:"
+    const master = "Master a"
+    const headerSpan = "digital skill"
+    const heroText =
+        "Build the tech skills you need for your dream job. We offer affordable courses for everyone, from beginners to developers, designers and entrepreneurs."
     const servicesData = [
         {
             icon: BarChartIcon,
@@ -257,7 +264,15 @@ export default function HomeComponent() {
 
     return (
         <Container>
-            <HomeHero />
+            <HomeHero
+                home={true}
+                welcome={welcome}
+                title={title}
+                heroHeader={heroHeader}
+                master={master}
+                headerSpan={headerSpan}
+                heroText={heroText}
+            />
             {/* introduction to bitkova section */}
             <Intro>
                 <Title>Here At Bitkova Academy,</Title>

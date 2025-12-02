@@ -94,7 +94,7 @@ const ProgressBarContainer = styled.div`
     background: ${(props) => props.theme.palette.action.hover};
     ${mobile(
         (props: any) => `
-        width: 70%;
+        width: 65%;
     `,
     )}
 `
