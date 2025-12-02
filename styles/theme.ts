@@ -73,7 +73,7 @@ export const theme = createTheme({
         dsktopWidth: "1140px",
         heroWidth: "1100px",
         ipadWidth: "665px",
-        mobileWidth: "360px",
+        mobileWidth: "350px",
     },
     paddings: {
         pagePadding: "5px 15px",
@@ -144,6 +144,9 @@ export const GlobalStyle = createGlobalStyle`
       font-size: 18px;
       line-height: 17px;
     }
+    * {
+    box-sizing: border-box;
+   }
 }
 `
 

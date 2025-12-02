@@ -15,11 +15,20 @@ import { ipad, mobile } from "@/responsive"
 import useSessionRefresh from "@/hooks/useSessionRefresh"
 
 const Container = styled.div`
-    width: 1440px;
+    width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto;
     padding: 0;
-    ${ipad({ width: "96%" })}
-    ${mobile({ width: "95%" })}
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            
+        `,
+    )}
 `
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()

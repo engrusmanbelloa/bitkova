@@ -33,6 +33,7 @@ const Container = styled.div`
         (props: any) => `
         width: ${props.theme.widths.mobileWidth};
         padding: 0;
+        margin: 0;
     `,
     )};
 `
@@ -44,7 +45,12 @@ const Intro = styled.section`
     animation: pulse;
     animation-duration: 2s;
     ${ipad({})};
-    ${mobile({ width: "360px", padding: 0 })};
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        padding: 0;
+    `,
+    )}
 `
 const Title = styled.h2`
     margin: 0;
@@ -58,30 +64,40 @@ const Description = styled.p`
 const Services = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};
     height: 315px;
-    margin: 50px auto 0;
+    margin: 50px 0 0;
+    padding: 0px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ width: "665px", height: 650, padding: "5px 0", marginTop: 20 })}
-    ${mobile({
-        width: "360px",
-        padding: 0,
-        flexDirection: "column",
-        flexWrap: "nowrap",
-        height: 800,
-    })}
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        margin-top: 20px;
+        padding: 5px 0;
+        height: 650px;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        flex-direction: column;
+        flex-wrap: nowrap;
+        height: 850px;
+    `,
+    )}
 `
 const ServicesBox = styled(Card)`
     width: 350px;
     height: 315px;
     display: flex;
+    margin: 0 auto;
     flex-direction: column;
     border: 0.93px solid #abd0ed;
     border-radius: 8px;
     ${ipad({ width: 325, height: 305, padding: "5px 0", marginBottom: 10 })};
-    ${mobile({ width: "360px", padding: 0 })}
+    ${mobile({ width: "350px", padding: 0 })}
     &:hover {
         background: ${(props) => props.theme.palette.action.hover};
         animation: pulse;
@@ -130,15 +146,36 @@ const Recomendations = styled.section`
     text-align: center;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ width: 665, height: 370, marginTop: 50 })};
-    ${mobile({ width: 360, height: 250 })};
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        height: 370px;
+        margin-top: 50px;
+    `,
+    )};
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        height: 250px;
+    `,
+    )};
 `
 const ShortClip = styled(Image)`
     width: ${(props) => props.theme.widths.heroWidth};
     height: 460px;
     margin: 30px auto 0;
-    ${ipad({ width: 665, height: 315 })};
-    ${mobile({ width: 360, height: 200 })};
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        height: 315px;
+    `,
+    )};
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        height: 200px;
+    `,
+    )};
 `
 const PlayCircle = styled(PlayCircleIcon)`
     position: relative;
@@ -257,7 +294,7 @@ export default function HomeComponent() {
             <HotCourses />
             <Recomendations>
                 <Title>Hear what they say about us</Title>
-                <ShortClip width={500} height={500} src="/shortclip.png" alt="Short Clip" />
+                <ShortClip width={450} height={450} src="/shortclip.png" alt="Short Clip" />
                 <PlayCircle />
             </Recomendations>
             <Testimonials />

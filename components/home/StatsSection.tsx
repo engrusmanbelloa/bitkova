@@ -12,8 +12,18 @@ const MainContainer = styled.div`
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    ${ipad({ width: 665, marginTop: 20 })};
-    ${mobile({ width: 360, height: 160 })};
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+            margin-top: 20px;
+        `,
+    )}
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+            height: 190px;
+        `,
+    )}
 `
 const Container = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};

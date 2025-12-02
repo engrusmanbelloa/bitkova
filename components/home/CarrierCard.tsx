@@ -13,8 +13,16 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     color: ${(props) => props.theme.palette.common.black};
-    ${ipad({ width: "100%" })};
-    ${mobile({})};
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+    `,
+    )}
 `
 const Card = styled.div`
     width: 100%;

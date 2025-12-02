@@ -15,14 +15,22 @@ const Container = styled.section`
     margin: 50px auto 0px;
     padding: 0px;
     letter-spacing: 1px;
-    ${ipad({ width: "665px", height: 650, marginTop: 20 })};
-    ${mobile({
-        width: "360px",
-        padding: 0,
-        flexDirection: "column",
-        flexWrap: "nowrap",
-        height: 900,
-    })};
+    ${ipad(
+        (props: any) => `
+        width: ${props.theme.widths.ipadWidth};
+        height: 650px;
+        margin-top: 20px;
+    `,
+    )}
+    ${mobile(
+        (props: any) => `
+        width: ${props.theme.widths.mobileWidth};
+        flex-direction: column;
+        flex-wrap: nowrap;
+        height: 900px;
+        padding: 0;
+    `,
+    )}
 `
 const TestimonialContainer = styled.div`
     padding: 0;
