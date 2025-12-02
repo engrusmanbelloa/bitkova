@@ -38,7 +38,7 @@ import NavSkeleton from "./NavSkeleton"
 const Container = styled.section`
     height: 50px;
     width: ${(props) => props.theme.widths.dsktopWidth};
-    margin: 0 auto;
+    margin: 0;
     padding: ${(props) => props.theme.paddings.pagePadding};
     position: sticky;
     top: 0;

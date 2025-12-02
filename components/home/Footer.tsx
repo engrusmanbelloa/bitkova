@@ -31,6 +31,8 @@ const Container = styled.section`
         (props: any) => `
             width: ${props.theme.widths.mobileWidth};
             flex-direction: column;
+            margin: auto;
+            padding: 0;
         `,
     )}
 `
@@ -152,12 +154,12 @@ export default function Footer() {
         },
         {
             icon: Twitter,
-            onClick: () => window.open("https://twitter.com/BitkovaNg"),
+            onClick: () => window.open("https://x.com/BitkovaHub"),
             color: "#55ACEE",
         },
         {
             icon: Telegram,
-            onClick: () => window.open("https://t.me/+RX1G04BIFdUxOTM8"),
+            onClick: () => window.open("https://t.me/BitkovaHub"),
             color: "#1c92d2",
         },
     ]
