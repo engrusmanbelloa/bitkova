@@ -3,6 +3,7 @@ import React from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
+import PhysicalClassesSwiper from "@/components/hub/PhysicalClasses"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -35,6 +36,7 @@ export default function Hub() {
     return (
         <Container>
             <HomeHero master={master} headerSpan={headerSpan} heroText={heroText} />
+            <PhysicalClassesSwiper />
         </Container>
     )
 }
