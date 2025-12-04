@@ -4,11 +4,14 @@ import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
 import PhysicalClassesSwiper from "@/components/hub/PhysicalClasses"
+import TelegramClass from "@/components/hub/TelegramClass"
+import StartupIncubationSwiper from "@/components/hub/StartupIncubation"
+import EventsSwiper from "@/components/hub/EventsSwiper"
+import TeamTutorsSwiper from "./TeamTutorsSwiper"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
-    margin: 0 auto;
-    z-index: 1;
+    margin: 0;
     padding: ${(props) => props.theme.paddings.pagePadding};
     ${ipad(
         (props: any) => `
@@ -37,6 +40,11 @@ export default function Hub() {
         <Container>
             <HomeHero master={master} headerSpan={headerSpan} heroText={heroText} />
             <PhysicalClassesSwiper />
+            <TelegramClass />
+            <StartupIncubationSwiper />
+            <EventsSwiper type="upcoming" />
+            <EventsSwiper type="past" />
+            <TeamTutorsSwiper />
         </Container>
     )
 }
