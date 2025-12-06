@@ -100,7 +100,6 @@ const ServiceDescription = styled.p`
     color: ${(props) => props.theme.palette.common.black};
     margin: 5px 0;
 `
-
 const ReadMoreLink = styled.a`
     color: ${(props) => props.theme.palette.primary.main};
     text-decoration: none;
