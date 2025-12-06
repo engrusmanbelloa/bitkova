@@ -53,15 +53,20 @@ const SwiperContainer = styled(Card)`
     }
 
     .swiper-pagination {
-        right: 20px;
-        left: auto;
-        top: 50%;
+        bottom: 0px;
+        left: 47%;
+        right: auto;
         transform: translateY(-50%);
         width: auto;
+        ${mobile(
+            (props: any) => `
+            left: 45%;
+        `,
+        )}
     }
 
     .swiper-pagination-bullet {
-        display: block;
+        display: inline-block;
         margin: 8px 0;
         background: ${(props) => props.theme.palette.primary.main};
         opacity: 0.3;
@@ -83,6 +88,8 @@ const SwiperContainer = styled(Card)`
 
     .swiper-pagination-bullet-active {
         opacity: 1;
+        width: 18px;
+        border-radius: 40%;
     }
 `
 const SlideContent = styled.div`
@@ -118,7 +125,7 @@ const ClassCard = styled.div`
     ${mobile({ maxWidth: "100%" })}
 `
 const ClassHeader = styled.div`
-    padding: 20px;
+    padding: 15px;
     border-bottom: 1px solid ${({ theme }) => theme.mobile.horizontalrule};
 `
 const ClassName = styled.h3`
@@ -141,7 +148,7 @@ const InfoRow = styled.div`
     }
 `
 const ClassBody = styled(CardContent)`
-    padding: 20px;
+    padding: 15px;
 `
 const SectionLabel = styled.div`
     display: flex;
@@ -326,7 +333,7 @@ export default function PhysicalClassesSwiper() {
             </SectionTitle>
             <SwiperContainer>
                 <Swiper
-                    direction="vertical"
+                    direction="horizontal"
                     slidesPerView={1}
                     spaceBetween={0}
                     mousewheel={true}

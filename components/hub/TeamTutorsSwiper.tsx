@@ -26,7 +26,14 @@ const SectionContainer = styled.div`
         `,
     )}
 `
-
+const SectionTitle = styled.h2`
+    margin: 0 0 10px 0;
+    color: ${(props) => props.theme.palette.common.black};
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    ${mobile({ marginBottom: "20px" })}
+`
 const SwiperContainer = styled.div`
     width: 100%;
     height: 350px;
@@ -45,7 +52,7 @@ const SwiperContainer = styled.div`
     }
 
     .swiper-pagination-bullet {
-        background: #356df1;
+        background: ${(props) => props.theme.palette.primary.main};
         opacity: 0.5;
     }
 
@@ -53,57 +60,35 @@ const SwiperContainer = styled.div`
         opacity: 1;
     }
 `
-
 const TeamCard = styled(Card)`
     width: 100%;
     padding: 40px;
-    background: white;
-    border-radius: 12px;
+    background: ${({ theme }) => theme.palette.common.white};
+    border-radius: 8px;
     text-align: center;
     border: 1px solid ${({ theme }) => theme.mobile.horizontalrule};
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `
-
 const MemberAvatar = styled(Avatar)`
     && {
         width: 120px;
         height: 120px;
         margin: 0 auto 20px;
-        border: 4px solid #eaf3fb;
+        border: 4px solid ${(props) => props.theme.mobile.horizontalrule};
     }
 `
-
-const MemberName = styled(Typography)`
-    && {
-        font-weight: 600;
-        font-size: 20px;
-        color: #000000b2;
-        margin-bottom: 8px;
-    }
-`
-
-const MemberRole = styled(Typography)`
-    && {
-        color: #356df1;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: 4px;
-    }
-`
-
-const MemberTitle = styled(Typography)`
-    && {
-        color: #666;
-        font-size: 13px;
-    }
-`
-const SectionTitle = styled.h2`
-    margin: 0 0 10px 0;
+const MemberName = styled.h2`
     color: ${(props) => props.theme.palette.common.black};
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    ${mobile({ marginBottom: "20px" })}
+    margin-bottom: 4px;
+`
+const MemberRole = styled.p`
+    color: ${(props) => props.theme.palette.primary.main};
+    margin-top: 0;
+    margin-bottom: 4px;
+`
+const MemberTitle = styled.p`
+    color: ${(props) => props.theme.palette.common.black};
+    margin-top: 0;
 `
 
 // Team members data
@@ -202,7 +187,7 @@ const teamMembers = [
     {
         id: 14,
         name: "Salim Abubakar",
-        role: "Assistant Tutor Gombe",
+        role: "Assistant Tutor Jos",
         title: "Web3 Specialist",
         avatar: "/team/salim.jpg",
     },
@@ -223,7 +208,6 @@ const teamMembers = [
 ]
 
 export default function TeamTutorsSwiper() {
-    // const TeamTutorsSwiper: React.FC = () => {
     return (
         <>
             <SectionTitle>
