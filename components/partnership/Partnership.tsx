@@ -28,7 +28,7 @@ const Banner = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
     height: 300px;
     background: ${(props) => props.theme.palette.primary.main};
-    border-radius: 12px;
+    border-radius: 8px;
     margin: 0 auto 30px;
     display: flex;
     flex-direction: column;

@@ -13,7 +13,7 @@ const Container = styled.div`
     margin: 0 auto;
     padding: 32px 24px;
     background: ${(props) => props.theme.mobile.mobileNavBg};
-    border-radius: 12px;
+    border-radius: 8px;
     box-sizing: border-box;
     ${ipad(
         (props: any) => `
@@ -24,6 +24,7 @@ const Container = styled.div`
         (props: any) => `
             width: 100%;
             max-width: ${props.theme.widths.mobileWidth};
+            border-radius: 12px 12px 0 0;
         `,
     )}
 `
