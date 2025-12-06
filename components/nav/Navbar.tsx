@@ -216,7 +216,7 @@ export default function Navbar() {
         },
         {
             id: 2,
-            href: "#",
+            href: "/partnership",
             title: "Be a partner",
         },
         {

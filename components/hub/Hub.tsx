@@ -7,7 +7,7 @@ import PhysicalClassesSwiper from "@/components/hub/PhysicalClasses"
 import TelegramClass from "@/components/hub/TelegramClass"
 import StartupIncubationSwiper from "@/components/hub/StartupIncubation"
 import EventsSwiper from "@/components/hub/EventsSwiper"
-import TeamTutorsSwiper from "./TeamTutorsSwiper"
+import TeamTutorsSwiper from "@/components/hub//TeamTutorsSwiper"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};

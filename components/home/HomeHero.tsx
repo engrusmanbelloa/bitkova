@@ -235,7 +235,7 @@ export default function HomeHero({
                 {home ? (
                     <>
                         <Title>
-                            {welcome}
+                            {welcome}&nbsp;
                             <span style={{ color: "#356DF1" }}>{title}</span>
                         </Title>
                         <HomeHeroHeader>

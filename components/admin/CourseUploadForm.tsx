@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, KeyboardEvent } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -238,7 +238,7 @@ export default function CourseUploadForm() {
         }
     }
 
-    const handleEnterKey = (callback: () => void) => (e: React.KeyboardEvent) => {
+    const handleEnterKey = (callback: () => void) => (e: KeyboardEvent) => {
         if (e.key === "Enter") {
             e.preventDefault()
             callback()

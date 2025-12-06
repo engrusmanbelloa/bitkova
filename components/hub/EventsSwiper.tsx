@@ -42,7 +42,7 @@ const SwiperContainer = styled.div<{ height: string }>`
     }
 
     .swiper-pagination-bullet {
-        background: #356df1;
+        background: ${(props) => props.theme.palette.primary.main};
         opacity: 0.5;
     }
 
