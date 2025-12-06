@@ -2,10 +2,10 @@
 
 const nextConfig = {
     transpilePackages: [
-    '@mui/material',
-    '@mui/system',
-    '@mui/icons-material', // If @mui/icons-material is being used
-  ],
+        '@mui/material',
+        '@mui/system',
+        '@mui/icons-material',
+    ],
     reactStrictMode: true,
 
     compiler: {
@@ -18,6 +18,14 @@ const nextConfig = {
         unoptimized: true,
     },
     
+    // Turbopack configuration (migrated from webpack)
+    turbopack: {
+        resolveAlias: {
+            '@mui/styled-engine': '@mui/styled-engine-sc',
+        },
+    },
+    
+    // Keep webpack config for webpack builds (if you ever use --webpack flag)
     webpack: (config, { isServer }) => {
         if (!isServer) {
             config.resolve.alias = {
@@ -28,6 +36,5 @@ const nextConfig = {
         return config
     },
 }
-// });
 
 module.exports = nextConfig
