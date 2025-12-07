@@ -33,6 +33,7 @@ const LeftSide = styled.div`
 const RightSide = styled.div`
     flex: 1;
     padding: 20px;
+    margin: auto;
 `
 const Title = styled.h2`
     margin-bottom: 30px;
@@ -78,19 +79,6 @@ const ForgotPassword = styled.a`
 const OrLoginWith = styled.p`
     text-align: center;
     margin: 15px auto 7px;
-`
-const Button = styled.button`
-    width: 97%;
-    height: 35px;
-    margin: 5px auto 0 7px;
-    text-align: center;
-    background-color: ${(props) => props.theme.palette.primary.main};
-    color: ${(props) => props.theme.palette.common.white};
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    ${ipad({ marginLeft: 3, width: "99%" })};
-    ${mobile({ width: 260 })};
 `
 const SocialButton = styled.button`
     width: 99%;
@@ -180,44 +168,6 @@ export default function SignIn({
             setIsLoading(false)
         }
     }
-    // const handleSignInWithGoogle = async () => {
-    //     setIsLoading(true)
-    //     try {
-    //         const provider = new GoogleAuthProvider()
-    //         const userCredential = await signInWithPopup(auth, provider)
-    //         const user = userCredential.user
-    //         const idToken = await user.getIdToken()
-    //         // console.log("id token is: ", idToken)
-    //         // await fetch("/api/auth/session", {
-    //         //     method: "POST",
-    //         //     headers: { "Content-Type": "application/json" },
-    //         //     body: JSON.stringify({ idToken }),
-    //         //     credentials: "include",
-    //         // })
-    //         // await res.json() //the res deleted after debug just the await
-    //         // console.log("SESSION SET:", data)
-    //         setSignInStatus("success")
-    //         setTimeout(() => {
-    //             handleClose()
-    //         }, 1000)
-    //         // alert(user.email + " Account created successfully")
-    //         // console.log(user)
-    //     } catch (error: any) {
-    //         const errorCode = error.code
-    //         const errorMessage = error.message
-    //         if (error.code === "auth/account-exists-with-different-credential") {
-    //             // The pending Google credential.
-    //             // let pendingCred = error.credential
-    //             setSignInStatus("Sign In error")
-    //             // console.log("error:", errorMessage, " ", errorCode)
-    //         }
-    //         setTimeout(() => {
-    //             setSignInStatus("initial")
-    //         }, 1000)
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // }
 
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)

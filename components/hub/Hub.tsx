@@ -29,9 +29,6 @@ const Container = styled.div`
 `
 
 export default function Hub() {
-    const welcome = "Welcome to"
-    const title = "Bitkova Academy"
-    const heroHeader = "Bitkova"
     const master = "Bitkova"
     const headerSpan = "Hub"
     const heroText =
