@@ -1,5 +1,4 @@
 "use client"
-import React from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
@@ -32,7 +31,7 @@ export default function Hub() {
     const master = "Bitkova"
     const headerSpan = "Hub"
     const heroText =
-        "Your gateway to cutting-edge tech skills and career growth. Explore our curated courses, expert instructors, and vibrant community designed to empower your journey in the digital world."
+        "Your gateway to tech excellence. Access hands-on training, expert mentorship, startup support, and a thriving community, all designed to accelerate your digital career"
     return (
         <Container>
             <HomeHero master={master} headerSpan={headerSpan} heroText={heroText} />

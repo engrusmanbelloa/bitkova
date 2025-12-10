@@ -14,6 +14,7 @@ declare module "@mui/material/styles" {
             orangeShadow: string
             orangeDark: string
             ash: string
+            lightAsh: string
             warning: string
             error: string
         }
@@ -38,6 +39,7 @@ declare module "@mui/material/styles" {
             orangeShadow?: string
             orangeDark?: string
             ash?: string
+            lightAsh?: string
             warning?: string
             error?: string
         }
@@ -87,6 +89,7 @@ export const theme = createTheme({
         orangeShadow: "rgba(255, 87, 34, 0.2)",
         orangeDark: "#e64a19",
         ash: "#c0cfd6ff",
+        lightAsh: "#F4F4F5",
         warning: "#ff9800",
         error: "#f44336",
     },
