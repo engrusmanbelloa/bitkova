@@ -14,9 +14,11 @@ declare module "@mui/material/styles" {
             orangeShadow: string
             orangeDark: string
             ash: string
+            gray: string
             lightAsh: string
             warning: string
             error: string
+            red: string
         }
         widths: {
             dsktopWidth: string
@@ -39,9 +41,11 @@ declare module "@mui/material/styles" {
             orangeShadow?: string
             orangeDark?: string
             ash?: string
+            gray: string
             lightAsh?: string
             warning?: string
             error?: string
+            red?: string
         }
         widths?: {
             dsktopWidth: string
@@ -84,14 +88,16 @@ export const theme = createTheme({
         mobileNavBg: "#EAF3FB",
         offWhite: "#ABD0ED",
         horizontalrule: "#cddeff",
-        green: "#4caf50",
+        green: "#0cdf13",
         orange: "#ff5722",
         orangeShadow: "rgba(255, 87, 34, 0.2)",
         orangeDark: "#e64a19",
         ash: "#c0cfd6ff",
+        gray: "#94a3b8",
         lightAsh: "#F4F4F5",
         warning: "#ff9800",
         error: "#f44336",
+        red: "#bd0202",
     },
     widths: {
         dsktopWidth: "1140px",

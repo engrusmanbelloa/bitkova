@@ -1,10 +1,12 @@
 "use client"
-import React, { useState } from "react"
+
+import { useState } from "react"
 import styled from "styled-components"
-import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
-import CryptoNews from "@/components/insights/CryptoNews"
-import PriceFeed from "./PriceFeed"
+import NewsFeed from "@/components/insights/NewsFeed"
+import PriceFeed from "@/components/insights/PriceFeed"
+import { NewsCategory } from "@/types/news"
+import { mobile, ipad } from "@/responsive"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -59,36 +61,41 @@ const Tab = styled.button<{ $isActive: boolean }>`
     border-bottom: ${({ $isActive }) => ($isActive ? "2px solid #3b82f6" : "none")};
     cursor: pointer;
     font-size: 20px;
+    ${ipad(
+        (props: any) => `
+       font-size: 16px;
+    `,
+    )};
+    ${mobile(
+        (props: any) => `
+        font-size: 12px;
+    `,
+    )};
 `
 
+type TabOption = "All" | NewsCategory
+
 export default function Insights() {
-    const [activeTab, setActiveTab] = useState<"all" | "crypto" | "blockchain">("all")
+    const [activeTab, setActiveTab] = useState<TabOption>("All")
     const master = "Bitkova"
     const headerSpan = "Insights"
     const heroText = "Stay informed with the latest in blockchain,economics, and smart money"
+
+    const tabs: TabOption[] = ["All", "Crypto", "Blockchain"]
+
     return (
         <Container>
             <HomeHero master={master} headerSpan={headerSpan} heroText={heroText} />
             <TabsWrapper>
-                <Tab $isActive={activeTab === "all"} onClick={() => setActiveTab("all")}>
-                    All
-                </Tab>
-                <Tab $isActive={activeTab === "crypto"} onClick={() => setActiveTab("crypto")}>
-                    Crypto
-                </Tab>
-                <Tab
-                    $isActive={activeTab === "blockchain"}
-                    onClick={() => setActiveTab("blockchain")}
-                >
-                    Blockchain
-                </Tab>
+                {tabs.map((tab) => (
+                    <Tab key={tab} $isActive={activeTab === tab} onClick={() => setActiveTab(tab)}>
+                        {tab}
+                    </Tab>
+                ))}
             </TabsWrapper>
-            {activeTab === "all" && (
-                <>
-                    <PriceFeed />
-                    <CryptoNews />
-                </>
-            )}
+            <PriceFeed />
+            {/* The NewsFeed component handles filtering internally based on the prop */}
+            <NewsFeed filterCategory={activeTab} />
         </Container>
     )
 }
