@@ -7,6 +7,7 @@ import NewsCard from "@/components/insights/NewsCard"
 import ArticleModal from "@/components/insights/ArticleModal"
 import { DUMMY_NEWS, NewsArticle, NewsCategory } from "@/types/news"
 import CircularProgress from "@mui/material/CircularProgress"
+import { useRouter, useSearchParams, usePathname } from "next/navigation"
 
 const FeedContainer = styled.div`
     margin-bottom: 40px;
@@ -21,6 +22,9 @@ interface NewsFeedProps {
 }
 
 export default function NewsFeed({ filterCategory }: NewsFeedProps) {
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const pathname = usePathname()
     const [filteredArticles, setFilteredArticles] = useState<NewsArticle[]>([])
     const [displayedArticles, setDisplayedArticles] = useState<NewsArticle[]>([])
     const [hasMore, setHasMore] = useState(true)
@@ -28,26 +32,39 @@ export default function NewsFeed({ filterCategory }: NewsFeedProps) {
 
     const itemsPerPage = 3
 
-    // 1. Filter the full dataset based on the selected tab
+    // 1. Handle Deep Linking: Check URL for ?id=... on initial load
+    useEffect(() => {
+        const articleId = searchParams.get("id")
+        if (articleId) {
+            // We search the entire DUMMY_NEWS, not just displayedArticles
+            // so it works even if the user hasn't scrolled down yet
+            const article = DUMMY_NEWS.find((a) => a.id === articleId)
+            if (article) {
+                setSelectedArticle(article)
+                document.body.style.overflow = "hidden"
+            }
+        } else {
+            setSelectedArticle(null)
+            document.body.style.overflow = "auto"
+        }
+    }, [searchParams])
+
+    // 2. Filter logic based on Tabs
     useEffect(() => {
         let filtered = DUMMY_NEWS
         if (filterCategory !== "All") {
             filtered = DUMMY_NEWS.filter((article) => {
-                if (Array.isArray(article.category)) {
-                    return article.category.includes(filterCategory)
-                }
-                return article.category === filterCategory
+                const cats = Array.isArray(article.category) ? article.category : [article.category]
+                return cats.includes(filterCategory)
             })
         }
         setFilteredArticles(filtered)
-        // Reset display on tab change
         setDisplayedArticles(filtered.slice(0, itemsPerPage))
         setHasMore(filtered.length > itemsPerPage)
     }, [filterCategory])
 
-    // 2. Infinite Scroll loader function
+    // 3. Infinite Scroll logic
     const fetchMoreData = () => {
-        // Simulate network delay
         setTimeout(() => {
             const currentLength = displayedArticles.length
             const nextSlice = filteredArticles.slice(currentLength, currentLength + itemsPerPage)
@@ -58,24 +75,24 @@ export default function NewsFeed({ filterCategory }: NewsFeedProps) {
             }
 
             setDisplayedArticles((prev) => [...prev, ...nextSlice])
-
             if (currentLength + nextSlice.length >= filteredArticles.length) {
                 setHasMore(false)
             }
         }, 800)
     }
 
+    // 4. Update URL when opening modal
     const handleReadMore = (article: NewsArticle) => {
-        setSelectedArticle(article)
-        // Prevent background scrolling when modal is open
-        document.body.style.overflow = "hidden"
+        // This updates the URL to ?id=123 without reloading the page
+        const params = new URLSearchParams(searchParams)
+        params.set("id", article.id)
+        router.push(`${pathname}?${params.toString()}`, { scroll: false })
     }
 
+    // 5. Update URL when closing modal
     const handleCloseModal = () => {
-        setSelectedArticle(null)
-        document.body.style.overflow = "auto"
+        router.push(pathname, { scroll: false })
     }
-
     return (
         <FeedContainer>
             <InfiniteScroll

@@ -4,11 +4,11 @@ import React, { useState, MouseEvent } from "react"
 import styled from "styled-components"
 import { NewsArticle } from "@/types/news"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
-import { TrendingUp, TrendingDown, ArrowLeft, Bookmark, Share } from "@mui/icons-material"
-import { Card, Badge, Box, CardContent, Button, IconButton, Avatar } from "@mui/material"
+import { Card, Badge, CardContent, IconButton, Avatar } from "@mui/material"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import ShareIcon from "@mui/icons-material/Share"
+import { toast } from "sonner"
 
 const StyledCard = styled(Card)`
     background: ${(props) => props.theme.palette.common.white};
@@ -129,32 +129,36 @@ export default function NewsCard({ article, onReadMore }: NewsCardProps) {
     // Using a placeholder strategy because I don't have the actual images
     // In a real app, ImageHeader would use article.imageUrl
 
+    const toggleBookmark = (e: MouseEvent) => {
+        e.stopPropagation()
+        setBookmarked(!bookmarked)
+        // Logic for Firebase: db.collection('bookmarks').add({ userId, articleId })
+    }
     const handleShare = async (e: MouseEvent) => {
         e.stopPropagation()
+
+        // Construct the "Real" deep link
+        const shareUrl = `${window.location.origin}${window.location.pathname}?id=${article.id}`
+
         const shareData = {
             title: article.title,
-            text: article.summary,
-            url: window.location.href, // In production, this would be the article link
+            text: `Check out this insight: ${article.title}`,
+            url: shareUrl,
         }
 
         if (navigator.share) {
             try {
                 await navigator.share(shareData)
             } catch (err) {
-                console.log("Error sharing", err)
+                console.error("Share failed", err)
             }
         } else {
-            // Fallback: Copy to clipboard
-            navigator.clipboard.writeText(window.location.href)
-            alert("Link copied to clipboard!")
+            // Fallback: Copy the deep link to clipboard
+            await navigator.clipboard.writeText(shareUrl)
+            toast.success("Link copied to clipboard!")
         }
     }
 
-    const toggleBookmark = (e: MouseEvent) => {
-        e.stopPropagation()
-        setBookmarked(!bookmarked)
-        // Logic for Firebase: db.collection('bookmarks').add({ userId, articleId })
-    }
     return (
         <StyledCard elevation={3} sx={{}}>
             {article.imageUrl.includes("placeholder") ? (

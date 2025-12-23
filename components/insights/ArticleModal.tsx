@@ -8,17 +8,16 @@ import { Card, Badge, Box, CardContent, Button, IconButton, Avatar } from "@mui/
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import ShareIcon from "@mui/icons-material/Share"
+import { toast } from "sonner"
 
 const fadeIn = keyframes`
   from { opacity: 0; }
   to { opacity: 1; }
 `
-
 const slideUp = keyframes`
   from { transform: translateY(50px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 `
-
 const Overlay = styled.div`
     position: fixed;
     top: 0;
@@ -35,8 +34,6 @@ const Overlay = styled.div`
     animation: ${fadeIn} 0.3s ease-out;
     backdrop-filter: blur(5px);
 `
-
-// Matches the card style but expanded
 const ModalContainer = styled.div`
     background: white;
     border-radius: 16px;
@@ -62,12 +59,10 @@ const ImageHeader = styled.div`
     background-size: cover;
     background-position: center;
 `
-
 const ModalContent = styled.div`
     padding: 30px;
     text-align: left;
 `
-
 const Tag = styled.span`
     background-color: #e0f2fe;
     color: #0284c7;
@@ -79,15 +74,12 @@ const Tag = styled.span`
     display: inline-block;
     margin-bottom: 15px;
 `
-
 const Title = styled.h2`
     margin: 0 0 15px 0;
     color: #1e293b;
     font-size: 28px;
     line-height: 1.2;
 `
-
-// Styles for the injected HTML content
 const ArticleBody = styled.div`
     color: #334155;
     line-height: 1.7;
@@ -110,9 +102,8 @@ const ArticleBody = styled.div`
         color: #0f172a;
     }
 `
-
 const ReadLessBtn = styled.button`
-    background-color: #ef4444; // Red color from image
+    background-color: #ef4444;
     border: none;
     color: white;
     font-weight: 600;
@@ -142,11 +133,36 @@ export default function ArticleModal({ article, onClose }: ArticleModalProps) {
         e.stopPropagation()
     }
 
-    const handleShare = () => {
+    const toggleBookmark = (e: MouseEvent) => {
+        e.stopPropagation()
+        setBookmarked(!bookmarked)
+        // Logic for Firebase: db.collection('bookmarks').add({ userId, articleId })
+    }
+    const handleShare = async (e: MouseEvent) => {
+        e.stopPropagation()
+
+        // Construct the "Real" deep link
+        const shareUrl = `${window.location.origin}${window.location.pathname}?id=${article.id}`
+
+        const shareData = {
+            title: article.title,
+            text: `Check out this insight: ${article.title}`,
+            url: shareUrl,
+        }
+
         if (navigator.share) {
-            navigator.share({ title: article.title, url: window.location.href })
+            try {
+                await navigator.share(shareData)
+            } catch (err) {
+                console.error("Share failed", err)
+            }
+        } else {
+            // Fallback: Copy the deep link to clipboard
+            await navigator.clipboard.writeText(shareUrl)
+            toast.success("Link copied to clipboard!")
         }
     }
+
     return (
         <Overlay onClick={onClose}>
             <ModalContainer onClick={handleContainerClick}>
@@ -165,7 +181,7 @@ export default function ArticleModal({ article, onClose }: ArticleModalProps) {
                                 <ShareIcon />
                             </IconButton>
                             <IconButton
-                                onClick={() => setBookmarked(!bookmarked)}
+                                onClick={toggleBookmark}
                                 color={bookmarked ? "primary" : "default"}
                             >
                                 {bookmarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}

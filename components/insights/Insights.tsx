@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import styled from "styled-components"
+import { useRouter, useSearchParams } from "next/navigation"
 import HomeHero from "@/components/home/HomeHero"
 import NewsFeed from "@/components/insights/NewsFeed"
 import PriceFeed from "@/components/insights/PriceFeed"
