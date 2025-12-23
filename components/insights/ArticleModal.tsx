@@ -1,5 +1,4 @@
 "use client"
-
 import React, { MouseEvent, useState } from "react"
 import styled, { keyframes } from "styled-components"
 import { NewsArticle } from "@/types/news"

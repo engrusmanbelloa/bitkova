@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useState, MouseEvent } from "react"
 import styled from "styled-components"
 import { NewsArticle } from "@/types/news"

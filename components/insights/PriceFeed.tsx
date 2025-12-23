@@ -96,13 +96,13 @@ export default function PriceFeed() {
             <SubTitle>Live cryptocurrency market data</SubTitle>
 
             <Swiper
-                slidesPerView={4.2}
+                slidesPerView={1.2}
                 spaceBetween={15}
                 freeMode={true}
                 modules={[FreeMode]}
                 breakpoints={{
                     640: { slidesPerView: 2.2 },
-                    960: { slidesPerView: 3.2 },
+                    960: { slidesPerView: 4.2 },
                 }}
                 style={{ padding: "10px 5px" }}
             >
