@@ -30,7 +30,6 @@ import { toast } from "sonner"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
-import { redirect } from "next/navigation"
 import { useQueryClient } from "@tanstack/react-query"
 import NavSkeleton from "./NavSkeleton"
 
@@ -38,7 +37,7 @@ import NavSkeleton from "./NavSkeleton"
 const Container = styled.section`
     height: 50px;
     width: ${(props) => props.theme.widths.dsktopWidth};
-    margin: 0;
+    margin: 0 auto;
     padding: ${(props) => props.theme.paddings.pagePadding};
     position: sticky;
     top: 0;
@@ -92,14 +91,16 @@ const LogoContainer = styled.li`
 const SearchContainer = styled.div`
     display: flex;
     flex: 0.8;
-    outline: solid 0.5px;
+    outline: solid 0.5px ${(props) => props.theme.mobile.offWhite};
     border-radius: 20px;
     height: 35px;
+    padding: 5px;
+    box-sizing: border-box;
     ${ipad({ display: "none" })};
 `
 // middle section of the nav bar
 const Center = styled.ul`
-    flex: 1.6;
+    flex: 1.8;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -144,10 +145,12 @@ const Right = styled.div`
 const MobileNavMiddle = styled.div`
     display: none;
     margin: auto;
-    outline: solid 0.5px;
-    height: 25px;
+    outline: solid 0.5px ${(props) => props.theme.mobile.offWhite};
+    height: 20px;
     border-radius: 20px;
-    ${ipad({ display: "flex" })}
+    padding: 5px;
+    box-sizing: border-box;
+    ${ipad({ display: "flex", justifyContent: "center", alignItems: "center" })}
     ${mobile({ width: 140 })}
 `
 const CartsContainer = styled.div`
@@ -211,8 +214,8 @@ export default function Navbar() {
     const menuList = [
         {
             id: 1,
-            href: "#",
-            title: "Blog",
+            href: "insights",
+            title: "Insights",
         },
         {
             id: 2,

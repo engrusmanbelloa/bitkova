@@ -34,6 +34,7 @@ const LeftSide = styled.div`
 const RightSide = styled.div`
     flex: 1;
     padding: 20px;
+    margin: auto;
 `
 const Title = styled.h2`
     margin-bottom: 0px;

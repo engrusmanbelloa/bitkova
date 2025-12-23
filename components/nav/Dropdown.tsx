@@ -95,16 +95,21 @@ export default function DropdownMenu({
         },
         {
             id: 2,
+            href: "insights",
+            title: "Insights",
+        },
+        {
+            id: 3,
             href: "/partnership",
             title: "Be a partner",
         },
         {
-            id: 3,
+            id: 4,
             href: "/our-hub",
             title: "Our Hub",
         },
         {
-            id: 4,
+            id: 5,
             href: "/my-learning",
             title: "My Learning",
         },

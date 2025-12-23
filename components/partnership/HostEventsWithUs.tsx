@@ -276,7 +276,7 @@ export default function HostEventsWithUs() {
                     <FormField>
                         <StyledTextField
                             {...register("eventIdea")}
-                            placeholder="Tell us about your event idea"
+                            placeholder="Tell us about the parntership. e.g. Strategic partner, Media partenr, Tech or Community partner etc."
                             variant="outlined"
                             multiline
                             rows={4}
