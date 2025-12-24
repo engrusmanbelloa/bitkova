@@ -6,14 +6,26 @@ import { FreeMode } from "swiper/modules"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import TrendingDownIcon from "@mui/icons-material/TrendingDown"
 import { DUMMY_MARKET_DATA, MarketTicker } from "@/types/news"
+import { mobile, ipad } from "@/responsive"
 
 // Import Swiper styles
 import "swiper/css"
 import "swiper/css/free-mode"
 
 const BarContainer = styled.div`
-    margin-top: auto;
-    margin-bottom: 50px;
+    width: ${(props) => props.theme.widths.heroWidth};
+    box-sizing: border-box;
+    margin: 0 auto 20px;
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+        `,
+    )};
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+        `,
+    )};
 `
 const Title = styled.h3`
     text-align: center;

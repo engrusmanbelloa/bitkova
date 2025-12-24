@@ -8,9 +8,22 @@ import ArticleModal from "@/components/insights/ArticleModal"
 import { DUMMY_NEWS, NewsArticle, NewsCategory } from "@/types/news"
 import CircularProgress from "@mui/material/CircularProgress"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
+import { mobile, ipad } from "@/responsive"
 
 const FeedContainer = styled.div`
-    margin-bottom: 40px;
+    width: ${(props) => props.theme.widths.heroWidth};
+    box-sizing: border-box;
+    margin: 0 auto 40px;
+    ${ipad(
+        (props: any) => `
+            width: ${props.theme.widths.ipadWidth};
+        `,
+    )};
+    ${mobile(
+        (props: any) => `
+            width: ${props.theme.widths.mobileWidth};
+        `,
+    )};
 `
 const LoaderContainer = styled.div`
     display: flex;
