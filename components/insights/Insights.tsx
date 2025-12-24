@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import styled from "styled-components"
+import { useRouter, useSearchParams } from "next/navigation"
 import HomeHero from "@/components/home/HomeHero"
 import NewsFeed from "@/components/insights/NewsFeed"
 import PriceFeed from "@/components/insights/PriceFeed"
@@ -79,7 +80,8 @@ export default function Insights() {
     const [activeTab, setActiveTab] = useState<TabOption>("All")
     const master = "Bitkova"
     const headerSpan = "Insights"
-    const heroText = "Stay informed with the latest in blockchain,economics, and smart money"
+    const heroText =
+        "Your lens into the future of decentralized finance. Navigate the digital frontier with real-time updates on blockchain breakthroughs, shifting global economics, and the strategic moves of smart money whales."
 
     const tabs: TabOption[] = ["All", "Crypto", "Blockchain"]
 

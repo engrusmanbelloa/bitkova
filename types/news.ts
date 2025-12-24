@@ -1,5 +1,3 @@
-// types/news.ts
-
 export type NewsCategory = "Crypto" | "Blockchain"
 // 'All' is a UI state, not necessarily a data category stored in DB
 
