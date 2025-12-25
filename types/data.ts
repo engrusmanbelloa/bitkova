@@ -1,4 +1,4 @@
-import { CourseType } from "@/types"
+import { CourseType } from "@/types/course"
 export const featuredCourses: CourseType[] = [
     {
         _id: 1,
