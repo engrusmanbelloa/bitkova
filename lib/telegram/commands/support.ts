@@ -6,7 +6,8 @@ export default async function support(ctx: TelegramContext) {
         ctx.chatId,
         `🆘 *Support*
 
-WhatsApp: +234 803 250 3624 0r +234 803 610 7361
+WhatsApp: +234 803 250 3624, +234 803 610 7361
+Telegram: @engrusmanbelloa, @mahmoudsardauna
 Email: support@bitkova.com`,
     )
 }
