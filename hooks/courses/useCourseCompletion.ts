@@ -4,7 +4,7 @@ import { useUserStore } from "@/lib/store/useUserStore"
 import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
 import { useQueryClient } from "@tanstack/react-query"
 import { useFetchCertificateStatus } from "./useFetchCertificate"
-import { EnrolledCourse } from "@/userType"
+import { EnrolledCourse } from "@/types/userType"
 
 // interface UseCourseCompletionProps {
 //     courseId: string

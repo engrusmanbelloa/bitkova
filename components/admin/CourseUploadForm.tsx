@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid"
 import { courseSchema, type CourseFormData, type ModuleFormData } from "@/lib/schemas/courseSchema"
 import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
 
-import { Course, Module, Lesson } from "@/types"
+import { Course, Module, Lesson } from "@/types/course"
 
 export default function CourseUploadForm() {
     const [uploading, setUploading] = useState(false)

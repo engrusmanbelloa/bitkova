@@ -1,7 +1,7 @@
 import { doc, getDoc, collection, getDocs, Timestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
-import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
+import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/types/userType"
 
 export const syncUserStore = async (userId: string) => {
     const userRef = doc(db, "users", userId)

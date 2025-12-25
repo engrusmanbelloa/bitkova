@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/userType"
+import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/types/userType"
 
 type UserStore = {
     cart: string[]

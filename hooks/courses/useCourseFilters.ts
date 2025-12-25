@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { CourseWithExtras } from "@/types"
+import { CourseWithExtras } from "@/types/course"
 
 export const useCourseFilters = (courses: CourseWithExtras[] | undefined) => {
     return useMemo(() => {

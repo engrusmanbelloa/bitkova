@@ -1,5 +1,5 @@
 import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
-import { data_package } from "@/data"
+import { data_package } from "@/types/data"
 
 export async function uploadDummyCourse() {
     // try {

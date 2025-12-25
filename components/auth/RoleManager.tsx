@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { onAuthStateChanged } from "firebase/auth"
 import { toast } from "sonner"
-import { UserRole } from "@/userType"
+import { UserRole } from "@/types/userType"
 
 export default function RoleManager() {
     const [userEmail, setUserEmail] = useState<string | null>(null)

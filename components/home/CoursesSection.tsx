@@ -4,7 +4,7 @@ import styled from "styled-components"
 import CourseCard from "@/components/course/CourseCard"
 import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
 import { mobile, ipad } from "@/responsive"
-import { CourseWithExtras } from "@/types"
+import { CourseWithExtras } from "@/types/course"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Pagination } from "swiper/modules"
 

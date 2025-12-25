@@ -1,4 +1,4 @@
-import { Course, Module, Lesson, Review } from "@/types"
+import { Course, Module, Lesson, Review } from "@/types/course"
 
 export default function extractPreviewVideo(modules: (Module & { lessons: Lesson[] })[]): string {
     if (modules?.length > 0 && modules[0]?.lessons?.length > 0) {

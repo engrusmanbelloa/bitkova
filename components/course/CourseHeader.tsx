@@ -197,6 +197,21 @@ const BottomContainer = styled.div`
 interface CourseId {
     courseId: string
 }
+interface Lesson {
+    title: string
+    videoUrl: string
+    position: number
+}
+
+interface Module {
+    position: number
+    lessons: Lesson[]
+}
+
+interface VideoItem {
+    title: string
+    url: string
+}
 
 export default function CourseHeader({ courseId }: CourseId) {
     const { user, firebaseUser, authReady, isLoadingUserDoc } = useAuthReady()
@@ -209,8 +224,8 @@ export default function CourseHeader({ courseId }: CourseId) {
     // const [certificateReady, setCertificateReady] = useState(true)
     const { data: course, isLoading, error } = useCourseById(courseId)
 
-    const videoList =
-        course?.modules
+    const videoList: VideoItem[] =
+        (course?.modules as Module[] | undefined)
             ?.sort((a, b) => a.position - b.position) // Sort modules by position
             .flatMap((module) =>
                 [...module.lessons]

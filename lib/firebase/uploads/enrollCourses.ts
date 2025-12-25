@@ -1,7 +1,7 @@
 import { doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { removeFromCartDb } from "@/lib/firebase/queries/cart"
-import { EnrolledCourse } from "@/userType"
+import { EnrolledCourse } from "@/types/userType"
 
 export const enrollCourses = async (userId: string, courseId: string[]) => {
     const batch = writeBatch(db)

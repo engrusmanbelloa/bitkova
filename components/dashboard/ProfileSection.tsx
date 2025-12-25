@@ -2,7 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import { formatToDDMMYYYY } from "@/config/formatDate"
 import { mobile, ipad } from "@/responsive"
-import { User } from "@/userType"
+import { User } from "@/types/userType"
 
 const Container = styled.div`
     display: flex;

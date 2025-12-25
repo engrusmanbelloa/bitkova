@@ -641,3 +641,48 @@ export const fetchCoursesWithReviews = async (): Promise<
 //         duration: { hours, minutes },
 //     } as CourseWithExtras
 // }
+
+
+    const { data: course, isLoading, error } = useCourseById(courseId)
+
+    const videoList =
+        course?.modules
+            ?.sort((a, b) => a.position - b.position) // Sort modules by position
+            .flatMap((module) =>
+                [...module.lessons]
+                    .sort((a, b) => a.position - b.position) // Sort lessons by position
+                    .map((lesson) => ({
+                        title: lesson.title,
+                        url: lesson.videoUrl,
+                    })),
+            ) || []
+
+    const { data: course, isLoading, error } = useCourseById(courseId)
+
+    interface Lesson {
+        title: string
+        videoUrl: string
+        position: number
+    }
+
+    interface Module {
+        position: number
+        lessons: Lesson[]
+    }
+
+    interface VideoItem {
+        title: string
+        url: string
+    }
+
+    const videoList: VideoItem[] =
+        (course?.modules as Module[] | undefined)
+            ?.sort((a, b) => a.position - b.position) // Sort modules by position
+            .flatMap((module) =>
+                [...module.lessons]
+                    .sort((a, b) => a.position - b.position) // Sort lessons by position
+                    .map((lesson) => ({
+                        title: lesson.title,
+                        url: lesson.videoUrl,
+                    })),
+            ) || []

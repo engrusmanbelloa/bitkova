@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { CourseWithExtras } from "@/types"
+import { CourseWithExtras } from "@/types/course"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Pagination } from "swiper/modules"
 import BoltIcon from "@mui/icons-material/Bolt"

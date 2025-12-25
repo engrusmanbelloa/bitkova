@@ -1,74 +1,46 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@mui/styled-engine": [
-        "./node_modules/@mui/styled-engine-sc"
-      ],
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/styles/*": [
-        "styles/*"
-      ],
-      "@/config/*": [
-        "config/*"
-      ],
-      "@/firebase/*": [
-        "firebase/*"
-      ],
-      "@/models/*": [
-        "app/api/models/*"
-      ],
-      "@/lib/*": [
-        "lib/*"
-      ],
-      "@/utils/*": [
-        "app/api/auth/utilslib/*"
-      ],
-      "@/session/*": [
-        "app/api/auth/session/*"
-      ],
-      "@/hooks/*": [
-        "hooks/*"
-      ],
-      "@/*": [
-        "./*"
-      ]
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "baseUrl": ".",
+        "paths": {
+            "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
+            "@/components/*": ["components/*"],
+            "@/styles/*": ["styles/*"],
+            "@/config/*": ["config/*"],
+            "@/firebase/*": ["firebase/*"],
+            "@/models/*": ["old-pages/models/*"],
+            "@/lib/*": ["lib/*"],
+            "@/utils/*": ["app/api/auth/utilslib/*"],
+            "@/session/*": ["app/api/auth/session/*"],
+            "@/hooks/*": ["hooks/*"],
+            "@/*": ["./*"]
+        },
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "incremental": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "strictNullChecks": true
     },
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "plugins": [
-      {
-        "name": "next"
-      }
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts",
+        ".next/dev/types/**/*.ts"
     ],
-    "strictNullChecks": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "exclude": ["node_modules"]
 }

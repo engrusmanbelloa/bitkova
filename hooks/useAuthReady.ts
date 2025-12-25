@@ -3,8 +3,8 @@ import { getAuth } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { useQuery } from "@tanstack/react-query"
 import { getUserById } from "@/lib/firebase/queries/getUserById"
-import { User } from "@/userType"
-import { User as UserDocType } from "@/userType"
+import { User } from "@/types/userType"
+import { User as UserDocType } from "@/types/userType"
 import { onAuthStateChanged, User as FirebaseUserType } from "firebase/auth"
 
 export interface CustomClaims {
