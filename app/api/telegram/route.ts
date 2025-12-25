@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 
+export async function GET() {
+    return new Response("Telegram webhook running ✅", { status: 200 })
+}
+
 export async function POST(req: NextRequest) {
     try {
         const update = await req.json()
