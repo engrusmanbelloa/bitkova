@@ -1,7 +1,7 @@
 import { doc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { nanoid } from "@/hooks/certId"
-import { Certificate, CompletedCourse } from "@/userType"
+import { Certificate, CompletedCourse } from "@/types/userType"
 
 export const createCertificate = async (userId: string, courseId: string): Promise<string> => {
     try {

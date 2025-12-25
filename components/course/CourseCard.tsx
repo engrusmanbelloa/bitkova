@@ -9,7 +9,7 @@ import CourseRating from "@/components/course/Review"
 // import CourseRating from "@/components/course/CourseRating"
 // import { formatPrice } from "@/utils/formatPrice"
 import { formatPrice } from "@/config/FormatPrice"
-import { CourseWithExtras } from "@/types"
+import { CourseWithExtras } from "@/types/course"
 import { mobile, ipad } from "@/responsive"
 import "animate.css/animate.min.css"
 

@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase/firebaseConfig"
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore"
 
-import { EnrolledCourse, WishListItem, ArchivedCourse, Certificate, Cart } from "@/userType"
+import { EnrolledCourse, WishListItem, ArchivedCourse, Certificate, Cart } from "@/types/userType"
 
 // Enroll user in a course
 export async function enrollUserInCourse(userId: string, courseId: string) {

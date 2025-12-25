@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
 import { adminApp } from "@/lib/firebase/admin"
-import { UserRole } from "@/userType"
+import { UserRole } from "@/types/userType"
 
 // Map roles to Firebase custom claim keys (camelCase)
 const ROLE_TO_CLAIM_MAP: Record<UserRole["role"], string> = {

@@ -9,7 +9,7 @@ import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { mobile, ipad } from "@/responsive"
-import { User } from "@/userType"
+import { User } from "@/types/userType"
 
 // containers section
 const Container = styled.section`

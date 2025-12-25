@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types"
+import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types/course"
 import { useQuery } from "@tanstack/react-query"
 
 const fetchCourses = async (): Promise<CourseWithExtras[]> => {

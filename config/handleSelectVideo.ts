@@ -1,4 +1,4 @@
-import { VideoSelectionProps } from "@/types"
+import { VideoSelectionProps } from "@/types/course"
 
 export default function handleSelectVideo({
     setSelectedVideo,

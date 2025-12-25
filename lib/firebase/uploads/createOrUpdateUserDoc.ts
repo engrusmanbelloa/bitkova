@@ -9,7 +9,7 @@ import {
     getDocs,
 } from "firebase/firestore"
 import { User as FirebaseUser } from "firebase/auth"
-import { User, UserCourseProgress } from "@/userType"
+import { User, UserCourseProgress } from "@/types/userType"
 import { app } from "@/lib/firebase/firebaseConfig"
 
 const db = getFirestore(app)

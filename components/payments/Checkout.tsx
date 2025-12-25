@@ -8,7 +8,7 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { enrollCourses } from "@/lib/firebase/uploads/enrollCourses"
 import { toast } from "sonner"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
-import { EnrolledCourse } from "@/userType"
+import { EnrolledCourse } from "@/types/userType"
 import { removeFromCartDb } from "@/lib/firebase/queries/cart"
 
 const Container = styled.div`

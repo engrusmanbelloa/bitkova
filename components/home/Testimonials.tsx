@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia"
 import CardContent from "@mui/material/CardContent"
 import Rating from "@mui/material/Rating"
 import styled from "styled-components"
-import { testimonials } from "@/data"
+import { testimonials } from "@/types/data"
 import { mobile, ipad } from "@/responsive"
 
 const Container = styled.section`

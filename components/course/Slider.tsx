@@ -6,7 +6,7 @@ import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { Pagination, Navigation, Autoplay } from "swiper/modules"
 import styled from "styled-components"
-import { sliderItems } from "@/data"
+import { sliderItems } from "@/types/data"
 import { mobile, ipad } from "@/responsive"
 
 const Wrapper = styled.div`

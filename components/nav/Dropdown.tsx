@@ -95,7 +95,7 @@ export default function DropdownMenu({
         },
         {
             id: 2,
-            href: "insights",
+            href: "/insights",
             title: "Insights",
         },
         {
