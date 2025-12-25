@@ -1,6 +1,6 @@
 import { TelegramContext } from "@/types/telegram"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
-export default async function bitkovaCalendar(ctx: TelegramContext) {
+export default async function calendar(ctx: TelegramContext) {
     await sendTelegramMessage(
         ctx.chatId,
         `🗓 **BITKOVA CALENDAR: Q1 2025**

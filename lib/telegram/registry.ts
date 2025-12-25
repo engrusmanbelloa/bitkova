@@ -5,7 +5,7 @@ import schedule from "./commands/schedule"
 import payment from "./commands/payment"
 import access from "./commands/access"
 import support from "./commands/support"
-import bitkovaCalendar from "./commands/bitkovaCalendar"
+import calendar from "./commands/calendar"
 import { TelegramContext } from "@/types/telegram"
 
 type CommandHandler = (ctx: TelegramContext) => Promise<void>
@@ -14,7 +14,7 @@ export const commandRegistry: Record<string, CommandHandler> = {
     "/start": start,
     "/help": help,
     "/classes": classes,
-    "/bitkovaCalendar": bitkovaCalendar,
+    "/calendar": calendar,
     "/schedule": schedule,
     "/payment": payment,
     "/access": access,
