@@ -1,5 +1,4 @@
 "use client"
-import React from "react"
 import styled from "styled-components"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Mousewheel, Pagination } from "swiper/modules"
@@ -12,6 +11,16 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import SchoolIcon from "@mui/icons-material/School"
 import EnrollButton from "@/components/EnrollButton"
 import { mobile, ipad } from "@/responsive"
+import { useRouter } from "next/navigation"
+import { useQuery } from "@tanstack/react-query"
+import { collection, query, where, getDocs } from "firebase/firestore"
+import { db } from "@/lib/firebase/firebaseConfig"
+import { PhysicalClass, Cohort } from "@/types/classTypes"
+import { useUserStore } from "@/lib/store/useUserStore"
+import Button from "@mui/material/Button"
+import CircularProgress from "@mui/material/CircularProgress"
+import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
+import { useFetchActiveCohort, useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
 
 // Import Swiper styles
 import "swiper/css"
@@ -260,6 +269,27 @@ const Price = styled.div`
         font-weight: 400;
     }
 `
+const LoadingContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+`
+const ErrorMessage = styled.div`
+    padding: 20px;
+    text-align: center;
+    color: #ef4444;
+`
+const CohortBadge = styled.div`
+    display: inline-block;
+    padding: 4px 12px;
+    background: ${(props) => props.theme.palette.primary.main};
+    color: white;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+`
 
 interface ClassData {
     id: string
@@ -325,6 +355,54 @@ const classesData: ClassData[] = [
 ]
 
 export default function PhysicalClassesSwiper() {
+    const router = useRouter()
+    const { isEnrolledInClass } = useUserStore()
+    const { data: cohort, isLoading: cohortLoading, error: cohortError } = useFetchActiveCohort()
+    const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
+
+    const {
+        data: classes,
+        isLoading: classesLoading,
+        error: classesError,
+    } = useFetchPhysicalClasses(cohort?.id)
+
+    if (cohortLoading || classesLoading) {
+        return (
+            <div>
+                <SectionTitle>
+                    <LocationOnIcon sx={{ color: "#356DF1" }} />
+                    Physical Classes
+                </SectionTitle>
+                <LoadingContainer>
+                    <CircularProgress />
+                </LoadingContainer>
+            </div>
+        )
+    }
+
+    if (!cohort) {
+        return (
+            <div>
+                <SectionTitle>
+                    <LocationOnIcon sx={{ color: "#356DF1" }} />
+                    Physical Classes
+                </SectionTitle>
+                <ErrorMessage>No active cohort available. Check back soon!</ErrorMessage>
+            </div>
+        )
+    }
+
+    if (!classes || classes.length === 0) {
+        return (
+            <div>
+                <SectionTitle>
+                    <LocationOnIcon sx={{ color: "#356DF1" }} />
+                    Physical Classes
+                </SectionTitle>
+                <ErrorMessage>No physical classes available for {cohort.name}</ErrorMessage>
+            </div>
+        )
+    }
     return (
         <>
             <SectionTitle>
@@ -342,7 +420,7 @@ export default function PhysicalClassesSwiper() {
                     }}
                     modules={[Mousewheel, Pagination]}
                 >
-                    {classesData.map((classItem) => (
+                    {/* {classes.map((classItem) => (
                         <SwiperSlide key={classItem.id}>
                             <SlideContent>
                                 <ClassCard>
@@ -396,7 +474,95 @@ export default function PhysicalClassesSwiper() {
                                 </ClassCard>
                             </SlideContent>
                         </SwiperSlide>
-                    ))}
+                    ))} */}
+                    {classes.map((classItem) => {
+                        const isEnrolled = isEnrolledInClass(classItem.id)
+                        const isFull = classItem.enrolled >= classItem.capacity
+
+                        return (
+                            <SwiperSlide key={classItem.id}>
+                                <SlideContent>
+                                    <ClassCard>
+                                        <ClassHeader>
+                                            <CohortBadge>{cohort.name}</CohortBadge>
+                                            <ClassName>{classItem.name}</ClassName>
+                                            <InfoRow>
+                                                <LocationOnIcon />
+                                                <span>{classItem.location}</span>
+                                            </InfoRow>
+                                            <InfoRow>
+                                                <PeopleIcon />
+                                                <span>
+                                                    {classItem.enrolled}/{classItem.capacity}{" "}
+                                                    enrolled
+                                                </span>
+                                            </InfoRow>
+                                            <InfoRow>
+                                                <CalendarMonthIcon />
+                                                <span>
+                                                    {new Date(
+                                                        cohort.startDate,
+                                                    ).toLocaleDateString()}{" "}
+                                                    -{" "}
+                                                    {new Date(cohort.endDate).toLocaleDateString()}
+                                                </span>
+                                            </InfoRow>
+                                            <InfoRow>
+                                                <AccessTimeIcon />
+                                                <span>
+                                                    {classItem.schedule.days.join(", ")} •{" "}
+                                                    {classItem.schedule.time}
+                                                </span>
+                                            </InfoRow>
+                                        </ClassHeader>
+
+                                        <ClassBody>
+                                            <SectionLabel>
+                                                <SchoolIcon />
+                                                Instructors
+                                            </SectionLabel>
+                                            <InstructorList>
+                                                {classItem.instructors.map((instructor, idx) => (
+                                                    <CourseItem key={idx}>{instructor}</CourseItem>
+                                                ))}
+                                            </InstructorList>
+
+                                            <SectionLabel>
+                                                <SchoolIcon />
+                                                Courses
+                                            </SectionLabel>
+                                            <CourseList>
+                                                {classItem.courses.map((course, idx) => (
+                                                    <CourseItem key={idx}>{course}</CourseItem>
+                                                ))}
+                                            </CourseList>
+
+                                            <Price>
+                                                <span>₦</span>
+                                                {classItem.price.toLocaleString()}
+                                            </Price>
+
+                                            <EnrollButton
+                                                variant="contained"
+                                                disabled={isEnrolled || isFull}
+                                                onClick={() =>
+                                                    router.push(
+                                                        `/pay/physical-classes/${classItem.id}`,
+                                                    )
+                                                }
+                                            >
+                                                {isEnrolled
+                                                    ? "Already Enrolled"
+                                                    : isFull
+                                                      ? "Class Full"
+                                                      : "Enroll Now"}
+                                            </EnrollButton>
+                                        </ClassBody>
+                                    </ClassCard>
+                                </SlideContent>
+                            </SwiperSlide>
+                        )
+                    })}
                 </Swiper>
             </SwiperContainer>
         </>

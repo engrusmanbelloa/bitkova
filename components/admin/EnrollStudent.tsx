@@ -12,31 +12,26 @@ const Container = styled.div`
     border-radius: 8px;
     background: #fdfdfd;
 `
-
 const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 15px;
 `
-
 const Input = styled.input`
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 `
-
 const Select = styled.select`
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 `
-
 const CheckboxContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
 `
-
 const Button = styled.button`
     padding: 12px;
     background-color: #007bff;

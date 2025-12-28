@@ -1,0 +1,320 @@
+// "use client"
+// import { use } from "react"
+// import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
+// import { useQuery } from "@tanstack/react-query"
+// import { doc, getDoc, setDoc } from "firebase/firestore"
+// import { db } from "@/lib/firebase/firebaseConfig"
+// import { PhysicalClass } from "@/types/classTypes"
+// import { useAuthReady } from "@/hooks/useAuthReady"
+// import { enrollPhysicalClass } from "@/lib/firebase/uploads/enrollPhysicalClass"
+
+// export default function PhysicalClassCheckoutPage({
+//     params,
+// }: {
+//     params: Promise<{ classId: string }>
+// }) {
+//     const { classId } = use(params)
+//     const { user } = useAuthReady()
+
+//     const { data: classData, isLoading } = useQuery({
+//         queryKey: ["physicalClass", classId],
+//         queryFn: async () => {
+//             const classDoc = await getDoc(doc(db, "physicalClasses", classId))
+//             if (!classDoc.exists()) throw new Error("Class not found")
+//             return { id: classDoc.id, ...classDoc.data() } as PhysicalClass
+//         },
+//     })
+
+//     const { data: cohort } = useQuery({
+//         queryKey: ["cohort", classData?.cohortId],
+//         queryFn: async () => {
+//             if (!classData?.cohortId) return null
+//             const cohortDoc = await getDoc(doc(db, "cohorts", classData.cohortId))
+//             return cohortDoc.exists() ? { id: cohortDoc.id, ...cohortDoc.data() } : null
+//         },
+//         enabled: !!classData?.cohortId,
+//     })
+
+//     const handlePaymentSuccess = async (reference: string) => {
+//         if (!user || !classData) throw new Error("Missing user or class data")
+
+//         await enrollPhysicalClass({
+//             userId: user.id,
+//             classId: classData.id,
+//             cohortId: classData.cohortId,
+//             paymentReference: reference,
+//         })
+//     }
+
+//     if (isLoading) return <div>Loading...</div>
+
+//     if (!classData) return <div>Class not found</div>
+
+//     // Check if registration is open
+//     if (cohort) {
+//         const now = new Date()
+//         const regOpen = new Date(cohort.registrationOpen)
+//         const regClose = new Date(cohort.registrationClose)
+
+//         if (now < regOpen) {
+//             return <div>Registration opens on {regOpen.toLocaleDateString()}</div>
+//         }
+
+//         if (now > regClose) {
+//             return <div>Registration closed on {regClose.toLocaleDateString()}</div>
+//         }
+//     }
+
+//     const checkoutItems = [
+//         {
+//             id: classData.id,
+//             title: `${classData.name} - Physical Class`,
+//             price: classData.price,
+//             details: {
+//                 Location: classData.location,
+//                 Cohort: cohort?.name || "N/A",
+//                 Schedule: `${classData.schedule.days.join(", ")} - ${classData.schedule.time}`,
+//                 Instructors: classData.instructors.join(", "),
+//             },
+//         },
+//     ]
+
+//     return (
+//         <UnifiedCheckout
+//             items={checkoutItems}
+//             classType="physical_class"
+//             onSuccess={handlePaymentSuccess}
+//             metadata={{
+//                 cohortId: classData.cohortId,
+//                 classLocation: classData.location,
+//             }}
+//         />
+//     )
+// }
+
+// components/payments/UnifiedCheckout.tsx
+"use client"
+import { usePaystackPayment } from "react-paystack"
+import styled from "styled-components"
+import { mobile, ipad } from "@/responsive"
+import { useRouter } from "next/navigation"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { toast } from "sonner"
+import { ClassType } from "@/types/classTypes"
+
+const Container = styled.div`
+    width: ${(props) => props.theme.widths.dsktopWidth};
+    margin: 0 auto;
+    ${ipad((props: any) => `width: ${props.theme.widths.ipadWidth};`)}
+    ${mobile(
+        (props: any) =>
+            `width: 100%; max-width: ${props.theme.widths.mobileWidth}; padding: 0 10px;`,
+    )}
+`
+const Wrapper = styled.div`
+    padding: 20px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+`
+const ItemCard = styled.div`
+    padding: 20px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    background: #fafafa;
+`
+const ItemTitle = styled.h3`
+    margin: 0 0 12px 0;
+    color: ${(props) => props.theme.palette.primary.main};
+`
+const ItemDetail = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    color: ${(props) => props.theme.palette.common.black};
+    font-size: 14px;
+`
+const PriceDisplay = styled.div`
+    font-size: 32px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.mobile.green};
+    text-align: center;
+    margin: 20px 0;
+`
+const PayButton = styled.button`
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: ${(props) => props.theme.palette.primary.main};
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+`
+const ErrorMessage = styled.div`
+    padding: 16px;
+    background: #fee;
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    color: #991b1b;
+    text-align: center;
+`
+
+interface CheckoutItem {
+    id: string
+    title: string
+    price: number
+    details?: Record<string, string> // Extra info to display
+    image?: string
+}
+
+interface UnifiedCheckoutProps {
+    items: CheckoutItem[]
+    classType: ClassType
+    onSuccess: (reference: string) => Promise<void>
+    metadata?: Record<string, any> // Additional payment metadata
+}
+
+export default function UnifiedCheckout({
+    items,
+    classType,
+    onSuccess,
+    metadata = {},
+}: UnifiedCheckoutProps) {
+    const router = useRouter()
+    const { user, authReady } = useAuthReady()
+
+    const totalAmount = items.reduce((sum, item) => sum + item.price, 0)
+
+    const config = {
+        reference: `BIT-${classType.toUpperCase()}-${Date.now()}-${user?.id || "guest"}`,
+        email: user?.email || "",
+        amount: totalAmount * 100, // Paystack expects kobo
+        publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
+        metadata: {
+            userId: user?.id,
+            classType,
+            itemIds: items.map((i) => i.id),
+            ...metadata,
+            custom_fields: [
+                {
+                    display_name: "Email",
+                    value: user?.email || "",
+                    variable_name: "user_email",
+                },
+                {
+                    display_name: "Phone",
+                    value: user?.phoneNumber || "N/A",
+                    variable_name: "user_phone",
+                },
+                {
+                    display_name: "Class Type",
+                    value: classType,
+                    variable_name: "class_type",
+                },
+            ],
+        },
+    }
+
+    const handleSuccess = async (reference: any) => {
+        try {
+            await onSuccess(reference.reference)
+            toast.success("Payment successful!")
+
+            // Redirect based on class type
+            if (classType === "async_course") {
+                router.push("/success")
+            } else {
+                router.push(`/dashboard/enrollments/${reference.reference}`)
+            }
+        } catch (err) {
+            console.error("Payment processing error:", err)
+            toast.error("Payment succeeded but enrollment failed. Contact support.")
+        }
+    }
+
+    const handleClose = () => {
+        toast("Payment cancelled")
+    }
+
+    const initializePayment = usePaystackPayment(config)
+
+    if (!authReady)
+        return (
+            <Container>
+                <p>Loading...</p>
+            </Container>
+        )
+
+    if (!user) {
+        return (
+            <Container>
+                <Wrapper>
+                    <ErrorMessage>Please log in to continue with payment</ErrorMessage>
+                </Wrapper>
+            </Container>
+        )
+    }
+
+    return (
+        <Container>
+            <Wrapper>
+                <h2>Complete Your Enrollment</h2>
+
+                {items.map((item) => (
+                    <ItemCard key={item.id}>
+                        <ItemTitle>{item.title}</ItemTitle>
+
+                        {item.details &&
+                            Object.entries(item.details).map(([key, value]) => (
+                                <ItemDetail key={key}>
+                                    <strong>{key}:</strong>
+                                    <span>{value}</span>
+                                </ItemDetail>
+                            ))}
+
+                        <ItemDetail>
+                            <strong>Price:</strong>
+                            <span style={{ color: "#10b981", fontWeight: 600 }}>
+                                ₦ {item.price.toLocaleString()}
+                            </span>
+                        </ItemDetail>
+                    </ItemCard>
+                ))}
+
+                <PriceDisplay>Total: ₦ {totalAmount.toLocaleString()}</PriceDisplay>
+
+                <PayButton
+                    onClick={() => {
+                        initializePayment({
+                            onSuccess: handleSuccess,
+                            onClose: handleClose,
+                            ...config,
+                        })
+                    }}
+                >
+                    Pay ₦ {totalAmount.toLocaleString()}
+                </PayButton>
+
+                <p style={{ fontSize: 12, color: "#666", textAlign: "center", margin: 0 }}>
+                    Secure payment powered by Paystack
+                </p>
+            </Wrapper>
+        </Container>
+    )
+}

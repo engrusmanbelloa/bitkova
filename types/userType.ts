@@ -1,4 +1,4 @@
-import { CourseType } from "@/types/course"
+import { CourseType } from "@/types/courseType"
 
 // Represents user-specific progress for a course
 export interface UserCourseProgress {
