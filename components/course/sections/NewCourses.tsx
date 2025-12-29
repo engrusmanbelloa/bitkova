@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types/courseType"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation, Pagination } from "swiper/modules"
 import FiberNewIcon from "@mui/icons-material/FiberNew"

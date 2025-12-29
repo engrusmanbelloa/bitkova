@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { Review } from "@/types/course"
+import { Review } from "@/types/courseType"
 
 // fetchCourseReviews
 export const fetchCourseReviews = async (courseId: string): Promise<Review[]> => {

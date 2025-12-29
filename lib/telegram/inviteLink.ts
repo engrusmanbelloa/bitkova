@@ -1,6 +1,7 @@
+// lib/telegram/inviteLink.ts
 const TELEGRAM_API = "https://api.telegram.org"
 
-export async function createTelegramInviteLink(chatId: string, userId: string): Promise<string> {
+export async function createTelegramInviteLink(chatId: string, userName: string): Promise<string> {
     const token = process.env.TELEGRAM_BOT_TOKEN
 
     if (!token) throw new Error("Missing TELEGRAM_BOT_TOKEN")
@@ -12,9 +13,9 @@ export async function createTelegramInviteLink(chatId: string, userId: string): 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             chat_id: chatId,
-            name: `Student-${userId}`,
+            name: `Student-${userName}`,
             member_limit: 1, // Single use
-            expire_date: Math.floor(Date.now() / 1000) + 86400, // 24 hours
+            expiration_date: 0, // it never expire
         }),
     })
 

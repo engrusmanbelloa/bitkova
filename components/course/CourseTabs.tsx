@@ -6,7 +6,7 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
 import CertificateVerifier from "@/components/course/CertificateVerifier"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types/courseType"
 
 const Container = styled(Box)`
     display: flex;

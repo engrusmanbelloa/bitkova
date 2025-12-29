@@ -1,3 +1,4 @@
+// types/classTypes.ts
 export type ClassType = "async_course" | "physical_class" | "telegram_class"
 
 export interface Cohort {
@@ -67,7 +68,6 @@ export interface TelegramClassEnrollment {
     cohortId: string
     paymentReference: string
     telegramInviteLink: string
-    linkExpiresAt: Date
     status: "paid" | "active" | "completed"
     enrolledAt: Date
     telegramUserId?: number

@@ -1,3 +1,4 @@
+// lib/telegram/commands/start.ts
 import { TelegramContext } from "@/types/telegram"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 

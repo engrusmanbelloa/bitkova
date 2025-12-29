@@ -1,3 +1,4 @@
+// components/hub/TelegramClass.tsx
 import React from "react"
 import styled from "styled-components"
 import { Container } from "@mui/material"
@@ -174,29 +175,6 @@ export default function TelegramClass() {
     )
 
     return (
-        // <ClassContainer>
-        //     <ClassesCard>
-        //         <ClassesTitle>💬 Telegram Online Classes</ClassesTitle>
-
-        //         <PriceTag>₦ 25,000</PriceTag>
-        //         <DateInfo>
-        //             📅 December 25, 2025
-        //             <br />
-        //             📅 New Intake closes 29, 2026
-        //         </DateInfo>
-
-        //         <CourseModules>
-        //             <ModuleTitle>Course Modules:</ModuleTitle>
-        //             <ModuleList>
-        //                 <ModuleItem>Beginner Trading</ModuleItem>
-        //                 <ModuleItem>Technical Analysis</ModuleItem>
-        //                 <ModuleItem>Risk Management</ModuleItem>
-        //             </ModuleList>
-        //         </CourseModules>
-        //         <EnrollButton variant="contained">Join Telegram Class</EnrollButton>
-        //         {/* <JoinButton>Join Telegram Class</JoinButton> */}
-        //     </ClassesCard>
-        // </ClassContainer>
         <ClassContainer>
             <ClassesCard>
                 <ClassesTitle>
@@ -239,7 +217,7 @@ export default function TelegramClass() {
                 <EnrollButton
                     variant="contained"
                     disabled={isEnrolled || isFull}
-                    onClick={() => router.push(`/pay/telegram-classes/${cohort.id}`)}
+                    onClick={() => router.push(`/pay/telegram/${cohort.id}`)}
                 >
                     <TelegramIcon />
                     {isEnrolled

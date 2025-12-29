@@ -53,6 +53,7 @@ export default function AsyncCourseCheckoutPage() {
         <UnifiedCheckout
             items={checkoutItems}
             classType="async_course"
+            className="async_course"
             onSuccess={handlePaymentSuccess}
         />
     )

@@ -1,3 +1,4 @@
+// app/pay/telegram/[cohortId]/page.tsx
 "use client"
 import { use } from "react"
 import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
@@ -6,13 +7,10 @@ import { doc, getDoc, collection, query, where, getDocs } from "firebase/firesto
 import { db } from "@/lib/firebase/firebaseConfig"
 import { TelegramClass, Cohort } from "@/types/classTypes"
 import { useAuthReady } from "@/hooks/useAuthReady"
+import { toast } from "sonner"
 import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
 
-export default function TelegramClassCheckoutPage({
-    params,
-}: {
-    params: Promise<{ cohortId: string }>
-}) {
+export default function Page({ params }: { params: Promise<{ cohortId: string }> }) {
     const { cohortId } = use(params)
     const { user } = useAuthReady()
 
@@ -37,18 +35,10 @@ export default function TelegramClassCheckoutPage({
         enabled: !!cohortId,
     })
 
-    const handlePaymentSuccess = async (reference: string) => {
-        if (!user || !telegramClass || !cohort) {
-            throw new Error("Missing required data")
-        }
-
-        await enrollTelegramClass({
-            userId: user.id,
-            classId: telegramClass.id,
-            cohortId: cohort.id,
-            paymentReference: reference,
-            telegramGroupId: telegramClass.telegramGroupId,
-        })
+    const handlePaymentSuccess = async (_reference: string) => {
+        toast.success(
+            "Payment successful! You will receive your Telegram access shortly via the bot.",
+        )
     }
 
     if (cohortLoading || classLoading) return <div>Loading...</div>
@@ -100,6 +90,7 @@ export default function TelegramClassCheckoutPage({
         <UnifiedCheckout
             items={checkoutItems}
             classType="telegram_class"
+            className={telegramClass.name}
             onSuccess={handlePaymentSuccess}
             metadata={{
                 cohortId: cohort.id,

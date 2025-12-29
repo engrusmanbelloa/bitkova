@@ -1,6 +1,7 @@
+// components/admin/cohorts/CreateTelegramClass.tsx
 "use client"
-
 import styled from "styled-components"
+import { useState, useEffect } from "react"
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { telegramClassSchema } from "@/lib/schemas/classSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -76,7 +77,6 @@ const LoadingContainer = styled.div`
     justify-content: center;
     padding: 20px;
 `
-
 const CohortInfo = styled.div`
     padding: 12px;
     background: #f0f9ff;
@@ -85,7 +85,6 @@ const CohortInfo = styled.div`
     font-size: 14px;
     color: #0369a1;
 `
-
 const HelpText = styled.div`
     padding: 12px;
     background: #fef3c7;
@@ -98,6 +97,7 @@ const HelpText = styled.div`
 type TelegramClassForm = z.infer<typeof telegramClassSchema>
 
 export default function CreateTelegramClass() {
+    const [telegramGroups, setTelegramGroups] = useState<{ chatId: string; title: string }[]>([])
     // Fetch available cohorts
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
     // Telegram Class Form
@@ -126,17 +126,6 @@ export default function CreateTelegramClass() {
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
 
-    // const modules = useFieldArray({ control: form.control, name: "modules" })
-
-    // const onSubmit = async (data: FormType) => {
-    //     await addDoc(collection(db, "telegramClasses"), {
-    //         ...data,
-    //         modules: data.modules.map((m) => m.value),
-    //         enrolled: 0,
-    //     })
-    //     toast.success("Telegram class created")
-    //     form.reset()
-    // }
     const onTelegramClassSubmit = async (data: TelegramClassForm) => {
         try {
             const classData = {
@@ -157,6 +146,15 @@ export default function CreateTelegramClass() {
             toast.error("Failed to create telegram class")
         }
     }
+
+    useEffect(() => {
+        async function loadGroups() {
+            const snap = await getDocs(collection(db, "telegramGroups"))
+            const groups = snap.docs.map((doc) => doc.data()) as any[]
+            setTelegramGroups(groups)
+        }
+        loadGroups()
+    }, [])
 
     if (cohortsLoading) {
         return (
@@ -180,44 +178,9 @@ export default function CreateTelegramClass() {
     }
 
     return (
-        // <FormCard>
-        //     <h2>Add Telegram Class</h2>
-        //     <form onSubmit={form.handleSubmit(onSubmit)}>
-        //         <Controller
-        //             name="name"
-        //             control={form.control}
-        //             render={({ field }) => <TextField {...field} label="Class Name" fullWidth />}
-        //         />
-
-        //         {modules.fields.map((f, i) => (
-        //             <ArrayItemContainer key={f.id}>
-        //                 <Controller
-        //                     name={`modules.${i}.value`}
-        //                     control={form.control}
-        //                     render={({ field }) => <TextField {...field} fullWidth />}
-        //                 />
-        //                 <RemoveButton onClick={() => modules.remove(i)}>✕</RemoveButton>
-        //             </ArrayItemContainer>
-        //         ))}
-
-        //         <AddButton onClick={() => modules.append({ value: "" })}>+ Module</AddButton>
-
-        //         <SubmitButton type="submit">Create Telegram Class</SubmitButton>
-        //     </form>
-        // </FormCard>
         <FormCard>
             <h2>Add Telegram Class</h2>
-            <HelpText>
-                <strong> How to get Telegram Group ID:</strong>
-                <br />
-                1. Add your bot to the Telegram group
-                <br />
-                2. Send a message in the group
-                <br />
-                3. Visit: https://api.telegram.org/bot[YOUR_BOT_TOKEN]/getUpdates
-                <br />
-                4. Copy the "chat" → "id" value (e.g., -1001234567890)
-            </HelpText>
+
             <form onSubmit={telegramForm.handleSubmit(onTelegramClassSubmit)}>
                 <FormRow>
                     <Controller
@@ -233,21 +196,6 @@ export default function CreateTelegramClass() {
                             />
                         )}
                     />
-
-                    {/* <Controller
-                        name="cohortId"
-                        control={telegramForm.control}
-                        render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                label="Cohort ID"
-                                placeholder="Get from Firestore"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                fullWidth
-                            />
-                        )}
-                    /> */}
 
                     <Controller
                         name="cohortId"
@@ -321,18 +269,42 @@ export default function CreateTelegramClass() {
                         )}
                     />
 
+                    {/* <Controller
+                        name="telegramGroupId"
+                        control={telegramForm.control}
+                        render={({ field, fieldState }) => (
+                            // <TextField
+                            //     {...field}
+                            //     label="Telegram Group ID"
+                            //     placeholder="e.g., -100123456789"
+                            //     error={!!fieldState.error}
+                            //     helperText={fieldState.error?.message}
+                            //     fullWidth
+                            // />
+                            <Select>
+                                {telegramGroups.map((g) => (
+                                    <MenuItem key={g.chatId} value={g.chatId}>
+                                        {g.title} ({g.chatId})
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        )}
+                    /> */}
                     <Controller
                         name="telegramGroupId"
                         control={telegramForm.control}
                         render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                label="Telegram Group ID"
-                                placeholder="e.g., -100123456789"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                fullWidth
-                            />
+                            <FormControl fullWidth error={!!fieldState.error}>
+                                <InputLabel>Telegram Group</InputLabel>
+                                <Select {...field} label="Telegram Group">
+                                    {telegramGroups.map((g) => (
+                                        <MenuItem key={g.chatId} value={g.chatId}>
+                                            {g.title} ({g.chatId})
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                            </FormControl>
                         )}
                     />
                 </FormRow>

@@ -546,9 +546,7 @@ export default function PhysicalClassesSwiper() {
                                                 variant="contained"
                                                 disabled={isEnrolled || isFull}
                                                 onClick={() =>
-                                                    router.push(
-                                                        `/pay/physical-classes/${classItem.id}`,
-                                                    )
+                                                    router.push(`/pay/physical/${classItem.id}`)
                                                 }
                                             >
                                                 {isEnrolled

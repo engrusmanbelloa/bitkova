@@ -2,7 +2,7 @@
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { useEffect, useState } from "react"
-import { CourseWithExtras, Course, Module, Review, Lesson } from "@/types/course"
+import { CourseWithExtras, Course, Module, Review, Lesson } from "@/types/courseType"
 
 export function useFullCourse(courseId: string) {
     const [course, setCourse] = useState<CourseWithExtras | null>(null)
