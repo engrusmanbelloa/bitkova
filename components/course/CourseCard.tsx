@@ -1,3 +1,4 @@
+// components/course/CourseCard.tsx
 import { useRouter } from "next/navigation"
 import styled from "styled-components"
 import Card from "@mui/material/Card"
@@ -9,7 +10,7 @@ import CourseRating from "@/components/course/Review"
 // import CourseRating from "@/components/course/CourseRating"
 // import { formatPrice } from "@/utils/formatPrice"
 import { formatPrice } from "@/config/FormatPrice"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types//courseType"
 import { mobile, ipad } from "@/responsive"
 import "animate.css/animate.min.css"
 

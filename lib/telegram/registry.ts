@@ -1,3 +1,4 @@
+// lib/telegram/registry.ts
 import start from "./commands/start"
 import help from "./commands/help"
 import classes from "./commands/classes"

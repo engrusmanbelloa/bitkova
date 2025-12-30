@@ -13,6 +13,7 @@ import IsLoading from "@/components/IsLoading"
 import { mobile, ipad } from "@/responsive"
 import { User } from "@/types/userType"
 import UploadCourse from "@/components/admin/UploadCourse"
+import ClassesTabs from "@/components/admin/cohorts/ClassesTabs"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import CircularProgress from "@mui/material/CircularProgress"
 import { redirect } from "next/navigation"
@@ -140,6 +141,12 @@ export default function Panel() {
                         <>
                             <Title>Upload Course</Title>
                             <UploadCourse />
+                        </>
+                    )}
+                    {activeItem === "classes" && (
+                        <>
+                            <Title>Classes Management</Title>
+                            <ClassesTabs />
                         </>
                     )}
                     {activeItem === "student" && (

@@ -161,6 +161,8 @@ export default function Checkout() {
             progress: 0,
             status: "in progress",
             enrolledAt: new Date(),
+            paymentReference: "",
+            type: "async_course",
         }))
 
         try {

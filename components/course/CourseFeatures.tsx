@@ -13,7 +13,7 @@ import PersonIcon from "@mui/icons-material/Person"
 import CartButton from "@/components/payments/CartButton"
 import { formatPrice } from "@/config/FormatPrice"
 import { useUserStore } from "@/lib/store/useUserStore"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types/courseType"
 import { User } from "@/types/userType"
 
 const Top = styled.div`

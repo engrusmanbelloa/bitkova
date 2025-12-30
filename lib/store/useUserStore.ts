@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/types/userType"
+import { ClassEnrollment } from "@/types/classTypes"
 
 type UserStore = {
     cart: string[]
@@ -7,12 +8,18 @@ type UserStore = {
     enrolledCourses: EnrolledCourse[]
     completedCourses: CompletedCourse[]
     archivedCourses: ArchivedCourse[]
+    classEnrollments: ClassEnrollment[]
 
     setCart: (cart: string[]) => void
     setWishlist: (wishlist: string[]) => void
     setEnrolledCourses: (courses: EnrolledCourse[]) => void
     setCompletedCourses: (courses: CompletedCourse[]) => void
     setArchivedCourses: (courses: ArchivedCourse[]) => void
+    // Class enrollment actions
+    setClassEnrollments: (enrollments: ClassEnrollment[]) => void
+    addClassEnrollment: (enrollment: ClassEnrollment) => void
+    removeClassEnrollment: (enrollmentId: string) => void
+    isEnrolledInClass: (itemId: string) => boolean
 
     addToCart: (courseId: string) => void
     removeFromCart: (courseId: string) => void
@@ -42,12 +49,32 @@ export const useUserStore = create<UserStore>((set, get) => ({
     enrolledCourses: [],
     completedCourses: [],
     archivedCourses: [],
+    classEnrollments: [],
 
     setCart: (cart) => set({ cart }),
     setWishlist: (wishlist) => set({ wishlist }),
     setEnrolledCourses: (courses) => set({ enrolledCourses: courses }),
     setCompletedCourses: (courses) => set({ completedCourses: courses }),
     setArchivedCourses: (courses) => set({ archivedCourses: courses }),
+    // Class enrollment setters
+    setClassEnrollments: (enrollments) => set({ classEnrollments: enrollments }),
+
+    addClassEnrollment: (enrollment) => {
+        const { classEnrollments } = get()
+        if (!classEnrollments.some((e) => e.id === enrollment.id)) {
+            set({ classEnrollments: [...classEnrollments, enrollment] })
+        }
+    },
+
+    removeClassEnrollment: (enrollmentId) => {
+        set({
+            classEnrollments: get().classEnrollments.filter((e) => e.id !== enrollmentId),
+        })
+    },
+
+    isEnrolledInClass: (itemId) => {
+        return get().classEnrollments.some((e) => e.itemId === itemId)
+    },
 
     addToCart: (courseId) => {
         const cart = get().cart
@@ -70,17 +97,6 @@ export const useUserStore = create<UserStore>((set, get) => ({
         const wishlist = get().wishlist.filter((id) => id !== courseId)
         set({ wishlist })
     },
-
-    // addToEnrolledCourses: (course: EnrolledCourse[]) => {
-    //     const { enrolledCourses } = get()
-    //     const unique = course.filter(
-    //         (course) => !enrolledCourses.some((c) => c.courseId === course.courseId),
-    //     )
-    //     if (unique.length > 0) {
-    //         set(() => ({ enrolledCourses: [...enrolledCourses, ...unique] }))
-    //     }
-    // },
-
     addToEnrolledCourses: (course: EnrolledCourse) => {
         const { enrolledCourses } = get()
         if (!enrolledCourses.some((c) => c.courseId === course.courseId)) {
@@ -93,19 +109,6 @@ export const useUserStore = create<UserStore>((set, get) => ({
         )
         set({ enrolledCourses })
     },
-
-    // addToCompletedCourses: (course) => {
-    //     const completedCourses = get().completedCourses
-    //     if (!completedCourses.some((c) => c.courseId === course.courseId)) {
-    //         set({ completedCourses: [...completedCourses, course] })
-    //     }
-    // },
-    // addToArchivedCourses: (course) => {
-    //     const archivedCourses = get().archivedCourses
-    //     if (!archivedCourses.some((c) => c.courseId === course.courseId)) {
-    //         set({ archivedCourses: [...archivedCourses, course] })
-    //     }
-    // },
 
     addToCompletedCourses: (course) => {
         if (!get().isCompleted(course.courseId)) {

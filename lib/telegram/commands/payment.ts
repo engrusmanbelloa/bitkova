@@ -7,6 +7,6 @@ export default async function payment(ctx: TelegramContext) {
         `💳 *Payment*
 
 Pay securely via Paystack:
-👉 https://paystack.com/pay/bitkova-classes`,
+👉 https://bitkova.com/pay/physical-classes`,
     )
 }

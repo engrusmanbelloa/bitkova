@@ -4,6 +4,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload"
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
+import WidgetsIcon from "@mui/icons-material/Widgets"
 import HistoryIcon from "@mui/icons-material/History"
 import SettingsIcon from "@mui/icons-material/Settings"
 import ExitToAppIcon from "@mui/icons-material/ExitToApp"
@@ -58,6 +59,7 @@ export default function Sidebar({ activeItem, setActiveItem, isAuthorized }: any
         { id: "panel", icon: <AdminPanelSettingsIcon />, label: "Panel" },
         { id: "performance", icon: <SignalCellularAltIcon />, label: "Performance" },
         { id: "course", icon: <DriveFolderUploadIcon />, label: "Upload course" },
+        { id: "classes", icon: <WidgetsIcon />, label: "Classes" },
         { id: "student", icon: <PersonAddAltIcon />, label: "Add student" },
         { id: "instructor", icon: <PersonAddAltIcon />, label: "Add instructor" },
         { id: "history", icon: <HistoryIcon />, label: "Payment History" },

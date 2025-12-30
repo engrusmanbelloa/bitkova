@@ -5,7 +5,7 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CourseModules from "@/components/course/CourseModules"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types/courseType"
 import { mobile, ipad } from "@/responsive"
 
 const Container = styled(Box)`

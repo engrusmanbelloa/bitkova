@@ -1,3 +1,4 @@
+// lib/telegram/bot.ts
 const TELEGRAM_API = "https://api.telegram.org"
 
 export async function sendTelegramMessage(chatId: number, text: string) {

@@ -1,10 +1,11 @@
+// components/payments/Cart.tsx
 "use client"
 import "animate.css/animate.min.css"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useRouter } from "next/navigation"
-import { CourseWithExtras } from "@/types/course"
+import { CourseWithExtras } from "@/types/courseType"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import IsLoading from "@/components/IsLoading"
@@ -258,40 +259,6 @@ export default function Cart() {
                                         </Course>
                                     </div>
                                 ))}
-
-                            {/* {cart.map((course) => (
-                                <div key={course._id}>
-                                    <Course>
-                                        <CourseDetail>
-                                            <Image src={course.image} alt={course.title} />
-                                            <Details>
-                                                <CourseName>{course.title}</CourseName>
-                                                <CourseId>
-                                                    <b>ID: </b>
-                                                    {course._id}
-                                                </CourseId>
-                                                <Duration>
-                                                    <b>Duration: </b>
-                                                    {course.duration.hours > 0
-                                                        ? `${course.duration.hours} hours ${course.duration.minutes} mins`
-                                                        : `${course.duration.minutes} mins`}
-                                                </Duration>
-                                                <Duration>
-                                                    <b>{course.lessons.length} </b>Lectures
-                                                </Duration>
-                                            </Details>
-                                        </CourseDetail>
-                                        <CourseDetail ipad>
-                                            <Price>Price: &#8358; {course.price.toFixed(2)}</Price>
-                                            <ChangeContainer>
-                                                <Remove onClick={remove}>Remove</Remove>
-                                                <Remove>Move to Wishlist</Remove>
-                                            </ChangeContainer>
-                                        </CourseDetail>
-                                    </Course>
-                                    <Hr />
-                                </div>
-                            ))} */}
                         </Info>
                         <Summary>
                             <SummaryTitle>CHECKOUT SUMMARY</SummaryTitle>
@@ -299,7 +266,7 @@ export default function Cart() {
                                 <SummaryItemText>Total:&nbsp;&nbsp;</SummaryItemText>
                                 <SummaryItemPrice>&#8358;{totalAmount}</SummaryItemPrice>
                             </SummaryItem>
-                            <CheckOutBtn $type="filled" onClick={() => router.push("/checkout")}>
+                            <CheckOutBtn $type="filled" onClick={() => router.push("/pay")}>
                                 CHECKOUT NOW
                             </CheckOutBtn>
                         </Summary>

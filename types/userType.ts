@@ -1,4 +1,4 @@
-import { CourseType } from "@/types/course"
+import { CourseType } from "@/types/courseType"
 
 // Represents user-specific progress for a course
 export interface UserCourseProgress {
@@ -36,6 +36,19 @@ export interface EnrolledCourse {
     completedLessons: number
     progress: number // e.g. 0 to 100
     status: "in progress" | "completed"
+    type?: "async_course" | "physical" | "telegram"
+    paymentReference?: string
+    enrolledAt: Date
+}
+
+export interface asyncCourseEnrollmentsType {
+    enrollmentId: string
+    userId: string
+    courseId: string
+    paymentReference: string
+    completedLessons: number
+    progress: number
+    status: "in_progress" | "completed" | "expired"
     enrolledAt: Date
 }
 export interface WishListItem {
