@@ -1,3 +1,4 @@
+// lib/firebase/uploads/enrollCourses.ts
 import { doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { removeFromCartDb } from "@/lib/firebase/queries/cart"
@@ -16,6 +17,8 @@ export const enrollCourses = async (userId: string, courseId: string[]) => {
             progress: 0,
             status: "in progress",
             enrolledAt: now,
+            type: "async_course",
+            paymentReference: "",
         }
         batch.set(enrolledCourseRef, enrolledCourse)
     })

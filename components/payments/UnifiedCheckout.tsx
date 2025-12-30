@@ -93,15 +93,19 @@ interface UnifiedCheckoutProps {
     items: CheckoutItem[]
     classType: ClassType
     className: string
-    onSuccess: (reference: string) => Promise<void>
-    metadata?: Record<string, any> // Additional payment metadata
+
+    successMessage: string
+    successRedirect: string
+
+    metadata?: Record<string, any>
 }
 
 export default function UnifiedCheckout({
     items,
     classType,
     className,
-    onSuccess,
+    successMessage,
+    successRedirect,
     metadata = {},
 }: UnifiedCheckoutProps) {
     const router = useRouter()
@@ -144,19 +148,32 @@ export default function UnifiedCheckout({
         },
     }
 
-    const handleSuccess = async (reference: any) => {
+    // const handleSuccess = async (reference: any) => {
+    //     try {
+    //         await onSuccess(reference.reference)
+    //         toast.success("Payment successful! Check your email for class access.")
+    //         // Redirect based on class type
+    //         if (classType === "async_course") {
+    //             router.push("/success")
+    //         } else {
+    //             router.push("/dashboard")
+    //         }
+    //     } catch (err) {
+    //         console.log("Payment processing error:", err)
+    //         toast.error("Payment succeeded but enrollment failed. Contact support.")
+    //     }
+    // }
+
+    const handleSuccess = async (reference: { reference: string }) => {
         try {
-            await onSuccess(reference.reference)
-            toast.success("Payment successful! Check your email for class access.")
-            // Redirect based on class type
-            if (classType === "async_course") {
-                router.push("/success")
-            } else {
-                router.push("/dashboard")
+            toast.success(successMessage ?? "Payment successful! Your access has been activated.")
+
+            if (successRedirect) {
+                router.push(successRedirect)
             }
         } catch (err) {
-            console.log("Payment processing error:", err)
-            toast.error("Payment succeeded but enrollment failed. Contact support.")
+            console.error("Post-payment enrollment failed:", err)
+            toast.error("Payment succeeded but enrollment failed. Please contact support.")
         }
     }
 

@@ -76,7 +76,7 @@ export default function Success() {
                         />
                         <Price>Course purchase successful</Price>
                     </Info>
-                    <Button onClick={() => router.push("/mylearning")}>Go to learn</Button>
+                    <Button onClick={() => router.push("/my-learning")}>Go to learn</Button>
                 </Wrapper>
             ) : (
                 <SetUpdate>Unauthorized</SetUpdate>

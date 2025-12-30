@@ -1,3 +1,4 @@
+// components/payments/Cart.tsx
 "use client"
 import "animate.css/animate.min.css"
 import styled from "styled-components"
@@ -265,7 +266,7 @@ export default function Cart() {
                                 <SummaryItemText>Total:&nbsp;&nbsp;</SummaryItemText>
                                 <SummaryItemPrice>&#8358;{totalAmount}</SummaryItemPrice>
                             </SummaryItem>
-                            <CheckOutBtn $type="filled" onClick={() => router.push("/checkout")}>
+                            <CheckOutBtn $type="filled" onClick={() => router.push("/pay")}>
                                 CHECKOUT NOW
                             </CheckOutBtn>
                         </Summary>

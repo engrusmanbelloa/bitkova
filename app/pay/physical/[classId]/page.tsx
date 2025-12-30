@@ -10,6 +10,7 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { enrollPhysicalClass } from "@/lib/firebase/uploads/enrollPhysicalClass"
 
 export default function Page({ params }: { params: Promise<{ classId: string }> }) {
+    const successMessage = "Physical class payment successful! Courses added."
     const { classId } = use(params)
     const { user } = useAuthReady()
 
@@ -87,7 +88,8 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
             items={checkoutItems}
             className={classData.name}
             classType="physical_class"
-            onSuccess={handlePaymentSuccess}
+            successMessage={successMessage}
+            successRedirect="/success"
             metadata={{
                 cohortId: classData.cohortId,
                 classLocation: classData.location,

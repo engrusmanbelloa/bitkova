@@ -1,60 +1,21 @@
-// // app/api/paystack/webhook/route.ts
-// import { NextRequest, NextResponse } from "next/server"
-// import crypto from "crypto"
-// import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
-// import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
-
-// export async function POST(req: NextRequest) {
-//     const body = await req.text()
-//     const signature = req.headers.get("x-paystack-signature")!
-
-//     const hash = crypto
-//         .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
-//         .update(body)
-//         .digest("hex")
-
-//     if (hash !== signature) {
-//         return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
-//     }
-
-//     const event = JSON.parse(body)
-
-//     if (event.event === "charge.success") {
-//         const data = event.data
-//         const meta = data.metadata
-
-//         if (meta.classType === "telegram_class") {
-//             const enrollment = await enrollTelegramClass({
-//                 userId: meta.userId,
-//                 classId: meta.itemIds[0],
-//                 cohortId: meta.cohortId,
-//                 paymentReference: data.reference,
-//                 telegramGroupId: meta.telegramGroupId,
-//             })
-
-//             await sendEnrollmentEmail({
-//                 to: data.customer.email,
-//                 cohortName: meta.class_name,
-//                 telegramInviteLink: enrollment.telegramInviteLink,
-//             })
-//         }
-//     }
-
-//     return NextResponse.json({ ok: true })
-// }
-
 // app/api/paystack/webhook/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
-import { enrollTelegramClassServer } from "@/lib/server//enrollTelegramClassServer"
+import { paymentHandlers } from "@/lib/server/paymentHandlers"
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY!
 
 export async function POST(req: NextRequest) {
+    console.log("🔥 Paystack webhook hit")
+    console.log("Headers:", Object.fromEntries(req.headers))
     const rawBody = await req.text()
     const signature = req.headers.get("x-paystack-signature")
 
+    console.log("Secret Key Exists:", !!PAYSTACK_SECRET)
+    console.log("Signature Received:", signature)
+
     if (!signature || !PAYSTACK_SECRET) {
+        console.error("❌ Missing signature or secret")
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -62,34 +23,46 @@ export async function POST(req: NextRequest) {
     const hash = crypto.createHmac("sha512", PAYSTACK_SECRET).update(rawBody).digest("hex")
 
     if (hash !== signature) {
+        console.error("❌ Invalid signature")
+        console.log("Expected:", hash)
+        console.log("Received:", signature)
         return NextResponse.json({ error: "Invalid signature" }, { status: 401 })
     }
 
     const event = JSON.parse(rawBody)
+    console.log("✅ Event:", event.event)
+    console.log("✅ Metadata:", event.data?.metadata)
 
     // ✅ We only care about successful charges
     if (event.event !== "charge.success") {
+        console.log("⚠️ Not a charge.success event")
         return NextResponse.json({ ok: true })
     }
 
     const data = event.data
     const metadata = data.metadata
 
-    try {
-        if (metadata.classType === "telegram_class") {
-            await enrollTelegramClassServer({
-                userId: metadata.userId,
-                classId: metadata.itemIds[0],
-                cohortId: metadata.cohortId,
-                telegramGroupId: metadata.telegramGroupId,
-                paymentReference: data.reference,
-                payerEmail: data.customer.email,
-            })
-        }
+    console.log("Processing payment for:", metadata.classType)
 
+    const handler = paymentHandlers[metadata.classType]
+
+    if (!handler) {
+        console.warn("No payment handler for type:", metadata.classType)
+        return NextResponse.json({ ok: true })
+    }
+
+    try {
+        await handler({
+            userId: metadata.userId,
+            itemIds: metadata.itemIds,
+            metadata,
+            paymentReference: data.reference,
+            payerEmail: data.customer.email,
+        })
+        console.log("✅ Payment processed successfully!")
         return NextResponse.json({ ok: true })
     } catch (err) {
-        console.error("Paystack webhook error:", err)
-        return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
+        console.error("Webhook processing error:", err)
+        return NextResponse.json({ error: "Webhook failed" }, { status: 500 })
     }
 }

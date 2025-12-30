@@ -11,6 +11,8 @@ import { toast } from "sonner"
 import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
 
 export default function Page({ params }: { params: Promise<{ cohortId: string }> }) {
+    const successMessage =
+        "Payment successful! You will receive your Telegram access shortly via the email or the bot."
     const { cohortId } = use(params)
     const { user } = useAuthReady()
 
@@ -35,11 +37,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
         enabled: !!cohortId,
     })
 
-    const handlePaymentSuccess = async (_reference: string) => {
-        toast.success(
-            "Payment successful! You will receive your Telegram access shortly via the bot.",
-        )
-    }
+    if (!user) throw new Error("You are not authenticated")
 
     if (cohortLoading || classLoading) return <div>Loading...</div>
 
@@ -91,7 +89,8 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
             items={checkoutItems}
             classType="telegram_class"
             className={telegramClass.name}
-            onSuccess={handlePaymentSuccess}
+            successMessage={successMessage}
+            successRedirect="/dashboard"
             metadata={{
                 cohortId: cohort.id,
                 telegramGroupId: telegramClass.telegramGroupId,

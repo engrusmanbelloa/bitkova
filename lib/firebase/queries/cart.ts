@@ -1,3 +1,4 @@
+// lib/firebase/queries/cart.ts
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 
