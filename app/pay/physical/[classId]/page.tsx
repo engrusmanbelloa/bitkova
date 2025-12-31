@@ -1,17 +1,24 @@
 // app/pay/physical/[classId]/page.tsx
 "use client"
 import { use } from "react"
-import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
+import dynamic from "next/dynamic"
+// import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
 import { useQuery } from "@tanstack/react-query"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { PhysicalClass, Cohort } from "@/types/classTypes"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { enrollPhysicalClass } from "@/lib/firebase/uploads/enrollPhysicalClass"
+import AuthMessage from "@/components/AuthMessage"
+
+const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
+    ssr: false,
+})
 
 export default function Page({ params }: { params: Promise<{ classId: string }> }) {
     const successMessage = "Physical class payment successful! Courses added."
     const { classId } = use(params)
+    console.log("Cohort id", classId)
     const { user } = useAuthReady()
 
     const { data: classData, isLoading } = useQuery({
@@ -52,6 +59,8 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
     if (isLoading) return <div>Loading...</div>
 
     if (!classData) return <div>Class not found</div>
+
+    if (!user) return <AuthMessage message="Authentication required" />
 
     // Check if registration is open
     if (cohort) {

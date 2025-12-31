@@ -607,4 +607,67 @@ export const sliderItems = [
         img: "/slider/3.png",
     },
 ]
+
+interface ClassData {
+    id: string
+    name: string
+    location: string
+    cohort: string
+    nextClass: string
+    time: string
+    instructors: string[]
+    courses: string[]
+    price: string
+}
+
+const classesData: ClassData[] = [
+    {
+        id: "1",
+        name: "Gombe HQ",
+        location: "C6 Duwa Plaza Opp Old Bauchi Park, Gombe",
+        cohort: "30+ cohort",
+        nextClass: "Next Cohort: January 15, 2026",
+        time: "Sarturday 2pm - 5pm, Sunday 2pm - 5pm",
+        instructors: ["Mahmoud Sardauna", "Aminu Muhammad", "Mustapha Yaha"],
+        courses: ["Cryptocurrency market analysis", "Crypto Trading", "Dafi Economics"],
+        price: "₦ 40,000",
+    },
+    {
+        id: "2",
+        name: "Bauchi",
+        location: "Reinsurance house,12 Ahmadu Bello Way, opposite Ministry Of Finance, Bauchi",
+        cohort: "45,000+ cohort",
+        nextClass: "Next Cohort: January 26, 2026",
+        time: "Sarturday 10am - 1pm, sunday 10am - 1pm",
+        instructors: ["Haruna Usman", "Usman Mukhtar"],
+        courses: ["Cryptocurrency market analysis", "Trading Skills"],
+        price: "₦ 40,000",
+    },
+    {
+        id: "3",
+        name: "Kano",
+        location: "Atlas training institute, Opp Buk Main Gate Old Site, Kano",
+        cohort: "30+ cohort",
+        nextClass: "Next Cohort: February 10, 2026",
+        time: "Sarturday 10am - 1pm, Sunday 10am - 1pm",
+        instructors: ["Amir Bahir Lawa", "Zainab Salisu"],
+        courses: ["Blockchain Technology", "Cryptocurrency market analysis"],
+        price: "₦ 50,000",
+    },
+    {
+        id: "4",
+        name: "Kaduna",
+        location: "Almara center, 32b kanta road Unguwan Rimi Kaduna",
+        cohort: "50,000+ cohort",
+        nextClass: "Next Cohort: January 30, 2026",
+        time: "Sarturday 2pm - 5pm, sunday 10am - 1pm",
+        instructors: ["Engr. Usman Bello A", "Musa Muhammad"],
+        courses: [
+            "Cryptocurrency market analysis",
+            "Blockchain development",
+            "software engineering",
+        ],
+        price: "₦ 50,000",
+    },
+]
 // # Show the resulting JSON to be uploaded via the uploadNewCourse helper

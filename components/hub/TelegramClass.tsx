@@ -2,9 +2,13 @@
 import React from "react"
 import styled from "styled-components"
 import { Container } from "@mui/material"
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import EnrollButton from "@/components/EnrollButton"
 import TelegramIcon from "@mui/icons-material/Telegram"
+import PeopleIcon from "@mui/icons-material/People"
+import BlindsClosedIcon from "@mui/icons-material/BlindsClosed"
+import EventBusyIcon from "@mui/icons-material/EventBusy"
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
+import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 import { mobile, ipad } from "@/responsive"
@@ -71,6 +75,19 @@ const CohortBadge = styled.div`
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 16px;
+`
+const InfoRow = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    color: ${(props) => props.theme.palette.common.black};
+    font-size: 14px;
+
+    svg {
+        font-size: 18px;
+        color: ${(props) => props.theme.palette.primary.main};
+    }
 `
 const PriceTag = styled.div`
     color: ${(props) => props.theme.mobile.green};
@@ -186,13 +203,31 @@ export default function TelegramClass() {
 
                 <PriceTag>₦ {telegramClass.price.toLocaleString()}</PriceTag>
 
-                <DateInfo>
-                    📅 Classes Start: {new Date(cohort.startDate).toLocaleDateString()}
-                    <br />
-                    📅 Classes End: {new Date(cohort.endDate).toLocaleDateString()}
-                    <br />⏰ Registration Closes:{" "}
-                    {new Date(cohort.registrationClose).toLocaleDateString()}
-                </DateInfo>
+                <InfoRow>
+                    <PeopleIcon />
+                    <span>
+                        {telegramClass.enrolled}/{telegramClass.capacity} enrolled
+                    </span>
+                </InfoRow>
+                <InfoRow>
+                    <CalendarMonthIcon /> Classes Start:
+                    <span>{new Date(cohort.startDate).toLocaleDateString()} </span>
+                </InfoRow>
+                <InfoRow>
+                    <EventBusyIcon /> Classes End:
+                    <span>{new Date(cohort.endDate).toLocaleDateString()}</span>
+                </InfoRow>
+                <InfoRow>
+                    <BlindsClosedIcon /> Registration Closes:
+                    <span>{new Date(cohort.registrationClose).toLocaleDateString()}</span>
+                </InfoRow>
+                {/* <InfoRow>
+                                                <AccessTimeIcon />
+                                                <span>
+                                                    {classItem.schedule.days.join(", ")} •{" "}
+                                                    {classItem.schedule.time}
+                                                </span>
+                                            </InfoRow> */}
 
                 {daysUntilClose <= 7 && !isEnrolled && (
                     <EnrollmentInfo>
@@ -209,10 +244,6 @@ export default function TelegramClass() {
                         ))}
                     </ModuleList>
                 </CourseModules>
-
-                <DateInfo style={{ marginTop: 20, marginBottom: 16 }}>
-                    👥 {telegramClass.enrolled}/{telegramClass.capacity} enrolled
-                </DateInfo>
 
                 <EnrollButton
                     variant="contained"

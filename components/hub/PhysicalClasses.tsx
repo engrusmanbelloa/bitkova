@@ -7,6 +7,8 @@ import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
 import PeopleIcon from "@mui/icons-material/People"
+import BlindsClosedIcon from "@mui/icons-material/BlindsClosed"
+import EventBusyIcon from "@mui/icons-material/EventBusy"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import SchoolIcon from "@mui/icons-material/School"
@@ -24,18 +26,19 @@ import "swiper/css/pagination"
 
 const SwiperContainer = styled(Card)`
     width: ${(props) => props.theme.widths.heroWidth};
-    height: 550px;
+    display: flex;
+    height: 580px;
     overflow: hidden;
     margin: 0 auto 30px;
     padding: 0;
     border: 1px solid ${({ theme }) => theme.mobile.horizontalrule};
     border-left: 5px solid ${({ theme }) => theme.palette.primary.main};
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 10px ${(props) => props.theme.mobile.offWhite};
     box-sizing: border-box;
     ${ipad(
         (props: any) => `
-            height: 500px;
+            height: 600px;
             width: ${props.theme.widths.ipadWidth};
         `,
     )}
@@ -49,16 +52,18 @@ const SwiperContainer = styled(Card)`
     .swiper {
         width: 100%;
         height: 100%;
+        padding: 0;
     }
 
     .swiper-slide {
         display: flex;
         justify-content: center;
         align-items: center;
+        padding: 0;
     }
 
     .swiper-pagination {
-        bottom: 0px;
+        bottom: -3px;
         left: 47%;
         right: auto;
         transform: translateY(-50%);
@@ -75,12 +80,12 @@ const SwiperContainer = styled(Card)`
         margin: 8px 0;
         background: ${(props) => props.theme.palette.primary.main};
         opacity: 0.3;
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         ${ipad(
             (props: any) => `
-            height: 8px;
-            width: 8px;
+            height: 7px;
+            width: 7px;
         `,
         )}
         ${mobile(
@@ -93,14 +98,13 @@ const SwiperContainer = styled(Card)`
 
     .swiper-pagination-bullet-active {
         opacity: 1;
-        width: 18px;
-        border-radius: 40%;
+        width: 20px;
+        border-radius: 50px;
     }
 `
 const SlideContent = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0 auto;
-    height: 520px;
     ${ipad(
         (props: any) => `
             width: ${props.theme.widths.ipadWidth};
@@ -131,6 +135,7 @@ const ClassCard = styled.div`
 `
 const ClassHeader = styled.div`
     padding: 15px;
+    margin-bottom: 0;
     border-bottom: 1px solid ${({ theme }) => theme.mobile.horizontalrule};
 `
 const ClassName = styled.h3`
@@ -154,12 +159,13 @@ const InfoRow = styled.div`
 `
 const ClassBody = styled(CardContent)`
     padding: 15px;
+    margin-top: 0;
 `
 const SectionLabel = styled.div`
     display: flex;
     align-items: center;
     gap: 6px;
-    margin: 20px 0 10px;
+    margin: 10px 0;
     font-weight: 600;
     color: ${(props) => props.theme.palette.common.black};
     font-size: 14px;
@@ -227,30 +233,6 @@ const CourseItem = styled.li`
     font-size: 14px;
     line-height: 1.6;
 `
-// const EnrollButton = styled(Button)`
-//     width: 100%;
-//     margin-top: 20px;
-//     background: ${(props) => props.theme.palette.primary.main};
-//     color: white;
-//     text-transform: none;
-//     font-weight: 500;
-//     padding: 12px;
-//     font-size: 16px;
-//     ${ipad(
-//         (props: any) => `
-//             height: 40px;
-//         `,
-//     )}
-//     ${mobile(
-//         (props: any) => `
-
-//         `,
-//     )}
-//     &:hover {
-//         background: ${(props) => props.theme.palette.primary.main};
-//         opacity: 0.9;
-//     }
-// `
 const Price = styled.div`
     display: flex;
     align-items: center;
@@ -258,7 +240,7 @@ const Price = styled.div`
     font-size: 28px;
     font-weight: 700;
     color: ${({ theme }) => theme.mobile.green};
-    margin-top: 16px;
+    margin: 10px 0;
 
     span {
         font-size: 18px;
@@ -286,69 +268,6 @@ const CohortBadge = styled.div`
     font-weight: 600;
     margin-bottom: 12px;
 `
-
-interface ClassData {
-    id: string
-    name: string
-    location: string
-    cohort: string
-    nextClass: string
-    time: string
-    instructors: string[]
-    courses: string[]
-    price: string
-}
-
-const classesData: ClassData[] = [
-    {
-        id: "1",
-        name: "Gombe HQ",
-        location: "C6 Duwa Plaza Opp Old Bauchi Park, Gombe",
-        cohort: "30+ cohort",
-        nextClass: "Next Cohort: January 15, 2026",
-        time: "Sarturday 2pm - 5pm, Sunday 2pm - 5pm",
-        instructors: ["Mahmoud Sardauna", "Aminu Muhammad", "Mustapha Yaha"],
-        courses: ["Cryptocurrency market analysis", "Crypto Trading", "Dafi Economics"],
-        price: "₦ 40,000",
-    },
-    {
-        id: "2",
-        name: "Bauchi",
-        location: "Reinsurance house,12 Ahmadu Bello Way, opposite Ministry Of Finance, Bauchi",
-        cohort: "45,000+ cohort",
-        nextClass: "Next Cohort: January 26, 2026",
-        time: "Sarturday 10am - 1pm, sunday 10am - 1pm",
-        instructors: ["Haruna Usman", "Usman Mukhtar"],
-        courses: ["Cryptocurrency market analysis", "Trading Skills"],
-        price: "₦ 40,000",
-    },
-    {
-        id: "3",
-        name: "Kano",
-        location: "Atlas training institute, Opp Buk Main Gate Old Site, Kano",
-        cohort: "30+ cohort",
-        nextClass: "Next Cohort: February 10, 2026",
-        time: "Sarturday 10am - 1pm, Sunday 10am - 1pm",
-        instructors: ["Amir Bahir Lawa", "Zainab Salisu"],
-        courses: ["Blockchain Technology", "Cryptocurrency market analysis"],
-        price: "₦ 50,000",
-    },
-    {
-        id: "4",
-        name: "Kaduna",
-        location: "Almara center, 32b kanta road Unguwan Rimi Kaduna",
-        cohort: "50,000+ cohort",
-        nextClass: "Next Cohort: January 30, 2026",
-        time: "Sarturday 2pm - 5pm, sunday 10am - 1pm",
-        instructors: ["Engr. Usman Bello A", "Musa Muhammad"],
-        courses: [
-            "Cryptocurrency market analysis",
-            "Blockchain development",
-            "software engineering",
-        ],
-        price: "₦ 50,000",
-    },
-]
 
 export default function PhysicalClassesSwiper() {
     const router = useRouter()
@@ -485,6 +404,9 @@ export default function PhysicalClassesSwiper() {
                                             <InfoRow>
                                                 <LocationOnIcon />
                                                 <span>{classItem.location}</span>
+                                                <a href={classItem.mapLink} target="_blank">
+                                                    Visit via map
+                                                </a>
                                             </InfoRow>
                                             <InfoRow>
                                                 <PeopleIcon />
@@ -494,13 +416,25 @@ export default function PhysicalClassesSwiper() {
                                                 </span>
                                             </InfoRow>
                                             <InfoRow>
-                                                <CalendarMonthIcon />
+                                                <CalendarMonthIcon /> Classes Start:
                                                 <span>
                                                     {new Date(
                                                         cohort.startDate,
                                                     ).toLocaleDateString()}{" "}
-                                                    -{" "}
+                                                </span>
+                                            </InfoRow>
+                                            <InfoRow>
+                                                <EventBusyIcon /> Classes End:
+                                                <span>
                                                     {new Date(cohort.endDate).toLocaleDateString()}
+                                                </span>
+                                            </InfoRow>
+                                            <InfoRow>
+                                                <BlindsClosedIcon /> Registration Closes:
+                                                <span>
+                                                    {new Date(
+                                                        cohort.registrationClose,
+                                                    ).toLocaleDateString()}
                                                 </span>
                                             </InfoRow>
                                             <InfoRow>

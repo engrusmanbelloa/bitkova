@@ -1,7 +1,8 @@
 // app/pay/telegram/[cohortId]/page.tsx
 "use client"
 import { use } from "react"
-import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
+import dynamic from "next/dynamic"
+
 import { useQuery } from "@tanstack/react-query"
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
@@ -10,10 +11,17 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { toast } from "sonner"
 import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
 
+import AuthMessage from "@/components/AuthMessage"
+
+const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
+    ssr: false,
+})
+
 export default function Page({ params }: { params: Promise<{ cohortId: string }> }) {
     const successMessage =
         "Payment successful! You will receive your Telegram access shortly via the email or the bot."
     const { cohortId } = use(params)
+    // console.log("Cohort id", cohortId)
     const { user } = useAuthReady()
 
     const { data: cohort, isLoading: cohortLoading } = useQuery({
@@ -37,11 +45,11 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
         enabled: !!cohortId,
     })
 
-    if (!user) throw new Error("You are not authenticated")
-
     if (cohortLoading || classLoading) return <div>Loading...</div>
 
-    if (!cohort || !telegramClass) return <div>Class not found</div>
+    if (!user) return <AuthMessage message="Authentication required" />
+
+    if (!cohort || !telegramClass) return <AuthMessage message="Class not found" />
 
     // Check registration window
     const now = new Date()
