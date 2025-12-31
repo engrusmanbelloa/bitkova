@@ -2,7 +2,7 @@
 "use client"
 import styled from "styled-components"
 import { useState, useEffect } from "react"
-import { useForm, Controller, useFieldArray } from "react-hook-form"
+import { useForm, Controller, useFieldArray, SubmitHandler } from "react-hook-form"
 import { telegramClassSchema } from "@/lib/schemas/classSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore"
@@ -125,8 +125,10 @@ export default function CreateTelegramClass() {
     // Watch selected cohort to show info
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
+    const selectedGroupId = telegramForm.watch("telegramGroupId")
+    const selectedGroup = telegramGroups?.find((c) => c.chatId === String(selectedGroupId))
 
-    const onTelegramClassSubmit = async (data: TelegramClassForm) => {
+    const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
         try {
             const classData = {
                 name: data.name,
@@ -150,7 +152,15 @@ export default function CreateTelegramClass() {
     useEffect(() => {
         async function loadGroups() {
             const snap = await getDocs(collection(db, "telegramGroups"))
-            const groups = snap.docs.map((doc) => doc.data()) as any[]
+            const groups = snap.docs.map((doc) => {
+                const data = doc.data()
+                return {
+                    ...data,
+                    // Ensure chatId is always a string for Zod/Select consistency
+                    chatId: String(data.chatId),
+                    title: data.title,
+                }
+            })
             setTelegramGroups(groups)
         }
         loadGroups()
@@ -299,8 +309,9 @@ export default function CreateTelegramClass() {
                                 <Select {...field} label="Telegram Group">
                                     {telegramGroups.map((g) => (
                                         <MenuItem key={g.chatId} value={g.chatId}>
-                                            {g.title} ({g.chatId})
+                                            {g.title}
                                         </MenuItem>
+                                        // ({g.chatId})
                                     ))}
                                 </Select>
                                 <FormHelperText>{fieldState.error?.message}</FormHelperText>

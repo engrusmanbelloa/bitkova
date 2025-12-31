@@ -9,8 +9,9 @@ import { toast } from "sonner"
 import { ClassType } from "@/types/classTypes"
 
 const Container = styled.div`
-    width: ${(props) => props.theme.widths.dsktopWidth};
-    margin: 0 auto;
+    width: ${(props) => props.theme.widths.heroWidth};
+    margin: 10px auto;
+    box-sizing: border-box;
     ${ipad((props: any) => `width: ${props.theme.widths.ipadWidth};`)}
     ${mobile(
         (props: any) =>
@@ -147,22 +148,6 @@ export default function UnifiedCheckout({
             ],
         },
     }
-
-    // const handleSuccess = async (reference: any) => {
-    //     try {
-    //         await onSuccess(reference.reference)
-    //         toast.success("Payment successful! Check your email for class access.")
-    //         // Redirect based on class type
-    //         if (classType === "async_course") {
-    //             router.push("/success")
-    //         } else {
-    //             router.push("/dashboard")
-    //         }
-    //     } catch (err) {
-    //         console.log("Payment processing error:", err)
-    //         toast.error("Payment succeeded but enrollment failed. Contact support.")
-    //     }
-    // }
 
     const handleSuccess = async (reference: { reference: string }) => {
         try {
