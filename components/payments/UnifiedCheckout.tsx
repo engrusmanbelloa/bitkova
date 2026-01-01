@@ -149,16 +149,53 @@ export default function UnifiedCheckout({
         },
     }
 
-    const handleSuccess = async (reference: { reference: string }) => {
-        try {
-            toast.success(successMessage ?? "Payment successful! Your access has been activated.")
+    // const handleSuccess = async (reference: { reference: string }) => {
+    //     try {
+    //         toast.success(successMessage ?? "Payment successful! Your access has been activated.")
 
-            if (successRedirect) {
-                router.push(successRedirect)
-            }
+    //         if (successRedirect) {
+    //             router.push(successRedirect)
+    //         }
+    //     } catch (err) {
+    //         console.error("Post-payment enrollment failed:", err)
+    //         toast.error("Payment succeeded but enrollment failed. Please contact support.")
+    //     }
+    // }
+    // const handleSuccess = async (reference: { reference: string }) => {
+    //     try {
+    //         await fetch("/api/paystack/verify", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({
+    //                 reference: reference.reference,
+    //             }),
+    //         })
+
+    //         toast.success(successMessage)
+    //         router.push(successRedirect)
+    //     } catch (err) {
+    //         console.error(err)
+    //         toast.error("Payment succeeded but verification failed")
+    //     }
+    // }
+    const handleSuccess = async (reference: { reference: string }) => {
+        console.log("Paystack real ref:", reference.reference)
+        try {
+            await new Promise((r) => setTimeout(r, 1500))
+
+            const res = await fetch("/api/paystack/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reference: reference.reference }),
+            })
+
+            if (!res.ok) throw new Error("Verification failed")
+
+            toast.success(successMessage)
+            router.push(successRedirect)
         } catch (err) {
-            console.error("Post-payment enrollment failed:", err)
-            toast.error("Payment succeeded but enrollment failed. Please contact support.")
+            console.error(err)
+            toast.error("Payment completed but verification failed")
         }
     }
 
