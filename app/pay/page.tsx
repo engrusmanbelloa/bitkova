@@ -5,9 +5,8 @@ import dynamic from "next/dynamic"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
-import { enrollCourses } from "@/lib/firebase/uploads/enrollCourses"
-import { removeFromCartDb } from "@/lib/firebase/queries/cart"
-import { EnrolledCourse } from "@/types/userType"
+import IsLoading from "@/components/IsLoading"
+import AuthMessage from "@/components/AuthMessage"
 
 const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
     ssr: false,
@@ -20,8 +19,8 @@ export default function AsyncCourseCheckoutPage() {
 
     const cartCourses = (courses ?? []).filter((course) => cart.includes(course.id))
 
-    if (isLoading) return <div>Loading...</div>
-    if (!user) return <div>Your not authenticated</div>
+    if (isLoading) return <IsLoading />
+    if (!user) return <AuthMessage message="Authentication required" />
 
     const checkoutItems = cartCourses.map((course) => ({
         id: course.id,

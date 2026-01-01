@@ -1,8 +1,10 @@
+// lib/store/useUserStore.ts
 import { create } from "zustand"
 import { EnrolledCourse, CompletedCourse, ArchivedCourse } from "@/types/userType"
 import { ClassEnrollment } from "@/types/classTypes"
 
 type UserStore = {
+    // State
     cart: string[]
     wishlist: string[]
     enrolledCourses: EnrolledCourse[]
@@ -10,6 +12,7 @@ type UserStore = {
     archivedCourses: ArchivedCourse[]
     classEnrollments: ClassEnrollment[]
 
+    // Setters
     setCart: (cart: string[]) => void
     setWishlist: (wishlist: string[]) => void
     setEnrolledCourses: (courses: EnrolledCourse[]) => void
@@ -17,33 +20,42 @@ type UserStore = {
     setArchivedCourses: (courses: ArchivedCourse[]) => void
     // Class enrollment actions
     setClassEnrollments: (enrollments: ClassEnrollment[]) => void
-    addClassEnrollment: (enrollment: ClassEnrollment) => void
-    removeClassEnrollment: (enrollmentId: string) => void
-    isEnrolledInClass: (itemId: string) => boolean
 
+    // Cart actions
     addToCart: (courseId: string) => void
     removeFromCart: (courseId: string) => void
 
+    // Wishlist actions
     addToWishlist: (courseId: string) => void
     removeFromWishlist: (courseId: string) => void
 
+    // Enrolled courses actions
     addToEnrolledCourses: (course: EnrolledCourse) => void
     removeFromEnrolledCourses: (courseId: string) => void
 
+    // Completed courses actions
     addToCompletedCourses: (course: CompletedCourse) => void
     removeFromCompletedCourses: (courseId: string) => void
 
+    // Archived courses actions
     addToArchivedCourses: (course: ArchivedCourse) => void
     removeFromArchivedCourses: (courseId: string) => void
 
+    // Class enrollment actions
+    addClassEnrollment: (enrollment: ClassEnrollment) => void
+    removeClassEnrollment: (enrollmentId: string) => void
+
+    // Query helpers
     isInCart: (courseId: string) => boolean
     isInWishlist: (courseId: string) => boolean
     isEnrolled: (courseId: string) => boolean
     isCompleted: (courseId: string) => boolean
     isArchived: (courseId: string) => boolean
+    isEnrolledInClass: (itemId: string) => boolean
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
+    // Initial state
     cart: [],
     wishlist: [],
     enrolledCourses: [],
@@ -51,14 +63,15 @@ export const useUserStore = create<UserStore>((set, get) => ({
     archivedCourses: [],
     classEnrollments: [],
 
+    // Setters
     setCart: (cart) => set({ cart }),
     setWishlist: (wishlist) => set({ wishlist }),
     setEnrolledCourses: (courses) => set({ enrolledCourses: courses }),
     setCompletedCourses: (courses) => set({ completedCourses: courses }),
     setArchivedCourses: (courses) => set({ archivedCourses: courses }),
-    // Class enrollment setters
     setClassEnrollments: (enrollments) => set({ classEnrollments: enrollments }),
 
+    // Class enrollment actions
     addClassEnrollment: (enrollment) => {
         const { classEnrollments } = get()
         if (!classEnrollments.some((e) => e.id === enrollment.id)) {
@@ -76,17 +89,20 @@ export const useUserStore = create<UserStore>((set, get) => ({
         return get().classEnrollments.some((e) => e.itemId === itemId)
     },
 
+    // Cart actions
     addToCart: (courseId) => {
         const cart = get().cart
         if (!cart.includes(courseId)) {
             set({ cart: [...cart, courseId] })
         }
     },
+
     removeFromCart: (courseId) => {
         const cart = get().cart.filter((id) => id !== courseId)
         set({ cart })
     },
 
+    // Wishlist actions
     addToWishlist: (courseId) => {
         const wishlist = get().wishlist
         if (!wishlist.includes(courseId)) {
@@ -97,6 +113,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         const wishlist = get().wishlist.filter((id) => id !== courseId)
         set({ wishlist })
     },
+    // Enrolled courses actions
     addToEnrolledCourses: (course: EnrolledCourse) => {
         const { enrolledCourses } = get()
         if (!enrolledCourses.some((c) => c.courseId === course.courseId)) {
@@ -110,6 +127,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         set({ enrolledCourses })
     },
 
+    // Completed courses actions
     addToCompletedCourses: (course) => {
         if (!get().isCompleted(course.courseId)) {
             set({ completedCourses: [...get().completedCourses, course] })
@@ -118,7 +136,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     removeFromCompletedCourses: (courseId) => {
         set({ completedCourses: get().completedCourses.filter((c) => c.courseId !== courseId) })
     },
-
+    // Archived courses actions
     addToArchivedCourses: (course) => {
         if (!get().isArchived(course.courseId)) {
             set({ archivedCourses: [...get().archivedCourses, course] })

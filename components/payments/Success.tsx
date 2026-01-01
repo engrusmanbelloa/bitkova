@@ -1,3 +1,4 @@
+// components/payments/Success.tsx
 "use client"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"

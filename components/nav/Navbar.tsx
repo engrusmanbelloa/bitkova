@@ -1,8 +1,19 @@
+// components/nav/Navbar.tsx
 "use client"
 import React, { useState, useRef, ReactElement, useEffect } from "react"
 import styled from "styled-components"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
+import { auth } from "@/lib/firebase/firebaseConfig"
+import { toast } from "sonner"
+// Hooks & Store
+import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { useUserStore } from "@/lib/store/useUserStore"
+import { syncUserStore } from "@/lib/store/syncUserStore"
+import { useQueryClient } from "@tanstack/react-query"
+// Mui Components
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
 import Slide from "@mui/material/Slide"
@@ -14,6 +25,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
 import { Badge } from "@mui/material"
+// Components
 import Logo from "@/components/nav/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
 import SignIn from "@/components/auth/SignIn"
@@ -22,16 +34,8 @@ import DropdownMenu from "@/components/nav/Dropdown"
 import NotifyModal from "@/components/auth/NotifyModal"
 import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
-import { mobile, ipad } from "@/responsive"
-import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth, app } from "@/lib/firebase/firebaseConfig"
-import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
-import { toast } from "sonner"
-import { useAuthReady } from "@/hooks/useAuthReady"
-import { useUserStore } from "@/lib/store/useUserStore"
-import { syncUserStore } from "@/lib/store/syncUserStore"
-import { useQueryClient } from "@tanstack/react-query"
 import NavSkeleton from "./NavSkeleton"
+import { mobile, ipad } from "@/responsive"
 
 // containers section
 const Container = styled.section`
@@ -100,12 +104,11 @@ const SearchContainer = styled.div`
 `
 // middle section of the nav bar
 const Center = styled.ul`
-    flex: 1.8;
+    flex: 2;
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     list-style-type: none;
-    width: 657px;
     height: 40px;
     padding: 10px;
     gap: 10px;
@@ -196,43 +199,73 @@ const Toggle = styled.div`
 export default function Navbar() {
     const router = useRouter()
     const queryClient = useQueryClient()
-    const [toggleMenu, setToggleMenu] = useState(false)
-    const [signin, setSignin] = useState(false)
-    const [singUp, setSignUp] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [sentVerification, setSentVerification] = useState(false)
-    const [verificationChecked, setVerificationChecked] = useState(false)
-    const [notifyModalOpen, setNotifyModalOpen] = useState(false)
-    const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
     const { user, firebaseUser, authReady, error, isLoadingUserDoc } = useAuthReady()
-    const [currentUser, setCurrentUser] = useState(auth.currentUser)
+
+    // UI State
+    const [toggleMenu, setToggleMenu] = useState(false)
+    const [isManualVerified, setIsManualVerified] = useState(false)
+    const [activeModal, setActiveModal] = useState<"signin" | "signup" | "notify" | "reset" | null>(
+        null,
+    )
+
+    // Store State
     const cartCount = useUserStore((s) => s.cart.length)
     const wishlistCount = useUserStore((s) => s.wishlist.length)
-    const main = "true"
 
-    // menu items array
-    const menuList = [
-        {
-            id: 1,
-            href: "insights",
-            title: "Insights",
-        },
-        {
-            id: 2,
-            href: "/partnership",
-            title: "Be a partner",
-        },
-        {
-            id: 3,
-            href: "/our-hub",
-            title: "Our Hub",
-        },
-        {
-            id: 4,
-            href: "/my-learning",
-            title: "My Learning",
-        },
-    ]
+    const main = "true"
+    const isAuthenticated = !!firebaseUser
+    // const isVerified =
+    //     (firebaseUser?.providerData[0]?.providerId === "password"
+    //         ? firebaseUser.emailVerified
+    //         : true) || isManualVerified
+    const isVerified =
+        (firebaseUser?.providerId === "password"
+            ? firebaseUser.emailVerified
+            : firebaseUser?.emailVerified) || isManualVerified
+
+    // Sync logic
+    useEffect(() => {
+        let unsubscribe: (() => void) | undefined
+
+        if (user?.id) {
+            // This now captures the cleanup function from our refactored syncUserStore
+            unsubscribe = syncUserStore(user.id)
+            console.log("Sync started for user:", user.id)
+        }
+
+        return () => {
+            if (unsubscribe) {
+                unsubscribe()
+                console.log("Sync cleaned up")
+            }
+        }
+    }, [user?.id])
+
+    // Auth actions
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth)
+            queryClient.clear()
+            router.push("/")
+            toast.success("Signed out successfully")
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
+
+    const checkVerification = async () => {
+        if (!firebaseUser) return
+
+        await firebaseUser.reload()
+
+        if (firebaseUser.emailVerified) {
+            toast.success("Email verified!")
+            setIsManualVerified(true)
+            setActiveModal(null)
+        } else {
+            toast.error("Still not verified. Please check your inbox/spam.")
+        }
+    }
 
     // SingIN Modal transition, open and close functions
     const Transition = ({
@@ -249,219 +282,28 @@ export default function Navbar() {
             </Slide>
         )
     }
-    const handleSignInOpen = async () => {
-        if (!user) {
-            setSignUp(false)
-            setSignin(true)
-        } else {
-            signOut(auth)
-                .then(() => {
-                    setCurrentUser(null)
-                })
-                .catch((error) => {
-                    toast.error(error.message)
-                })
-        }
-    }
-
-    const handleSignInClose = async () => {
-        if (firebaseUser) {
-            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
-            toast.success("Welcome back " + (firebaseUser.displayName || firebaseUser.email))
-        }
-        setTimeout(() => {
-            setSignin(false)
-            setCurrentUser(auth.currentUser)
-        }, 1000)
-    }
-    // SingUp Modal transition, open and close functions
-    const handleSignUpOpen = async () => {
-        if (!user) {
-            setSignin(false)
-            setSignUp(true)
-        } else {
-            setSignUp(false)
-            toast.success("You are already logged in")
-        }
-    }
-
-    const handleSignUpClose = async () => {
-        if (firebaseUser) {
-            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
-        }
-        setTimeout(() => {
-            setSignUp(false)
-        }, 1000)
-    }
 
     // Handle user email verification
+
     const handleSendVerification = async () => {
-        if (!authReady) return // Wait until auth state is ready
-        try {
-            if (!firebaseUser) {
-                toast.error("User not authenticated.")
-                return
-            }
-            await firebaseUser.reload() // Always refresh to get up-to-date emailVerified status
-            // console.log("the user is verified? ", auth.currentUser?.emailVerified)
-            if (firebaseUser.emailVerified) {
-                // Verified, proceed
-                setVerificationChecked(true)
-                setSentVerification(false)
-                setNotifyModalOpen(false)
-                toast.success("Email already verified")
-
-                // create user document if verified but not created
-                await createUserIfNotExists(firebaseUser)
-
-                const idToken = await firebaseUser.getIdToken() // force refresh
-                // Create session
-                // await fetch("/api/auth/session", {
-                //     method: "POST",
-                //     headers: { "Content-Type": "application/json" },
-                //     body: JSON.stringify({ idToken }),
-                //     credentials: "include",
-                // })
-                toast.success("Email verification successful")
-            } else {
-                if (!sentVerification) {
-                    await sendEmailVerification(firebaseUser)
-                    setSentVerification(true)
-                    toast.success("Verification email sent check your inbox/spam")
-                } else {
-                    toast.success("Verification email already sent to your inbox/spam")
-                }
-            }
-        } catch (error: any) {
-            console.log("Faild:", error.message)
-            toast.error("Failed to resend verification email. Please try again later.", error)
+        if (!firebaseUser) {
+            toast.error("User not authenticated")
+            return
         }
-    }
-    // Check if the user confirmed their email
-    const handleCheckVerification = async () => {
-        if (!authReady) return // Wait until Firebase auth is ready
 
-        try {
-            if (!firebaseUser) {
-                toast.error("User not authenticated")
-                return
-            }
+        await firebaseUser.reload()
 
+        if (firebaseUser.emailVerified) {
             await firebaseUser.reload()
-            const isVerified = firebaseUser.emailVerified
-
-            if (!isVerified) {
-                toast.info("Email not verified. Please verify your email.")
-                return
-            }
-
-            // Proceed after successful verification
-            setVerificationChecked(true)
-            setSentVerification(false)
-            setNotifyModalOpen(false)
-
-            // create user document after being verified
+            await firebaseUser.getIdToken(true)
             await createUserIfNotExists(firebaseUser)
-
-            const idToken = await firebaseUser.getIdToken() // force refresh
-            // const res = await fetch("/api/auth/session", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ idToken }),
-            //     credentials: "include",
-            // })
-
-            // if (!res.ok) {
-            //     const { error } = await res.json()
-            //     throw new Error(error || "Session creation failed")
-            // }
-            // Invalidate the query to force a re-fetch and re-render
-            await queryClient.invalidateQueries({ queryKey: ["userDoc", firebaseUser.uid] })
-            toast.success("Verification successful, You can now login")
-            // window.location.reload()
-        } catch (error: any) {
-            console.error("Verification error:", error)
-            setNotifyModalOpen(true)
-            setSentVerification(false)
-            toast.error("Failed to check verification status. Please try again later.")
+            toast.success("Email already verified")
+            return
         }
-    }
-    // close the notification modal
-    const notifyModalClose = async () => {
-        setNotifyModalOpen(false)
-        // await signOut(auth)
-        //     .then(() => {
-        //         // login = false
-        //         toast.success("You have been signed out")
-        //     })
-        //     .catch((error) => {
-        //         toast.error(error.message)
-        //     })
-    }
-    // forgot password functions open, close the modal
-    const handleForgotPasswordOpen = () => {
-        setForgotPasswordOpen(true)
-        setSignUp(false)
-        setSignin(false)
-    }
-    const handleForgotPasswordClose = () => {
-        setForgotPasswordOpen(false)
-    }
 
-    useEffect(() => {
-        setIsLoading(true)
-        // console.log(`Auth is ready state: ${authReady}, checking user state...`)
-        const unsubscribe = onAuthStateChanged(auth, async (useEffectUser) => {
-            setCurrentUser(useEffectUser)
-            // console.log("Auth state changed, user:", useEffectUser)
-            if (useEffectUser !== null) {
-                await useEffectUser.reload()
-                if (!useEffectUser.emailVerified) {
-                    // console.log(
-                    //     "user verification is : " +
-                    //         user.emailVerified +
-                    //         ", User logged in :" +
-                    //         userLoggedIn,
-                    // )
-                    // toast.info("User signed in but not verified.")
-                    setNotifyModalOpen(true)
-                } else {
-                    // toast.info("User account verified.")
-                    setNotifyModalOpen(false)
-                }
-                setSignin(false)
-                setSignUp(false)
-                // const uid = user.uid
-                // login = true
-                // console.log("user id is : " + uid)
-            } else {
-                // User is signed out.
-                // toast.info("You are not logged in.")
-            }
-        })
-
-        return () => {
-            setIsLoading(false)
-            unsubscribe()
-        }
-    }, [currentUser])
-
-    useEffect(() => {
-        if (user) {
-            useUserStore.setState({
-                cart: user.cart || [],
-                wishlist: user.wishList || [],
-                enrolledCourses: [],
-            })
-            syncUserStore(user.id)
-                .then(() => {
-                    console.log("User store synced successfully")
-                })
-                .catch((error) => {
-                    console.error("Error syncing user store:", error)
-                })
-        }
-    }, [user])
+        await sendEmailVerification(firebaseUser)
+        toast.success("Verification email sent. Check inbox or spam.")
+    }
 
     if (!authReady || isLoadingUserDoc) {
         return (
@@ -499,16 +341,23 @@ export default function Navbar() {
                     </Left>
                     {/* nav center items container  */}
                     <Center>
-                        {menuList.map((item) => (
-                            <Link key={item.id} href={item.href}>
-                                <Menu>{item.title}</Menu>
-                            </Link>
-                        ))}
+                        <Center>
+                            {["Insights", "Partnership", "Our Hub", "My Learning"].map((item) => (
+                                <Menu
+                                    key={item}
+                                    onClick={() =>
+                                        router.push(`/${item.toLowerCase().replace(" ", "-")}`)
+                                    }
+                                >
+                                    {item}
+                                </Menu>
+                            ))}
+                        </Center>
                     </Center>
                     {/* nav right items container  */}
                     <Right>
                         {/* Right side nav When user is logged in */}
-                        {authReady && user && firebaseUser && firebaseUser.emailVerified && (
+                        {isAuthenticated && isVerified ? (
                             <>
                                 <CartsContainer>
                                     <Badge
@@ -556,11 +405,65 @@ export default function Navbar() {
                                     </Badge>
                                 </CartsContainer>
 
-                                <NavAvatar user={user.name || user.email} />
+                                <NavAvatar
+                                    user={user?.name || firebaseUser.email}
+                                    onSignOut={handleSignOut}
+                                />
+                            </>
+                        ) : (
+                            // Right side nav When user is not logged in
+                            <>
+                                <NavBtn onClick={() => router.push("/courses")}>
+                                    Browse Courses
+                                </NavBtn>
+                                <LoginBtn $login={false} onClick={() => setActiveModal("signin")} />
                             </>
                         )}
+                        {/* Only show Auth Modals if no user is present */}
+                        {!firebaseUser && (
+                            <>
+                                {/* Modal for signup  */}
+                                {activeModal === "signup" && (
+                                    <SignUp
+                                        open={activeModal === "signup"}
+                                        Transition={Transition}
+                                        handleClose={() => setActiveModal(null)}
+                                        handleSignInOpen={() => setActiveModal("signin")}
+                                    />
+                                )}
+                                {/* Modal for signin  */}
+                                {activeModal === "signin" && (
+                                    <SignIn
+                                        open={activeModal === "signin"}
+                                        Transition={Transition}
+                                        handleClose={() => setActiveModal(null)}
+                                        handleSingUpOpen={() => setActiveModal("signup")}
+                                        handleForgotPasswordOpen={() => setActiveModal("reset")}
+                                    />
+                                )}
+                                {/* Reset password modal  */}
+                                {activeModal === "reset" && (
+                                    <ResetPsswd
+                                        open={activeModal === "reset"}
+                                        handleClose={() => setActiveModal(null)}
+                                        Transition={Transition}
+                                    />
+                                )}
+                            </>
+                        )}
+                        {/* Notification modal for email verification */}
+                        {isAuthenticated && !isVerified && (
+                            <NotifyModal
+                                open={true}
+                                handleNotifyModalClose={() => signOut(auth)}
+                                handleCheckVerification={checkVerification}
+                                handleSendVerification={handleSendVerification}
+                                Transition={Transition}
+                            />
+                        )}
+
+                        {/* Mobile middle search bar */}
                         <>
-                            {/* Mobile middle search bar */}
                             <MobileNavMiddle>
                                 <InputBase
                                     sx={{ ml: 1, flex: 1 }}
@@ -575,53 +478,7 @@ export default function Navbar() {
                                     <SearchIcon />
                                 </IconButton>
                             </MobileNavMiddle>
-                            {/* Right side nav When user is not logged in */}
-                            {!user && (
-                                <>
-                                    <NavBtn onClick={() => router.push("/courses")}>
-                                        Browse Courses
-                                    </NavBtn>
-                                    <LoginBtn $login={false} onClick={handleSignInOpen} />
-                                </>
-                            )}
                         </>
-                        {/* Modal for signup  */}
-                        {singUp && (
-                            <SignUp
-                                handleClose={handleSignUpClose}
-                                open={singUp}
-                                Transition={Transition}
-                                handleSignInOpen={handleSignInOpen}
-                            />
-                        )}
-                        {/* Modal for login  */}
-                        {signin && (
-                            <SignIn
-                                open={signin}
-                                handleClose={handleSignInClose}
-                                Transition={Transition}
-                                handleSingUpOpen={handleSignUpOpen}
-                                handleForgotPasswordOpen={handleForgotPasswordOpen}
-                            />
-                        )}
-                        {notifyModalOpen && (
-                            <NotifyModal
-                                open={notifyModalOpen}
-                                handleNotifyModalClose={notifyModalClose}
-                                handleSendVerification={handleSendVerification}
-                                handleCheckVerification={handleCheckVerification}
-                                Transition={Transition}
-                                verificationChecked={verificationChecked}
-                                sentVerification={sentVerification}
-                            />
-                        )}
-                        {forgotPasswordOpen && (
-                            <ResetPsswd
-                                open={forgotPasswordOpen}
-                                handleClose={handleForgotPasswordClose}
-                                Transition={Transition}
-                            />
-                        )}
                         {/* Mobile nav toggler  */}
                         <Toggle>
                             {/* cart icon badge */}
@@ -688,21 +545,16 @@ export default function Navbar() {
                                 />
                             )}
                             {/* Drop down menu for mobile users when successfully logged in */}
-                            {toggleMenu && user && firebaseUser && firebaseUser.emailVerified ? (
+                            {toggleMenu && (
                                 <DropdownMenu
-                                    handleSingUpOpen={handleSignInOpen}
+                                    user={
+                                        isAuthenticated && isVerified
+                                            ? user?.name || user?.email
+                                            : false
+                                    }
+                                    handleSingUpOpen={() => setActiveModal("signin")}
                                     closeMenu={() => setToggleMenu(false)}
-                                    user={user.name || user.email}
                                 />
-                            ) : (
-                                // {/* Drop down menu for mobile users when not logged in */}
-                                toggleMenu && (
-                                    <DropdownMenu
-                                        user={false}
-                                        handleSingUpOpen={handleSignInOpen}
-                                        closeMenu={() => setToggleMenu(false)}
-                                    />
-                                )
                             )}
                         </Toggle>
                     </Right>

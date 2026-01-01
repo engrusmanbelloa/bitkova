@@ -5,12 +5,15 @@ import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useRouter } from "next/navigation"
 import { useAuthReady } from "@/hooks/useAuthReady"
+import { useUserStore } from "@/lib/store/useUserStore"
 import { toast } from "sonner"
 import { ClassType } from "@/types/classTypes"
+import { EnrolledCourse } from "@/types/userType"
 
 const Container = styled.div`
-    width: ${(props) => props.theme.widths.heroWidth};
-    margin: 10px auto;
+    width: ${(props) => props.theme.widths.dsktopWidth};
+    margin: 0 auto;
+    padding: ${(props) => props.theme.paddings.pagePadding};
     box-sizing: border-box;
     ${ipad((props: any) => `width: ${props.theme.widths.ipadWidth};`)}
     ${mobile(
@@ -111,6 +114,7 @@ export default function UnifiedCheckout({
 }: UnifiedCheckoutProps) {
     const router = useRouter()
     const { user, authReady } = useAuthReady()
+    const { cart, enrolledCourses, removeFromCart, addToEnrolledCourses } = useUserStore()
 
     const totalAmount = items.reduce((sum, item) => sum + item.price, 0)
 
@@ -149,35 +153,6 @@ export default function UnifiedCheckout({
         },
     }
 
-    // const handleSuccess = async (reference: { reference: string }) => {
-    //     try {
-    //         toast.success(successMessage ?? "Payment successful! Your access has been activated.")
-
-    //         if (successRedirect) {
-    //             router.push(successRedirect)
-    //         }
-    //     } catch (err) {
-    //         console.error("Post-payment enrollment failed:", err)
-    //         toast.error("Payment succeeded but enrollment failed. Please contact support.")
-    //     }
-    // }
-    // const handleSuccess = async (reference: { reference: string }) => {
-    //     try {
-    //         await fetch("/api/paystack/verify", {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify({
-    //                 reference: reference.reference,
-    //             }),
-    //         })
-
-    //         toast.success(successMessage)
-    //         router.push(successRedirect)
-    //     } catch (err) {
-    //         console.error(err)
-    //         toast.error("Payment succeeded but verification failed")
-    //     }
-    // }
     const handleSuccess = async (reference: { reference: string }) => {
         console.log("Paystack real ref:", reference.reference)
         try {
@@ -190,6 +165,29 @@ export default function UnifiedCheckout({
             })
 
             if (!res.ok) throw new Error("Verification failed")
+            // ✅ UI STATE CLEANUP ONLY
+            // items.forEach((item) => removeFromCart(item.id))
+            // something.forEach(addToEnrolledCourses)
+            // 1. Loop through the items being purchased
+            items.forEach((item) => {
+                // 2. Remove from cart (UI state)
+                removeFromCart(item.id)
+
+                // 3. Prepare the enrollment object
+                const enrollmentData: EnrolledCourse = {
+                    userId: user!.id,
+                    courseId: item.id,
+                    completedLessons: 0,
+                    progress: 0,
+                    status: "in progress",
+                    type: classType as any, // "async_course", "physical", or "telegram"
+                    paymentReference: reference.reference,
+                    enrolledAt: new Date(),
+                }
+
+                // 4. Add to the enrolled courses (UI state)
+                addToEnrolledCourses(enrollmentData)
+            })
 
             toast.success(successMessage)
             router.push(successRedirect)
