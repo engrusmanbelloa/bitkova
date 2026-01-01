@@ -36,6 +36,7 @@ import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import NavSkeleton from "./NavSkeleton"
 import { mobile, ipad } from "@/responsive"
+import AuthModalManager from "@/components/auth/AuthModalManager"
 
 // containers section
 const Container = styled.section`
@@ -214,10 +215,6 @@ export default function Navbar() {
 
     const main = "true"
     const isAuthenticated = !!firebaseUser
-    // const isVerified =
-    //     (firebaseUser?.providerData[0]?.providerId === "password"
-    //         ? firebaseUser.emailVerified
-    //         : true) || isManualVerified
     const isVerified =
         (firebaseUser?.providerId === "password"
             ? firebaseUser.emailVerified
@@ -253,17 +250,39 @@ export default function Navbar() {
         }
     }
 
-    const checkVerification = async () => {
-        if (!firebaseUser) return
+    // Handle user email verification
+    const handleSendVerification = async () => {
+        if (!firebaseUser) {
+            toast.error("User not authenticated")
+            return
+        }
 
         await firebaseUser.reload()
 
         if (firebaseUser.emailVerified) {
-            toast.success("Email verified!")
-            setIsManualVerified(true)
-            setActiveModal(null)
-        } else {
-            toast.error("Still not verified. Please check your inbox/spam.")
+            await firebaseUser.reload()
+            await firebaseUser.getIdToken(true)
+            toast.success("Email already verified")
+            return
+        }
+
+        await sendEmailVerification(firebaseUser)
+        toast.success("Verification email sent. Check inbox or spam.")
+    }
+    const checkVerification = async () => {
+        if (!firebaseUser) return
+        try {
+            await firebaseUser.reload()
+            if (firebaseUser.emailVerified) {
+                setIsManualVerified(true)
+                await createUserIfNotExists(firebaseUser)
+                toast.success("Account verified and synced!")
+                setActiveModal(null)
+            } else {
+                toast.error("Please verify your email first.")
+            }
+        } catch (e) {
+            toast.error("Verification check failed.")
         }
     }
 
@@ -281,28 +300,6 @@ export default function Navbar() {
                 {children}
             </Slide>
         )
-    }
-
-    // Handle user email verification
-
-    const handleSendVerification = async () => {
-        if (!firebaseUser) {
-            toast.error("User not authenticated")
-            return
-        }
-
-        await firebaseUser.reload()
-
-        if (firebaseUser.emailVerified) {
-            await firebaseUser.reload()
-            await firebaseUser.getIdToken(true)
-            await createUserIfNotExists(firebaseUser)
-            toast.success("Email already verified")
-            return
-        }
-
-        await sendEmailVerification(firebaseUser)
-        toast.success("Verification email sent. Check inbox or spam.")
     }
 
     if (!authReady || isLoadingUserDoc) {
@@ -421,35 +418,11 @@ export default function Navbar() {
                         )}
                         {/* Only show Auth Modals if no user is present */}
                         {!firebaseUser && (
-                            <>
-                                {/* Modal for signup  */}
-                                {activeModal === "signup" && (
-                                    <SignUp
-                                        open={activeModal === "signup"}
-                                        Transition={Transition}
-                                        handleClose={() => setActiveModal(null)}
-                                        handleSignInOpen={() => setActiveModal("signin")}
-                                    />
-                                )}
-                                {/* Modal for signin  */}
-                                {activeModal === "signin" && (
-                                    <SignIn
-                                        open={activeModal === "signin"}
-                                        Transition={Transition}
-                                        handleClose={() => setActiveModal(null)}
-                                        handleSingUpOpen={() => setActiveModal("signup")}
-                                        handleForgotPasswordOpen={() => setActiveModal("reset")}
-                                    />
-                                )}
-                                {/* Reset password modal  */}
-                                {activeModal === "reset" && (
-                                    <ResetPsswd
-                                        open={activeModal === "reset"}
-                                        handleClose={() => setActiveModal(null)}
-                                        Transition={Transition}
-                                    />
-                                )}
-                            </>
+                            <AuthModalManager
+                                activeModal={activeModal as any}
+                                setActiveModal={setActiveModal as any}
+                                Transition={Transition}
+                            />
                         )}
                         {/* Notification modal for email verification */}
                         {isAuthenticated && !isVerified && (
