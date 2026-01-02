@@ -27,6 +27,8 @@ import { z } from "zod"
 import { useQuery } from "@tanstack/react-query"
 import { Cohort } from "@/types/classTypes"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
+import { createTelegramClass } from "@/lib/firebase/uploads/CreateClasseDoc"
+import { useFetchTelegramGroups } from "@/hooks/classes/useFetchTgGroups"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;
@@ -145,9 +147,10 @@ const DetailItem = styled.div`
 type TelegramClassForm = z.infer<typeof telegramClassSchema>
 
 export default function CreateTelegramClass() {
-    const [telegramGroups, setTelegramGroups] = useState<{ chatId: string; title: string }[]>([])
+    // const [telegramGroups, setTelegramGroups] = useState<{ chatId: string; title: string }[]>([])
     // Fetch available cohorts
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
+    const { data: tgGroups = [], isLoading: tgLoading, error: tgError } = useFetchTelegramGroups()
     // Telegram Class Form
     const telegramForm = useForm<TelegramClassForm>({
         resolver: zodResolver(telegramClassSchema),
@@ -183,7 +186,7 @@ export default function CreateTelegramClass() {
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
     const selectedGroupId = telegramForm.watch("telegramGroupId")
-    const selectedGroup = telegramGroups?.find((c) => c.chatId === String(selectedGroupId))
+    const selectedGroup = tgGroups?.find((c) => c.chatId === String(selectedGroupId))
 
     const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
         try {
@@ -197,8 +200,8 @@ export default function CreateTelegramClass() {
                 telegramGroupId: data.telegramGroupId,
                 schedule: data.schedule,
             }
-
-            await addDoc(collection(db, "telegramClasses"), classData)
+            await createTelegramClass(classData)
+            // await addDoc(collection(db, "telegramClasses"), classData)
             toast.success("Telegram class created successfully!")
             telegramForm.reset()
         } catch (error) {
@@ -207,29 +210,37 @@ export default function CreateTelegramClass() {
         }
     }
 
-    useEffect(() => {
-        async function loadGroups() {
-            const snap = await getDocs(collection(db, "telegramGroups"))
-            const groups = snap.docs.map((doc) => {
-                const data = doc.data()
-                return {
-                    ...data,
-                    // Ensure chatId is always a string for Zod/Select consistency
-                    chatId: String(data.chatId),
-                    title: data.title,
-                }
-            })
-            setTelegramGroups(groups)
-        }
-        loadGroups()
-    }, [])
+    // useEffect(() => {
+    //     async function loadGroups() {
+    //         const snap = await getDocs(collection(db, "telegramGroups"))
+    //         const groups = snap.docs.map((doc) => {
+    //             const data = doc.data()
+    //             return {
+    //                 ...data,
+    //                 // Ensure chatId is always a string for Zod/Select consistency
+    //                 chatId: String(data.chatId),
+    //                 title: data.title,
+    //             }
+    //         })
+    //         setTelegramGroups(groups)
+    //     }
+    //     loadGroups()
+    // }, [])
 
-    if (cohortsLoading) {
+    if (cohortsLoading || tgLoading) {
         return (
             <FormCard>
                 <LoadingContainer>
                     <CircularProgress />
                 </LoadingContainer>
+            </FormCard>
+        )
+    }
+
+    if (tgError || cohortsError) {
+        return (
+            <FormCard>
+                <p style={{ color: "#ef4444" }}>Failed to load Telegram groups</p>
             </FormCard>
         )
     }
@@ -437,7 +448,7 @@ export default function CreateTelegramClass() {
                             <FormControl fullWidth error={!!fieldState.error}>
                                 <InputLabel>Telegram Group</InputLabel>
                                 <Select {...field} label="Telegram Group">
-                                    {telegramGroups.map((g) => (
+                                    {tgGroups.map((g) => (
                                         <MenuItem key={g.chatId} value={g.chatId}>
                                             {g.title}
                                         </MenuItem>

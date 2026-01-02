@@ -26,6 +26,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
+import { createPhysicalClass } from "@/lib/firebase/uploads/CreateClasseDoc"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;
@@ -200,21 +201,6 @@ export default function CreatePhysicalClass() {
 
     const onPhysicalClassSubmit = async (data: PhysicalClassForm) => {
         try {
-            // const classData = {
-            //     name: data.name,
-            //     location: data.location,
-            //     cohortId: data.cohortId,
-            //     price: data.price,
-            //     capacity: data.capacity,
-            //     enrolled: 0,
-            //     schedule: {
-            //         days: ["Saturday", "Sunday"],
-            //         time: data.time,
-            //     },
-            //     instructors: data.instructors.map((i) => i.value),
-            //     courses: data.courses.map((c) => c.value),
-            //     mapLink: data.mapLink || "",
-            // }
             const classData = {
                 name: data.name,
                 location: data.location,
@@ -229,7 +215,9 @@ export default function CreatePhysicalClass() {
                 mapLink: data.mapLink || "",
             }
 
-            await addDoc(collection(db, "physicalClasses"), classData)
+            await createPhysicalClass(classData)
+
+            // await addDoc(collection(db, "physicalClasses"), classData)
             toast.success(`Physical class ${data.name} created!`)
             physicalForm.reset()
         } catch (error) {
@@ -335,22 +323,6 @@ export default function CreatePhysicalClass() {
                         )}
                     />
                 </FormRow>
-                {/* {selectedCohort && (
-                    <CohortInfo>
-                        <strong>Selected Cohort Details:</strong>
-                        <br />
-                        📅 Duration: {new Date(
-                            selectedCohort.startDate,
-                        ).toLocaleDateString()} -{" "}
-                        {new Date(selectedCohort.endDate).toLocaleDateString()}
-                        <br />
-                        📝 Registration:{" "}
-                        {new Date(selectedCohort.registrationOpen).toLocaleDateString()} -{" "}
-                        {new Date(selectedCohort.registrationClose).toLocaleDateString()}
-                        <br />
-                        📊 Status: {selectedCohort.status.toUpperCase()}
-                    </CohortInfo>
-                )} */}
                 {selectedCohort && (
                     <CohortInfoContainer>
                         <InfoTitle>
@@ -585,21 +557,6 @@ export default function CreatePhysicalClass() {
                             />
                         )}
                     />
-
-                    {/* <Controller
-                        name="time"
-                        control={physicalForm.control}
-                        render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                label="Schedule Time"
-                                placeholder="e.g., 2pm - 5pm"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                fullWidth
-                            />
-                        )}
-                    /> */}
                 </FormRow>
 
                 <FullWidthField>

@@ -16,19 +16,17 @@ export interface Cohort {
 
 export interface PhysicalClass {
     id: string
-    name: string // "Gombe HQ"
+    name: string
     location: string
     cohortId: string
     price: number
     capacity: number
     enrolled: number
     schedule: {
-        slots: [
-            {
-                days: []
-                time: ""
-            },
-        ]
+        slots: {
+            days: string[]
+            time: string
+        }[]
     }
     instructors: string[]
     courses: string[]
@@ -44,12 +42,10 @@ export interface TelegramClass {
     enrolled: number
     telegramGroupId: string
     schedule: {
-        slots: [
-            {
-                days: []
-                time: ""
-            },
-        ]
+        slots: {
+            days: string[]
+            time: string
+        }[]
     }
 }
 
