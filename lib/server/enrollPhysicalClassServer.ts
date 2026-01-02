@@ -1,68 +1,91 @@
-// lib/server/enrollTelegramClassServer.ts
 import { db } from "@/lib/firebase/firebaseConfig"
-import { doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore"
+import { doc, setDoc, updateDoc, increment, getDoc, writeBatch } from "firebase/firestore"
+import QRCode from "qrcode"
+import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
-import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
-import { markInvitePending } from "@/lib/telegram/markInvitePending"
+import { markInvitePending } from "../telegram/markInvitePending"
 
 interface Params {
     userId: string
     classId: string
-    className: string
     cohortId: string
     cohortName: string
-    telegramGroupId: string
+    className: string
     paymentReference: string
     payerEmail: string
+    telegramGroupId: string
 }
 
-export async function enrollTelegramClassServer({
+export async function enrollPhysicalClassServer({
     userId,
     classId,
     cohortId,
     cohortName,
-    telegramGroupId,
+    className,
     paymentReference,
     payerEmail,
-    className,
+    telegramGroupId,
 }: Params) {
     const enrollmentId = `${userId}-${classId}`
 
-    // ✅ Idempotency check
-    const existing = await getDoc(doc(db, "telegramClassEnrollments", enrollmentId))
+    // ✅ Idempotency check (CRITICAL)
+    const existing = await getDoc(doc(db, "physicalClassEnrollments", enrollmentId))
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
     const inviteLink = await createTelegramInviteLink(telegramGroupId, userId)
 
-    await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
+    // ✅ Generate QR code
+    const qrPayload = {
+        enrollmentId,
+        userId,
+        classId,
+        type: "physical_class",
+        inviteLink,
+        issuedAt: Date.now(),
+    }
+    const qrCode = await QRCode.toDataURL(JSON.stringify(qrPayload))
+
+    const batch = writeBatch(db)
+    const now = new Date()
+
+    // ✅ Enrollment record
+    batch.set(doc(db, "physicalClassEnrollments", enrollmentId), {
         id: enrollmentId,
         userId,
         classId,
-        className,
         cohortId,
         paymentReference,
-        telegramInviteLink: inviteLink,
+        qrCode,
         status: "paid",
-        enrolledAt: new Date(),
+        enrolledAt: now,
+        attendanceLog: [],
     })
 
-    // ✅ Increment class count
-    await updateDoc(doc(db, "telegramClasses", classId), {
+    // ✅ Increment class capacity
+    batch.update(doc(db, "physicalClasses", classId), {
         enrolled: increment(1),
     })
 
-    // ✅ Save unified enrollment
-    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
+    // ✅ Unified enrollment (dashboard, receipts, audit)
+    batch.set(doc(db, "users", userId, "classEnrollments", enrollmentId), {
         enrollmentId,
-        className,
         itemId: classId,
-        type: "telegram_class",
+        type: "physical_class",
         paymentReference,
-        enrolledAt: new Date(),
+        enrolledAt: now,
     })
 
+    await batch.commit()
+
+    // ✅ Email notification
+    //  await sendEnrollmentEmail({
+    //      to: payerEmail,
+    //      cohortName: cohortName,
+    //      className: className,
+    //      telegramInviteLink: inviteLink,
+    //  })
     if (inviteLink) {
         await sendEnrollmentEmail({
             to: payerEmail,
@@ -71,7 +94,6 @@ export async function enrollTelegramClassServer({
             telegramInviteLink: inviteLink,
         })
     } else {
-        // await markInvitePending(userId, classId, telegramGroupId)
         await markInvitePending({
             userId: userId,
             email: payerEmail,
@@ -82,12 +104,6 @@ export async function enrollTelegramClassServer({
         })
     }
 
-    // await s  `1endEnrollmentEmail({
-    //     to: payerEmail,
-    //     cohortName: cohortName,
-    //     className: className,
-    //     telegramInviteLink: inviteLink,
-    // })
     // ✅ Telegram auto-DM
     //  await sendTelegramMessage(
     //      userId,

@@ -96,3 +96,18 @@ export interface ClassEnrollment {
     progress?: number // For async courses
     completedLessons?: number // For async courses
 }
+
+export type InviteStatus = "pending" | "processing" | "sent" | "failed"
+
+export interface telegramPendingInvites {
+    userId: string
+    email: string
+    classId: string
+    telegramGroupId: string
+    cohortName: string
+    className: string
+    attempts: number
+    status: InviteStatus
+    createdAt: Date
+    updatedAt: Date
+}

@@ -95,7 +95,6 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
             details: {
                 Cohort: cohort.name,
                 Duration: `${new Date(cohort.startDate).toLocaleDateString()} - ${new Date(cohort.endDate).toLocaleDateString()}`,
-                // Modules: telegramClass.modules.join(", "),
                 Platform: "Telegram (Live Classes)",
             },
         },
@@ -106,6 +105,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
             items={checkoutItems}
             classType="telegram_class"
             className={telegramClass.name}
+            cohortName={cohort.name}
             successMessage={successMessage}
             successRedirect="/dashboard"
             metadata={{

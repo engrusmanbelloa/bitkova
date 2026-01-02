@@ -3,7 +3,8 @@ import { PaymentHandler } from "@/types/paymentHandlers"
 import { enrollTelegramClassServer } from "@/lib/server/enrollTelegramClassServer"
 import { enrollAsyncCoursesServer } from "@/lib/server/enrollAsyncCoursesServer"
 import { removeCoursesFromCartServer } from "@/lib/server/cartServer"
-
+import { enrollPhysicalClassServer } from "../enrollPhysicalClassServer"
+// "async_course" | "physical_class" | "telegram_class"
 export const paymentHandlers: Record<string, PaymentHandler> = {
     telegram_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
         await enrollTelegramClassServer({
@@ -11,6 +12,21 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
             classId: itemIds[0],
             cohortId: metadata.cohortId,
             telegramGroupId: metadata.telegramGroupId,
+            className: metadata.className,
+            cohortName: metadata.cohortName,
+            paymentReference,
+            payerEmail,
+        })
+    },
+
+    physical_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
+        await enrollPhysicalClassServer({
+            userId,
+            classId: itemIds[0],
+            cohortId: metadata.cohortId,
+            telegramGroupId: metadata.telegramGroupId,
+            className: metadata.className,
+            cohortName: metadata.cohortName,
             paymentReference,
             payerEmail,
         })

@@ -56,9 +56,9 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
         })
     }
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading || cohortLoading) return <div>Loading...</div>
 
-    if (!classData) return <div>Class not found</div>
+    if (!classData || !cohort) return <div>Class not found</div>
 
     if (!user) return <AuthMessage message="Authentication required" />
 
@@ -96,6 +96,7 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
         <UnifiedCheckout
             items={checkoutItems}
             className={classData.name}
+            cohortName={cohort.name}
             classType="physical_class"
             successMessage={successMessage}
             successRedirect="/success"

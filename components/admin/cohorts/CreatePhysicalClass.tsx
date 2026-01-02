@@ -89,11 +89,6 @@ const CohortInfo = styled.div`
     font-size: 14px;
     color: #0369a1;
 `
-const HeaderTitle = styled.h3`
-    font-weight: 500;
-    margin-bottom: 5px;
-    color: ${(props) => props.theme.palette.common.black};
-`
 const CohortInfoContainer = styled.div`
     padding: 16px;
     background: #f0f9ff;
@@ -106,7 +101,7 @@ const InfoTitle = styled.div`
     align-items: center;
     gap: 8px;
     font-weight: 700;
-    color: #0369a1;
+    color: ${(props) => props.theme.palette.primary.main};
     margin-bottom: 12px;
     text-transform: uppercase;
     font-size: 12px;
@@ -124,7 +119,7 @@ const DetailItem = styled.div`
 
     label {
         font-size: 12px;
-        color: #0ea5e9;
+        color: ${(props) => props.theme.palette.primary.main};
         font-weight: 600;
     }
 
@@ -137,7 +132,11 @@ const DetailItem = styled.div`
         font-weight: 500;
     }
 `
-
+const HeaderTitle = styled.h3`
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: ${(props) => props.theme.palette.common.black};
+`
 type PhysicalClassForm = z.infer<typeof physicalClassSchema>
 
 export default function CreatePhysicalClass() {
