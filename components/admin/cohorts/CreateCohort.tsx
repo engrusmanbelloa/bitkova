@@ -41,6 +41,11 @@ const SubmitButton = styled(Button)`
         opacity: 0.9;
     }
 `
+const HeaderTitle = styled.h3`
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: ${(props) => props.theme.palette.common.black};
+`
 type CohortForm = z.infer<typeof cohortSchema>
 
 export default function CreateCohort() {
@@ -79,7 +84,7 @@ export default function CreateCohort() {
 
     return (
         <FormCard>
-            <h2>Create New Cohort</h2>
+            <HeaderTitle>Create New Cohort</HeaderTitle>
             <form onSubmit={cohortForm.handleSubmit(onCohortSubmit)}>
                 <FormRow>
                     <Controller

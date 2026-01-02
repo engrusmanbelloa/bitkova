@@ -143,11 +143,15 @@ const DetailItem = styled.div`
         font-weight: 500;
     }
 `
+const HeaderTitle = styled.h3`
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: ${(props) => props.theme.palette.common.black};
+`
 
 type TelegramClassForm = z.infer<typeof telegramClassSchema>
 
 export default function CreateTelegramClass() {
-    // const [telegramGroups, setTelegramGroups] = useState<{ chatId: string; title: string }[]>([])
     // Fetch available cohorts
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
     const { data: tgGroups = [], isLoading: tgLoading, error: tgError } = useFetchTelegramGroups()
@@ -185,8 +189,6 @@ export default function CreateTelegramClass() {
     // Watch selected cohort to show info
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
-    const selectedGroupId = telegramForm.watch("telegramGroupId")
-    const selectedGroup = tgGroups?.find((c) => c.chatId === String(selectedGroupId))
 
     const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
         try {
@@ -196,7 +198,6 @@ export default function CreateTelegramClass() {
                 price: data.price,
                 capacity: data.capacity,
                 enrolled: 0,
-                // modules: data.modules.map((m) => m.value),
                 telegramGroupId: data.telegramGroupId,
                 schedule: data.schedule,
             }
@@ -209,23 +210,6 @@ export default function CreateTelegramClass() {
             toast.error("Failed to create telegram class")
         }
     }
-
-    // useEffect(() => {
-    //     async function loadGroups() {
-    //         const snap = await getDocs(collection(db, "telegramGroups"))
-    //         const groups = snap.docs.map((doc) => {
-    //             const data = doc.data()
-    //             return {
-    //                 ...data,
-    //                 // Ensure chatId is always a string for Zod/Select consistency
-    //                 chatId: String(data.chatId),
-    //                 title: data.title,
-    //             }
-    //         })
-    //         setTelegramGroups(groups)
-    //     }
-    //     loadGroups()
-    // }, [])
 
     if (cohortsLoading || tgLoading) {
         return (
@@ -258,7 +242,7 @@ export default function CreateTelegramClass() {
 
     return (
         <FormCard>
-            <h2>Add Telegram Class</h2>
+            <HeaderTitle>Add Telegram Class</HeaderTitle>
 
             <form onSubmit={telegramForm.handleSubmit(onTelegramClassSubmit)}>
                 <FormRow>
