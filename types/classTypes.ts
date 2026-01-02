@@ -16,15 +16,17 @@ export interface Cohort {
 
 export interface PhysicalClass {
     id: string
-    name: string // "Gombe HQ"
+    name: string
     location: string
     cohortId: string
     price: number
     capacity: number
     enrolled: number
     schedule: {
-        days: string[] // ["Saturday", "Sunday"]
-        time: string // "2pm - 5pm"
+        slots: {
+            days: string[]
+            time: string
+        }[]
     }
     instructors: string[]
     courses: string[]
@@ -38,11 +40,12 @@ export interface TelegramClass {
     price: number
     capacity: number
     enrolled: number
-    modules: string[]
     telegramGroupId: string
-    schedule?: {
-        days: string[]
-        time: string
+    schedule: {
+        slots: {
+            days: string[]
+            time: string
+        }[]
     }
 }
 
@@ -55,6 +58,7 @@ export interface PhysicalClassEnrollment {
     qrCode: string
     status: "paid" | "attended" | "completed"
     enrolledAt: Date
+    // telegramGroupId: string
     attendanceLog: {
         date: Date
         attended: boolean

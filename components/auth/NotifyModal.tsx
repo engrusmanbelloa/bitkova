@@ -1,3 +1,4 @@
+// components/auth/NotifyModal.tsx
 import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
@@ -44,14 +45,13 @@ const VerificationContainer = styled.div`
     width: 250px;
     height: 150px;
 `
+
 interface NotifyModalProps {
     handleNotifyModalClose: () => void
     open: boolean
     Transition: ComponentType<any>
-    sentVerification: boolean
     handleCheckVerification: () => void
     handleSendVerification: () => void
-    verificationChecked: boolean
 }
 
 export default function NotifyModal({

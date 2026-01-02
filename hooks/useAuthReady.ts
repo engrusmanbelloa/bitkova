@@ -1,3 +1,4 @@
+// hooks/useAuthReady.ts
 import { useEffect, useState } from "react"
 import { getAuth } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"

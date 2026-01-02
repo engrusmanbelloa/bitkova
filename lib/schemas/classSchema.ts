@@ -14,13 +14,32 @@ export const cohortSchema = z.object({
     status: z.enum(["upcoming", "active", "closed"]),
 })
 
+// const scheduleSchema = z.object({
+//     days: z.array(z.string()).min(1, "At least one day is required"),
+//     time: z.string().min(1, "Time is required"),
+// })
+
+const scheduleSlotSchema = z.object({
+    days: z.array(z.string()).min(1, "At least one day is required"),
+    time: z.string().min(1, "Time is required"),
+})
+
+export const scheduleSchema = z.object({
+    slots: z.array(scheduleSlotSchema).min(1, "At least one schedule slot is required"),
+})
+
 export const physicalClassSchema = z.object({
     name: z.string().min(1, "Class name is required"),
     location: z.string().min(1, "Location is required"),
     cohortId: z.string().min(1, "Cohort ID is required"),
-    price: z.number().min(0, "Price must be positive"),
-    capacity: z.number().min(1, "Capacity must be at least 1"),
-    time: z.string().min(1, "Schedule time is required"),
+    // price: z.number().min(0, "Price must be positive"),
+    // capacity: z.number().min(1, "Capacity must be at least 1"),
+    price: z.number({ invalid_type_error: "Price is required" }).min(0, "Price cannot be negative"),
+    capacity: z
+        .number({ invalid_type_error: "Capacity is required" })
+        .min(1, "Capacity must be at least 1"),
+    schedule: scheduleSchema,
+    telegramGroupId: z.string().min(1, "Telegram Group ID is required"),
     mapLink: z.string().optional(),
     instructors: z
         .array(z.object({ value: z.string().min(1, "Instructor name required") }))
@@ -36,7 +55,5 @@ export const telegramClassSchema = z.object({
     price: z.number().min(0, "Price must be positive"),
     capacity: z.number().min(1, "Capacity must be at least 1"),
     telegramGroupId: z.string().min(1, "Telegram Group ID is required"),
-    modules: z
-        .array(z.object({ value: z.string().min(1, "Module name required") }))
-        .min(1, "At least one module required"),
+    schedule: scheduleSchema,
 })

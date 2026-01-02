@@ -12,7 +12,7 @@ import IsLoading from "@/components/IsLoading"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
-    margin: 0 auto;
+    margin: 10 auto;
     padding: ${(props) => props.theme.paddings.pagePadding};
     ${ipad(
         (props: any) => `
@@ -24,13 +24,13 @@ const Container = styled.div`
         (props: any) => `
             width: ${props.theme.widths.mobileWidth};
             background: ${props.theme.mobile.mobileNavBg};
-            box-shadow: 0px 4px 4px 0px #00000033;
+            box-shadow: 0px 4px 4px 0px ${props.theme.mobile.offWhite};
         `,
     )}
 `
 const Wrapper = styled.div`
     padding: 20px;
-    border: 1px solid ${(props) => props.theme.mobile.mobileNavBg};
+    border: 1px solid ${(props) => props.theme.mobile.horizontalrule};
     border-radius: 5px;
     ${ipad({ padding: "10px" })}
 `
@@ -76,7 +76,7 @@ const TopText = styled.span`
     text-decoration: underline;
     cursor: pointer;
     margin: 0px 10px;
-    color: #1c3879;
+    color: ${(props) => props.theme.palette.primary.main};
 `
 const BottomDiv = styled.div`
     display: flex;
@@ -131,7 +131,7 @@ const ChangeContainer = styled.div`
 `
 const Price = styled.p`
     font-weight: 600;
-    color: #1c3879;
+    color: ${(props) => props.theme.palette.primary.main};
     ${ipad({ margin: "0 auto" })}
     ${mobile({ margin: "0 auto" })}
 `
@@ -149,7 +149,7 @@ const Hr = styled.hr`
 const Summary = styled.div`
     flex: 1;
     text-align: center;
-    border: 0.5px solid #cddeff;
+    border: 0.5px solid ${(props) => props.theme.mobile.horizontalrule};
     border-radius: 10px;
     padding: 20px;
     height: 50%;
@@ -180,7 +180,7 @@ const SetUpdate = styled.div`
     border: 0.5px solid;
     box-shadow: 5px 5px #cddeff;
     text-align: center;
-    background: rgba(28, 56, 121, 1);
+    background: ${(props) => props.theme.palette.primary.main};
     ${ipad({ width: "80%" })}
     ${mobile({})}
 `

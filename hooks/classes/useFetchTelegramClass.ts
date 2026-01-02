@@ -13,7 +13,7 @@ function convertTelegramClassDoc(doc: any): TelegramClass {
         price: data.price || 0,
         capacity: data.capacity || 0,
         enrolled: data.enrolled || 0,
-        modules: data.modules || [],
+        // modules: data.modules || [],
         telegramGroupId: data.telegramGroupId || "",
         schedule: data.schedule,
     }

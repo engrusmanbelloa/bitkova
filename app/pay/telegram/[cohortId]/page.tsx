@@ -1,8 +1,8 @@
 // app/pay/telegram/[cohortId]/page.tsx
 "use client"
 import { use } from "react"
+import styled from "styled-components"
 import dynamic from "next/dynamic"
-
 import { useQuery } from "@tanstack/react-query"
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
@@ -10,13 +10,22 @@ import { TelegramClass, Cohort } from "@/types/classTypes"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { toast } from "sonner"
 import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
-
 import AuthMessage from "@/components/AuthMessage"
+import { mobile, ipad } from "@/responsive"
+import IsLoading from "@/components/IsLoading"
 
 const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
     ssr: false,
 })
 
+const Container = styled.div`
+    width: ${(props) => props.theme.widths.dsktopWidth};
+    ${ipad((props: any) => `width: ${props.theme.widths.ipadWidth};`)}
+    ${mobile(
+        (props: any) =>
+            `width: 100%; max-width: ${props.theme.widths.mobileWidth}; padding: 0 10px;`,
+    )}
+`
 export default function Page({ params }: { params: Promise<{ cohortId: string }> }) {
     const successMessage =
         "Payment successful! You will receive your Telegram access shortly via the email or the bot."
@@ -45,7 +54,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
         enabled: !!cohortId,
     })
 
-    if (cohortLoading || classLoading) return <div>Loading...</div>
+    if (cohortLoading || classLoading) return <IsLoading />
 
     if (!user) return <AuthMessage message="Authentication required" />
 
@@ -86,7 +95,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
             details: {
                 Cohort: cohort.name,
                 Duration: `${new Date(cohort.startDate).toLocaleDateString()} - ${new Date(cohort.endDate).toLocaleDateString()}`,
-                Modules: telegramClass.modules.join(", "),
+                // Modules: telegramClass.modules.join(", "),
                 Platform: "Telegram (Live Classes)",
             },
         },

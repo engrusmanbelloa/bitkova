@@ -2,6 +2,7 @@
 import { PaymentHandler } from "@/types/paymentHandlers"
 import { enrollTelegramClassServer } from "@/lib/server/enrollTelegramClassServer"
 import { enrollAsyncCoursesServer } from "@/lib/server/enrollAsyncCoursesServer"
+import { removeCoursesFromCartServer } from "@/lib/server/cartServer"
 
 export const paymentHandlers: Record<string, PaymentHandler> = {
     telegram_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
@@ -21,5 +22,7 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
             courseIds: itemIds,
             paymentReference,
         })
+        // ✅ REMOVE FROM DB CART (AUTHORITATIVE)
+        await removeCoursesFromCartServer(userId, itemIds)
     },
 }

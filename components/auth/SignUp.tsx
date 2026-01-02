@@ -1,3 +1,4 @@
+// components/auth/SignUp.tsx
 import React, { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
@@ -11,7 +12,6 @@ import {
     createUserWithEmailAndPassword,
     signInWithPopup,
     GoogleAuthProvider,
-    signOut,
 } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase/firebaseConfig"
@@ -133,7 +133,6 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
     const passwordMismatch = "Passwords do not match"
     const emailErrorMsg = "Invalid email address"
-    const hasFieldErrors = emailError || passwordError || passwordMismatchError
 
     const handleEmailChange = (event: any) => {
         const newEmail = event.target.value
@@ -192,57 +191,6 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             setIsLoading(false)
         }
     }
-    // const handleSignInWithGoogle = async () => {
-    //     setIsLoading(true)
-    //     try {
-    //         const provider = new GoogleAuthProvider()
-    //         const userCredential = await signInWithPopup(auth, provider)
-    //         const user = userCredential.user
-
-    //         // Check if it's a new user
-    //         const info = getAdditionalUserInfo(userCredential)
-    //         await user.getIdToken(true) // force refresh
-    //         const idToken = await user.getIdToken()
-    //         console.log("Checking if user is new...", info?.isNewUser)
-    //         // if (info?.isNewUser) {
-    //         // create user document if it is new and not created
-    //         // try {
-    //         await createUserIfNotExists(user)
-
-    //         //     } catch (createUserError: any) {
-    //         //         console.error("Failed to create user document:", createUserError)
-    //         //         toast.error("Account verified, but failed to store user details.")
-    //         //         setSignUpStatus("Sign Up error")
-    //         //     }
-    //         // }
-    //         // await fetch("/api/auth/session", {
-    //         //     method: "POST",
-    //         //     headers: { "Content-Type": "application/json" },
-    //         //     body: JSON.stringify({ idToken }),
-    //         //     credentials: "include",
-    //         // })
-    //         setSignUpStatus("success")
-    //         toast.success(user.email + " Account created successfully")
-    //         setTimeout(() => {
-    //             handleClose()
-    //         }, 1000)
-    //         // console.log(userCredential, info)
-    //     } catch (error: any) {
-    //         console.error("Error during Google sign-in:", error)
-    //         if (error?.code === "auth/account-exists-with-different-credential") {
-    //             toast.error("Account already exists with different provider.")
-    //         } else if (error?.message?.includes("permission-denied")) {
-    //             toast.error("Permission denied when saving user. Contact admin.")
-    //         } else {
-    //             toast.error("Failed to sign in. Try again later.")
-    //         }
-    //         setTimeout(() => {
-    //             setSignUpStatus("initial")
-    //         }, 1000)
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // }
 
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
@@ -263,16 +211,14 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
                 // user already exists in Firestore → ask them to login instead
                 toast.error("Account already exists, please login.")
                 setSignUpStatus("duplicate")
-                await auth.signOut() // optional: sign them out again
+                // await auth.signOut() // optional: sign them out again
                 return
             }
 
             // if not exists → create user doc
             await createUserIfNotExists(user)
             setSignUpStatus("success")
-            // await user.reload()
-            // await signOut(auth)
-            toast.success(`${user.email} Account created kindly login`)
+            toast.success(`${user.email} Account created successfully!`)
             setTimeout(() => {
                 handleClose()
             }, 1000)

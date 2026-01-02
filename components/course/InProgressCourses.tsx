@@ -1,3 +1,4 @@
+// components/course/InProgressCourses.tsx
 import styled from "styled-components"
 import Rating from "@mui/material/Rating"
 import { useRouter } from "next/navigation"

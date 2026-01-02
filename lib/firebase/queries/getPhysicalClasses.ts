@@ -1,3 +1,4 @@
+// lib/firebase/queries/getPhysicalClasses.ts
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { PhysicalClass } from "@/types/classTypes"
