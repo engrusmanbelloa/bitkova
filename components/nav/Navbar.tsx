@@ -119,6 +119,7 @@ const Menu = styled.li`
     text-align: center;
     padding: 5px 25px;
     border-radius: 5px;
+    cursor: pointer;
     color: ${(props) => props.theme.palette.common.black};
     &:hover {
         animation: pulse;
