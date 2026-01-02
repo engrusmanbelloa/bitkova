@@ -97,6 +97,7 @@ interface UnifiedCheckoutProps {
     items: CheckoutItem[]
     classType: ClassType
     className: string
+    cohortName?: string
 
     successMessage: string
     successRedirect: string
@@ -108,6 +109,7 @@ export default function UnifiedCheckout({
     items,
     classType,
     className,
+    cohortName,
     successMessage,
     successRedirect,
     metadata = {},
@@ -126,6 +128,8 @@ export default function UnifiedCheckout({
         metadata: {
             userId: user?.id,
             classType,
+            className,
+            cohortName,
             itemIds: items.map((i) => i.id),
             ...metadata,
             custom_fields: [
