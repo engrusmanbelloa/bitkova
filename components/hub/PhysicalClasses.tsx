@@ -27,7 +27,7 @@ import "swiper/css/pagination"
 const SwiperContainer = styled(Card)`
     width: ${(props) => props.theme.widths.heroWidth};
     display: flex;
-    height: 580px;
+    height: 600px;
     overflow: hidden;
     margin: 0 auto 30px;
     padding: 0;

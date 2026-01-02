@@ -84,26 +84,10 @@ const LoadingContainer = styled.div`
     justify-content: center;
     padding: 20px;
 `
-const CohortInfo = styled.div`
-    padding: 12px;
-    background: #f0f9ff;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #0369a1;
-`
-const HelpText = styled.div`
-    padding: 12px;
-    background: #fef3c7;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #92400e;
-`
 const CohortInfoContainer = styled.div`
     padding: 16px;
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
+    background: ${(props) => props.theme.mobile.mobileNavBg};
+    border: 1px solid ${(props) => props.theme.mobile.horizontalrule};
     border-radius: 8px;
     margin-bottom: 24px;
 `
@@ -112,7 +96,7 @@ const InfoTitle = styled.div`
     align-items: center;
     gap: 8px;
     font-weight: 700;
-    color: #0369a1;
+    color: ${(props) => props.theme.palette.primary.main};
     margin-bottom: 12px;
     text-transform: uppercase;
     font-size: 12px;
@@ -130,7 +114,7 @@ const DetailItem = styled.div`
 
     label {
         font-size: 12px;
-        color: #0ea5e9;
+        color: ${(props) => props.theme.palette.primary.main};
         font-weight: 600;
     }
 
