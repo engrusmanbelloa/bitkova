@@ -19,6 +19,10 @@ import {
     FormHelperText,
     CircularProgress,
 } from "@mui/material"
+import EventAvailableIcon from "@mui/icons-material/EventAvailable"
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration"
+import AssessmentIcon from "@mui/icons-material/Assessment"
+import InfoIcon from "@mui/icons-material/Info"
 import { z } from "zod"
 import { useQuery } from "@tanstack/react-query"
 import { Cohort } from "@/types/classTypes"
@@ -56,7 +60,7 @@ const ArrayInput = styled.div`
 const ArrayItemContainer = styled.div`
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     align-items: flex-start;
 `
 const RemoveButton = styled(Button)`
@@ -65,6 +69,7 @@ const RemoveButton = styled(Button)`
     margin-top: 8px;
 `
 const AddButton = styled(Button)`
+    margin-top: 0px;
     color: ${(props) => props.theme.palette.primary.main};
     border-color: ${(props) => props.theme.palette.primary.main};
 `
@@ -93,6 +98,49 @@ const HelpText = styled.div`
     font-size: 14px;
     color: #92400e;
 `
+const CohortInfoContainer = styled.div`
+    padding: 16px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    margin-bottom: 24px;
+`
+const InfoTitle = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #0369a1;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+`
+const InfoGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+`
+const DetailItem = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    label {
+        font-size: 12px;
+        color: #0ea5e9;
+        font-weight: 600;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #0c4a6e;
+        font-weight: 500;
+    }
+`
 
 type TelegramClassForm = z.infer<typeof telegramClassSchema>
 
@@ -109,18 +157,27 @@ export default function CreateTelegramClass() {
             price: 0,
             capacity: 100,
             telegramGroupId: "",
-            modules: [{ value: "" }],
+            schedule: {
+                slots: [
+                    {
+                        days: [],
+                        time: "",
+                    },
+                ],
+            },
         },
     })
 
     const {
-        fields: moduleFields,
-        append: appendModule,
-        remove: removeModule,
+        fields: slotFields,
+        append,
+        remove,
     } = useFieldArray({
         control: telegramForm.control,
-        name: "modules",
+        name: "schedule.slots",
     })
+
+    const parseNumberInput = (value: string) => (value === "" ? undefined : Number(value))
 
     // Watch selected cohort to show info
     const selectedCohortId = telegramForm.watch("cohortId")
@@ -136,8 +193,9 @@ export default function CreateTelegramClass() {
                 price: data.price,
                 capacity: data.capacity,
                 enrolled: 0,
-                modules: data.modules.map((m) => m.value),
+                // modules: data.modules.map((m) => m.value),
                 telegramGroupId: data.telegramGroupId,
+                schedule: data.schedule,
             }
 
             await addDoc(collection(db, "telegramClasses"), classData)
@@ -230,21 +288,113 @@ export default function CreateTelegramClass() {
                 </FormRow>
 
                 {selectedCohort && (
-                    <CohortInfo>
-                        <strong>Selected Cohort Details:</strong>
-                        <br />
-                        📅 Duration: {new Date(
-                            selectedCohort.startDate,
-                        ).toLocaleDateString()} -{" "}
-                        {new Date(selectedCohort.endDate).toLocaleDateString()}
-                        <br />
-                        📝 Registration:{" "}
-                        {new Date(selectedCohort.registrationOpen).toLocaleDateString()} -{" "}
-                        {new Date(selectedCohort.registrationClose).toLocaleDateString()}
-                        <br />
-                        📊 Status: {selectedCohort.status.toUpperCase()}
-                    </CohortInfo>
+                    <CohortInfoContainer>
+                        <InfoTitle>
+                            <InfoIcon fontSize="small" /> Selected Cohort Details
+                        </InfoTitle>
+                        <InfoGrid>
+                            <DetailItem>
+                                <label>Class Duration</label>
+                                <div>
+                                    <EventAvailableIcon fontSize="small" />
+                                    {new Date(selectedCohort.startDate).toLocaleDateString()} -{" "}
+                                    {new Date(selectedCohort.endDate).toLocaleDateString()}
+                                </div>
+                            </DetailItem>
+                            <DetailItem>
+                                <label>Registration Period</label>
+                                <div>
+                                    <AppRegistrationIcon fontSize="small" />
+                                    {new Date(
+                                        selectedCohort.registrationOpen,
+                                    ).toLocaleDateString()}{" "}
+                                    -{" "}
+                                    {new Date(
+                                        selectedCohort.registrationClose,
+                                    ).toLocaleDateString()}
+                                </div>
+                            </DetailItem>
+                            <DetailItem>
+                                <label>Current Status</label>
+                                <div>
+                                    <AssessmentIcon fontSize="small" />
+                                    {selectedCohort.status.toUpperCase()}
+                                </div>
+                            </DetailItem>
+                        </InfoGrid>
+                    </CohortInfoContainer>
                 )}
+
+                <ArrayInput>
+                    <SectionTitle>Class Schedule</SectionTitle>
+
+                    {slotFields.map((slot, index) => (
+                        <ArrayItemContainer key={slot.id}>
+                            <FormRow>
+                                <Controller
+                                    name={`schedule.slots.${index}.days`}
+                                    control={telegramForm.control}
+                                    render={({ field, fieldState }) => (
+                                        <FormControl fullWidth error={!!fieldState.error}>
+                                            <InputLabel>Days</InputLabel>
+                                            <Select {...field} multiple label="Days">
+                                                {[
+                                                    "Sat",
+                                                    "Sun",
+                                                    "Mon",
+                                                    "Tue",
+                                                    "Wed",
+                                                    "Thu",
+                                                    "Fri",
+                                                ].map((day) => (
+                                                    <MenuItem key={day} value={day}>
+                                                        {day}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                            <FormHelperText>
+                                                {fieldState.error?.message}
+                                            </FormHelperText>
+                                        </FormControl>
+                                    )}
+                                />
+                            </FormRow>
+                            <FormRow>
+                                <Controller
+                                    name={`schedule.slots.${index}.time`}
+                                    control={telegramForm.control}
+                                    render={({ field, fieldState }) => (
+                                        <TextField
+                                            {...field}
+                                            label="Class Time"
+                                            placeholder="e.g. 8:30pm – 10pm"
+                                            error={!!fieldState.error}
+                                            helperText={fieldState.error?.message}
+                                            fullWidth
+                                        />
+                                    )}
+                                />
+                            </FormRow>
+
+                            {slotFields.length > 1 && (
+                                <RemoveButton variant="outlined" onClick={() => remove(index)}>
+                                    Remove slot
+                                </RemoveButton>
+                            )}
+                        </ArrayItemContainer>
+                    ))}
+                    <AddButton
+                        variant="outlined"
+                        onClick={() =>
+                            append({
+                                days: [],
+                                time: "",
+                            })
+                        }
+                    >
+                        + Add another time slot
+                    </AddButton>
+                </ArrayInput>
 
                 <FormRow>
                     <Controller
@@ -255,7 +405,8 @@ export default function CreateTelegramClass() {
                                 {...field}
                                 label="Price (₦)"
                                 type="number"
-                                onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(parseNumberInput(e.target.value))}
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
                                 fullWidth
@@ -271,7 +422,7 @@ export default function CreateTelegramClass() {
                                 {...field}
                                 label="Capacity"
                                 type="number"
-                                onChange={(e) => field.onChange(parseInt(e.target.value))}
+                                onChange={(e) => field.onChange(parseNumberInput(e.target.value))}
                                 error={!!fieldState.error}
                                 helperText={fieldState.error?.message}
                                 fullWidth
@@ -279,27 +430,6 @@ export default function CreateTelegramClass() {
                         )}
                     />
 
-                    {/* <Controller
-                        name="telegramGroupId"
-                        control={telegramForm.control}
-                        render={({ field, fieldState }) => (
-                            // <TextField
-                            //     {...field}
-                            //     label="Telegram Group ID"
-                            //     placeholder="e.g., -100123456789"
-                            //     error={!!fieldState.error}
-                            //     helperText={fieldState.error?.message}
-                            //     fullWidth
-                            // />
-                            <Select>
-                                {telegramGroups.map((g) => (
-                                    <MenuItem key={g.chatId} value={g.chatId}>
-                                        {g.title} ({g.chatId})
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        )}
-                    /> */}
                     <Controller
                         name="telegramGroupId"
                         control={telegramForm.control}
@@ -319,33 +449,6 @@ export default function CreateTelegramClass() {
                         )}
                     />
                 </FormRow>
-
-                <ArrayInput>
-                    <SectionTitle>Course Modules</SectionTitle>
-                    {moduleFields.map((field, index) => (
-                        <ArrayItemContainer key={field.id}>
-                            <Controller
-                                name={`modules.${index}.value`}
-                                control={telegramForm.control}
-                                render={({ field, fieldState }) => (
-                                    <TextField
-                                        {...field}
-                                        placeholder="Module name"
-                                        error={!!fieldState.error}
-                                        helperText={fieldState.error?.message}
-                                        fullWidth
-                                    />
-                                )}
-                            />
-                            {moduleFields.length > 1 && (
-                                <RemoveButton onClick={() => removeModule(index)}>✕</RemoveButton>
-                            )}
-                        </ArrayItemContainer>
-                    ))}
-                    <AddButton variant="outlined" onClick={() => appendModule({ value: "" })}>
-                        + Add Module
-                    </AddButton>
-                </ArrayInput>
 
                 <SubmitButton type="submit" variant="contained">
                     Create Telegram Class

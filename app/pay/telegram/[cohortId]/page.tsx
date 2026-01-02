@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
 import AuthMessage from "@/components/AuthMessage"
 import { mobile, ipad } from "@/responsive"
+import IsLoading from "@/components/IsLoading"
 
 const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
     ssr: false,
@@ -53,7 +54,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
         enabled: !!cohortId,
     })
 
-    if (cohortLoading || classLoading) return <div>Loading...</div>
+    if (cohortLoading || classLoading) return <IsLoading />
 
     if (!user) return <AuthMessage message="Authentication required" />
 
@@ -94,7 +95,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
             details: {
                 Cohort: cohort.name,
                 Duration: `${new Date(cohort.startDate).toLocaleDateString()} - ${new Date(cohort.endDate).toLocaleDateString()}`,
-                Modules: telegramClass.modules.join(", "),
+                // Modules: telegramClass.modules.join(", "),
                 Platform: "Telegram (Live Classes)",
             },
         },

@@ -28,11 +28,8 @@ import { Badge } from "@mui/material"
 // Components
 import Logo from "@/components/nav/Logo"
 import LoginBtn from "@/components/nav/LoginBtn"
-import SignIn from "@/components/auth/SignIn"
-import SignUp from "@/components/auth/SignUp"
 import DropdownMenu from "@/components/nav/Dropdown"
 import NotifyModal from "@/components/auth/NotifyModal"
-import ResetPsswd from "@/components/auth/ResetPsswd"
 import NavAvatar from "@/components/nav/Avatar"
 import NavSkeleton from "./NavSkeleton"
 import { mobile, ipad } from "@/responsive"
@@ -311,7 +308,7 @@ export default function Navbar() {
     }
 
     if (error) {
-        return <p>Error Fetching data.</p>
+        return <Container>Error Fetching data.</Container>
     }
 
     return (

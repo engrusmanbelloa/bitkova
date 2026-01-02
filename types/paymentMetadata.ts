@@ -11,6 +11,8 @@ export type PhysicalClassMetadata = {
     userId: string
     classId: string
     cohortId: string
+    telegramClassId: string
+    telegramUsername?: string
 }
 
 export type TelegramClassMetadata = {

@@ -1,7 +1,6 @@
 // components/hub/TelegramClass.tsx
 import React from "react"
 import styled from "styled-components"
-import { Container } from "@mui/material"
 import EnrollButton from "@/components/EnrollButton"
 import TelegramIcon from "@mui/icons-material/Telegram"
 import PeopleIcon from "@mui/icons-material/People"
@@ -9,14 +8,9 @@ import BlindsClosedIcon from "@mui/icons-material/BlindsClosed"
 import EventBusyIcon from "@mui/icons-material/EventBusy"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
-import Button from "@mui/material/Button"
 import CircularProgress from "@mui/material/CircularProgress"
 import { mobile, ipad } from "@/responsive"
 import { useRouter } from "next/navigation"
-import { useQuery } from "@tanstack/react-query"
-import { collection, query, where, getDocs } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
-import { TelegramClass as TelegramClassType, Cohort } from "@/types/classTypes"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useFetchActiveCohort } from "@/hooks/classes/useFetchCohorts"
 import { useFetchTelegramClass } from "@/hooks/classes/useFetchTelegramClass"
@@ -80,7 +74,7 @@ const InfoRow = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 10px 0;
+    margin: 5px 0;
     color: ${(props) => props.theme.palette.common.black};
     font-size: 14px;
 
@@ -89,43 +83,43 @@ const InfoRow = styled.div`
         color: ${(props) => props.theme.palette.primary.main};
     }
 `
+const Schedule = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    color: ${(props) => props.theme.palette.common.black};
+
+    svg {
+        font-size: 18px;
+        color: ${(props) => props.theme.palette.primary.main};
+    }
+    ${ipad(
+        (props: any) => `
+                width: ${props.theme.widths.ipadWidth};
+                flex-direction: column;
+                align-items: flex-start;
+            `,
+    )}
+    ${mobile(
+        (props: any) => `
+                width: ${props.theme.widths.mobileWidth};
+            `,
+    )}
+`
+const ScheduleTitle = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    color: ${(props) => props.theme.palette.primary.main};
+    padding: 0;
+    margin: 0;
+`
 const PriceTag = styled.div`
     color: ${(props) => props.theme.mobile.green};
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 8px;
-`
-const DateInfo = styled.div`
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 24px;
-`
-const CourseModules = styled.div`
-    margin-bottom: 24px;
-`
-const ModuleTitle = styled.h4`
-    color: ${(props) => props.theme.palette.common.black};
-    margin-bottom: 12px;
-`
-const ModuleList = styled.ul`
-    list-style: none;
-    padding: 0;
-    margin: 0;
-`
-const ModuleItem = styled.li`
-    color: #666;
-    font-size: 14px;
-    padding: 6px 0;
-    padding-left: 20px;
-    position: relative;
-
-    &:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: ${(props) => props.theme.mobile.green};
-        font-weight: 600;
-    }
 `
 const LoadingContainer = styled.div`
     display: flex;
@@ -221,13 +215,25 @@ export default function TelegramClass() {
                     <BlindsClosedIcon /> Registration Closes:
                     <span>{new Date(cohort.registrationClose).toLocaleDateString()}</span>
                 </InfoRow>
-                {/* <InfoRow>
-                                                <AccessTimeIcon />
-                                                <span>
-                                                    {classItem.schedule.days.join(", ")} •{" "}
-                                                    {classItem.schedule.time}
-                                                </span>
-                                            </InfoRow> */}
+                <Schedule>
+                    <ScheduleTitle>
+                        <AccessTimeIcon /> Schedule:
+                    </ScheduleTitle>
+                    {telegramClass?.schedule?.slots ? (
+                        telegramClass.schedule.slots.map((slot, index) => (
+                            <InfoRow key={index}>
+                                <span>
+                                    {slot.days.join(", ")} | <strong>{slot.time}</strong>
+                                </span>
+                            </InfoRow>
+                        ))
+                    ) : (
+                        <InfoRow>
+                            <AccessTimeIcon />
+                            <span>TBA (To be announced)</span>
+                        </InfoRow>
+                    )}
+                </Schedule>
 
                 {daysUntilClose <= 7 && !isEnrolled && (
                     <EnrollmentInfo>
@@ -235,15 +241,6 @@ export default function TelegramClass() {
                         enroll!
                     </EnrollmentInfo>
                 )}
-
-                <CourseModules>
-                    <ModuleTitle>Course Modules:</ModuleTitle>
-                    <ModuleList>
-                        {telegramClass.modules.map((module, idx) => (
-                            <ModuleItem key={idx}>{module}</ModuleItem>
-                        ))}
-                    </ModuleList>
-                </CourseModules>
 
                 <EnrollButton
                     variant="contained"

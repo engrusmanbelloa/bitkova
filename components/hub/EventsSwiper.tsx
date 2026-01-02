@@ -2,7 +2,7 @@ import React from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Mousewheel, Pagination } from "swiper/modules"
 import styled from "styled-components"
-import { Card, Box, Typography, Button, Chip } from "@mui/material"
+import { Card, Button, Chip } from "@mui/material"
 import EventIcon from "@mui/icons-material/Event"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -68,7 +68,7 @@ const EventCard = styled(Card)`
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 10px ${(props) => props.theme.mobile.orangeShadow};
 `
 const EventType = styled.span`
     font-weight: 600;

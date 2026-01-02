@@ -157,6 +157,38 @@ const InfoRow = styled.div`
         color: ${(props) => props.theme.palette.primary.main};
     }
 `
+const Schedule = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    color: ${(props) => props.theme.palette.common.black};
+
+    svg {
+        font-size: 18px;
+        color: ${(props) => props.theme.palette.primary.main};
+    }
+    ${ipad(
+        (props: any) => `
+                width: ${props.theme.widths.ipadWidth};
+            `,
+    )}
+    ${mobile(
+        (props: any) => `
+                width: ${props.theme.widths.mobileWidth};
+                gap: 4px;
+                margin: 0;
+            `,
+    )}
+`
+const ScheduleTitle = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    color: ${(props) => props.theme.palette.primary.main};
+    padding: 0;
+    margin: 0;
+`
 const ClassBody = styled(CardContent)`
     padding: 15px;
     margin-top: 0;
@@ -335,61 +367,6 @@ export default function PhysicalClassesSwiper() {
                     }}
                     modules={[Mousewheel, Pagination]}
                 >
-                    {/* {classes.map((classItem) => (
-                        <SwiperSlide key={classItem.id}>
-                            <SlideContent>
-                                <ClassCard>
-                                    <ClassHeader>
-                                        <ClassName>{classItem.name}</ClassName>
-                                        <InfoRow>
-                                            <LocationOnIcon />
-                                            <span>{classItem.location}</span>
-                                        </InfoRow>
-                                        <InfoRow>
-                                            <PeopleIcon />
-                                            <span>{classItem.cohort}</span>
-                                        </InfoRow>
-                                        <InfoRow>
-                                            <CalendarMonthIcon />
-                                            <span>{classItem.nextClass}</span>
-                                        </InfoRow>
-                                        <InfoRow>
-                                            <AccessTimeIcon />
-                                            <span>{classItem.time}</span>
-                                        </InfoRow>
-                                    </ClassHeader>
-
-                                    <ClassBody>
-                                        <SectionLabel>
-                                            <SchoolIcon />
-                                            Instructors
-                                        </SectionLabel>
-                                        <InstructorList>
-                                            {classItem.instructors.map((instructor, idx) => (
-                                                <CourseItem key={idx}>{instructor}</CourseItem>
-                                            ))}
-                                        </InstructorList>
-
-                                        <SectionLabel>
-                                            <SchoolIcon />
-                                            Courses
-                                        </SectionLabel>
-                                        <CourseList>
-                                            {classItem.courses.map((course, idx) => (
-                                                <CourseItem key={idx}>{course}</CourseItem>
-                                            ))}
-                                        </CourseList>
-
-                                        <Price>
-                                            <span>₦</span>
-                                            {classItem.price.replace("₦ ", "")}
-                                        </Price>
-                                        <EnrollButton variant="contained">Enroll Now</EnrollButton>
-                                    </ClassBody>
-                                </ClassCard>
-                            </SlideContent>
-                        </SwiperSlide>
-                    ))} */}
                     {classes.map((classItem) => {
                         const isEnrolled = isEnrolledInClass(classItem.id)
                         const isFull = classItem.enrolled >= classItem.capacity
@@ -437,13 +414,33 @@ export default function PhysicalClassesSwiper() {
                                                     ).toLocaleDateString()}
                                                 </span>
                                             </InfoRow>
-                                            <InfoRow>
+                                            {/* <InfoRow>
                                                 <AccessTimeIcon />
                                                 <span>
                                                     {classItem.schedule.days.join(", ")} •{" "}
                                                     {classItem.schedule.time}
                                                 </span>
-                                            </InfoRow>
+                                            </InfoRow> */}
+                                            <Schedule>
+                                                <ScheduleTitle>
+                                                    <AccessTimeIcon /> Schedule:
+                                                </ScheduleTitle>
+                                                {classItem?.schedule?.slots ? (
+                                                    classItem.schedule.slots.map((slot, index) => (
+                                                        <InfoRow key={index}>
+                                                            <span>
+                                                                {slot.days.join(", ")} |{" "}
+                                                                <strong>{slot.time}</strong>
+                                                            </span>
+                                                        </InfoRow>
+                                                    ))
+                                                ) : (
+                                                    <InfoRow>
+                                                        <AccessTimeIcon />
+                                                        <span>TBA (To be announced)</span>
+                                                    </InfoRow>
+                                                )}
+                                            </Schedule>
                                         </ClassHeader>
 
                                         <ClassBody>

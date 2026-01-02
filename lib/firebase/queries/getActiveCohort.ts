@@ -1,3 +1,4 @@
+// lib/firebase/queries/getActiveCohort.ts
 import { collection, query, where, getDocs, orderBy, limit } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { Cohort } from "@/types/classTypes"

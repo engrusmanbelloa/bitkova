@@ -86,7 +86,7 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
             details: {
                 Location: classData.location,
                 Cohort: cohort?.name || "N/A",
-                Schedule: `${classData.schedule.days.join(", ")} - ${classData.schedule.time}`,
+                Schedule: `${classData.schedule.slots.join(", ")}`,
                 Instructors: classData.instructors.join(", "),
             },
         },

@@ -23,8 +23,12 @@ export interface PhysicalClass {
     capacity: number
     enrolled: number
     schedule: {
-        days: string[] // ["Saturday", "Sunday"]
-        time: string // "2pm - 5pm"
+        slots: [
+            {
+                days: []
+                time: ""
+            },
+        ]
     }
     instructors: string[]
     courses: string[]
@@ -38,11 +42,14 @@ export interface TelegramClass {
     price: number
     capacity: number
     enrolled: number
-    modules: string[]
     telegramGroupId: string
-    schedule?: {
-        days: string[]
-        time: string
+    schedule: {
+        slots: [
+            {
+                days: []
+                time: ""
+            },
+        ]
     }
 }
 
@@ -55,6 +62,7 @@ export interface PhysicalClassEnrollment {
     qrCode: string
     status: "paid" | "attended" | "completed"
     enrolledAt: Date
+    // telegramGroupId: string
     attendanceLog: {
         date: Date
         attended: boolean

@@ -15,10 +15,7 @@ function convertPhysicalClassDoc(doc: any): PhysicalClass {
         price: data.price || 0,
         capacity: data.capacity || 0,
         enrolled: data.enrolled || 0,
-        schedule: {
-            days: data.schedule?.days || ["Saturday", "Sunday"],
-            time: data.schedule?.time || "",
-        },
+        schedule: data.schedule,
         instructors: data.instructors || [],
         courses: data.courses || [],
         mapLink: data.mapLink,
