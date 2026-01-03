@@ -14,13 +14,21 @@ export function useFetchTelegramGroups() {
             const q = query(collection(db, "telegramGroups"), orderBy("title"))
             const snap = await getDocs(q)
 
-            return snap.docs.map((doc) => {
-                const data = doc.data()
-                return {
-                    chatId: String(data.chatId), // normalize for Select
-                    title: data.title,
-                }
-            })
+            return snap.docs
+                .map((doc) => doc.data())
+                .filter((g) => !g.deprecated)
+                .map((g) => ({
+                    chatId: String(g.chatId),
+                    title: g.title,
+                }))
+
+            // return snap.docs.map((doc) => {
+            //     const data = doc.data()
+            //     return {
+            //         chatId: String(data.chatId), // normalize for Select
+            //         title: data.title,
+            //     }
+            // })
         },
         staleTime: 1000 * 60 * 2, // 2 minutes
     })

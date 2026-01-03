@@ -4,7 +4,7 @@ import { commandRegistry } from "@/lib/telegram/registry"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { TelegramContext } from "@/types/telegram"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc, deleteDoc } from "firebase/firestore"
 
 export async function GET() {
     return new Response("Telegram webhook running ✅", { status: 200 })
@@ -24,18 +24,35 @@ export async function POST(req: NextRequest) {
             const chatId = message.chat.id
             const title = message.chat.title
 
-            // Using chatId as the Doc ID prevents redundant "groups"
-            // It simply updates the existing record for this specific group
-            await setDoc(
-                doc(db, "telegramGroups", String(chatId)),
-                {
-                    chatId,
-                    title,
-                    lastActive: new Date(), // Useful for tracking bot usage
-                    type: message.chat.type,
-                },
-                { merge: true },
-            )
+            if (message.migrate_to_chat_id) {
+                const oldId = String(message.chat.id)
+                const newId = String(message.migrate_to_chat_id)
+
+                await setDoc(
+                    doc(db, "telegramGroups", oldId),
+                    {
+                        chatId: oldId,
+                        migratedTo: newId,
+                        deprecated: true,
+                        lastActive: new Date(),
+                    },
+                    { merge: true },
+                )
+
+                // Save / update new supergroup
+                await setDoc(
+                    doc(db, "telegramGroups", newId),
+                    {
+                        chatId: newId,
+                        title: message.chat.title,
+                        type: "supergroup",
+                        lastActive: new Date(),
+                    },
+                    { merge: true },
+                )
+
+                return NextResponse.json({ ok: true })
+            }
         }
 
         // 2. COMMAND PROCESSING

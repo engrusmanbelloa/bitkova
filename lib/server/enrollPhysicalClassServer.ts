@@ -5,6 +5,7 @@ import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { markInvitePending } from "../telegram/markInvitePending"
+import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
 
 interface Params {
     userId: string
@@ -34,7 +35,8 @@ export async function enrollPhysicalClassServer({
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
-    const inviteLink = await createTelegramInviteLink(telegramGroupId, userId)
+    const realChatId = await resolveTelegramChatId(telegramGroupId)
+    const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Generate QR code
     const qrPayload = {

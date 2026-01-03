@@ -50,8 +50,8 @@ export async function sendEnrollmentEmail({
     }
     try {
         const res = await resend.emails.send({
-            // from: "Bitkova <classes@bitkova.com>",
-            from: "Bitkova <onboarding@resend.dev>",
+            from: "Bitkova <no-reply@bitkova.com>",
+            // from: "Bitkova <onboarding@resend.dev>",
             to,
             subject: `You're enrolled in ${cohortName}`,
             html: content,
