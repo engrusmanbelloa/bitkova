@@ -5,6 +5,7 @@ import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { markInvitePending } from "@/lib/telegram/markInvitePending"
+import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
 
 interface Params {
     userId: string
@@ -34,8 +35,10 @@ export async function enrollTelegramClassServer({
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
-    const inviteLink = await createTelegramInviteLink(telegramGroupId, userId)
+    const realChatId = await resolveTelegramChatId(telegramGroupId)
+    const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
+    // ✅ Save enrollment record
     await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
         id: enrollmentId,
         userId,

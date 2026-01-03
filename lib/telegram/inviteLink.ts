@@ -21,7 +21,6 @@ export async function createTelegramInviteLink(
                 chat_id: chatId,
                 name: `Student-${userName}`,
                 member_limit: 1, // Single use
-                expiration_date: 0, // it never expire
             }),
         })
 
