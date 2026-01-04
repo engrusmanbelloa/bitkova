@@ -54,6 +54,7 @@ export const useCourseCompletion = ({
             await updateDoc(courseRef, {
                 completedLessons: updatedList.length,
                 completedVideos: updatedList,
+                progress: (updatedList.length / videoList.length) * 100,
             })
 
             useUserStore.getState().setEnrollments(
