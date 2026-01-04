@@ -1,15 +1,17 @@
 import { db } from "@/lib/firebase/firebaseConfig"
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore"
 
-import { EnrolledCourse, WishListItem, ArchivedCourse, Certificate, Cart } from "@/types/userType"
+import { Enrollment, WishListItem, ArchivedCourse, Certificate, Cart } from "@/types/userType"
 
 // Enroll user in a course
 export async function enrollUserInCourse(userId: string, courseId: string) {
     const id = `${userId}_${courseId}`
     const ref = doc(db, "enrollments", id)
-    const data: EnrolledCourse = {
+    const data: Enrollment = {
+        id,
         userId,
-        courseId,
+        itemId: courseId,
+        itemType: "async_course",
         completedLessons: 0,
         progress: 0,
         status: "in progress",

@@ -8,7 +8,8 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { toast } from "sonner"
 import { ClassType } from "@/types/classTypes"
-import { EnrolledCourse } from "@/types/userType"
+import { Enrollment } from "@/types/userType"
+import { useEffect } from "react"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -116,7 +117,7 @@ export default function UnifiedCheckout({
 }: UnifiedCheckoutProps) {
     const router = useRouter()
     const { user, authReady } = useAuthReady()
-    const { cart, enrolledCourses, removeFromCart, addToEnrolledCourses } = useUserStore()
+    const { cart, removeFromCart, addEnrollment, isEnrolled } = useUserStore()
 
     const totalAmount = items.reduce((sum, item) => sum + item.price, 0)
 
@@ -158,7 +159,7 @@ export default function UnifiedCheckout({
     }
 
     const handleSuccess = async (reference: { reference: string }) => {
-        console.log("Paystack real ref:", reference.reference)
+        // console.log("Paystack real ref:", reference.reference)
         try {
             await new Promise((r) => setTimeout(r, 1500))
 
@@ -169,28 +170,38 @@ export default function UnifiedCheckout({
             })
 
             if (!res.ok) throw new Error("Verification failed")
+
             // ✅ UI STATE CLEANUP ONLY
-            // items.forEach((item) => removeFromCart(item.id))
-            // something.forEach(addToEnrolledCourses)
+
             // 1. Loop through the items being purchased
             items.forEach((item) => {
                 // 2. Remove from cart (UI state)
                 removeFromCart(item.id)
+                const enrollmentId = `${user!.id}-${item.id}`
 
                 // 3. Prepare the enrollment object
-                const enrollmentData: EnrolledCourse = {
+                const baseEnrollment: Enrollment = {
+                    id: enrollmentId,
                     userId: user!.id,
-                    courseId: item.id,
-                    completedLessons: 0,
-                    progress: 0,
-                    status: "in progress",
-                    type: classType as any, // "async_course", "physical", or "telegram"
+                    itemId: item.id,
+                    itemType: classType,
                     paymentReference: reference.reference,
                     enrolledAt: new Date(),
                 }
 
-                // 4. Add to the enrolled courses (UI state)
-                addToEnrolledCourses(enrollmentData)
+                // Add async-course only fields when needed
+                const enrollment: Enrollment =
+                    classType === "async_course"
+                        ? {
+                              ...baseEnrollment,
+                              progress: 0,
+                              completedLessons: 0,
+                              status: "in progress",
+                          }
+                        : baseEnrollment
+
+                // 4. Add to enrolled courses (UI state)
+                addEnrollment(enrollment)
             })
 
             toast.success(successMessage)
@@ -206,6 +217,15 @@ export default function UnifiedCheckout({
     }
 
     const initializePayment = usePaystackPayment(config)
+
+    useEffect(() => {
+        items.forEach((item) => {
+            if (isEnrolled(item.id)) {
+                toast.error("You are already enrolled")
+                router.replace("/dashboard")
+            }
+        })
+    }, [])
 
     if (!authReady)
         return (

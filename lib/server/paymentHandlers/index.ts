@@ -16,6 +16,8 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
             cohortName: metadata.cohortName,
             paymentReference,
             payerEmail,
+            enrolledAt: new Date(),
+            itemId: itemIds[0],
         })
     },
 

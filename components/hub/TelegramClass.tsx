@@ -1,5 +1,4 @@
 // components/hub/TelegramClass.tsx
-import React from "react"
 import styled from "styled-components"
 import EnrollButton from "@/components/EnrollButton"
 import TelegramIcon from "@mui/icons-material/Telegram"
@@ -143,7 +142,7 @@ const EnrollmentInfo = styled.div`
 
 export default function TelegramClass() {
     const router = useRouter()
-    const { isEnrolledInClass } = useUserStore()
+    const { isEnrolled } = useUserStore()
 
     // Fetch active cohort
     const { data: cohort, isLoading: cohortLoading, error: cohortError } = useFetchActiveCohort()
@@ -178,7 +177,7 @@ export default function TelegramClass() {
         )
     }
 
-    const isEnrolled = isEnrolledInClass(telegramClass.id)
+    const isEnrolledInClass = isEnrolled(telegramClass.id, "telegram_class")
     const isFull = telegramClass.enrolled >= telegramClass.capacity
     const daysUntilClose = Math.ceil(
         (new Date(cohort.registrationClose).getTime() - new Date().getTime()) /
@@ -244,11 +243,11 @@ export default function TelegramClass() {
 
                 <EnrollButton
                     variant="contained"
-                    disabled={isEnrolled || isFull}
+                    disabled={isEnrolledInClass || isFull}
                     onClick={() => router.push(`/pay/telegram/${cohort.id}`)}
                 >
                     <TelegramIcon />
-                    {isEnrolled
+                    {isEnrolledInClass
                         ? "Already Enrolled"
                         : isFull
                           ? "Class Full"

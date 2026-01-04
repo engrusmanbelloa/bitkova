@@ -1,3 +1,4 @@
+// components/dashboard/DashboardOverview.tsx
 "use client"
 import styled from "styled-components"
 import SchoolIcon from "@mui/icons-material/School"
@@ -98,20 +99,29 @@ interface DashboardProps {
 
 export default function DashboardOverview({ userData, limit }: DashboardProps) {
     const { data: courses, isLoading, error } = useFetchCourses()
-    const { enrolledCourses } = useUserStore()
+    const { enrollments } = useUserStore()
     const { user, authReady } = useAuthReady()
 
-    const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
-    const coursesToDisplay = (courses ?? [])
-        .filter((course) => enrolledCourseIds.includes(course.id))
-        .slice(0, limit ?? enrolledCourseIds.length)
+    // const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
+    // const coursesToDisplay = (courses ?? [])
+    //     .filter((course) => enrolledCourseIds.includes(course.id))
+    //     .slice(0, limit ?? enrolledCourseIds.length)
+
+    const asyncEnrollments = enrollments.filter((e) => e.itemType === "async_course")
+
+    // const enrolledCount = asyncEnrollments.length
+    const enrolledCount = enrollments.length
+
+    const activeCount = asyncEnrollments.filter((e) => e.status === "in progress").length
+
+    const completedCount = asyncEnrollments.filter((e) => e.status === "completed").length
+    if (isLoading || !authReady) return <CircularProgress />
+    if (error) return <p>Failed to load dashboard data.</p>
+    if (!user) return <p>Please log in to view your dashboard.</p>
 
     // console.log("Courses to display: ", coursesToDisplay)
     // console.log("Enrolled course ids to display: ", enrolledCourseIds)
 
-    if (isLoading || !authReady) return <CircularProgress />
-    if (error) return <p>Failed to load courses.</p>
-    if (!user) return <p>Please log in to view your learning progress.</p>
     return (
         <Container>
             <ProfileSetupContainer>
@@ -124,21 +134,21 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
                     <IconWrapper color="#3b82f6">
                         <SchoolIcon fontSize="large" />
                     </IconWrapper>
-                    <Count>{enrolledCourses.length}</Count>
+                    <Count>{enrolledCount}</Count>
                     <Label>Enrolled Courses</Label>
                 </OverviewBox>
                 <OverviewBox>
                     <IconWrapper color="#10b981">
                         <PlayCircleFilledIcon fontSize="large" />
                     </IconWrapper>
-                    {/* <Count>{archiveCourses.length}</Count> */}
+                    <Count>{activeCount}</Count>
                     <Label>Active Courses</Label>
                 </OverviewBox>
                 <OverviewBox>
                     <IconWrapper color="#f59e0b">
                         <EmojiEventsIcon fontSize="large" />
                     </IconWrapper>
-                    {/* <Count>{completedCourses.length}</Count> */}
+                    <Count>{completedCount}</Count>
                     <Label>Completed Courses</Label>
                 </OverviewBox>
             </OverviewContainer>

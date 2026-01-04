@@ -5,7 +5,7 @@ import { useUserStore } from "@/lib/store/useUserStore"
 import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
 import { useQueryClient } from "@tanstack/react-query"
 import { useFetchCertificateStatus } from "./useFetchCertificate"
-import { EnrolledCourse } from "@/types/userType"
+import { Enrollment } from "@/types/userType"
 
 interface UseCourseCompletionProps {
     courseId: string
@@ -26,8 +26,13 @@ export const useCourseCompletion = ({
 
     const { data: status, isLoading } = useFetchCertificateStatus(firebaseUser?.uid, courseId)
 
-    const completedVideos = status?.completedVideos || []
+    // const completedVideos = status?.completedVideos || []
     const certificateReady = status?.certificateExists || false
+    const enrollment = useUserStore((s) =>
+        s.enrollments.find((e) => e.itemId === courseId && e.itemType === "async_course"),
+    )
+
+    const completedVideos = enrollment?.completedVideos ?? status?.completedVideos ?? []
 
     const handleCompletedVideos = async () => {
         if (!selectedTitle || completedVideos.includes(selectedTitle) || !firebaseUser?.uid) {
@@ -36,6 +41,7 @@ export const useCourseCompletion = ({
 
         const userId = firebaseUser.uid
         const updatedList = [...completedVideos, selectedTitle]
+        const enrollmentId = `${userId}-${courseId}`
 
         // Optimistically update the UI
         queryClient.setQueryData(["certificateStatus", userId, courseId], {
@@ -44,23 +50,38 @@ export const useCourseCompletion = ({
         })
 
         try {
-            const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
+            const courseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
             await updateDoc(courseRef, {
                 completedLessons: updatedList.length,
                 completedVideos: updatedList,
             })
 
+            useUserStore.getState().setEnrollments(
+                useUserStore.getState().enrollments.map((e) =>
+                    e.id === enrollmentId
+                        ? {
+                              ...e,
+                              completedLessons: updatedList.length,
+                              completedVideos: updatedList,
+                              progress: (updatedList.length / videoList.length) * 100,
+                          }
+                        : e,
+                ),
+            )
+
             const isEnrolled = useUserStore.getState().isEnrolled(courseId)
             if (!isEnrolled) {
-                const enrolledCourse: EnrolledCourse = {
+                const enrolledCourse: Enrollment = {
+                    id: enrollmentId,
                     userId,
-                    courseId,
+                    itemType: "async_course",
+                    itemId: courseId,
                     completedLessons: updatedList.length,
                     progress: (updatedList.length / videoList.length) * 100,
                     status: "in progress",
                     enrolledAt: new Date(),
                 }
-                useUserStore.getState().addToEnrolledCourses(enrolledCourse)
+                useUserStore.getState().addEnrollment(enrolledCourse)
             }
 
             if (updatedList.length === videoList.length) {

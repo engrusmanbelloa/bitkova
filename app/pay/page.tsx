@@ -13,7 +13,7 @@ const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheck
 })
 export default function AsyncCourseCheckoutPage() {
     const successMessage = "Payment successful! Courses added."
-    const { cart, removeFromCart, addToEnrolledCourses } = useUserStore()
+    const { cart, removeFromCart } = useUserStore()
     const { user } = useAuthReady()
     const { data: courses, isLoading } = useFetchCourses()
 

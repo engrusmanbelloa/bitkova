@@ -6,6 +6,7 @@ import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { markInvitePending } from "../telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { Enrollment } from "@/types/userType"
 
 interface Params {
     userId: string
@@ -71,23 +72,28 @@ export async function enrollPhysicalClassServer({
     })
 
     // ✅ Unified enrollment (dashboard, receipts, audit)
-    batch.set(doc(db, "users", userId, "classEnrollments", enrollmentId), {
-        enrollmentId,
+    // batch.set(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
+    //     enrollmentId,
+    //     itemId: classId,
+    //     className,
+    //     type: "physical_class",
+    //     paymentReference,
+    //     enrolledAt: now,
+    // })
+    const enrollment: Enrollment = {
+        id: enrollmentId,
+        userId: userId,
         itemId: classId,
-        type: "physical_class",
-        paymentReference,
-        enrolledAt: now,
-    })
+        itemType: "physical_class",
+        className: className,
+        cohortId: cohortId,
+        paymentReference: paymentReference,
+        enrolledAt: new Date(),
+    }
+    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
 
     await batch.commit()
 
-    // ✅ Email notification
-    //  await sendEnrollmentEmail({
-    //      to: payerEmail,
-    //      cohortName: cohortName,
-    //      className: className,
-    //      telegramInviteLink: inviteLink,
-    //  })
     if (inviteLink) {
         await sendEnrollmentEmail({
             to: payerEmail,

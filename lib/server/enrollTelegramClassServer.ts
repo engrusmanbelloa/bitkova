@@ -6,6 +6,7 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { markInvitePending } from "@/lib/telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { Enrollment } from "@/types/userType"
 
 interface Params {
     userId: string
@@ -16,11 +17,15 @@ interface Params {
     telegramGroupId: string
     paymentReference: string
     payerEmail: string
+    itemId: string
+    enrolledAt: Date
 }
+
+// Omit<telegramPendingInvites, "attempts" | "status" | "createdAt" | "updatedAt">)
 
 export async function enrollTelegramClassServer({
     userId,
-    classId,
+    itemId,
     cohortId,
     cohortName,
     telegramGroupId,
@@ -28,7 +33,7 @@ export async function enrollTelegramClassServer({
     payerEmail,
     className,
 }: Params) {
-    const enrollmentId = `${userId}-${classId}`
+    const enrollmentId = `${userId}-${itemId}`
 
     // ✅ Idempotency check
     const existing = await getDoc(doc(db, "telegramClassEnrollments", enrollmentId))
@@ -42,7 +47,7 @@ export async function enrollTelegramClassServer({
     await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
         id: enrollmentId,
         userId,
-        classId,
+        itemId: itemId,
         className,
         cohortId,
         paymentReference,
@@ -52,19 +57,31 @@ export async function enrollTelegramClassServer({
     })
 
     // ✅ Increment class count
-    await updateDoc(doc(db, "telegramClasses", classId), {
+    await updateDoc(doc(db, "telegramClasses", itemId), {
         enrolled: increment(1),
     })
 
     // ✅ Save unified enrollment
-    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
-        enrollmentId,
-        className,
-        itemId: classId,
-        type: "telegram_class",
-        paymentReference,
+    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
+    //     enrollmentId,
+    //     className,
+    //     itemId: classId,
+    //     type: "telegram_class",
+    //     paymentReference,
+    //     enrolledAt: new Date(),
+    // })
+
+    const enrollment: Enrollment = {
+        id: enrollmentId,
+        userId: userId,
+        itemId: itemId, // courseId OR classId
+        itemType: "telegram_class",
+        className: className,
+        cohortId: cohortId,
+        paymentReference: paymentReference,
         enrolledAt: new Date(),
-    })
+    }
+    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
 
     if (inviteLink) {
         await sendEnrollmentEmail({
@@ -78,19 +95,13 @@ export async function enrollTelegramClassServer({
         await markInvitePending({
             userId: userId,
             email: payerEmail,
-            classId: classId,
+            classId: itemId,
             telegramGroupId: telegramGroupId,
             cohortName: cohortName,
             className: className,
         })
     }
 
-    // await s  `1endEnrollmentEmail({
-    //     to: payerEmail,
-    //     cohortName: cohortName,
-    //     className: className,
-    //     telegramInviteLink: inviteLink,
-    // })
     // ✅ Telegram auto-DM
     //  await sendTelegramMessage(
     //      userId,

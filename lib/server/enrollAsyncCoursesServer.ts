@@ -1,7 +1,7 @@
 // lib/server/enrollAsyncCoursesServer.ts
 import { db } from "@/lib/firebase/firebaseConfig"
-import { doc, writeBatch, getDoc, serverTimestamp } from "firebase/firestore"
-import { EnrolledCourse, asyncCourseEnrollmentsType } from "@/types/userType"
+import { doc, writeBatch, getDoc, setDoc, serverTimestamp } from "firebase/firestore"
+import { Enrollment } from "@/types/userType"
 export async function enrollAsyncCoursesServer({
     userId,
     courseIds,
@@ -23,31 +23,45 @@ export async function enrollAsyncCoursesServer({
 
         // ✅ Course enrollment record
         const enrolledRecordRef = doc(db, "asyncCourseEnrollments", enrollmentId)
-        const asyncCourseEnrollRecord: asyncCourseEnrollmentsType = {
-            enrollmentId,
+        const asyncCourseEnrollRecord: Enrollment = {
+            id: enrollmentId,
             userId,
-            courseId,
+            itemId: courseId,
+            itemType: "async_course",
             paymentReference,
             completedLessons: 0,
             progress: 0,
-            status: "in_progress",
+            status: "in progress",
             enrolledAt: now,
         }
         batch.set(enrolledRecordRef, asyncCourseEnrollRecord)
 
         // ✅ Unified enrollment (for dashboards, receipts, history)
-        const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-        const enrolledCourse: EnrolledCourse = {
-            userId,
-            courseId,
+        const enrollment: Enrollment = {
+            id: enrollmentId,
+            userId: userId,
+            itemId: courseId,
+            itemType: "async_course",
+            paymentReference: paymentReference,
             completedLessons: 0,
             progress: 0,
             status: "in progress",
-            enrolledAt: now,
-            type: "async_course",
-            paymentReference,
+            enrolledAt: new Date(),
         }
-        batch.set(enrolledCourseRef, enrolledCourse)
+        batch.set(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
+        // const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
+        // const enrolledCourse: Enrollment = {
+        //     userId,
+        //     id: enrollmentId,
+        //     completedLessons: 0,
+        //     progress: 0,
+        //     itemId: courseId,
+        //     status: "in progress",
+        //     enrolledAt: now,
+        //     itemType: "async_course",
+        //     paymentReference,
+        // }
+        // batch.set(enrolledCourseRef, enrolledCourse)
     }
 
     await batch.commit()

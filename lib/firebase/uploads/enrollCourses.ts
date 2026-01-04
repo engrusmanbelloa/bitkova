@@ -2,7 +2,7 @@
 import { doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { removeFromCartDb } from "@/lib/firebase/queries/cart"
-import { EnrolledCourse } from "@/types/userType"
+import { Enrollment } from "@/types/userType"
 
 export const enrollCourses = async (userId: string, courseId: string[]) => {
     const batch = writeBatch(db)
@@ -10,14 +10,15 @@ export const enrollCourses = async (userId: string, courseId: string[]) => {
 
     courseId.forEach((courseId) => {
         const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-        const enrolledCourse: EnrolledCourse = {
+        const enrolledCourse: Enrollment = {
+            id: `${userId}-${courseId}`,
             userId,
-            courseId,
+            itemId: courseId,
             completedLessons: 0,
             progress: 0,
             status: "in progress",
             enrolledAt: now,
-            type: "async_course",
+            itemType: "async_course",
             paymentReference: "",
         }
         batch.set(enrolledCourseRef, enrolledCourse)
