@@ -57,19 +57,6 @@ export const useCourseCompletion = ({
                 progress: (updatedList.length / videoList.length) * 100,
             })
 
-            useUserStore.getState().setEnrollments(
-                useUserStore.getState().enrollments.map((e) =>
-                    e.id === enrollmentId
-                        ? {
-                              ...e,
-                              completedLessons: updatedList.length,
-                              completedVideos: updatedList,
-                              progress: (updatedList.length / videoList.length) * 100,
-                          }
-                        : e,
-                ),
-            )
-
             const isEnrolled = useUserStore.getState().isEnrolled(courseId)
             if (!isEnrolled) {
                 const enrolledCourse: Enrollment = {
