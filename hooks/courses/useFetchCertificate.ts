@@ -7,7 +7,7 @@ interface CertificateStatus {
     certificateExists: boolean
     completedVideos: string[]
     certificateId?: string
-    issuedAt: Date
+    issuedAt?: Date
 }
 
 const fetchCertificateStatus = async ({
@@ -28,12 +28,18 @@ const fetchCertificateStatus = async ({
     const certificateId = certSnap.docs[0]?.id // Get the first result's ID, if it exists
     const issuedAt = certSnap.docs[0]?.data()?.issuedAt // Get issuedAt if available
 
-    //  return { certificateExists, completedVideos }
-    const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-    const courseSnap = await getDoc(courseRef)
-    const completedVideos: string[] = courseSnap.exists()
-        ? courseSnap.data()?.completedVideos || []
+    const enrollmentId = `${userId}-${courseId}`
+    const enrollmentSnap = await getDoc(doc(db, "enrollments", enrollmentId))
+
+    const completedVideos = enrollmentSnap.exists()
+        ? enrollmentSnap.data().completedVideos || []
         : []
+
+    // const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
+    // const courseSnap = await getDoc(courseRef)
+    // const completedVideos: string[] = courseSnap.exists()
+    //     ? courseSnap.data()?.completedVideos || []
+    //     : []
 
     return { certificateExists, completedVideos, certificateId, issuedAt }
 }

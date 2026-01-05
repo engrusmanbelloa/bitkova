@@ -6,6 +6,7 @@ import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { markInvitePending } from "../telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { Enrollment } from "@/types/userType"
 
 interface Params {
     userId: string
@@ -31,7 +32,7 @@ export async function enrollPhysicalClassServer({
     const enrollmentId = `${userId}-${classId}`
 
     // ✅ Idempotency check (CRITICAL)
-    const existing = await getDoc(doc(db, "physicalClassEnrollments", enrollmentId))
+    const existing = await getDoc(doc(db, "enrollments", enrollmentId))
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
@@ -53,16 +54,19 @@ export async function enrollPhysicalClassServer({
     const now = new Date()
 
     // ✅ Enrollment record
-    batch.set(doc(db, "physicalClassEnrollments", enrollmentId), {
+    batch.set(doc(db, "enrollments", enrollmentId), {
         id: enrollmentId,
         userId,
-        classId,
+        itemId: classId,
+        itemType: "physical_class",
         cohortId,
+        className,
         paymentReference,
-        qrCode,
         status: "paid",
-        enrolledAt: now,
+        qrCode,
+        inviteLink,
         attendanceLog: [],
+        enrolledAt: now,
     })
 
     // ✅ Increment class capacity
@@ -70,24 +74,8 @@ export async function enrollPhysicalClassServer({
         enrolled: increment(1),
     })
 
-    // ✅ Unified enrollment (dashboard, receipts, audit)
-    batch.set(doc(db, "users", userId, "classEnrollments", enrollmentId), {
-        enrollmentId,
-        itemId: classId,
-        type: "physical_class",
-        paymentReference,
-        enrolledAt: now,
-    })
-
     await batch.commit()
 
-    // ✅ Email notification
-    //  await sendEnrollmentEmail({
-    //      to: payerEmail,
-    //      cohortName: cohortName,
-    //      className: className,
-    //      telegramInviteLink: inviteLink,
-    //  })
     if (inviteLink) {
         await sendEnrollmentEmail({
             to: payerEmail,

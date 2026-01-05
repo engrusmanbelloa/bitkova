@@ -303,7 +303,8 @@ const CohortBadge = styled.div`
 
 export default function PhysicalClassesSwiper() {
     const router = useRouter()
-    const { isEnrolledInClass } = useUserStore()
+    // const { isEnrolledInClass } = useUserStore()
+    const { isEnrolled } = useUserStore()
     const { data: cohort, isLoading: cohortLoading, error: cohortError } = useFetchActiveCohort()
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
 
@@ -368,7 +369,7 @@ export default function PhysicalClassesSwiper() {
                     modules={[Mousewheel, Pagination]}
                 >
                     {classes.map((classItem) => {
-                        const isEnrolled = isEnrolledInClass(classItem.id)
+                        const isEnrolledInClass = isEnrolled(classItem.id)
                         const isFull = classItem.enrolled >= classItem.capacity
 
                         return (
@@ -471,12 +472,12 @@ export default function PhysicalClassesSwiper() {
 
                                             <EnrollButton
                                                 variant="contained"
-                                                disabled={isEnrolled || isFull}
+                                                disabled={isEnrolledInClass || isFull}
                                                 onClick={() =>
                                                     router.push(`/pay/physical/${classItem.id}`)
                                                 }
                                             >
-                                                {isEnrolled
+                                                {isEnrolledInClass
                                                     ? "Already Enrolled"
                                                     : isFull
                                                       ? "Class Full"

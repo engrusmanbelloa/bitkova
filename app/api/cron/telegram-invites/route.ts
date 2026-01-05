@@ -4,9 +4,9 @@ import { db } from "@/lib/firebase/firebaseConfig"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 
-const MAX_ATTEMPTS = 5
+const MAX_ATTEMPTS = 1
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
     const auth = req.headers.get("authorization")
 
     if (auth !== `Bearer ${process.env.CRON_SECRET}`) {

@@ -1,7 +1,7 @@
 // lib/firebase/uploads/enrollPhysicalClass.ts
 import { doc, setDoc, getDoc, updateDoc, increment } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { PhysicalClassEnrollment } from "@/types/classTypes"
+import { Enrollment } from "@/types/userType"
 import QRCode from "qrcode"
 
 interface EnrollPhysicalClassParams {
@@ -29,10 +29,11 @@ export async function enrollPhysicalClass({
     })
     const qrCode = await QRCode.toDataURL(qrData)
 
-    const enrollment: PhysicalClassEnrollment = {
+    const enrollment: Enrollment = {
         id: enrollmentId,
         userId,
-        classId,
+        itemId: classId,
+        itemType: "physical_class",
         cohortId,
         paymentReference,
         qrCode,

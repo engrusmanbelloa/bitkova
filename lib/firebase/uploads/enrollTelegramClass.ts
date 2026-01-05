@@ -1,7 +1,7 @@
 // lib/firebase/uploads/enrollTelegramClass.ts
 import { doc, setDoc, updateDoc, increment } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
-import { TelegramClassEnrollment } from "@/types/classTypes"
+import { Enrollment } from "@/types/userType"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 
 interface EnrollTelegramClassParams {
@@ -24,10 +24,11 @@ export async function enrollTelegramClass({
     // Generate Telegram invite link
     const inviteLink = await createTelegramInviteLink(telegramGroupId, userId)
 
-    const enrollment: TelegramClassEnrollment = {
+    const enrollment: Enrollment = {
         id: enrollmentId,
         userId,
-        classId,
+        itemId: classId,
+        itemType: "telegram_class",
         cohortId,
         paymentReference,
         telegramInviteLink: inviteLink || "",

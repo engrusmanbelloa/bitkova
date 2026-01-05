@@ -4,7 +4,7 @@ import Rating from "@mui/material/Rating"
 import { useRouter } from "next/navigation"
 import NoDataAvailable from "@/components/dashboard/NoData"
 import { mobile, ipad } from "@/responsive"
-import { User } from "@/types/userType"
+import { Enrollment, User } from "@/types/userType"
 import CircularProgress from "@mui/material/CircularProgress"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
@@ -111,27 +111,37 @@ interface DashboardProps {
 }
 
 export default function InProgressCourses({ userData, limit }: DashboardProps) {
-    const { data: courses, isLoading, error } = useFetchCourses()
-    const { enrolledCourses } = useUserStore()
-    const { user, authReady } = useAuthReady()
     const router = useRouter()
+    const { user, authReady } = useAuthReady()
+    const { data: courses, isLoading, error } = useFetchCourses()
+    const { enrollments } = useUserStore()
 
-    // Limit to courses the user is enrolled in
-    const coursesToDisplay = (courses ?? [])
-        .filter((course) => enrolledCourses.some((ec) => ec.courseId === course.id))
-        .slice(0, limit ?? enrolledCourses.length)
-
-    if (isLoading || !authReady) return <CircularProgress />
-    if (error) return <p>Failed to load courses.</p>
+    if (!authReady || isLoading) return <CircularProgress />
     if (!user) return <p>Please log in to view your learning progress.</p>
+    if (error) return <p>Failed to load courses.</p>
+
+    // get async course enrollments only
+    const asyncEnrollments = enrollments.filter((e) => e.itemType === "async_course")
+    const enrolledCount = enrollments.length
+
+    // match enrollments with courses
+    const coursesToDisplay = (courses ?? [])
+        .filter((course) => asyncEnrollments.some((e) => e.itemId === course.id))
+        .slice(0, limit ?? asyncEnrollments.length)
+
+    // const coursesToDisplay = (courses ?? [])
+    //     .filter((course) => enrolledCourses.some((ec) => ec.courseId === course.id))
+    //     .slice(0, limit ?? enrolledCourses.length)
 
     return (
         <Container>
             <CourseList>
-                {coursesToDisplay.length > 0 ? (
+                {coursesToDisplay.length > 0 &&
                     coursesToDisplay.map((course) => {
                         // Find matching enrollment data
-                        const enrollment = enrolledCourses.find((ec) => ec.courseId === course.id)
+                        const enrollment = asyncEnrollments.find(
+                            (ec) => ec.itemId === course.id,
+                        ) as Enrollment | undefined
 
                         // Fallbacks in case of missing data
                         const completedLessons = enrollment?.completedLessons ?? 0
@@ -168,8 +178,8 @@ export default function InProgressCourses({ userData, limit }: DashboardProps) {
                                 </CourseInfo>
                             </CourseCard>
                         )
-                    })
-                ) : (
+                    })}
+                {enrolledCount === 0 && (
                     <NoDataAvailable comment={`${user.name} sir, you have no enrolled courses`} />
                 )}
             </CourseList>

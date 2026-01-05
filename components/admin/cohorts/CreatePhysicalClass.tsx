@@ -206,9 +206,8 @@ export default function CreatePhysicalClass() {
                 cohortId: data.cohortId,
                 price: data.price,
                 capacity: data.capacity,
-                enrolled: 0,
                 schedule: data.schedule, // FROM FORM
-                telegramGroupId: data.telegramGroupId || null,
+                telegramGroupId: data.telegramGroupId ?? "",
                 instructors: data.instructors.map((i) => i.value),
                 courses: data.courses.map((c) => c.value),
                 mapLink: data.mapLink || "",

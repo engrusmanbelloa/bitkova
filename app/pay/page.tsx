@@ -1,7 +1,6 @@
 // app/pay/page.tsx
 "use client"
 import dynamic from "next/dynamic"
-// import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
@@ -13,7 +12,7 @@ const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheck
 })
 export default function AsyncCourseCheckoutPage() {
     const successMessage = "Payment successful! Courses added."
-    const { cart, removeFromCart, addToEnrolledCourses } = useUserStore()
+    const { cart, removeFromCart } = useUserStore()
     const { user } = useAuthReady()
     const { data: courses, isLoading } = useFetchCourses()
 
