@@ -154,7 +154,6 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
             </OverviewContainer>
             <InProgressCourses userData={userData} />
             <RegisteredClasses userData={userData} limit={3} />
-            {/* <PhysicalClassCard enrollment={physicalEnrolment[0]} cohorts={[]} />] */}
         </Container>
     )
 }
