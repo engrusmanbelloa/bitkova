@@ -1,7 +1,6 @@
 // app/pay/page.tsx
 "use client"
 import dynamic from "next/dynamic"
-// import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"

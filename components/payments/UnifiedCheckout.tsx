@@ -185,6 +185,7 @@ export default function UnifiedCheckout({
                     userId: user!.id,
                     itemId: item.id,
                     itemType: classType,
+                    status: "paid",
                     paymentReference: reference.reference,
                     enrolledAt: new Date(),
                 }

@@ -18,37 +18,54 @@ export async function enrollAsyncCoursesServer({
         const enrollmentId = `${userId}-${courseId}`
 
         // ✅ Idempotency check
-        const existing = await getDoc(doc(db, "asyncCourseEnrollments", enrollmentId))
+        const existing = await getDoc(doc(db, "enrollments", enrollmentId))
         if (existing.exists()) continue
 
         // ✅ Course enrollment record
-        const enrolledRecordRef = doc(db, "asyncCourseEnrollments", enrollmentId)
-        const asyncCourseEnrollRecord: Enrollment = {
+        // const enrolledRecordRef = doc(db, "asyncCourseEnrollments", enrollmentId)
+        // const asyncCourseEnrollRecord: Enrollment = {
+        //     id: enrollmentId,
+        //     userId,
+        //     itemId: courseId,
+        //     itemType: "async_course",
+        //     paymentReference,
+        //     completedLessons: 0,
+        //     progress: 0,
+        //     status: "in progress",
+        //     enrolledAt: now,
+        // }
+        // batch.set(enrolledRecordRef, asyncCourseEnrollRecord)
+
+        const enrollmentRef = doc(db, "enrollments", enrollmentId)
+
+        const enrollment: Enrollment = {
             id: enrollmentId,
             userId,
             itemId: courseId,
             itemType: "async_course",
             paymentReference,
-            completedLessons: 0,
-            progress: 0,
             status: "in progress",
             enrolledAt: now,
+            progress: 0,
+            completedLessons: 0,
+            completedVideos: [],
         }
-        batch.set(enrolledRecordRef, asyncCourseEnrollRecord)
+
+        batch.set(enrollmentRef, enrollment)
 
         // ✅ Unified enrollment (for dashboards, receipts, history)
-        const enrollment: Enrollment = {
-            id: enrollmentId,
-            userId: userId,
-            itemId: courseId,
-            itemType: "async_course",
-            paymentReference: paymentReference,
-            completedLessons: 0,
-            progress: 0,
-            status: "in progress",
-            enrolledAt: new Date(),
-        }
-        batch.set(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
+        // const enrollment: Enrollment = {
+        //     id: enrollmentId,
+        //     userId: userId,
+        //     itemId: courseId,
+        //     itemType: "async_course",
+        //     paymentReference: paymentReference,
+        //     completedLessons: 0,
+        //     progress: 0,
+        //     status: "in progress",
+        //     enrolledAt: new Date(),
+        // }
+        // batch.set(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
         // const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
         // const enrolledCourse: Enrollment = {
         //     userId,

@@ -49,53 +49,53 @@ export interface TelegramClass {
     }
 }
 
-export interface PhysicalClassEnrollment {
-    id: string
-    userId: string
-    classId: string
-    cohortId: string
-    paymentReference: string
-    qrCode: string
-    status: "paid" | "attended" | "completed"
-    enrolledAt: Date
-    // telegramGroupId: string
-    attendanceLog: {
-        date: Date
-        attended: boolean
-    }[]
-}
+// export interface PhysicalClassEnrollment {
+//     id: string
+//     userId: string
+//     classId: string
+//     cohortId: string
+//     paymentReference: string
+//     qrCode: string
+//     status: "paid" | "attended" | "completed"
+//     enrolledAt: Date
+//     // telegramGroupId: string
+//     attendanceLog: {
+//         date: Date
+//         attended: boolean
+//     }[]
+// }
 
-export interface TelegramClassEnrollment {
-    id: string
-    userId: string
-    classId: string
-    cohortId: string
-    paymentReference: string
-    telegramInviteLink: string
-    status: "paid" | "active" | "completed"
-    enrolledAt: Date
-    telegramUserId?: number
-}
+// export interface TelegramClassEnrollment {
+//     id: string
+//     userId: string
+//     classId: string
+//     cohortId: string
+//     paymentReference: string
+//     telegramInviteLink: string
+//     status: "paid" | "active" | "completed"
+//     enrolledAt: Date
+//     telegramUserId?: number
+// }
 
 // Unified enrollment type for all class types
-export interface ClassEnrollment {
-    id: string
-    userId: string
-    itemId: string // courseId, classId, or telegramClassId
-    type: ClassType
-    cohortId?: string
-    paymentReference: string
-    status: "pending" | "paid" | "active" | "completed" | "cancelled"
-    enrolledAt: Date
+// export interface ClassEnrollment {
+//     id: string
+//     userId: string
+//     itemId: string // courseId, classId, or telegramClassId
+//     type: ClassType
+//     cohortId?: string
+//     paymentReference: string
+//     status: "pending" | "paid" | "active" | "completed" | "cancelled"
+//     enrolledAt: Date
 
-    // Type-specific data
-    qrCode?: string // For physical classes
-    telegramInviteLink?: string // For TG classes
-    telegramUserId?: number
-    linkExpiresAt?: Date
-    progress?: number // For async courses
-    completedLessons?: number // For async courses
-}
+//     // Type-specific data
+//     qrCode?: string // For physical classes
+//     telegramInviteLink?: string // For TG classes
+//     telegramUserId?: number
+//     linkExpiresAt?: Date
+//     progress?: number // For async courses
+//     completedLessons?: number // For async courses
+// }
 
 export type InviteStatus = "pending" | "processing" | "sent" | "failed"
 

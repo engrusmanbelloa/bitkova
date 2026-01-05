@@ -1,7 +1,7 @@
 // lib/store/useUserStore.ts
 import { create } from "zustand"
 import { Enrollment, CompletedCourse, ArchivedCourse, EnrollmentType } from "@/types/userType"
-import { ClassEnrollment } from "@/types/classTypes"
+// import { ClassEnrollment } from "@/types/classTypes"
 
 type UserStore = {
     // State

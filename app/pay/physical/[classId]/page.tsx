@@ -45,16 +45,6 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
         },
         enabled: !!classData?.cohortId,
     })
-    const handlePaymentSuccess = async (reference: string) => {
-        if (!user || !classData) throw new Error("Missing user or class data")
-
-        await enrollPhysicalClass({
-            userId: user.id,
-            classId: classData.id,
-            cohortId: classData.cohortId,
-            paymentReference: reference,
-        })
-    }
 
     if (isLoading || cohortLoading) return <div>Loading...</div>
 

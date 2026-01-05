@@ -21,8 +21,6 @@ interface Params {
     enrolledAt: Date
 }
 
-// Omit<telegramPendingInvites, "attempts" | "status" | "createdAt" | "updatedAt">)
-
 export async function enrollTelegramClassServer({
     userId,
     itemId,
@@ -36,7 +34,7 @@ export async function enrollTelegramClassServer({
     const enrollmentId = `${userId}-${itemId}`
 
     // ✅ Idempotency check
-    const existing = await getDoc(doc(db, "telegramClassEnrollments", enrollmentId))
+    const existing = await getDoc(doc(db, "enrollments", enrollmentId))
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
@@ -44,10 +42,23 @@ export async function enrollTelegramClassServer({
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Save enrollment record
-    await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
+    // await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
+    //     id: enrollmentId,
+    //     userId,
+    //     itemId: itemId,
+    //     className,
+    //     cohortId,
+    //     paymentReference,
+    //     telegramInviteLink: inviteLink,
+    //     status: "paid",
+    //     enrolledAt: new Date(),
+    // })
+
+    await setDoc(doc(db, "enrollments", enrollmentId), {
         id: enrollmentId,
         userId,
-        itemId: itemId,
+        itemId,
+        itemType: "telegram_class",
         className,
         cohortId,
         paymentReference,
@@ -62,26 +73,18 @@ export async function enrollTelegramClassServer({
     })
 
     // ✅ Save unified enrollment
-    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
-    //     enrollmentId,
-    //     className,
-    //     itemId: classId,
-    //     type: "telegram_class",
-    //     paymentReference,
-    //     enrolledAt: new Date(),
-    // })
 
-    const enrollment: Enrollment = {
-        id: enrollmentId,
-        userId: userId,
-        itemId: itemId, // courseId OR classId
-        itemType: "telegram_class",
-        className: className,
-        cohortId: cohortId,
-        paymentReference: paymentReference,
-        enrolledAt: new Date(),
-    }
-    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
+    // const enrollment: Enrollment = {
+    //     id: enrollmentId,
+    //     userId: userId,
+    //     itemId: itemId, // courseId OR classId
+    //     itemType: "telegram_class",
+    //     className: className,
+    //     cohortId: cohortId,
+    //     paymentReference: paymentReference,
+    //     enrolledAt: new Date(),
+    // }
+    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
 
     if (inviteLink) {
         await sendEnrollmentEmail({

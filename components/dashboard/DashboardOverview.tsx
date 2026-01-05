@@ -102,11 +102,8 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
     const { enrollments } = useUserStore()
     const { user, authReady } = useAuthReady()
 
-    // const enrolledCourseIds = enrolledCourses.map((c) => c.courseId)
-    // const coursesToDisplay = (courses ?? [])
-    //     .filter((course) => enrolledCourseIds.includes(course.id))
-    //     .slice(0, limit ?? enrolledCourseIds.length)
-
+    const telegramEnrolment = enrollments.filter((e) => e.itemType === "telegram_class")
+    const physicalEnrolment = enrollments.filter((e) => e.itemType === "physical_class")
     const asyncEnrollments = enrollments.filter((e) => e.itemType === "async_course")
 
     // const enrolledCount = asyncEnrollments.length

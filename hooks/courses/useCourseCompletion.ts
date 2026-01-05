@@ -50,12 +50,20 @@ export const useCourseCompletion = ({
         })
 
         try {
-            const courseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
-            await updateDoc(courseRef, {
+            const enrollmentRef = doc(db, "enrollments", enrollmentId)
+
+            await updateDoc(enrollmentRef, {
                 completedLessons: updatedList.length,
                 completedVideos: updatedList,
                 progress: (updatedList.length / videoList.length) * 100,
             })
+
+            // const courseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
+            // await updateDoc(courseRef, {
+            //     completedLessons: updatedList.length,
+            //     completedVideos: updatedList,
+            //     progress: (updatedList.length / videoList.length) * 100,
+            // })
 
             const isEnrolled = useUserStore.getState().isEnrolled(courseId)
             if (!isEnrolled) {

@@ -32,7 +32,7 @@ export async function enrollPhysicalClassServer({
     const enrollmentId = `${userId}-${classId}`
 
     // ✅ Idempotency check (CRITICAL)
-    const existing = await getDoc(doc(db, "physicalClassEnrollments", enrollmentId))
+    const existing = await getDoc(doc(db, "enrollments", enrollmentId))
     if (existing.exists()) return
 
     // ✅ Create Telegram invite
@@ -54,16 +54,31 @@ export async function enrollPhysicalClassServer({
     const now = new Date()
 
     // ✅ Enrollment record
-    batch.set(doc(db, "physicalClassEnrollments", enrollmentId), {
+    // batch.set(doc(db, "physicalClassEnrollments", enrollmentId), {
+    //     id: enrollmentId,
+    //     userId,
+    //     classId,
+    //     cohortId,
+    //     paymentReference,
+    //     qrCode,
+    //     status: "paid",
+    //     enrolledAt: now,
+    //     attendanceLog: [],
+    // })
+
+    batch.set(doc(db, "enrollments", enrollmentId), {
         id: enrollmentId,
         userId,
-        classId,
+        itemId: classId,
+        itemType: "physical_class",
         cohortId,
+        className,
         paymentReference,
-        qrCode,
         status: "paid",
-        enrolledAt: now,
+        qrCode,
+        inviteLink,
         attendanceLog: [],
+        enrolledAt: now,
     })
 
     // ✅ Increment class capacity
@@ -80,17 +95,17 @@ export async function enrollPhysicalClassServer({
     //     paymentReference,
     //     enrolledAt: now,
     // })
-    const enrollment: Enrollment = {
-        id: enrollmentId,
-        userId: userId,
-        itemId: classId,
-        itemType: "physical_class",
-        className: className,
-        cohortId: cohortId,
-        paymentReference: paymentReference,
-        enrolledAt: new Date(),
-    }
-    await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
+    // const enrollment: Enrollment = {
+    //     id: enrollmentId,
+    //     userId: userId,
+    //     itemId: classId,
+    //     itemType: "physical_class",
+    //     className: className,
+    //     cohortId: cohortId,
+    //     paymentReference: paymentReference,
+    //     enrolledAt: new Date(),
+    // }
+    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
 
     await batch.commit()
 

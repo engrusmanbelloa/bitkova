@@ -7,9 +7,10 @@ import { Enrollment } from "@/types/userType"
 export const enrollCourses = async (userId: string, courseId: string[]) => {
     const batch = writeBatch(db)
     const now = new Date()
+    const enrollmentId = `${userId}-${courseId}`
 
     courseId.forEach((courseId) => {
-        const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", courseId)
+        const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
         const enrolledCourse: Enrollment = {
             id: `${userId}-${courseId}`,
             userId,
@@ -23,7 +24,6 @@ export const enrollCourses = async (userId: string, courseId: string[]) => {
         }
         batch.set(enrolledCourseRef, enrolledCourse)
     })
-    // courseId.forEach((id) => removeFromCartDb(userId, id))
 
     await batch.commit()
 }

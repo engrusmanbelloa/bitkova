@@ -33,47 +33,57 @@ export interface User {
 // types/enrollment.ts
 export type EnrollmentType = "async_course" | "telegram_class" | "physical_class"
 
-export interface Enrollment {
-    id: string // enrollmentId (doc id)
-    userId: string
+// export interface Enrollment {
+//     id: string // enrollmentId (doc id)
+//     userId: string
 
-    itemId: string // courseId OR classId
-    itemType: EnrollmentType
+//     itemId: string // courseId OR classId
+//     itemType: EnrollmentType
 
-    cohortId?: string
-    className?: string
-    cohortName?: string
-    // async only
-    progress?: number
-    completedLessons?: number
-    completedVideos?: string[]
-    status?: "in progress" | "completed"
+//     cohortId?: string
+//     className?: string
+//     cohortName?: string
+//     // async only
+//     progress?: number
+//     completedLessons?: number
+//     completedVideos?: string[]
+//     status?: "in progress" | "completed"
 
-    paymentReference?: string
-    enrolledAt: Date
-}
-
-// export interface EnrolledCourse {
-//     userId: string // UID from Firebase Auth
-//     courseId: string // Document ID from the `courses` collection
-//     completedLessons: number
-//     progress: number // e.g. 0 to 100
-//     status: "in progress" | "completed"
-//     type?: "async_course" | "physical" | "telegram"
 //     paymentReference?: string
 //     enrolledAt: Date
 // }
 
-// export interface asyncCourseEnrollmentsType {
-//     enrollmentId: string
-//     userId: string
-//     courseId: string
-//     paymentReference: string
-//     completedLessons: number
-//     progress: number
-//     status: "in_progress" | "completed" | "expired"
-//     enrolledAt: Date
-// }
+// enrollments/{enrollmentId}
+export interface Enrollment {
+    id: string
+    userId: string
+
+    itemId: string
+    itemType: "async_course" | "physical_class" | "telegram_class"
+
+    cohortId?: string
+    className?: string
+    cohortName?: string
+
+    paymentReference?: string
+    status: "pending" | "paid" | "active" | "completed" | "cancelled" | "in progress"
+
+    enrolledAt: Date
+
+    // async only
+    progress?: number
+    completedLessons?: number
+    completedVideos?: string[]
+
+    // physical only
+    qrCode?: string
+    attendanceLog?: { date: Date; attended: boolean }[]
+
+    // telegram only
+    telegramInviteLink?: string
+    telegramUserId?: number
+}
+
 export interface WishListItem {
     id: string
     userId: string
