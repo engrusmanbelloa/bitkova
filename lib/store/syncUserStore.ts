@@ -1,7 +1,16 @@
 // // lib/store/syncUserStore.ts
 
 // lib/store/syncUserStore.ts
-import { doc, getDoc, collection, getDocs, onSnapshot, Unsubscribe } from "firebase/firestore"
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    onSnapshot,
+    Unsubscribe,
+    where,
+    query,
+} from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { Enrollment, CompletedCourse, ArchivedCourse } from "@/types/userType"
@@ -55,8 +64,17 @@ export const syncUserStore = (userId: string): Unsubscribe => {
 
     // 2. Setup Real-time Listener for Enrolled Courses
     // This is the only thing that needs to be "Live"
+    // const unsubscribe = onSnapshot(
+    //     collection(db, "users", userId, "enrolledCourses"),
+    //     (snap) => {
+    //         const list = snap.docs.map(mapDoc) as Enrollment[]
+    //         store.setEnrollments(list)
+    //     },
+    //     (err) => console.error("Enrollment listener error:", err),
+    // )
+
     const unsubscribe = onSnapshot(
-        collection(db, "users", userId, "enrolledCourses"),
+        query(collection(db, "enrollments"), where("userId", "==", userId)),
         (snap) => {
             const list = snap.docs.map(mapDoc) as Enrollment[]
             store.setEnrollments(list)
