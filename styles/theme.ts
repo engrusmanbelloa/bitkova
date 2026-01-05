@@ -88,7 +88,7 @@ export const theme = createTheme({
         mobileNavBg: "#EAF3FB",
         offWhite: "#ABD0ED",
         horizontalrule: "#cddeff",
-        green: "#0cdf13",
+        green: "#0dc413",
         orange: "#ff5722",
         orangeShadow: "rgba(255, 87, 34, 0.2)",
         orangeDark: "#e64a19",

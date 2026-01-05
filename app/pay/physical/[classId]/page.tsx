@@ -89,10 +89,11 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
             cohortName={cohort.name}
             classType="physical_class"
             successMessage={successMessage}
-            successRedirect="/success"
+            successRedirect="/dashboard"
             metadata={{
                 cohortId: classData.cohortId,
                 classLocation: classData.location,
+                telegramGroupId: classData.telegramGroupId,
             }}
         />
     )

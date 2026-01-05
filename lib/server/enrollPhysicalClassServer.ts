@@ -54,18 +54,6 @@ export async function enrollPhysicalClassServer({
     const now = new Date()
 
     // ✅ Enrollment record
-    // batch.set(doc(db, "physicalClassEnrollments", enrollmentId), {
-    //     id: enrollmentId,
-    //     userId,
-    //     classId,
-    //     cohortId,
-    //     paymentReference,
-    //     qrCode,
-    //     status: "paid",
-    //     enrolledAt: now,
-    //     attendanceLog: [],
-    // })
-
     batch.set(doc(db, "enrollments", enrollmentId), {
         id: enrollmentId,
         userId,
@@ -85,27 +73,6 @@ export async function enrollPhysicalClassServer({
     batch.update(doc(db, "physicalClasses", classId), {
         enrolled: increment(1),
     })
-
-    // ✅ Unified enrollment (dashboard, receipts, audit)
-    // batch.set(doc(db, "users", userId, "enrolledCourses", enrollmentId), {
-    //     enrollmentId,
-    //     itemId: classId,
-    //     className,
-    //     type: "physical_class",
-    //     paymentReference,
-    //     enrolledAt: now,
-    // })
-    // const enrollment: Enrollment = {
-    //     id: enrollmentId,
-    //     userId: userId,
-    //     itemId: classId,
-    //     itemType: "physical_class",
-    //     className: className,
-    //     cohortId: cohortId,
-    //     paymentReference: paymentReference,
-    //     enrolledAt: new Date(),
-    // }
-    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
 
     await batch.commit()
 

@@ -7,6 +7,9 @@ import { enrollPhysicalClassServer } from "../enrollPhysicalClassServer"
 // "async_course" | "physical_class" | "telegram_class"
 export const paymentHandlers: Record<string, PaymentHandler> = {
     telegram_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
+        if (!metadata.telegramGroupId) {
+            throw new Error("Missing telegramGroupId for physical class")
+        }
         await enrollTelegramClassServer({
             userId,
             classId: itemIds[0],
@@ -22,6 +25,9 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
     },
 
     physical_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
+        if (!metadata.telegramGroupId) {
+            throw new Error("Missing telegramGroupId for physical class")
+        }
         await enrollPhysicalClassServer({
             userId,
             classId: itemIds[0],

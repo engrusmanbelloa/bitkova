@@ -132,6 +132,10 @@ export default function UnifiedCheckout({
             className,
             cohortName,
             itemIds: items.map((i) => i.id),
+            //             ...(classType !== "async_course" && {
+            //     telegramGroupId,
+            //     cohortId,
+            // }),
             ...metadata,
             custom_fields: [
                 {

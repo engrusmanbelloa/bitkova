@@ -6,6 +6,9 @@ import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import CircularProgress from "@mui/material/CircularProgress"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import RegisteredClasses from "@/components/dashboard/classes/RegisteredClasses"
+import PhysicalClassCard from "@/components/dashboard/classes/PhysicalClassCard"
+import TelegramClassCard from "@/components/dashboard/classes/TelegramClassCard"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
@@ -150,6 +153,8 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
                 </OverviewBox>
             </OverviewContainer>
             <InProgressCourses userData={userData} />
+            <RegisteredClasses userData={userData} limit={3} />
+            {/* <PhysicalClassCard enrollment={physicalEnrolment[0]} cohorts={[]} />] */}
         </Container>
     )
 }
