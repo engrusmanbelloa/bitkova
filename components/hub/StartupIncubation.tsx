@@ -68,10 +68,10 @@ const ProgramCard = styled.div`
     border-radius: 8px;
 `
 
-const IconContainer = styled.div<{ bgcolor: string }>`
+const IconContainer = styled.div<{ $bgcolor: string }>`
     width: 56px;
     height: 56px;
-    background: ${(props) => props.bgcolor};
+    background: ${(props) => props.$bgcolor};
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -153,7 +153,7 @@ export default function StartupIncubationSwiper() {
                         {programs.map((program) => (
                             <SwiperSlide key={program.id}>
                                 <ProgramCard>
-                                    <IconContainer bgcolor={program.bgcolor}>
+                                    <IconContainer $bgcolor={program.bgcolor}>
                                         <span style={{ fontSize: "24px" }}>{program.icon}</span>
                                     </IconContainer>
 

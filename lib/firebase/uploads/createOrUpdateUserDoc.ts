@@ -9,7 +9,7 @@ import {
     getDocs,
 } from "firebase/firestore"
 import { User as FirebaseUser } from "firebase/auth"
-import { User, UserCourseProgress } from "@/types/userType"
+import { User } from "@/types/userType"
 import { app } from "@/lib/firebase/firebaseConfig"
 
 const db = getFirestore(app)
@@ -47,12 +47,12 @@ export default async function createUserIfNotExists(user: FirebaseUser) {
             }
 
             await setDoc(userRef, newUser, { merge: true })
-            console.log("New user document created")
+            // console.log("New user document created")
         } else {
-            console.log("User document already exists")
+            // console.log("User document already exists")
         }
     } catch (error) {
-        console.error("Error creating or checking user document:", error)
+        // console.log("Error creating or checking user document:", error)
         throw error
     }
 }

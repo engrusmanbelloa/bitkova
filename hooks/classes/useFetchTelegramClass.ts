@@ -19,43 +19,62 @@ function convertTelegramClassDoc(doc: any): TelegramClass {
     }
 }
 
+// export function useFetchTelegramClass(cohortId?: string) {
+//     return useQuery({
+//         queryKey: ["telegramClass", cohortId],
+//         queryFn: async () => {
+//             if (!cohortId) {
+//                 // console.log("⏭️ Skipping telegram class fetch - no cohort ID")
+//                 return []
+//             }
+
+//             // console.log("🔍 Fetching telegram class for cohort:", cohortId)
+
+//             try {
+//                 const q = query(
+//                     collection(db, "telegramClasses"),
+//                     where("cohortId", "==", cohortId),
+//                 )
+
+//                 const snapshot = await getDocs(q)
+
+//                 // console.log("📊 Telegram classes found:", snapshot.size)
+
+//                 if (snapshot.empty) {
+//                     console.warn("⚠️ No telegram class for this cohort")
+//                     return []
+//                 }
+
+//                 const telegramClass = convertTelegramClassDoc(snapshot.docs[0])
+
+//                 // console.log("✅ Telegram class loaded:", telegramClass.name)
+//                 return telegramClass
+//             } catch (error) {
+//                 // console.error("❌ Error fetching telegram class:", error)
+//                 throw error
+//             }
+//         },
+//         enabled: !!cohortId,
+//         retry: 2,
+//         staleTime: 5 * 60 * 1000,
+//     })
+// }
+
 export function useFetchTelegramClass(cohortId?: string) {
-    return useQuery({
-        queryKey: ["telegramClass", cohortId],
+    return useQuery<TelegramClass[]>({
+        queryKey: ["telegramClasses", cohortId],
         queryFn: async () => {
-            if (!cohortId) {
-                console.log("⏭️ Skipping telegram class fetch - no cohort ID")
-                return null
-            }
+            if (!cohortId) return []
 
-            console.log("🔍 Fetching telegram class for cohort:", cohortId)
+            const q = query(collection(db, "telegramClasses"), where("cohortId", "==", cohortId))
 
-            try {
-                const q = query(
-                    collection(db, "telegramClasses"),
-                    where("cohortId", "==", cohortId),
-                )
+            const snapshot = await getDocs(q)
 
-                const snapshot = await getDocs(q)
+            if (snapshot.empty) return []
 
-                console.log("📊 Telegram classes found:", snapshot.size)
-
-                if (snapshot.empty) {
-                    console.warn("⚠️ No telegram class for this cohort")
-                    return null
-                }
-
-                const telegramClass = convertTelegramClassDoc(snapshot.docs[0])
-
-                console.log("✅ Telegram class loaded:", telegramClass.name)
-                return telegramClass
-            } catch (error) {
-                console.error("❌ Error fetching telegram class:", error)
-                throw error
-            }
+            return snapshot.docs.map(convertTelegramClassDoc)
         },
         enabled: !!cohortId,
-        retry: 2,
         staleTime: 5 * 60 * 1000,
     })
 }

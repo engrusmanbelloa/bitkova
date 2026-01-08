@@ -42,18 +42,6 @@ export async function enrollTelegramClassServer({
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Save enrollment record
-    // await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), {
-    //     id: enrollmentId,
-    //     userId,
-    //     itemId: itemId,
-    //     className,
-    //     cohortId,
-    //     paymentReference,
-    //     telegramInviteLink: inviteLink,
-    //     status: "paid",
-    //     enrolledAt: new Date(),
-    // })
-
     await setDoc(doc(db, "enrollments", enrollmentId), {
         id: enrollmentId,
         userId,

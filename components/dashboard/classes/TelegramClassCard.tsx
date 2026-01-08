@@ -153,7 +153,12 @@ const ScheduleItem = styled.div`
 // export default function RegisteredClasses({ userData, limit }: RegisteredClassesProps) {
 
 export default function TelegramClassCard({ enrollment, cohorts }: any) {
-    const { data: telegramClass, isLoading } = useFetchTelegramClass(enrollment.cohortId)
+    // const { data: telegramClass, isLoading } = useFetchTelegramClass(enrollment.cohortId)
+    const { data: telegramClasses = [], isLoading } = useFetchTelegramClass(enrollment.cohortId)
+
+    const telegramClass = telegramClasses[0]
+
+    if (!telegramClass) return null
 
     if (isLoading) return <CircularProgress size={24} />
 
@@ -202,7 +207,7 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
                             <ScheduleList>
                                 {telegramClass.schedule?.slots.map((s: any, i: number) => (
                                     <ScheduleItem key={i}>
-                                        {s.day}: {s.time}
+                                        {s.days}: {s.time}
                                     </ScheduleItem>
                                 ))}
                             </ScheduleList>

@@ -147,11 +147,19 @@ export default function TelegramClass() {
     // Fetch active cohort
     const { data: cohort, isLoading: cohortLoading, error: cohortError } = useFetchActiveCohort()
 
+    // const {
+    //     data: telegramClass,
+    //     isLoading: classesLoading,
+    //     error: classesError,
+    // } = useFetchTelegramClass(cohort?.id)
+
     const {
-        data: telegramClass,
+        data: telegramClasses = [],
         isLoading: classesLoading,
         error: classesError,
     } = useFetchTelegramClass(cohort?.id)
+
+    const telegramClass = telegramClasses[0]
 
     if (cohortLoading || classesLoading) {
         return (

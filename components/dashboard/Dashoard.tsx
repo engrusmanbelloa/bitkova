@@ -57,7 +57,7 @@ const Title = styled.h3`
     color: ${(props) => props.theme.palette.common.black};
 `
 
-const authorizedEmails = ["usmanbelloa@gmail.com"]
+// const authorizedEmails = ["usmanbelloa@gmail.com"]
 
 export default function Dashboard() {
     // setting active menu item defaults to dashboard
@@ -88,12 +88,12 @@ export default function Dashboard() {
 
         // Check for authorization based on custom claims and specific email
         const userEmail = user?.email || ""
-        const isEmailAuthorized = authorizedEmails.includes(userEmail)
+        // const isEmailAuthorized = authorizedEmails.includes(userEmail)
         const isClaimAuthorized = claims?.admin || claims?.instructor
 
-        // console.log("The claims:...", claims)
+        // console.log("The claims:...", claims.admin, claims.instructor)
 
-        if (user && (isEmailAuthorized || isClaimAuthorized)) {
+        if (user && isClaimAuthorized) {
             setIsAuthorized(true)
         } else {
             // Not authorized, handle redirect and feedback
