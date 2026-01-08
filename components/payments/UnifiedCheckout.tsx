@@ -1,5 +1,6 @@
 // components/payments/UnifiedCheckout.tsx
 "use client"
+import { useEffect } from "react"
 import { usePaystackPayment } from "react-paystack"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
@@ -9,7 +10,7 @@ import { useUserStore } from "@/lib/store/useUserStore"
 import { toast } from "sonner"
 import { ClassType } from "@/types/classTypes"
 import { Enrollment } from "@/types/userType"
-import { useEffect } from "react"
+import TestModeWarning from "@/components/payments/TestModeWarning"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -252,6 +253,7 @@ export default function UnifiedCheckout({
     return (
         <Container>
             <Wrapper>
+                <TestModeWarning />
                 <h2>Complete Your Enrollment</h2>
 
                 {items.map((item) => (

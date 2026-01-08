@@ -1,9 +1,12 @@
+// app/api/setRole/route.ts
 import { NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
 import { adminApp } from "@/lib/firebase/admin"
 import { UserRole } from "@/types/userType"
 
-// Map roles to Firebase custom claim keys (camelCase)
+const auth = getAuth(adminApp)
+
+// Maps app roles → Firebase custom claims
 const ROLE_TO_CLAIM_MAP: Record<UserRole["role"], string> = {
     guest: "guest",
     student: "student",
@@ -14,58 +17,54 @@ const ROLE_TO_CLAIM_MAP: Record<UserRole["role"], string> = {
     business_dev: "businessDev",
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
     try {
-        const body = await request.json()
-        const { email, role, requesterEmail } = body as {
-            email: string
-            role: UserRole["role"] | "none"
-            requesterEmail: string
+        const { email, role } = (await req.json()) as {
+            email?: string
+            role?: UserRole["role"] | "none"
         }
 
-        // Validation
-        if (!email || !role || !requesterEmail) {
-            return NextResponse.json(
-                { error: "Missing required fields: email, role, and requesterEmail" },
-                { status: 400 },
-            )
+        if (!email || !role) {
+            return NextResponse.json({ error: "Missing email or role" }, { status: 400 })
         }
 
-        // Authorization check
-        const allowedAdmins = ["usmanbelloa@gmail.com"]
-        if (role === "admin" && !allowedAdmins.includes(requesterEmail)) {
+        // 🔐 AUTH
+        const authHeader = req.headers.get("Authorization")
+        if (!authHeader?.startsWith("Bearer ")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        }
+
+        const decoded = await auth.verifyIdToken(authHeader.replace("Bearer ", ""))
+
+        // 🔒 Only admins can manage roles
+        if (decoded.admin !== true) {
+            return NextResponse.json({ error: "Forbidden: Admin role required" }, { status: 403 })
+        }
+
+        // 🚨 Only super-admins can assign admin
+        if (role === "admin" && decoded.superAdmin !== true) {
             return NextResponse.json(
-                { error: "You are not authorized to assign admin role" },
+                { error: "Only super admins can assign admin role" },
                 { status: 403 },
             )
         }
 
-        const auth = getAuth(adminApp)
+        // 👤 TARGET USER
         const user = await auth.getUserByEmail(email)
+        const currentClaims = user.customClaims ?? {}
 
-        // Get current claims
-        const currentUser = await auth.getUser(user.uid)
-        const currentClaims = currentUser.customClaims || {}
+        // 🧹 Clear all managed role claims
+        const cleanedClaims = { ...currentClaims }
+        Object.values(ROLE_TO_CLAIM_MAP).forEach((claim) => {
+            delete cleanedClaims[claim]
+        })
 
-        // Check if user already has the role
+        // ➕ Apply new role
         if (role !== "none") {
-            const claimKey = ROLE_TO_CLAIM_MAP[role]
-
-            if (currentClaims[claimKey] === true) {
-                return NextResponse.json(
-                    {
-                        success: false,
-                        message: `User already has the ${role.replace(/_/g, " ")} role`,
-                    },
-                    { status: 200 },
-                )
-            }
+            cleanedClaims[ROLE_TO_CLAIM_MAP[role]] = true
         }
-        // Set new claims
-        const claims: Record<string, boolean> =
-            role === "none" ? {} : { [ROLE_TO_CLAIM_MAP[role]]: true }
 
-        await auth.setCustomUserClaims(user.uid, claims)
+        await auth.setCustomUserClaims(user.uid, cleanedClaims)
 
         return NextResponse.json({
             success: true,
@@ -74,16 +73,13 @@ export async function POST(request: Request) {
                     ? "All roles removed successfully"
                     : `${role.replace(/_/g, " ")} role assigned successfully`,
         })
-    } catch (error) {
-        console.error("Failed to update claims:", error)
+    } catch (err: any) {
+        console.error("Role assignment failed:", err)
 
-        if (error instanceof Error && error.message.includes("user-not-found")) {
-            return NextResponse.json({ error: "User not found with that email" }, { status: 404 })
+        if (err?.code === "auth/user-not-found") {
+            return NextResponse.json({ error: "User not found" }, { status: 404 })
         }
 
-        return NextResponse.json(
-            { error: "Failed to update user role. Please try again." },
-            { status: 500 },
-        )
+        return NextResponse.json({ error: "Failed to update role" }, { status: 500 })
     }
 }

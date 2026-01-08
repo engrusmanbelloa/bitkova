@@ -13,6 +13,7 @@ import { enrollTelegramClass } from "@/lib/firebase/uploads/enrollTelegramClass"
 import AuthMessage from "@/components/AuthMessage"
 import { mobile, ipad } from "@/responsive"
 import IsLoading from "@/components/IsLoading"
+import TestModeWarning from "@/components/payments/TestModeWarning"
 
 const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
     ssr: false,
@@ -101,17 +102,20 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
     ]
 
     return (
-        <UnifiedCheckout
-            items={checkoutItems}
-            classType="telegram_class"
-            className={telegramClass.name}
-            cohortName={cohort.name}
-            successMessage={successMessage}
-            successRedirect="/dashboard"
-            metadata={{
-                cohortId: cohort.id,
-                telegramGroupId: telegramClass.telegramGroupId,
-            }}
-        />
+        <>
+            <TestModeWarning />
+            <UnifiedCheckout
+                items={checkoutItems}
+                classType="telegram_class"
+                className={telegramClass.name}
+                cohortName={cohort.name}
+                successMessage={successMessage}
+                successRedirect="/dashboard"
+                metadata={{
+                    cohortId: cohort.id,
+                    telegramGroupId: telegramClass.telegramGroupId,
+                }}
+            />
+        </>
     )
 }

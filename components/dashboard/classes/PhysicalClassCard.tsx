@@ -277,7 +277,7 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
                                 <ScheduleList>
                                     {classData.schedule?.slots.map((s: any, i: number) => (
                                         <ScheduleItem key={i}>
-                                            {s.day}: {s.time}
+                                            {s.days}: {s.time}
                                         </ScheduleItem>
                                     ))}
                                 </ScheduleList>

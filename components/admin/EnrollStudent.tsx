@@ -208,7 +208,7 @@ export default function EnrollStudent() {
                 <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
                     {isEnrolling ? (
                         <>
-                            <CircularProgress size={25} color="inherit" />
+                            <CircularProgress size={20} color="inherit" />
                             <span> Processing...</span>
                         </>
                     ) : (

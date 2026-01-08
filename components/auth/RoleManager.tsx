@@ -1,115 +1,126 @@
 // components/auth/RoleManager.tsx
 "use client"
-import { useState, useEffect } from "react"
-import { auth } from "@/lib/firebase/firebaseConfig"
-import { onAuthStateChanged } from "firebase/auth"
+
+import { useState } from "react"
+import {
+    TextField,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    FormHelperText,
+    Card,
+    CircularProgress,
+} from "@mui/material"
+import styled from "styled-components"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { roleManagerSchema } from "@/lib/schemas/roleManagerSchema"
+import { z } from "zod"
 import { toast } from "sonner"
-import { UserRole } from "@/types/userType"
+import { auth } from "@/lib/firebase/firebaseConfig"
+
+type RoleForm = z.infer<typeof roleManagerSchema>
+
+const FormCard = styled(Card)`
+    padding: 16px;
+`
 
 export default function RoleManager() {
-    const [userEmail, setUserEmail] = useState<string | null>(null)
-    const [targetEmail, setTargetEmail] = useState("")
-    const [loading, setLoading] = useState(true)
-    const [role, setRole] = useState<UserRole["role"] | "none">("instructor")
     const [assigning, setAssigning] = useState(false)
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserEmail(user.email ?? null)
-            } else {
-                setUserEmail(null)
-            }
-            setLoading(false)
-        })
+    const form = useForm<RoleForm>({
+        resolver: zodResolver(roleManagerSchema),
+        defaultValues: {
+            email: "",
+            role: "instructor",
+        },
+    })
 
-        return () => unsubscribe()
-    }, [])
-    async function assignRole() {
-        if (!targetEmail || !userEmail) {
-            // alert("Please enter an email and be logged in")
-            toast.success("Please enter an email and be logged in")
-            return
-        }
-
-        setAssigning(true)
-
+    const onSubmit = async (data: RoleForm) => {
         try {
+            setAssigning(true)
+
+            const currentUser = auth.currentUser
+            if (!currentUser) throw new Error("Not authenticated")
+
+            const token = await currentUser.getIdToken()
+
             const res = await fetch("/api/setRole", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ email: targetEmail, role, requesterEmail: userEmail }),
+                body: JSON.stringify(data),
             })
 
-            const data = await res.json()
+            const json = await res.json()
+            if (!res.ok) throw new Error(json.error)
 
-            if (!res.ok) {
-                // Handle specific error cases
-                throw new Error(data.error || "Failed to assign role")
-            }
-
-            // Refresh token to get updated claims
-            await auth.currentUser?.getIdToken(true)
-            const token = await auth.currentUser?.getIdTokenResult()
-            // console.log("Custom Claims:", token?.claims)
-            toast.success(data.message)
-
-            // alert(data.message)
-            setTargetEmail("") // Clear input on success
-        } catch (error) {
-            console.log("Error assigning role:", error)
-            const errorMessage = error instanceof Error ? error.message : "Failed to assign role"
-            alert(`Error: ${errorMessage}`)
-            toast.error(errorMessage)
+            await currentUser.getIdToken(true)
+            toast.success(json.message)
+            form.reset()
+        } catch (err: any) {
+            toast.error(err.message ?? "Failed to assign role")
         } finally {
             setAssigning(false)
         }
     }
 
-    if (loading) return <p>🔄 Loading...</p>
-    if (!userEmail) return <p> Not authenticated</p>
-
     return (
-        <div>
-            <input
-                type="email"
-                placeholder="Target User Email"
-                value={targetEmail}
-                onChange={(e) => setTargetEmail(e.target.value)}
-                disabled={assigning}
-                style={{ padding: "8px" }}
-            />
-            {/* <input
-                type="email"
-                placeholder="Target User Email"
-                value={targetEmail}
-                onChange={(e) => setTargetEmail(e.target.value)}
-            /> */}
+        <FormCard>
+            <h3>Role Manager</h3>
 
-            <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as UserRole["role"] | "none")}
-                disabled={assigning}
-                style={{ padding: "8px" }}
-            >
-                <option value="instructor">Instructor</option>
-                <option value="admin">Admin</option>
-                <option value="blog_admin">Blog Admin</option>
-                <option value="event_manager">Event Manager</option>
-                <option value="business_dev">Business Development</option>
-                <option value="none">Remove Role</option>
-            </select>
-            <button
-                onClick={assignRole}
-                type="submit"
-                disabled={assigning || !targetEmail || !userEmail}
-                style={{ padding: "10px", cursor: assigning ? "not-allowed" : "pointer" }}
-            >
-                {assigning ? "⏳ Processing..." : role === "none" ? "Remove Role" : "Assign Role"}
-            </button>
-            {/* <button onClick={assignRole}>{role === "none" ? "Remove Role" : "Assign Role"}</button> */}
-        </div>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                {/* Target Email */}
+                <Controller
+                    name="email"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            {...field}
+                            label="User Email"
+                            fullWidth
+                            margin="normal"
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+
+                {/* Role Selector */}
+                <Controller
+                    name="role"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <FormControl fullWidth margin="normal" error={!!fieldState.error}>
+                            <InputLabel>Role</InputLabel>
+                            <Select {...field} label="Role">
+                                <MenuItem value="instructor">Instructor</MenuItem>
+                                <MenuItem value="admin">Admin</MenuItem>
+                                <MenuItem value="blog_admin">Blog Admin</MenuItem>
+                                <MenuItem value="event_manager">Event Manager</MenuItem>
+                                <MenuItem value="business_dev">Business Development</MenuItem>
+                                <MenuItem value="none">Remove Role</MenuItem>
+                            </Select>
+                            <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                        </FormControl>
+                    )}
+                />
+
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+                    {assigning ? (
+                        <>
+                            <CircularProgress size={25} color="inherit" />
+                            <span style={{ marginLeft: 8 }}>Processing…</span>
+                        </>
+                    ) : (
+                        "Submit"
+                    )}
+                </Button>
+            </form>
+        </FormCard>
     )
 }
