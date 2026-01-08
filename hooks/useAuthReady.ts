@@ -32,8 +32,9 @@ export function useAuthReady() {
             if (user) {
                 try {
                     // Attempt to fetch custom claims with error handling
-                    const idTokenResult = await user.getIdTokenResult()
+                    const idTokenResult = await user.getIdTokenResult(true)
                     setClaims(idTokenResult.claims as CustomClaims)
+                    // console.log("✅ Custom claims loaded:", idTokenResult.claims)
                 } catch (err) {
                     console.error("Failed to fetch custom claims:", err)
                     setError("Failed to fetch user roles. Please try again.")

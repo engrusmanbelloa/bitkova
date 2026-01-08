@@ -25,11 +25,13 @@ export async function POST(req: NextRequest) {
         await adminAuth.setCustomUserClaims(user.uid, claims)
 
         // 3. Update Firestore user document
-        await adminDb.collection("users").doc(user.uid).update({
-            role: role, // e.g., "admin" or "instructor"
-        })
+        // await adminDb.collection("users").doc(user.uid).update({
+        //     role: role, // e.g., "admin" or "instructor"
+        // })
 
-        return NextResponse.json({ message: `Role '${role}' granted to ${targetEmail}` })
+        return NextResponse.json({
+            message: `Role '${role}' granted to ${targetEmail}`,
+        })
     } catch (error: any) {
         console.error("SetClaims Error:", error)
         return NextResponse.json({ error: error.message }, { status: 500 })

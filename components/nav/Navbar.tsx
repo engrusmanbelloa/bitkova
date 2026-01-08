@@ -225,7 +225,7 @@ export default function Navbar() {
         if (user?.id) {
             // This now captures the cleanup function from our refactored syncUserStore
             unsubscribe = syncUserStore(user.id)
-            console.log("Sync started for user:", user.id)
+            // console.log("Sync started for user:", user.id)
         }
 
         return () => {

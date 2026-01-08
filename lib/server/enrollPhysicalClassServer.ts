@@ -41,12 +41,12 @@ export async function enrollPhysicalClassServer({
 
     // ✅ Generate QR code
     const qrPayload = {
-        enrollmentId,
-        userId,
-        classId,
-        type: "physical_class",
+        // enrollmentId,
+        // userId,
+        // classId,
+        // type: "physical_class",
         inviteLink,
-        issuedAt: Date.now(),
+        // issuedAt: Date.now(),
     }
     const qrCode = await QRCode.toDataURL(JSON.stringify(qrPayload))
 

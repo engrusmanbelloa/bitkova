@@ -1,12 +1,3 @@
-import { CourseType } from "@/types/courseType"
-
-// Represents user-specific progress for a course
-export interface UserCourseProgress {
-    course: CourseType
-    completedLessons: number
-    progress: number // Percentage (0-100)
-    status: "completed" | "in-progress" | "archived" | "wishlist" | "cart"
-}
 export interface UserRole {
     role:
         | "guest"
@@ -33,33 +24,13 @@ export interface User {
 // types/enrollment.ts
 export type EnrollmentType = "async_course" | "telegram_class" | "physical_class"
 
-// export interface Enrollment {
-//     id: string // enrollmentId (doc id)
-//     userId: string
-
-//     itemId: string // courseId OR classId
-//     itemType: EnrollmentType
-
-//     cohortId?: string
-//     className?: string
-//     cohortName?: string
-//     // async only
-//     progress?: number
-//     completedLessons?: number
-//     completedVideos?: string[]
-//     status?: "in progress" | "completed"
-
-//     paymentReference?: string
-//     enrolledAt: Date
-// }
-
 // enrollments/{enrollmentId}
 export interface Enrollment {
     id: string
     userId: string
 
     itemId: string
-    itemType: "async_course" | "physical_class" | "telegram_class"
+    itemType: EnrollmentType
 
     cohortId?: string
     className?: string

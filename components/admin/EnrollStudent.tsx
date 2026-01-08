@@ -1,167 +1,211 @@
+// components/admin/EnrollStudent.tsx
 "use client"
 import { useState, useEffect } from "react"
-import { auth } from "@/lib/firebase/firebaseConfig"
-import { onAuthStateChanged } from "firebase/auth"
-import { toast } from "sonner"
 import styled from "styled-components"
-import CircularProgress from "@mui/material/CircularProgress"
+import {
+    TextField,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    FormHelperText,
+    Card,
+    CircularProgress,
+} from "@mui/material"
+import { useForm, Controller } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { enrollStudentSchema } from "@/lib/schemas/enrollStudentSchema"
+import { z } from "zod"
+import { toast } from "sonner"
+import { auth } from "@/lib/firebase/firebaseConfig"
+import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
+import { useFetchTelegramGroups } from "@/hooks/classes/useFetchTgGroups"
+import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
+import { useFetchTelegramClass } from "@/hooks/classes/useFetchTelegramClass"
+import { useFetchAsyncCourses } from "@/hooks/classes/useFetchAsyncCourses"
 
-const Container = styled.div`
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background: #fdfdfd;
-`
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-`
-const Input = styled.input`
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-`
-const Select = styled.select`
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-`
-const CheckboxContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 10px;
-`
-const Button = styled.button`
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    &:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-    }
+type EnrollForm = z.infer<typeof enrollStudentSchema>
+
+const FormCard = styled(Card)`
+    padding: 16px;
 `
 
 export default function EnrollStudent() {
-    const [userEmail, setUserEmail] = useState<string | null>(null)
-    const [targetEmail, setTargetEmail] = useState("")
-    const [courseId, setCourseId] = useState("")
-    const [loading, setLoading] = useState(true)
     const [isEnrolling, setIsEnrolling] = useState(false)
-    const [enroll, setEnroll] = useState(true)
-    const [assignCertificate, setAssignCertificate] = useState(false)
+    const { data: cohorts = [] } = useFetchCohorts()
+    const { data: telegramGroups = [] } = useFetchTelegramGroups()
+
+    const form = useForm<EnrollForm>({
+        resolver: zodResolver(enrollStudentSchema),
+        defaultValues: {
+            targetEmail: "",
+            itemType: "async_course",
+            itemId: "", // ✅ REQUIRED
+            cohortId: "",
+            telegramGroupId: "",
+        },
+    })
+
+    const itemType = form.watch("itemType")
+    const cohortId = form.watch("cohortId")
+
+    const { data: physicalClasses = [] } = useFetchPhysicalClasses(cohortId)
+    const { data: telegramClasses = [] } = useFetchTelegramClass(cohortId)
+    const { data: asyncCourses = [] } = useFetchAsyncCourses()
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserEmail(user.email ?? null)
-            } else {
-                setUserEmail(null)
-            }
-            setLoading(false)
-        })
+        form.setValue("itemId", "")
+    }, [itemType, form])
 
-        return () => unsubscribe()
-    }, [])
-
-    async function handleEnroll() {
-        if (!targetEmail || !courseId || !userEmail) {
-            toast.error("Please fill in all fields.")
-            return
-        }
-
+    const onSubmit = async (data: EnrollForm) => {
         setIsEnrolling(true)
         try {
-            // 1. Get fresh Firebase ID token for the current user
-            const idToken = await auth.currentUser?.getIdToken()
-            if (!idToken) {
-                throw new Error("User is not authenticated.")
-            }
+            const currentUser = auth.currentUser
+            if (!currentUser) throw new Error("Not authenticated")
+
+            const token = await currentUser.getIdToken()
 
             const res = await fetch("/api/enrollStudent", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${idToken}`,
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({
-                    targetEmail,
-                    courseId,
-                    enroll: enroll,
-                    assignCertificate,
-                    requesterEmail: userEmail,
-                }),
+                body: JSON.stringify(data),
             })
 
-            const data = await res.json()
-            console.log("Response Data:", data)
+            const json = await res.json()
+            if (!res.ok) throw new Error(json.error)
 
-            if (!res.ok) {
-                throw new Error(data.error || "Failed to process request.")
-            }
-
-            toast.success(data.message)
-            setTargetEmail("")
-            setCourseId("")
-        } catch (error: any) {
-            console.error("Error:", error)
-            toast.error(error.message || "Failed to perform action.")
+            toast.success(json.message)
+            form.reset()
+        } catch (err: any) {
+            toast.error(err.message)
         } finally {
             setIsEnrolling(false)
         }
     }
 
-    if (loading) return <CircularProgress />
-    if (!userEmail) return <p>Please log in to manage students.</p>
-
     return (
-        <Container>
-            <h3>Manage Student Enrollment</h3>
-            <Form
-                onSubmit={(e) => {
-                    e.preventDefault()
-                    handleEnroll()
-                }}
-            >
-                <Input
-                    type="email"
-                    placeholder="Student's Email"
-                    value={targetEmail}
-                    onChange={(e) => setTargetEmail(e.target.value)}
-                    required
+        <FormCard>
+            <h3>Enroll Student</h3>
+
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                {/* Student Email */}
+                <Controller
+                    name="targetEmail"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            {...field}
+                            label="Student Email"
+                            fullWidth
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                            margin="normal"
+                        />
+                    )}
                 />
-                <Input
-                    type="text"
-                    placeholder="Course ID"
-                    value={courseId}
-                    onChange={(e) => setCourseId(e.target.value)}
-                    required
+
+                {/* Item Type */}
+                <Controller
+                    name="itemType"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel>Enrollment Type</InputLabel>
+                            <Select {...field} label="Enrollment Type">
+                                <MenuItem value="async_course">Async Course</MenuItem>
+                                <MenuItem value="telegram_class">Telegram Class</MenuItem>
+                                <MenuItem value="physical_class">Physical Class</MenuItem>
+                            </Select>
+                        </FormControl>
+                    )}
                 />
-                <CheckboxContainer>
-                    <input
-                        type="checkbox"
-                        id="enrollCheckbox"
-                        checked={enroll}
-                        onChange={(e) => setEnroll(e.target.checked)}
+
+                {/* Cohort (optional but recommended) */}
+                <Controller
+                    name="cohortId"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel>Cohort (optional)</InputLabel>
+                            <Select {...field} label="Cohort">
+                                <MenuItem value="">None</MenuItem>
+                                {cohorts.map((c) => (
+                                    <MenuItem key={c.id} value={c.id}>
+                                        {c.name} ({c.quarter} {c.year})
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                />
+
+                {/* Item Selector */}
+                <Controller
+                    name="itemId"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <FormControl fullWidth margin="normal" error={!!fieldState.error}>
+                            <InputLabel>
+                                {itemType === "async_course" && "Select Course"}
+                                {itemType === "telegram_class" && "Select Telegram Class"}
+                                {itemType === "physical_class" && "Select Physical Class"}
+                            </InputLabel>
+
+                            <Select {...field} label="Item">
+                                {itemType === "physical_class" &&
+                                    physicalClasses.map((c) => (
+                                        <MenuItem key={c.id} value={c.id}>
+                                            {c.name}
+                                        </MenuItem>
+                                    ))}
+
+                                {/* Uncomment when hooks exist */}
+                                {itemType === "telegram_class" &&
+                                    telegramClasses.map((c) => (
+                                        <MenuItem key={c.id} value={c.id}>
+                                            {c.name}
+                                        </MenuItem>
+                                    ))}
+
+                                {itemType === "async_course" &&
+                                    asyncCourses.map((c) => (
+                                        <MenuItem key={c.id} value={c.id}>
+                                            {c.title}
+                                        </MenuItem>
+                                    ))}
+                            </Select>
+
+                            <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                        </FormControl>
+                    )}
+                />
+
+                {/* Telegram Group (conditional) */}
+                {itemType !== "async_course" && (
+                    <Controller
+                        name="telegramGroupId"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                            <FormControl fullWidth margin="normal" error={!!fieldState.error}>
+                                <InputLabel>Telegram Group</InputLabel>
+                                <Select {...field} label="Telegram Group">
+                                    {telegramGroups.map((g) => (
+                                        <MenuItem key={g.chatId} value={g.chatId}>
+                                            {g.title}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
+                            </FormControl>
+                        )}
                     />
-                    <label htmlFor="enrollCheckbox">Enroll in Course</label>
-                </CheckboxContainer>
-                <CheckboxContainer>
-                    <input
-                        type="checkbox"
-                        id="certCheckbox"
-                        checked={assignCertificate}
-                        onChange={(e) => setAssignCertificate(e.target.checked)}
-                    />
-                    <label htmlFor="certCheckbox">
-                        Assign Certificate (Marks course as completed)
-                    </label>
-                </CheckboxContainer>
-                <Button>
+                )}
+
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
                     {isEnrolling ? (
                         <>
                             <CircularProgress size={25} color="inherit" />
@@ -171,7 +215,7 @@ export default function EnrollStudent() {
                         "Submit"
                     )}
                 </Button>
-            </Form>
-        </Container>
+            </form>
+        </FormCard>
     )
 }
