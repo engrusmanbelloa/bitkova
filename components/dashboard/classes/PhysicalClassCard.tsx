@@ -77,6 +77,7 @@ const ClassBodyTop = styled.div`
     display: flex;
 
     ${mobile(`
+        flex-direction: column;
     `)}
 `
 const InfoGrid = styled.div`
@@ -98,10 +99,17 @@ const InfoItem = styled.div`
 `
 const IconWrapper = styled.div`
     color: ${(props) => props.theme.palette.primary.main};
-    margin-top: 2px;
+    margin-top: 0px;
 `
 const InfoContent = styled.div`
     flex: 1;
+`
+const QrContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    ${mobile(`
+        
+    `)}
 `
 const InfoLabel = styled.div`
     font-size: 14px;
@@ -309,27 +317,28 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
 
                             <InfoContent>
                                 <InfoLabel>Class Link QR Code </InfoLabel>
+                                <QrContent>
+                                    <img
+                                        src={enrollment.qrCode}
+                                        alt="Class Attendance QR Code"
+                                        style={{
+                                            width: 120,
+                                            height: 120,
+                                            marginTop: 8,
+                                            borderRadius: 8,
+                                            border: "1px solid #eee",
+                                        }}
+                                    />
 
-                                <img
-                                    src={enrollment.qrCode}
-                                    alt="Class Attendance QR Code"
-                                    style={{
-                                        width: 120,
-                                        height: 120,
-                                        marginTop: 8,
-                                        borderRadius: 8,
-                                        border: "1px solid #eee",
-                                    }}
-                                />
-
-                                <LinkButton
-                                    href={enrollment.qrCode}
-                                    download={`qr-${enrollment.className || "class"}.png`}
-                                    style={{ marginTop: 6 }}
-                                >
-                                    <DownloadIcon fontSize="small" />
-                                    Download QR
-                                </LinkButton>
+                                    <LinkButton
+                                        href={enrollment.qrCode}
+                                        download={`qr-${enrollment.className || "class"}.png`}
+                                        style={{ marginTop: 6 }}
+                                    >
+                                        <DownloadIcon fontSize="small" />
+                                        Download QR
+                                    </LinkButton>
+                                </QrContent>
                             </InfoContent>
                         </InfoItem>
                     )}

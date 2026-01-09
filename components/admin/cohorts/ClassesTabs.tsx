@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+"use client"
+import { useState } from "react"
 import styled from "styled-components"
-import CourseUploadForm from "@/components/admin/CourseUploadForm"
 import CreateCohort from "@/components/admin/cohorts/CreateCohort"
 import CreatePhysicalClass from "@/components/admin/cohorts/CreatePhysicalClass"
 import CreateTelegramClass from "@/components/admin/cohorts/CreateTelegramClass"
@@ -40,25 +40,32 @@ const TabsWrapper = styled.div`
     )};
 `
 
+const TABS = [
+    { key: "cohort", label: "Create Cohort", component: <CreateCohort /> },
+    { key: "physical", label: "Physical Class", component: <CreatePhysicalClass /> },
+    { key: "telegram", label: "Telegram Class", component: <CreateTelegramClass /> },
+] as const
+
+type TabKey = (typeof TABS)[number]["key"]
+
 export default function ClassesTabs() {
-    const [activeTab, setActiveTab] = useState<"cohort" | "physical" | "telegram">("cohort")
+    const [activeTab, setActiveTab] = useState<TabKey>("cohort")
 
     return (
         <Container>
             <TabsWrapper>
-                <Tab $isActive={activeTab === "cohort"} onClick={() => setActiveTab("cohort")}>
-                    Create Cohort
-                </Tab>
-                <Tab $isActive={activeTab === "physical"} onClick={() => setActiveTab("physical")}>
-                    Create Physical Class
-                </Tab>
-                <Tab $isActive={activeTab === "telegram"} onClick={() => setActiveTab("telegram")}>
-                    Create Telegram Class
-                </Tab>
+                {TABS.map((tab) => (
+                    <Tab
+                        key={tab.key}
+                        $isActive={activeTab === tab.key}
+                        onClick={() => setActiveTab(tab.key)}
+                    >
+                        {tab.label}
+                    </Tab>
+                ))}
             </TabsWrapper>
-            {activeTab === "cohort" && <CreateCohort />}
-            {activeTab === "physical" && <CreatePhysicalClass />}
-            {activeTab === "telegram" && <CreateTelegramClass />}
+
+            {TABS.find((t) => t.key === activeTab)?.component}
         </Container>
     )
 }

@@ -41,7 +41,7 @@ export default function EnrollStudent() {
         defaultValues: {
             targetEmail: "",
             itemType: "async_course",
-            itemId: "", // ✅ REQUIRED
+            itemId: "",
             cohortId: "",
             telegramGroupId: "",
         },
@@ -66,7 +66,7 @@ export default function EnrollStudent() {
 
             const token = await currentUser.getIdToken()
 
-            const res = await fetch("/api/enrollStudent", {
+            const res = await fetch("/api/admin/enrollStudent", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

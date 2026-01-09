@@ -60,20 +60,6 @@ export async function enrollTelegramClassServer({
         enrolled: increment(1),
     })
 
-    // ✅ Save unified enrollment
-
-    // const enrollment: Enrollment = {
-    //     id: enrollmentId,
-    //     userId: userId,
-    //     itemId: itemId, // courseId OR classId
-    //     itemType: "telegram_class",
-    //     className: className,
-    //     cohortId: cohortId,
-    //     paymentReference: paymentReference,
-    //     enrolledAt: new Date(),
-    // }
-    // await setDoc(doc(db, "users", userId, "enrolledCourses", enrollmentId), enrollment)
-
     if (inviteLink) {
         await sendEnrollmentEmail({
             to: payerEmail,

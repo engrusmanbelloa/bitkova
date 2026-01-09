@@ -2,15 +2,12 @@
 "use client"
 import { use } from "react"
 import dynamic from "next/dynamic"
-// import UnifiedCheckout from "@/components/payments/UnifiedCheckout"
 import { useQuery } from "@tanstack/react-query"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { PhysicalClass, Cohort } from "@/types/classTypes"
 import { useAuthReady } from "@/hooks/useAuthReady"
-import { enrollPhysicalClass } from "@/lib/firebase/uploads/enrollPhysicalClass"
 import AuthMessage from "@/components/AuthMessage"
-import TestModeWarning from "@/components/payments/TestModeWarning"
 
 const UnifiedCheckout = dynamic(() => import("@/components/payments/UnifiedCheckout"), {
     ssr: false,
@@ -84,21 +81,18 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
     ]
 
     return (
-        <>
-            <TestModeWarning />
-            <UnifiedCheckout
-                items={checkoutItems}
-                className={classData.name}
-                cohortName={cohort.name}
-                classType="physical_class"
-                successMessage={successMessage}
-                successRedirect="/dashboard"
-                metadata={{
-                    cohortId: classData.cohortId,
-                    classLocation: classData.location,
-                    telegramGroupId: classData.telegramGroupId,
-                }}
-            />
-        </>
+        <UnifiedCheckout
+            items={checkoutItems}
+            className={classData.name}
+            cohortName={cohort.name}
+            classType="physical_class"
+            successMessage={successMessage}
+            successRedirect="/dashboard"
+            metadata={{
+                cohortId: classData.cohortId,
+                classLocation: classData.location,
+                telegramGroupId: classData.telegramGroupId,
+            }}
+        />
     )
 }

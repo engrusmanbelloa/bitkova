@@ -24,11 +24,9 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration"
 import AssessmentIcon from "@mui/icons-material/Assessment"
 import InfoIcon from "@mui/icons-material/Info"
 import { z } from "zod"
-import { useQuery } from "@tanstack/react-query"
-import { Cohort } from "@/types/classTypes"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
-import { createTelegramClass } from "@/lib/firebase/uploads/CreateClasseDoc"
 import { useFetchTelegramGroups } from "@/hooks/classes/useFetchTgGroups"
+import { auth } from "@/lib/firebase/firebaseConfig"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;
@@ -136,7 +134,7 @@ const HeaderTitle = styled.h3`
 type TelegramClassForm = z.infer<typeof telegramClassSchema>
 
 export default function CreateTelegramClass() {
-    // Fetch available cohorts
+    const [isLoading, setIsLoading] = useState(false)
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
     const { data: tgGroups = [], isLoading: tgLoading, error: tgError } = useFetchTelegramGroups()
     // Telegram Class Form
@@ -174,24 +172,56 @@ export default function CreateTelegramClass() {
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
 
+    // const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
+    //     try {
+    //         const classData = {
+    //             name: data.name,
+    //             cohortId: data.cohortId,
+    //             price: data.price,
+    //             capacity: data.capacity,
+    //             enrolled: 0,
+    //             telegramGroupId: data.telegramGroupId,
+    //             schedule: data.schedule,
+    //         }
+    //         await createTelegramClass(classData)
+    //         // await addDoc(collection(db, "telegramClasses"), classData)
+    //         toast.success("Telegram class created successfully!")
+    //         telegramForm.reset()
+    //     } catch (error) {
+    //         console.log("Error creating telegram class:", error)
+    //         toast.error("Failed to create telegram class")
+    //     }
+    // }
+
     const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
+        setIsLoading(true)
         try {
-            const classData = {
-                name: data.name,
-                cohortId: data.cohortId,
-                price: data.price,
-                capacity: data.capacity,
-                enrolled: 0,
-                telegramGroupId: data.telegramGroupId,
-                schedule: data.schedule,
+            const token = await auth.currentUser?.getIdToken()
+            if (!token) throw new Error("Not authenticated")
+
+            const res = await fetch("/api/admin/telegram-classes/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            })
+
+            if (!res.ok) {
+                const err = await res.json()
+                toast.error(err.error || "Failed to create Telegram class")
+                return
             }
-            await createTelegramClass(classData)
-            // await addDoc(collection(db, "telegramClasses"), classData)
-            toast.success("Telegram class created successfully!")
+
+            const json = await res.json()
+            toast.success(json.message)
             telegramForm.reset()
-        } catch (error) {
-            console.log("Error creating telegram class:", error)
-            toast.error("Failed to create telegram class")
+        } catch (error: any) {
+            console.error(error)
+            toast.error(error.message)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -428,10 +458,16 @@ export default function CreateTelegramClass() {
                         )}
                     />
                 </FormRow>
-
-                <SubmitButton type="submit" variant="contained">
-                    Create Telegram Class
-                </SubmitButton>
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+                    {isLoading ? (
+                        <>
+                            <CircularProgress size={20} color="inherit" />
+                            <span> Processing...</span>
+                        </>
+                    ) : (
+                        " Create Telegram Class"
+                    )}
+                </Button>
             </form>
         </FormCard>
     )

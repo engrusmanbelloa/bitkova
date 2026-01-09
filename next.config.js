@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-    transpilePackages: [
-        '@mui/material',
-        '@mui/system',
-        '@mui/icons-material',
-    ],
+
     reactStrictMode: true,
 
     compiler: {
@@ -17,6 +13,11 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+    transpilePackages: [
+        '@mui/material',
+        '@mui/system',
+        '@mui/icons-material',
+    ],
     
     // Turbopack configuration (migrated from webpack)
     turbopack: {
@@ -35,6 +36,12 @@ const nextConfig = {
         }
         return config
     },
+     allowedDevOrigins: [
+    'localhost',
+    '127.0.0.1',
+    '10.0.2.2',
+    '10.122.95.179',
+  ],
 }
 
 module.exports = nextConfig
