@@ -19,6 +19,7 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import CircularProgress from "@mui/material/CircularProgress"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
+import { ADMIN_TABS, AdminTabKey } from "./adminTabs"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -54,6 +55,7 @@ const ContentContainer = styled.div`
     padding: 0 0 20px 20px;
     ${mobile(
         (props: any) => `
+                margin-top: 40px;
                 padding: 0;
             `,
     )}
@@ -65,9 +67,18 @@ const Title = styled.h3`
 
 export default function Panel() {
     // setting active menu item defaults to panel
-    const [activeItem, setActiveItem] = useState("panel")
+    // const [activeItem, setActiveItem] = useState("panel")
+    const [activeItem, setActiveItem] = useState<AdminTabKey>("panel")
+
+    const ActiveTab = ADMIN_TABS.find((tab) => tab.key === activeItem)
     const { user, claims, firebaseUser, error, authReady, isLoadingUserDoc } = useAuthReady()
     const [isAuthorized, setIsAuthorized] = useState(false)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+
+    const handleMenuClick = (key: AdminTabKey) => {
+        setActiveItem(key)
+        setDrawerOpen(false)
+    }
 
     const getInitials = (name: string): string => {
         const words = name.split(" ")
@@ -125,13 +136,16 @@ export default function Panel() {
                 <SidebarContainer>
                     <Sidebar
                         activeItem={activeItem}
-                        setActiveItem={setActiveItem}
+                        onSelect={handleMenuClick}
                         isAuthorized={isAuthorized}
+                        drawerOpen={drawerOpen}
+                        setDrawerOpen={setDrawerOpen}
                     />
                 </SidebarContainer>
                 {/* Main Content Area */}
-                <ContentContainer>
-                    {/* Dashboard Overview */}
+                <ContentContainer>{ActiveTab?.component(user)}</ContentContainer>
+
+                {/* Dashboard Overview
                     {activeItem === "panel" && <DashboardOverview />}
                     {activeItem === "performance" && <ProfileSection user={user} />}
 
@@ -152,7 +166,7 @@ export default function Panel() {
                             <Title>Add Student</Title>
                             <EnrollStudent />
                             {/* <NoDataAvailable comment="Comming Soon" /> */}
-                        </>
+                {/* </>
                     )}
                     {activeItem === "instructor" && (
                         <>
@@ -171,8 +185,7 @@ export default function Panel() {
                             <Title>Settings</Title>
                             <ProfileForm />
                         </>
-                    )}
-                </ContentContainer>
+                    )} */}
             </DashboardContainer>
         </>
     )

@@ -16,6 +16,7 @@ const HeaderContainer = styled.div`
     )}
     ${mobile(
         (props: any) => `
+            display: none;
             width: ${props.theme.widths.mobileWidth};
             height: 100px;
             margin: 10px auto 0px;

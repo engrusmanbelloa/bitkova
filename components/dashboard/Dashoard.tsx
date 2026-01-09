@@ -1,18 +1,15 @@
+// components/dashboard/Dashoard.tsx
 "use client"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import DashboardHeader from "@/components/dashboard/DashboardHeader"
 import Sidebar from "@/components/dashboard/SideBar"
-import DashboardOverview from "@/components/dashboard/DashboardOverview"
-import ProfileSection from "@/components/dashboard/ProfileSection"
-import ProfileForm from "@/components/dashboard/Settings"
-import NoDataAvailable from "./NoData"
 import { mobile, ipad } from "@/responsive"
 import { useAuthReady } from "@/hooks/useAuthReady"
-import InProgressCourses from "@/components/course/InProgressCourses"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import IsLoading from "@/components/IsLoading"
+import { DASHBOARD_TABS, DashboardTabKey } from "./dashboardTabs"
 
 const DashboardContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -49,6 +46,7 @@ const ContentContainer = styled.div`
     ${mobile(
         (props: any) => `
                 padding: 0;
+                margin-top: 40px;
             `,
     )}
 `
@@ -59,10 +57,18 @@ const Title = styled.h3`
 
 export default function Dashboard() {
     // setting active menu item defaults to dashboard
-    const [activeItem, setActiveItem] = useState("dashboard")
+    // const [activeItem, setActiveItem] = useState("dashboard")
+    const [activeItem, setActiveItem] = useState<DashboardTabKey>("dashboard")
     const { user, claims, firebaseUser, error, authReady, isLoadingUserDoc } = useAuthReady()
     const [isAuthorized, setIsAuthorized] = useState(false)
+    const [drawerOpen, setDrawerOpen] = useState(false)
 
+    const ActiveTab = DASHBOARD_TABS.find((tab) => tab.key === activeItem)
+
+    const handleMenuClick = (key: DashboardTabKey) => {
+        setActiveItem(key)
+        setDrawerOpen(false)
+    }
     const getInitials = (name: string): string => {
         const words = name.split(" ")
         return words.length > 1
@@ -85,8 +91,6 @@ export default function Dashboard() {
         }
 
         // Check for authorization based on custom claims and specific email
-        const userEmail = user?.email || ""
-        // const isEmailAuthorized = authorizedEmails.includes(userEmail)
         const isClaimAuthorized = claims?.admin || claims?.instructor
 
         // console.log("The claims:...", claims.admin, claims.instructor)
@@ -105,9 +109,6 @@ export default function Dashboard() {
         return <IsLoading />
     }
     if (!user) return <p>Please log in to view your dashboard.</p>
-    // if (!isAuthorized) {
-    //     return <p>Checking authorization...</p>
-    // }
 
     return (
         <>
@@ -118,66 +119,14 @@ export default function Dashboard() {
                 <SidebarContainer>
                     <Sidebar
                         activeItem={activeItem}
-                        setActiveItem={setActiveItem}
+                        onSelect={handleMenuClick}
                         isAuthorized={isAuthorized}
+                        drawerOpen={drawerOpen}
+                        setDrawerOpen={setDrawerOpen}
                     />
                 </SidebarContainer>
                 {/* Main Content Area */}
-                <ContentContainer>
-                    {/* Dashboard Overview */}
-                    {activeItem === "dashboard" && <DashboardOverview userData={user} />}
-                    {activeItem === "profile" && <ProfileSection user={user} />}
-
-                    {activeItem === "learning" && (
-                        <>
-                            <Title>My Learning</Title>
-                            <InProgressCourses userData={user} />
-                            {/* <NoDataAvailable comment="Comming Soon" /> */}
-                        </>
-                    )}
-                    {activeItem === "certificate" && (
-                        <>
-                            <Title>My Certificates</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "wishlist" && (
-                        <>
-                            <Title>Wishlist</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "quiz" && (
-                        <>
-                            <Title>My Quiz Attempts</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "history" && (
-                        <>
-                            <Title>Order History</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "qa" && (
-                        <>
-                            <Title>Question & Answer</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "RedeemIcon" && (
-                        <>
-                            <Title>Referal Reward</Title>
-                            <NoDataAvailable comment="Comming Soon" />
-                        </>
-                    )}
-                    {activeItem === "settings" && (
-                        <>
-                            <Title>Settings</Title>
-                            <ProfileForm />
-                        </>
-                    )}
-                </ContentContainer>
+                <ContentContainer>{ActiveTab?.component(user)}</ContentContainer>
             </DashboardContainer>
         </>
     )

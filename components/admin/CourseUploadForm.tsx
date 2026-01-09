@@ -175,71 +175,6 @@ export default function CourseUploadForm() {
         setEditingLessonIndex(null)
     }
 
-    // const onSubmit = async (data: CourseFormData) => {
-    //     // Validate modules
-    //     if (modules.length === 0) {
-    //         toast.error("Add at least one module before submitting")
-    //         return
-    //     }
-
-    //     setUploading(true)
-
-    //     try {
-    //         const courseId = uuidv4()
-
-    //         const finalizedCourse: Course = {
-    //             id: courseId,
-    //             title: data.title,
-    //             category: data.category,
-    //             skillLevel: data.skillLevel,
-    //             facilitatorEmail: data.facilitatorEmail,
-    //             rating: 0,
-    //             image: data.image,
-    //             about: data.about,
-    //             shortDesc: data.shortDesc,
-    //             courseDesc: data.courseDesc,
-    //             students: 0,
-    //             price: data.price,
-    //             onDemandVideos: data.onDemandVideos,
-    //             downloadableFiles: data.downloadableFiles || 0,
-    //             whatYoullLearn: data.whatYoullLearn,
-    //         }
-
-    //         const finalizedModules = modules.map((mod, modIndex) => ({
-    //             ...mod,
-    //             position: modIndex,
-    //             lessons: mod.lessons.map((lesson, lessonIndex) => ({
-    //                 ...lesson,
-    //                 position: lessonIndex,
-    //             })),
-    //         }))
-
-    //         await uploadNewCourse({
-    //             course: finalizedCourse,
-    //             modules: finalizedModules as (Module & { lessons: Lesson[] })[],
-    //             reviews: [],
-    //         })
-
-    //         toast.success("✅ Course uploaded successfully!")
-
-    //         // Reset everything
-    //         reset()
-    //         setModules([])
-    //         setCurrentModule({ title: "", position: 0, lessons: [] })
-    //         setCurrentLessons([])
-    //         setNewLesson({ title: "", videoUrl: "", content: "", durationMinutes: 0 })
-    //         setNewLearningItem("")
-    //         setEditingModuleIndex(null)
-    //         setEditingLessonIndex(null)
-    //     } catch (error) {
-    //         console.error("Upload error:", error)
-    //         const errorMessage = error instanceof Error ? error.message : "Failed to upload course"
-    //         toast.error(`❌ ${errorMessage}`)
-    //     } finally {
-    //         setUploading(false)
-    //     }
-    // }
-
     const onSubmit = async (data: CourseFormData) => {
         if (modules.length === 0) {
             toast.error("Add at least one module")
@@ -304,6 +239,13 @@ export default function CourseUploadForm() {
 
             toast.success("✅ Course uploaded successfully!")
             reset()
+            setModules([])
+            setCurrentModule({ title: "", position: 0, lessons: [] })
+            setCurrentLessons([])
+            setNewLesson({ title: "", videoUrl: "", content: "", durationMinutes: 0 })
+            setNewLearningItem("")
+            setEditingModuleIndex(null)
+            setEditingLessonIndex(null)
         } catch (err) {
             console.error(err)
             toast.error("Unexpected error occurred")
