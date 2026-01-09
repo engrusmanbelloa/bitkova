@@ -13,6 +13,7 @@ const SectionContainer = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
     padding: 0;
     margin: 0 auto 30px;
+    box-sizing: border-box;
     ${ipad(
         (props: any) => `
             width: ${props.theme.widths.ipadWidth};

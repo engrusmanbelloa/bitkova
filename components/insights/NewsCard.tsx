@@ -8,8 +8,10 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import ShareIcon from "@mui/icons-material/Share"
 import { toast } from "sonner"
+import { mobile, ipad } from "@/responsive"
 
 const StyledCard = styled(Card)`
+    width: ${(props) => props.theme.widths.heroWidth};
     background: ${(props) => props.theme.palette.common.white};
     border-radius: 8px;
     margin-bottom: 16px;
@@ -22,6 +24,17 @@ const StyledCard = styled(Card)`
     &:hover {
         transform: translateY(-2px);
     }
+    ${ipad(
+        (props: any) => `
+                    width: ${props.theme.widths.ipadWidth};
+                `,
+    )}
+    ${mobile(
+        (props: any) => `
+                    width: 100%;
+                    max-width: ${props.theme.widths.mobileWidth};
+                `,
+    )}
 `
 const NewsImage = styled.img`
     width: 100%;

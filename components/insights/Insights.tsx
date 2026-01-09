@@ -12,6 +12,7 @@ const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
     margin: 0;
     padding: ${(props) => props.theme.paddings.pagePadding};
+    box-sizing: border-box;
     ${ipad(
         (props: any) => `
         padding: 5px 0;
