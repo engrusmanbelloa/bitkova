@@ -14,11 +14,6 @@ export const cohortSchema = z.object({
     status: z.enum(["upcoming", "active", "closed"]),
 })
 
-// const scheduleSchema = z.object({
-//     days: z.array(z.string()).min(1, "At least one day is required"),
-//     time: z.string().min(1, "Time is required"),
-// })
-
 const scheduleSlotSchema = z.object({
     days: z.array(z.string()).min(1, "At least one day is required"),
     time: z.string().min(1, "Time is required"),

@@ -9,14 +9,15 @@ import {
     InputLabel,
     Card,
     FormHelperText,
+    CircularProgress,
 } from "@mui/material"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { collection, addDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/firebaseConfig"
 import { toast } from "sonner"
 import { cohortSchema } from "@/lib/schemas/classSchema"
 import { z } from "zod"
+import { useState } from "react"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;
@@ -49,6 +50,7 @@ const HeaderTitle = styled.h3`
 type CohortForm = z.infer<typeof cohortSchema>
 
 export default function CreateCohort() {
+    const [isLoading, setIsLoading] = useState(false)
     const cohortForm = useForm<CohortForm>({
         resolver: zodResolver(cohortSchema),
         defaultValues: {
@@ -63,22 +65,52 @@ export default function CreateCohort() {
         },
     })
 
+    // const onCohortSubmit = async (data: CohortForm) => {
+    //     try {
+    //         const cohortData = {
+    //             ...data,
+    //             startDate: new Date(data.startDate),
+    //             endDate: new Date(data.endDate),
+    //             registrationOpen: new Date(data.registrationOpen),
+    //             registrationClose: new Date(data.registrationClose),
+    //         }
+
+    //         await addDoc(collection(db, "cohorts"), cohortData)
+    //         toast.success(`Cohort ${data.name} created successfully!`)
+    //         cohortForm.reset()
+    //     } catch (error) {
+    //         console.log("Error creating cohort:", error)
+    //         toast.error("Failed to create cohort")
+    //     }
+    // }
+
     const onCohortSubmit = async (data: CohortForm) => {
+        setIsLoading(true)
+
         try {
-            const cohortData = {
-                ...data,
-                startDate: new Date(data.startDate),
-                endDate: new Date(data.endDate),
-                registrationOpen: new Date(data.registrationOpen),
-                registrationClose: new Date(data.registrationClose),
+            const token = await auth.currentUser?.getIdToken()
+            const res = await fetch("/api/admin/cohorts/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            })
+
+            if (!res.ok) {
+                const err = await res.json()
+                toast.error(err.error || "Failed to create Telegram class")
+                return
             }
 
-            await addDoc(collection(db, "cohorts"), cohortData)
-            toast.success(`Cohort ${data.name} created successfully!`)
+            const json = await res.json()
+            toast.success(json.message)
             cohortForm.reset()
-        } catch (error) {
-            console.log("Error creating cohort:", error)
-            toast.error("Failed to create cohort")
+        } catch (err: any) {
+            toast.error(err.message)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -224,9 +256,16 @@ export default function CreateCohort() {
                     />
                 </FormRow>
 
-                <SubmitButton type="submit" variant="contained">
-                    Create Cohort
-                </SubmitButton>
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+                    {isLoading ? (
+                        <>
+                            <CircularProgress size={20} color="inherit" />
+                            <span> Processing...</span>
+                        </>
+                    ) : (
+                        "Create Cohort"
+                    )}
+                </Button>
             </form>
         </FormCard>
     )

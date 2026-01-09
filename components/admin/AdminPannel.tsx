@@ -63,8 +63,6 @@ const Title = styled.h3`
     color: ${(props) => props.theme.palette.common.black};
 `
 
-const authorizedEmails = ["usmanbelloa@gmail.com"]
-
 export default function Panel() {
     // setting active menu item defaults to panel
     const [activeItem, setActiveItem] = useState("panel")
@@ -94,12 +92,11 @@ export default function Panel() {
 
         // Check for authorization based on custom claims and specific email
         const userEmail = user?.email || ""
-        const isEmailAuthorized = authorizedEmails.includes(userEmail)
         const isClaimAuthorized = claims?.admin || claims?.instructor
 
         // console.log("The claims:...", claims)
 
-        if (user && (isEmailAuthorized || isClaimAuthorized)) {
+        if (user && isClaimAuthorized) {
             setIsAuthorized(true)
         } else {
             // Not authorized, handle redirect and feedback

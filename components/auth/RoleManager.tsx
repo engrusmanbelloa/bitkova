@@ -47,7 +47,7 @@ export default function RoleManager() {
 
             const token = await currentUser.getIdToken()
 
-            const res = await fetch("/api/setRole", {
+            const res = await fetch("/api/admin/setRole/route.ts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -57,8 +57,6 @@ const Title = styled.h3`
     color: ${(props) => props.theme.palette.common.black};
 `
 
-// const authorizedEmails = ["usmanbelloa@gmail.com"]
-
 export default function Dashboard() {
     // setting active menu item defaults to dashboard
     const [activeItem, setActiveItem] = useState("dashboard")

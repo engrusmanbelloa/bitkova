@@ -1,3 +1,4 @@
+// components/admin/cohorts/CreatePhysicalClass.tsx
 "use client"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
@@ -26,7 +27,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
-import { createPhysicalClass } from "@/lib/firebase/uploads/CreateClasseDoc"
+import { auth } from "@/lib/firebase/firebaseConfig"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;
@@ -140,8 +141,8 @@ const HeaderTitle = styled.h3`
 type PhysicalClassForm = z.infer<typeof physicalClassSchema>
 
 export default function CreatePhysicalClass() {
+    const [isLoading, setIsLoading] = useState(false)
     const [telegramGroups, setTelegramGroups] = useState<{ chatId: string; title: string }[]>([])
-    // Fetch available cohorts
     const { data: cohorts, isLoading: cohortsLoading, error: cohortsError } = useFetchCohorts()
 
     const physicalForm = useForm<PhysicalClassForm>({
@@ -198,29 +199,59 @@ export default function CreatePhysicalClass() {
     const selectedCohortId = physicalForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
 
+    // const onPhysicalClassSubmit = async (data: PhysicalClassForm) => {
+    //     try {
+    //         const classData = {
+    //             name: data.name,
+    //             location: data.location,
+    //             cohortId: data.cohortId,
+    //             price: data.price,
+    //             capacity: data.capacity,
+    //             schedule: data.schedule, // FROM FORM
+    //             telegramGroupId: data.telegramGroupId ?? "",
+    //             instructors: data.instructors.map((i) => i.value),
+    //             courses: data.courses.map((c) => c.value),
+    //             mapLink: data.mapLink || "",
+    //         }
+
+    //         await createPhysicalClass(classData)
+
+    //         // await addDoc(collection(db, "physicalClasses"), classData)
+    //         toast.success(`Physical class ${data.name} created!`)
+    //         physicalForm.reset()
+    //     } catch (error) {
+    //         console.error("Error creating physical class:", error)
+    //         toast.error("Failed to create physical class")
+    //     }
+    // }
+
     const onPhysicalClassSubmit = async (data: PhysicalClassForm) => {
+        setIsLoading(true)
+
         try {
-            const classData = {
-                name: data.name,
-                location: data.location,
-                cohortId: data.cohortId,
-                price: data.price,
-                capacity: data.capacity,
-                schedule: data.schedule, // FROM FORM
-                telegramGroupId: data.telegramGroupId ?? "",
-                instructors: data.instructors.map((i) => i.value),
-                courses: data.courses.map((c) => c.value),
-                mapLink: data.mapLink || "",
+            const token = await auth.currentUser?.getIdToken()
+            const res = await fetch("/api/admin/physical-classes/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            })
+
+            if (!res.ok) {
+                const err = await res.json()
+                toast.error(err.error || "Failed to create Telegram class")
+                return
             }
 
-            await createPhysicalClass(classData)
-
-            // await addDoc(collection(db, "physicalClasses"), classData)
-            toast.success(`Physical class ${data.name} created!`)
+            const json = await res.json()
+            toast.success(json.message)
             physicalForm.reset()
-        } catch (error) {
-            console.error("Error creating physical class:", error)
-            toast.error("Failed to create physical class")
+        } catch (err: any) {
+            toast.error(err.message)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -629,9 +660,16 @@ export default function CreatePhysicalClass() {
                     </AddButton>
                 </ArrayInput>
 
-                <SubmitButton type="submit" variant="contained">
-                    Create Physical Class
-                </SubmitButton>
+                <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+                    {isLoading ? (
+                        <>
+                            <CircularProgress size={20} color="inherit" />
+                            <span> Processing...</span>
+                        </>
+                    ) : (
+                        "Create Physical Class"
+                    )}
+                </Button>
             </form>
         </FormCard>
     )

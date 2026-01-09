@@ -67,6 +67,7 @@ export async function POST(req: Request) {
         await auth.setCustomUserClaims(user.uid, cleanedClaims)
 
         return NextResponse.json({
+            ok: true,
             success: true,
             message:
                 role === "none"
