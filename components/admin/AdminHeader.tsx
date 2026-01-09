@@ -19,6 +19,7 @@ const HeaderContainer = styled.div`
     )}
     ${mobile(
         (props: any) => `
+            display: none;
             width: ${props.theme.widths.mobileWidth};
             height: 100px;
             margin: 10px auto 0px;
@@ -76,6 +77,7 @@ const DisplayName = styled.h3`
         (props: any) => `
             margin: 0px auto;
             padding: 0;
+            
         `,
     )}
 `
