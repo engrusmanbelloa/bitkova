@@ -53,6 +53,13 @@ export interface Enrollment {
     // telegram only
     telegramInviteLink?: string
     telegramUserId?: number
+
+    termsAccepted?: true
+    termsVersion?: "2026-01"
+    termsAcceptedAt?: Date
+
+    privacyAccepted?: true
+    privacyAcceptedAt?: Date
 }
 
 export interface WishListItem {
