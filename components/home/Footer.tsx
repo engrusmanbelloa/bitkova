@@ -166,27 +166,27 @@ export default function Footer() {
     const footerMenuList = [
         {
             id: 1,
-            href: "#",
+            href: "https://t.me/BitkovaHub",
             title: "Communities",
         },
         {
             id: 2,
-            href: "#",
-            title: "Terms",
+            href: "/terms-of-service",
+            title: "Terms of service",
         },
         {
             id: 3,
-            href: "#",
+            href: "/courses",
             title: "Courses",
         },
         {
             id: 4,
-            href: "#",
-            title: "Privacy",
+            href: "/privacy-policy",
+            title: "Privacy policy",
         },
         {
             id: 5,
-            href: "#",
+            href: "/our-hub",
             title: "Our Hub",
         },
         {
@@ -198,7 +198,7 @@ export default function Footer() {
     const contactItemsData = [
         {
             icon: WhatsApp,
-            data: "+234 80325-3624",
+            data: "+234-803-2503-624",
             color: "#25D366",
         },
         {

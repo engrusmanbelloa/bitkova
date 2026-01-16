@@ -1,8 +1,4 @@
 import styled, { keyframes } from "styled-components"
-import LockPersonIcon from "@mui/icons-material/LockPerson"
-import LockIcon from "@mui/icons-material/Lock"
-import SecurityIcon from "@mui/icons-material/Security"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 
 const fadeIn = keyframes`
   from {
