@@ -13,6 +13,7 @@ import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
 import useSessionRefresh from "@/hooks/useSessionRefresh"
+import { initAppCheck } from "@/lib/firebase/appCheck"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -48,6 +49,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })
         }
     }, [isOnline])
+
+    // Initialize App Check on mount
+    useEffect(() => {
+        initAppCheck()
+    }, [])
 
     if (!isOnline) {
         toast.error("You are offline. Please connect to the internet")
