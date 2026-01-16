@@ -3,6 +3,10 @@
         {
             "path": "/api/cron/telegram-invites",
             "schedule": "0 0 * * *"
+        },
+        {
+            "path": "/api/cron/cleanup-invites",
+            "schedule": "0 1 * * *"
         }
     ]
 }
