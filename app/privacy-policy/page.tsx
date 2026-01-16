@@ -143,7 +143,7 @@ export default function PrivacyPolicyPage() {
                 <Heading>9. Contact Us</Heading>
                 <Text>If you have questions about this Privacy Policy, please contact us at:</Text>
                 <Text>
-                    <strong>Email:</strong> support@bitkovaacademy.com
+                    <strong>Email:</strong> support@bitkova.com
                 </Text>
             </Section>
         </Container>
