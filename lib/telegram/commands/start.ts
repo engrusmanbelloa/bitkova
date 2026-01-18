@@ -5,6 +5,7 @@ import { collection, addDoc, setDoc, doc, orderBy } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 
 export default async function start(ctx: TelegramContext) {
+    console.log("start is hit:....")
     await setDoc(
         doc(db, "telegramUsers", String(ctx.from.id)),
         {
