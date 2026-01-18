@@ -24,8 +24,6 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
             message += `🏢 ${c.address}\n`
             message += `🗺️ ${c.googleMapsLink}\n`
             message += `💳 ₦${c.price}\n\n`
-            message += `💳 ₦${c.schedule.days}\n\n`
-            message += `💳 ₦${c.schedule.time}\n\n`
         })
     }
 
