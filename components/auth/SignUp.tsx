@@ -1,5 +1,5 @@
 // components/auth/SignUp.tsx
-import React, { useState, ComponentType, useRef } from "react"
+import { useState, ComponentType, useRef } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"

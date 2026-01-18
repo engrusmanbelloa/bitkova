@@ -91,8 +91,8 @@ export default function TermsOfServicePage() {
             <Section>
                 <Heading>5. Intellectual Property</Heading>
                 <Text>
-                    All content, materials, videos, text, and branding belong to Bitkova Academy and
-                    are protected by intellectual property laws.
+                    All content, materials, videos, text, and branding belong to Bitkova Digtal Hub
+                    LTD and are protected by intellectual property laws.
                 </Text>
             </Section>
 
@@ -141,7 +141,7 @@ export default function TermsOfServicePage() {
                 <Heading>11. Contact</Heading>
                 <Text>For questions regarding these Terms, contact us at:</Text>
                 <Text>
-                    <strong>Email:</strong> support@bitkovaacademy.com
+                    <strong>Email:</strong> support@bitkova.com
                 </Text>
             </Section>
         </Container>
