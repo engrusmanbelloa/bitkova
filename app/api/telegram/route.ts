@@ -75,6 +75,8 @@ export async function POST(req: NextRequest) {
             },
         }
 
+        console.log("CTX:", ctx)
+
         const handler = commandRegistry[cleanCommand]
 
         if (!handler) {
