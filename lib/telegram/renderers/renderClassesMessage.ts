@@ -10,7 +10,8 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
         telegramClasses.forEach((c: any, i: number) => {
             message += `*${i + 1}. ${c.name}*\n`
             message += `💳 ₦${c.price}\n`
-            message += `📅 ${c.schedule?.summary ?? "Schedule TBD"}\n\n`
+            message += `💳 ₦${c.schedule.days}\n\n`
+            message += `💳 ₦${c.schedule.time}\n\n`
         })
     }
 
@@ -23,6 +24,8 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
             message += `🏢 ${c.address}\n`
             message += `🗺️ ${c.googleMapsLink}\n`
             message += `💳 ₦${c.price}\n\n`
+            message += `💳 ₦${c.schedule.days}\n\n`
+            message += `💳 ₦${c.schedule.time}\n\n`
         })
     }
 

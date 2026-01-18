@@ -1,4 +1,4 @@
-// lib/telegram/access/getTelegramAccess.ts
+// lib/telegram/services/getTelegramAccess.ts
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 

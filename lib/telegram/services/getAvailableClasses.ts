@@ -1,3 +1,4 @@
+// lib/telegram/services/getAvailableClasses.ts
 import { getActiveCohort } from "@/lib/firebase/queries/getActiveCohort"
 import { collection, query, where, getDocs } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"

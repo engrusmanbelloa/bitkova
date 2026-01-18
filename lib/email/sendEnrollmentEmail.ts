@@ -18,13 +18,13 @@ export async function sendEnrollmentEmail({
     telegramInviteLink,
     physicalQrCode,
 }: EmailParams) {
-    console.log("📨 sendEnrollmentEmail called with:", {
-        to: to,
-        cohortName: cohortName,
-        className: className,
-        hasTelegram: !!telegramInviteLink,
-        hasQr: !!physicalQrCode,
-    })
+    // console.log("📨 sendEnrollmentEmail called with:", {
+    //     to: to,
+    //     cohortName: cohortName,
+    //     className: className,
+    //     hasTelegram: !!telegramInviteLink,
+    //     hasQr: !!physicalQrCode,
+    // })
     let content = `
         <h2>🎉 Enrollment Successful</h2>
         <p>You’ve been enrolled in <strong>${cohortName} - ${className}</strong>.</p>
@@ -51,7 +51,6 @@ export async function sendEnrollmentEmail({
     try {
         const res = await resend.emails.send({
             from: "Bitkova <no-reply@bitkova.com>",
-            // from: "Bitkova <onboarding@resend.dev>",
             to,
             subject: `You're enrolled in ${cohortName}`,
             html: content,
