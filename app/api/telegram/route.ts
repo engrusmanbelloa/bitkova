@@ -13,9 +13,9 @@ export async function GET() {
 export async function POST(req: NextRequest) {
     try {
         const update = await req.json()
-        // const message = update.message
-        let message = update.message || update.edited_message || update.callback_query?.message
-        console.log("Incoming update:", JSON.stringify(update, null, 2))
+        const message = update.message
+        // let message = update.message || update.edited_message || update.callback_query?.message
+        // console.log("Incoming update:", JSON.stringify(update, null, 2))
 
         if (!message) return NextResponse.json({ ok: true })
         if (message.from?.is_bot) return NextResponse.json({ ok: true })
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
             },
         }
 
-        console.log("CTX:", ctx)
+        // console.log("CTX:", ctx)
 
         const handler = commandRegistry[cleanCommand]
 
