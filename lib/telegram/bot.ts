@@ -1,7 +1,8 @@
 // lib/telegram/bot.ts
 const TELEGRAM_API = "https://api.telegram.org"
 
-export async function sendTelegramMessage(chatId: number, text: string, options: any = {}) {
+// export async function sendTelegramMessage(chatId: number, text: string, options: any = {}) {
+export async function sendTelegramMessage(chatId: number, text: string) {
     const token = process.env.TELEGRAM_BOT_TOKEN
 
     if (!token) throw new Error("Missing TELEGRAM_BOT_TOKEN")
@@ -15,7 +16,7 @@ export async function sendTelegramMessage(chatId: number, text: string, options:
             chat_id: chatId,
             text,
             parse_mode: "Markdown",
-            ...options,
+            // ...options,
         }),
     })
 }
