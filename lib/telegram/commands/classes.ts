@@ -19,5 +19,5 @@ export default async function classes(ctx: TelegramContext) {
     const message = renderClassesMessage(data)
     const buttons = renderClassButtons(data)
 
-    await sendTelegramMessage(ctx.chatId, message, buttons)
+    await sendTelegramMessage(ctx.chatId, message)
 }
