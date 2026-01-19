@@ -7,8 +7,6 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import CircularProgress from "@mui/material/CircularProgress"
 import InProgressCourses from "@/components/course/InProgressCourses"
 import RegisteredClasses from "@/components/dashboard/classes/RegisteredClasses"
-import PhysicalClassCard from "@/components/dashboard/classes/PhysicalClassCard"
-import TelegramClassCard from "@/components/dashboard/classes/TelegramClassCard"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
@@ -109,12 +107,10 @@ export default function DashboardOverview({ userData, limit }: DashboardProps) {
     const physicalEnrolment = enrollments.filter((e) => e.itemType === "physical_class")
     const asyncEnrollments = enrollments.filter((e) => e.itemType === "async_course")
 
-    // const enrolledCount = asyncEnrollments.length
     const enrolledCount = enrollments.length
-
     const activeCount = asyncEnrollments.filter((e) => e.status === "in progress").length
-
     const completedCount = asyncEnrollments.filter((e) => e.status === "completed").length
+
     if (isLoading || !authReady) return <CircularProgress />
     if (error) return <p>Failed to load dashboard data.</p>
     if (!user) return <p>Please log in to view your dashboard.</p>

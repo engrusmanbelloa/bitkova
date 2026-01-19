@@ -5,20 +5,8 @@ import Drawer from "@mui/material/Drawer"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
-import DashboardIcon from "@mui/icons-material/Dashboard"
 import Link from "next/link"
-import {
-    AccountCircle,
-    School,
-    Star,
-    Quiz,
-    History,
-    Help,
-    Redeem,
-    Settings,
-    ExitToApp,
-    ChangeCircle,
-} from "@mui/icons-material"
+import { ExitToApp, ChangeCircle } from "@mui/icons-material"
 import { signOut } from "firebase/auth"
 import { auth } from "@/lib/firebase/firebaseConfig"
 import { mobile } from "@/responsive"

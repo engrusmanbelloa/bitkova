@@ -14,8 +14,6 @@ import {
     Help,
     Redeem,
     Settings,
-    ExitToApp,
-    ChangeCircle,
 } from "@mui/icons-material"
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
 

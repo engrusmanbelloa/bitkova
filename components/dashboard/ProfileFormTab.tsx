@@ -13,8 +13,6 @@ const Container = styled.div`
     max-width: 800px;
     margin: auto;
 `
-// ${(props) => props.theme.mobile.offWhite}
-
 const UploadContainer = styled.div`
     position: relative;
     width: 100%;
