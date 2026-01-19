@@ -1,3 +1,4 @@
+// app/api/cron/cleanup-invites/route.ts
 import { NextResponse } from "next/server"
 import { collection, getDocs, query, where, writeBatch, limit } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
