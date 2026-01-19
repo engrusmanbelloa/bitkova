@@ -50,10 +50,6 @@ const ContentContainer = styled.div`
             `,
     )}
 `
-const Title = styled.h3`
-    font-weight: 500;
-    color: ${(props) => props.theme.palette.common.black};
-`
 
 export default function Dashboard() {
     // setting active menu item defaults to dashboard

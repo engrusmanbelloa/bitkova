@@ -4,19 +4,9 @@ import { useState, useEffect } from "react"
 import styled from "styled-components"
 import AdminHeader from "@/components/admin/AdminHeader"
 import Sidebar from "@/components/admin/SideBar"
-import DashboardOverview from "@/components/admin/DashboardOverview"
-import ProfileSection from "@/components/admin/ProfileSection"
-import ProfileForm from "@/components/admin/Settings"
-import RoleManager from "@/components/auth/RoleManager"
-import EnrollStudent from "@/components/admin/EnrollStudent"
-import NoDataAvailable from "./NoData"
 import IsLoading from "@/components/IsLoading"
 import { mobile, ipad } from "@/responsive"
-import { User } from "@/types/userType"
-import UploadCourse from "@/components/admin/UploadCourse"
-import ClassesTabs from "@/components/admin/cohorts/ClassesTabs"
 import { useAuthReady } from "@/hooks/useAuthReady"
-import CircularProgress from "@mui/material/CircularProgress"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { ADMIN_TABS, AdminTabKey } from "./adminTabs"
@@ -71,7 +61,7 @@ export default function Panel() {
     const [activeItem, setActiveItem] = useState<AdminTabKey>("panel")
 
     const ActiveTab = ADMIN_TABS.find((tab) => tab.key === activeItem)
-    const { user, claims, firebaseUser, error, authReady, isLoadingUserDoc } = useAuthReady()
+    const { user, claims, error, authReady, isLoadingUserDoc } = useAuthReady()
     const [isAuthorized, setIsAuthorized] = useState(false)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
@@ -102,7 +92,6 @@ export default function Panel() {
         }
 
         // Check for authorization based on custom claims and specific email
-        const userEmail = user?.email || ""
         const isClaimAuthorized = claims?.admin || claims?.instructor
 
         // console.log("The claims:...", claims)
