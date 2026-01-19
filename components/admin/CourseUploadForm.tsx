@@ -6,9 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { v4 as uuidv4 } from "uuid"
 import { courseSchema, type CourseFormData, type ModuleFormData } from "@/lib/schemas/courseSchema"
-import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
 import { auth } from "@/lib/firebase/firebaseConfig"
-
 import { Course, Module, Lesson } from "@/types/courseType"
 
 export default function CourseUploadForm() {
