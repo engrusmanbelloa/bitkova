@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         // We do this first to ensure we track the group even if no command is issued
         if (message.chat?.type === "group" || message.chat?.type === "supergroup") {
             const chatId = message.chat.id
-            const title = message.chat.title
+            // const title = message.chat.title
 
             if (message.migrate_to_chat_id) {
                 const oldId = String(message.chat.id)
