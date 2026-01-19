@@ -1,9 +1,17 @@
-import {
-    initializeAppCheck,
-    ReCaptchaV3Provider,
-    ReCaptchaEnterpriseProvider,
-} from "firebase/app-check"
+// lib/firebase/appCheck.ts
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check"
 import { app } from "./firebaseConfig"
+
+/**
+ * IMPORTANT:
+ * This route must NOT use Firebase App Check.
+ * It is accessed by server-to-server clients (Telegram/Cron).
+ *
+ * /api/telegram/route.ts
+ * /api/cron/*
+ * /api/paystack/*
+ *
+ */
 
 export const initAppCheck = () => {
     // Only run on the client side
@@ -22,7 +30,7 @@ export const initAppCheck = () => {
         }
 
         initializeAppCheck(app, {
-            provider: new ReCaptchaEnterpriseProvider(siteKey),
+            provider: new ReCaptchaV3Provider(siteKey),
             isTokenAutoRefreshEnabled: true,
         })
     }
