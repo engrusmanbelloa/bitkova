@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { commandRegistry } from "@/lib/telegram/registry"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
+import { handleFlow } from "@/lib/telegram/engine/flowEngine"
 import { TelegramContext } from "@/types/telegram"
 import { db } from "@/lib/firebase/firebaseConfig"
 import { doc, setDoc, deleteDoc } from "firebase/firestore"
@@ -71,6 +72,10 @@ export async function POST(req: NextRequest) {
                 id: message.from.id,
                 username: message.from.username,
             },
+        }
+
+        if (await handleFlow(ctx)) {
+            return NextResponse.json({ ok: true })
         }
 
         const handler = commandRegistry[cleanCommand]

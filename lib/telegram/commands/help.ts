@@ -5,10 +5,12 @@ export default async function help(ctx: TelegramContext) {
     await sendTelegramMessage(
         ctx.chatId,
         `/classes - View available classes
-/schedule - Check class schedules
+/status - Get your status of payment in bitkova
 /payment - Payment instructions
-/access - Get class access link
+/schedule - Check class schedules
+/calendar - View Q1 academic schedule and events
 /resources - Learning materials
+/faq - View frequently asked question
 /support - Contact support`,
     )
 }
