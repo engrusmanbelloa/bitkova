@@ -3,7 +3,7 @@ import { TelegramContext } from "@/types/telegram"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { findEnrollmentByRecovery } from "@/lib/telegram/services/findEnrollmentByRecovery"
 import { renderEnrollmentStatus } from "@/lib/telegram/renderers/renderEnrollmentStatus"
-import { doc, setDoc } from "firebase/firestore"
+import { Timestamp, doc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/firebaseConfig"
 
 // export default async function status(ctx: TelegramContext) {
@@ -38,7 +38,7 @@ export default async function status(ctx: TelegramContext) {
     await setDoc(doc(db, "telegramSessions", String(ctx.chatId)), {
         flow: "status",
         step: "awaiting_input",
-        expiresAt: Date.now() + 5 * 60 * 1000, // 5 min TTL
+        expiresAt: Timestamp.fromMillis(Date.now() + 5 * 60 * 1000),
     })
 
     await sendTelegramMessage(
@@ -46,3 +46,16 @@ export default async function status(ctx: TelegramContext) {
         `🔎 *Check Enrollment Status*\n\nReply with:\n• Your *email address*\nOR\n• Your *Paystack payment reference*`,
     )
 }
+
+// export default async function status(ctx: TelegramContext) {
+//     await setDoc(doc(db, "telegramSessions", String(ctx.chatId)), {
+//         flow: "status",
+//         step: "awaiting_input",
+//         expiresAt: Date.now() + 5 * 60 * 1000, // 5 min TTL
+//     })
+
+//     await sendTelegramMessage(
+//         ctx.chatId,
+//         `🔎 *Check Enrollment Status*\n\nReply with:\n• Your *email address*\nOR\n• Your *Paystack payment reference*`,
+//     )
+// }
