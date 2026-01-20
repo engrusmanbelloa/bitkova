@@ -1,6 +1,6 @@
 // lib/firebase/appCheck.ts
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check"
-import { app } from "./firebaseConfig"
+import { app } from "./client"
 
 /**
  * IMPORTANT:

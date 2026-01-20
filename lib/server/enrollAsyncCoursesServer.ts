@@ -1,5 +1,5 @@
 // lib/server/enrollAsyncCoursesServer.ts
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, writeBatch, getDoc, increment, setDoc, serverTimestamp } from "firebase/firestore"
 import { Enrollment } from "@/types/userType"
 export async function enrollAsyncCoursesServer({

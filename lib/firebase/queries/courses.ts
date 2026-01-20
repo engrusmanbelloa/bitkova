@@ -1,5 +1,5 @@
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Review } from "@/types/courseType"
 
 // fetchCourseReviews

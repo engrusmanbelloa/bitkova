@@ -41,20 +41,25 @@ import { renderClassesMessage } from "@/lib/telegram/renderers/renderClassesMess
 import { renderClassButtons } from "@/lib/telegram/renderers/renderClassButtons"
 
 export default async function classes(ctx: TelegramContext) {
-    const data = await getAvailableClasses()
+    try {
+        const data = await getAvailableClasses()
 
-    if (!data) {
+        if (!data) {
+            await sendTelegramMessage(ctx.chatId, "🚫 No active classes at the moment.")
+            return
+        }
+        const message = renderClassesMessage(data)
+        const buttons = renderClassButtons(data)
+
+        await sendTelegramMessage(ctx.chatId, message, {
+            reply_markup: buttons.reply_markup,
+        })
+    } catch (err) {
+        console.error("❌ /classes failed:", err)
+
         await sendTelegramMessage(
             ctx.chatId,
-            "🚫 No active classes at the moment. Please check back later.",
+            "⚠️ Something went wrong loading classes. Please try again later.",
         )
-        return
     }
-
-    const message = renderClassesMessage(data)
-    const buttons = renderClassButtons(data)
-
-    await sendTelegramMessage(ctx.chatId, message, {
-        reply_markup: buttons.reply_markup,
-    })
 }

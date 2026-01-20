@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export async function resolveTelegramChatId(chatId: string): Promise<string> {
     if (!chatId) {

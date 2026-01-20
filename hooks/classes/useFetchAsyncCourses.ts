@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, orderBy, query } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export type AsyncCourse = {
     id: string

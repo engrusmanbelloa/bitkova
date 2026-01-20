@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, query, where } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { TelegramClass } from "@/types/classTypes"
 
 function convertTelegramClassDoc(doc: any): TelegramClass {

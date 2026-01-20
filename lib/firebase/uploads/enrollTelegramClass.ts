@@ -1,6 +1,6 @@
 // lib/firebase/uploads/enrollTelegramClass.ts
 import { doc, setDoc, updateDoc, increment } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Enrollment } from "@/types/userType"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 

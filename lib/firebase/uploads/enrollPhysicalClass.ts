@@ -1,6 +1,6 @@
 // lib/firebase/uploads/enrollPhysicalClass.ts
 import { doc, setDoc, getDoc, updateDoc, increment } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Enrollment } from "@/types/userType"
 import QRCode from "qrcode"
 

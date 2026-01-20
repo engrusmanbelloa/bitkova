@@ -1,6 +1,6 @@
 // lib/firebase/uploads/createCertificate.ts
 import { doc, setDoc, updateDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { nanoid } from "@/hooks/certId"
 
 export const createCertificate = async (userId: string, courseId: string): Promise<string> => {

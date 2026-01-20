@@ -1,7 +1,7 @@
 // lib/telegram/services/findEnrollmentByRecovery.ts
 
 import { collection, getDocs, query, where, limit } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export async function findEnrollmentByRecovery(input: string) {
     const enrollmentsRef = collection(db, "enrollments")

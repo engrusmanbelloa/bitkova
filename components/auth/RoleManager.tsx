@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { roleManagerSchema } from "@/lib/schemas/roleManagerSchema"
 import { z } from "zod"
 import { toast } from "sonner"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 
 type RoleForm = z.infer<typeof roleManagerSchema>
 

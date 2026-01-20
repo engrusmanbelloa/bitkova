@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore"
 import { telegramPendingInvites } from "@/types/classTypes"
 export async function markInvitePending({

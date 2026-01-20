@@ -6,7 +6,7 @@ import { useForm, Controller, useFieldArray, SubmitHandler } from "react-hook-fo
 import { telegramClassSchema } from "@/lib/schemas/classSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { toast } from "sonner"
 import {
     TextField,
@@ -26,7 +26,7 @@ import InfoIcon from "@mui/icons-material/Info"
 import { z } from "zod"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
 import { useFetchTelegramGroups } from "@/hooks/classes/useFetchTgGroups"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;

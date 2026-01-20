@@ -1,7 +1,7 @@
 // hooks/useAuthReady.ts
 import { useEffect, useState } from "react"
 import { getAuth } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { useQuery } from "@tanstack/react-query"
 import { getUserById } from "@/lib/firebase/queries/getUserById"
 import { User } from "@/types/userType"

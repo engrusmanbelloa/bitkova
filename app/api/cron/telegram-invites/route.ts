@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { collection, getDocs, query, where, limit, updateDoc, doc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 

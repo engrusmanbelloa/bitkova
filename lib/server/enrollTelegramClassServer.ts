@@ -1,5 +1,5 @@
 // lib/server/enrollTelegramClassServer.ts
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"

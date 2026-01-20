@@ -11,7 +11,7 @@ import {
     where,
     query,
 } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { Enrollment, CompletedCourse, ArchivedCourse } from "@/types/userType"
 

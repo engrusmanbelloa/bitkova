@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore"
 import { User as FirebaseUser } from "firebase/auth"
 import { User } from "@/types/userType"
-import { app } from "@/lib/firebase/firebaseConfig"
+import { app } from "@/lib/firebase/client"
 
 const db = getFirestore(app)
 

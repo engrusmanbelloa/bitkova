@@ -1,5 +1,5 @@
 import { getDoc, doc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { User } from "@/types/userType"
 
 export async function getUserById(uid: string): Promise<User | null> {

@@ -1,7 +1,7 @@
 // app/api/webhook/paystack/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { collection, query, where, getDocs, doc, updateDoc, getDoc } from "firebase/firestore"
 
 // Verify Paystack signature

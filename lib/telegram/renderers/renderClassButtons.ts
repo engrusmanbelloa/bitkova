@@ -1,3 +1,4 @@
+// lib/telegram/renderers/renderClassButtons.ts
 export function renderClassButtons({ cohort, telegramClasses, physicalClasses }: any) {
     const buttons: any[] = []
 

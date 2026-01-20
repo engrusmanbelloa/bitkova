@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, setDoc, updateDoc, increment, getDoc, writeBatch } from "firebase/firestore"
 import QRCode from "qrcode"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"

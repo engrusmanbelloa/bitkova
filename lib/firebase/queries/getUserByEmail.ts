@@ -1,5 +1,5 @@
 import { getFirestore, collection, query, where, getDocs, limit } from "firebase/firestore"
-import { app } from "@/lib/firebase/firebaseConfig"
+import { app } from "@/lib/firebase/client"
 
 const db = getFirestore(app)
 

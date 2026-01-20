@@ -5,7 +5,7 @@ import Link from "next/link"
 import LogoutIcon from "@mui/icons-material/Logout"
 import LoginIcon from "@mui/icons-material/Login"
 import { signOut } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { redirect } from "next/navigation"
 
 const DropdownContent = styled.ul<{ $isVisible: boolean }>`

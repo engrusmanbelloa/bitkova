@@ -13,7 +13,7 @@ import {
 } from "@mui/material"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { toast } from "sonner"
 import { cohortSchema } from "@/lib/schemas/classSchema"
 import { z } from "zod"

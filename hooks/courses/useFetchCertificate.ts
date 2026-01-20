@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { useUserStore } from "@/lib/store/useUserStore"
 
 interface CertificateStatus {

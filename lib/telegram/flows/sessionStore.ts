@@ -1,5 +1,5 @@
 // lib/telegram/flows/sessionStore.ts
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, getDoc, setDoc, deleteDoc, Timestamp } from "firebase/firestore"
 import { FlowSession } from "@/types/telegram"
 
