@@ -7,7 +7,7 @@ export function renderEnrollmentStatus(enrollment: any) {
     msg += `💳 Payment: ${enrollment.status}\n`
     msg += `🗓 Enrolled: ${new Date(enrollment.enrolledAt.seconds * 1000).toDateString()}\n\n`
 
-    if (enrollment.telegramInviteLink) {
+    if (enrollment.inviteLink) {
         msg += `👉 *Telegram Access:*\n${enrollment.inviteLink}\n\n`
         msg += `⚠️ Single-use link. Join immediately.\n`
     } else {
