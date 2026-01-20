@@ -27,7 +27,7 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
 
     message += `────────────────────\n`
     message += `💳 *Ready to start?*\n`
-    message += `Use /payment to enroll in any of these classes.`
+    message += `click enroll botton to enroll in any of these classes.`
 
     return message
 }
