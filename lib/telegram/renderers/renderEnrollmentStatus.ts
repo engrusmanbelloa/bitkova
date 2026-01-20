@@ -8,7 +8,7 @@ export function renderEnrollmentStatus(enrollment: any) {
     msg += `🗓 Enrolled: ${new Date(enrollment.enrolledAt.seconds * 1000).toDateString()}\n\n`
 
     if (enrollment.telegramInviteLink) {
-        msg += `👉 *Telegram Access:*\n${enrollment.telegramInviteLink}\n\n`
+        msg += `👉 *Telegram Access:*\n${enrollment.inviteLink}\n\n`
         msg += `⚠️ Single-use link. Join immediately.\n`
     } else {
         msg += `⏳ Telegram access pending.\n`

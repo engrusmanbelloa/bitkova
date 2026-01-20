@@ -8,6 +8,7 @@ import payment from "./commands/payment"
 import support from "./commands/support"
 import calendar from "./commands/calendar"
 import { TelegramContext } from "@/types/telegram"
+import cancel from "./commands/cancel"
 
 type CommandHandler = (ctx: TelegramContext) => Promise<void>
 
@@ -20,4 +21,5 @@ export const commandRegistry: Record<string, CommandHandler> = {
     "/schedule": schedule,
     "/payment": payment,
     "/support": support,
+    "/cancel": cancel,
 }
