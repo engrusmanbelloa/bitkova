@@ -1,28 +1,24 @@
 import { db } from "@/lib/firebase/firebaseConfig"
 import { doc, getDoc, setDoc, deleteDoc, Timestamp } from "firebase/firestore"
+import { FlowSession } from "@/types/telegram"
 
 const COLLECTION = "telegramSessions"
 
-export async function getTelegramSession(chatId: number) {
+export async function getTelegramSession(chatId: number): Promise<FlowSession | null> {
     const ref = doc(db, COLLECTION, String(chatId))
     const snap = await getDoc(ref)
-    return snap.exists() ? snap.data() : null
+
+    if (!snap.exists()) return null
+
+    return snap.data() as FlowSession
 }
 
-export async function setTelegramSession(
-    chatId: number,
-    data: { flow: string; step?: string; ttlMinutes?: number },
-) {
-    const expiresAt = Timestamp.fromDate(new Date(Date.now() + (data.ttlMinutes ?? 5) * 60 * 1000))
-
-    await setDoc(doc(db, COLLECTION, String(chatId)), {
-        flow: data.flow,
-        step: data.step ?? null,
-        expiresAt,
-        createdAt: Timestamp.now(),
-    })
+export async function setTelegramSession(chatId: number, session: FlowSession) {
+    const ref = doc(db, COLLECTION, String(chatId))
+    await setDoc(ref, session)
 }
 
 export async function clearTelegramSession(chatId: number) {
-    await deleteDoc(doc(db, COLLECTION, String(chatId)))
+    const ref = doc(db, COLLECTION, String(chatId))
+    await deleteDoc(ref)
 }

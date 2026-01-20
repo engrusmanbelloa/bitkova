@@ -13,3 +13,12 @@ export type TelegramCommand = {
     adminOnly?: boolean
     execute: (ctx: TelegramContext) => Promise<void>
 }
+
+export interface FlowSession {
+    flow: string
+    step?: number
+    expiresAt: FirebaseFirestore.Timestamp
+    data?: Record<string, any>
+}
+
+export type TelegramFlowHandler = (ctx: TelegramContext, session: FlowSession) => Promise<void>
