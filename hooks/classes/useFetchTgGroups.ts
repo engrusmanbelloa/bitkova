@@ -1,5 +1,5 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { useQuery } from "@tanstack/react-query"
 
 export type TelegramGroup = {

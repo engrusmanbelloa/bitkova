@@ -1,6 +1,6 @@
 // lib/telegram/flows/status.flow.ts
 import { doc, deleteDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { findEnrollmentByRecovery } from "../services/findEnrollmentByRecovery"
 import { renderEnrollmentStatus } from "../renderers/renderEnrollmentStatus"
 import { sendTelegramMessage } from "../bot"

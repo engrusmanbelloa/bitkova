@@ -1,7 +1,7 @@
 // app/api/cron/cleanup-invites/route.ts
 import { NextResponse } from "next/server"
 import { collection, getDocs, query, where, writeBatch, limit } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export async function GET(req: Request) {
     // 1. Security Check

@@ -1,6 +1,6 @@
 // lib/firebase/uploads/enrollCourses.ts
 import { doc, setDoc, writeBatch, serverTimestamp } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Enrollment } from "@/types/userType"
 
 export const enrollCourses = async (userId: string, courseId: string[]) => {

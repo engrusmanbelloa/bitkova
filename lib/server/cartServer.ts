@@ -1,5 +1,5 @@
 // lib/server/cartServer.ts
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, writeBatch, arrayRemove, updateDoc } from "firebase/firestore"
 
 // export async function removeCoursesFromCartServer(userId: string, courseIds: string[]) {

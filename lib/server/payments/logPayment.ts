@@ -1,7 +1,7 @@
 // lib/server/payments/logPayment.ts
 
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export async function logPayment({
     reference,

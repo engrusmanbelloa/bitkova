@@ -5,7 +5,7 @@ import styled from "styled-components"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { toast } from "sonner"
 // Hooks & Store
 import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"

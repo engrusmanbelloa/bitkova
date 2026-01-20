@@ -4,7 +4,7 @@ import { commandRegistry } from "@/lib/telegram/registry"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { handleFlow } from "@/lib/telegram/engine/flowEngine"
 import { TelegramContext } from "@/types/telegram"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { doc, setDoc, deleteDoc } from "firebase/firestore"
 
 export async function GET() {

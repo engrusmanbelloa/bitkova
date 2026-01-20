@@ -1,7 +1,7 @@
 // hooks/classes/useFetchCohorts.ts
 import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, query, where, Timestamp } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Cohort } from "@/types/classTypes"
 
 // Helper function to safely convert Firestore data

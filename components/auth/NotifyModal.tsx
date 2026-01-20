@@ -5,7 +5,7 @@ import Dialog from "@mui/material/Dialog"
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 import { mobile, ipad } from "@/responsive"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};

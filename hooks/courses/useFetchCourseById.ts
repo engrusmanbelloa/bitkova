@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types/courseType"
 
 // fetchCourses by course id

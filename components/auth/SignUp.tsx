@@ -14,7 +14,7 @@ import {
     GoogleAuthProvider,
 } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
-import { auth, db } from "@/lib/firebase/firebaseConfig"
+import { auth, db } from "@/lib/firebase/client"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`

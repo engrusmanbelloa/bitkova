@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import AuthButton from "@/components/auth/AuthButton"
 import { getAuth, sendPasswordResetEmail } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};

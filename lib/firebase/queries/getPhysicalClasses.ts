@@ -1,6 +1,6 @@
 // lib/firebase/queries/getPhysicalClasses.ts
 import { collection, query, where, getDocs } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { PhysicalClass } from "@/types/classTypes"
 
 export async function getPhysicalClassesByCohort(cohortId: string): Promise<PhysicalClass[]> {

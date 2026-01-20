@@ -1,6 +1,6 @@
 // hooks/courses/useCourseCompletion.ts
 import { doc, updateDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { createCertificate } from "@/lib/firebase/uploads/createCertificate"
 import { useQueryClient } from "@tanstack/react-query"

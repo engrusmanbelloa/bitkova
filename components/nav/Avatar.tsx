@@ -5,7 +5,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { getAuth, signOut, sendEmailVerification, onAuthStateChanged } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { mobile, ipad } from "@/responsive"
 
 const AvatarContainer = styled.div`

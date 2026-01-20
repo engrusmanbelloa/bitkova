@@ -1,6 +1,6 @@
 // lib/firebase/queries/getActiveCohort.ts
 import { collection, query, where, getDocs, orderBy, limit } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 import { Cohort } from "@/types/classTypes"
 
 export async function getActiveCohort(): Promise<Cohort | null> {

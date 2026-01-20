@@ -13,7 +13,7 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
 } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`

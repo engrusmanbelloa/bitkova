@@ -4,7 +4,7 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { findEnrollmentByRecovery } from "@/lib/telegram/services/findEnrollmentByRecovery"
 import { renderEnrollmentStatus } from "@/lib/telegram/renderers/renderEnrollmentStatus"
 import { Timestamp, doc, setDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase/firebaseConfig"
+import { db } from "@/lib/firebase/client"
 
 export default async function status(ctx: TelegramContext) {
     await setDoc(doc(db, "telegramSessions", String(ctx.chatId)), {

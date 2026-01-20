@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
 import { getFirestore, doc, getDoc } from "firebase/firestore"
-import { app } from "@/lib/firebase/firebaseConfig"
+import { app } from "@/lib/firebase/client"
 import { User } from "@/types/userType"
 
 const auth = getAuth(app)

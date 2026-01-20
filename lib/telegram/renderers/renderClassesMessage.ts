@@ -10,8 +10,6 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
         telegramClasses.forEach((c: any, i: number) => {
             message += `*${i + 1}. ${c.name}*\n`
             message += `💳 ₦${c.price}\n`
-            message += `💳 ₦${c.schedule.days}\n\n`
-            message += `💳 ₦${c.schedule.time}\n\n`
         })
     }
 

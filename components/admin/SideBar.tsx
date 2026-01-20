@@ -9,7 +9,7 @@ import CloseIcon from "@mui/icons-material/Close"
 import Link from "next/link"
 import { ExitToApp, ChangeCircle } from "@mui/icons-material"
 import { signOut } from "firebase/auth"
-import { auth } from "@/lib/firebase/firebaseConfig"
+import { auth } from "@/lib/firebase/client"
 import { mobile } from "@/responsive"
 
 const drawerWidth = 260
