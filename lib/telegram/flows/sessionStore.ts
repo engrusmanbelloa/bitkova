@@ -1,3 +1,4 @@
+// lib/telegram/flows/sessionStore.ts
 import { db } from "@/lib/firebase/firebaseConfig"
 import { doc, getDoc, setDoc, deleteDoc, Timestamp } from "firebase/firestore"
 import { FlowSession } from "@/types/telegram"
@@ -17,8 +18,6 @@ export async function getTelegramSession(chatId: number): Promise<FlowSession | 
     const data = snap.data()
     if (!isValidFlowSession(data)) return null
     return data
-
-    //  return snap.data() as FlowSession
 }
 
 export async function setTelegramSession(chatId: number, session: FlowSession) {
