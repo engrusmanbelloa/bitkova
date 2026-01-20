@@ -1,6 +1,7 @@
 // lib/telegram/renderers/renderClassesMessage.ts
 export function renderClassesMessage({ cohort, telegramClasses, physicalClasses }: any) {
-    let message = `🎓 *${cohort.name}*\n`
+    // let message = `🎓 *${cohort.name}*\n`
+    let message = `🎓 *${cohort.name ?? "Current Cohort"}*\n`
     message += `────────────────────\n`
     message += `*Choose your preferred learning hub below:*\n\n`
 
@@ -18,9 +19,8 @@ export function renderClassesMessage({ cohort, telegramClasses, physicalClasses 
         message += `📍 *Physical Learning Hubs*\n`
         physicalClasses.forEach((c: any, i: number) => {
             message += `*${i + 1}. ${c.name}*\n`
-            message += `📍 ${c.locationName}\n`
-            message += `🏢 ${c.address}\n`
-            message += `🗺️ ${c.googleMapsLink}\n`
+            message += `📍 ${c.c.location}\n`
+            message += `🗺️ ${c.mapLink}\n`
             message += `💳 ₦${c.price}\n\n`
         })
     }
