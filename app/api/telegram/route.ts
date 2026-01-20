@@ -4,8 +4,7 @@ import { commandRegistry } from "@/lib/telegram/registry"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { handleFlow } from "@/lib/telegram/engine/flowEngine"
 import { TelegramContext } from "@/types/telegram"
-import { db } from "@/lib/firebase/client"
-import { doc, setDoc, deleteDoc } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
 
 export async function GET() {
     return new Response("Telegram webhook running ✅", { status: 200 })
@@ -19,18 +18,14 @@ export async function POST(req: NextRequest) {
         if (!message) return NextResponse.json({ ok: true })
         if (message.from?.is_bot) return NextResponse.json({ ok: true })
 
-        // 1. AUTO-SAVE GROUP INFO
-        // We do this first to ensure we track the group even if no command is issued
+        // 1️⃣ AUTO-SAVE GROUP INFO
         if (message.chat?.type === "group" || message.chat?.type === "supergroup") {
-            const chatId = message.chat.id
-            // const title = message.chat.title
+            const oldId = String(message.chat.id)
 
             if (message.migrate_to_chat_id) {
-                const oldId = String(message.chat.id)
                 const newId = String(message.migrate_to_chat_id)
 
-                await setDoc(
-                    doc(db, "telegramGroups", oldId),
+                await adminDb.collection("telegramGroups").doc(oldId).set(
                     {
                         chatId: oldId,
                         migratedTo: newId,
@@ -40,9 +35,7 @@ export async function POST(req: NextRequest) {
                     { merge: true },
                 )
 
-                // Save / update new supergroup
-                await setDoc(
-                    doc(db, "telegramGroups", newId),
+                await adminDb.collection("telegramGroups").doc(newId).set(
                     {
                         chatId: newId,
                         title: message.chat.title,
@@ -56,14 +49,11 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // 2. COMMAND PROCESSING
+        // 2️⃣ COMMAND PROCESSING
         if (!message.text) return NextResponse.json({ ok: true })
 
         const fullText = message.text.trim()
-        const firstWord = fullText.split(" ")[0]
-
-        // Strip bot username (e.g., /start@MyBot -> /start)
-        const cleanCommand = firstWord.split("@")[0]
+        const cleanCommand = fullText.split(" ")[0].split("@")[0]
 
         const ctx: TelegramContext = {
             chatId: message.chat.id,
@@ -74,6 +64,7 @@ export async function POST(req: NextRequest) {
             },
         }
 
+        // Flow engine first
         if (await handleFlow(ctx)) {
             return NextResponse.json({ ok: true })
         }
