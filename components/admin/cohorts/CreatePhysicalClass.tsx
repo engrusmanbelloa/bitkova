@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore"
-import { db } from "@/lib/firebase/client"
+import { db, auth } from "@/lib/firebase/client"
 import { physicalClassSchema } from "@/lib/schemas/classSchema"
 import {
     TextField,
@@ -27,7 +27,6 @@ import { useForm, useFieldArray, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useFetchCohorts } from "@/hooks/classes/useFetchCohorts"
-import { auth } from "@/lib/firebase/client"
 
 const FormCard = styled(Card)`
     margin-bottom: 0 auto 30px;

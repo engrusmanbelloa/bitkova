@@ -4,14 +4,13 @@ import styled from "styled-components"
 import { useRouter } from "next/navigation"
 import CircularProgress from "@mui/material/CircularProgress"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
-import TelegramIcon from "@mui/icons-material/Telegram"
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday"
 import PersonIcon from "@mui/icons-material/Person"
 import DownloadIcon from "@mui/icons-material/Download"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import { Card, CardContent } from "@mui/material"
 import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
 import { mobile } from "@/responsive"
-import { Card, CardContent } from "@mui/material"
 
 const ClassCard = styled(Card)`
     border-radius: 12px;

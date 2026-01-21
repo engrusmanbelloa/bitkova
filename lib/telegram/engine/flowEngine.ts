@@ -6,12 +6,6 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { TelegramContext } from "@/types/telegram"
 
 export async function handleFlow(ctx: TelegramContext): Promise<boolean> {
-    //  // Global cancel
-    //  if (ctx.text === "/cancel") {
-    //      await clearTelegramSession(ctx.chatId)
-    //      await sendTelegramMessage(ctx.chatId, "❌ Action cancelled.")
-    //      return true
-    //  }
     if (ctx.text === "/cancel") return false
 
     const session = await getTelegramSession(ctx.chatId)

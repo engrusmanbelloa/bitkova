@@ -1,3 +1,4 @@
+// components/admin/cohorts/CreateCohort.tsx
 "use client"
 import styled from "styled-components"
 import {
@@ -64,25 +65,6 @@ export default function CreateCohort() {
             status: "upcoming",
         },
     })
-
-    // const onCohortSubmit = async (data: CohortForm) => {
-    //     try {
-    //         const cohortData = {
-    //             ...data,
-    //             startDate: new Date(data.startDate),
-    //             endDate: new Date(data.endDate),
-    //             registrationOpen: new Date(data.registrationOpen),
-    //             registrationClose: new Date(data.registrationClose),
-    //         }
-
-    //         await addDoc(collection(db, "cohorts"), cohortData)
-    //         toast.success(`Cohort ${data.name} created successfully!`)
-    //         cohortForm.reset()
-    //     } catch (error) {
-    //         console.log("Error creating cohort:", error)
-    //         toast.error("Failed to create cohort")
-    //     }
-    // }
 
     const onCohortSubmit = async (data: CohortForm) => {
         setIsLoading(true)

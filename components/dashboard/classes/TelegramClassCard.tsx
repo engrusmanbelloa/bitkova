@@ -150,8 +150,6 @@ const ScheduleItem = styled.div`
     padding: 4px 0;
 `
 
-// export default function RegisteredClasses({ userData, limit }: RegisteredClassesProps) {
-
 export default function TelegramClassCard({ enrollment, cohorts }: any) {
     // const { data: telegramClass, isLoading } = useFetchTelegramClass(enrollment.cohortId)
     const { data: telegramClasses = [], isLoading } = useFetchTelegramClass(enrollment.cohortId)
