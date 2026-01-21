@@ -39,19 +39,50 @@
 import { TelegramContext } from "@/types/telegram"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { getActiveClasses } from "@/lib/telegram/services/getActiveClasses"
-import { renderClasses } from "@/lib/telegram/renderers/renderClasses"
+import { renderClassCard } from "@/lib/telegram/renderers/renderClassCard"
 
 export default async function classes(ctx: TelegramContext) {
-    const data = await getActiveClasses()
+    try {
+        const result = await getActiveClasses()
 
-    if (!data) {
-        await sendTelegramMessage(ctx.chatId, "❌ No active classes at the moment.")
-        return
+        if (!result || result.classes.length === 0) {
+            await sendTelegramMessage(
+                ctx.chatId,
+                "⚠️ No active classes available at the moment.\nPlease check back later.",
+            )
+            return
+        }
+
+        await sendTelegramMessage(
+            ctx.chatId,
+            `🎓 *${result.cohort.name}*\nAvailable Classes:\n────────────────────`,
+        )
+
+        for (const c of result.classes) {
+            const payUrl =
+                c.type === "physical"
+                    ? `https://bitkova.com/pay/physical/${c.id}`
+                    : `https://bitkova.com/pay/telegram/${c.id}`
+
+            await sendTelegramMessage(ctx.chatId, renderClassCard(c), {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "💳 Enroll & Pay",
+                                url: payUrl,
+                            },
+                        ],
+                    ],
+                },
+            })
+        }
+    } catch (err) {
+        console.error("❌ /classes error:", err)
+
+        await sendTelegramMessage(
+            ctx.chatId,
+            "⚠️ Unable to load classes right now.\nPlease try again later.",
+        )
     }
-
-    const rendered = renderClasses(data)
-
-    await sendTelegramMessage(ctx.chatId, rendered.text, {
-        reply_markup: rendered.reply_markup,
-    })
 }
