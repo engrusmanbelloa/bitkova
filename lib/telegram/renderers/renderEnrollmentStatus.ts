@@ -1,7 +1,7 @@
 // lib/telegram/renderers/renderEnrollmentStatus.ts
 export function renderEnrollmentStatus(enrollment: any) {
     let msg = `📌 *ENROLLMENT STATUS*\n`
-    msg += `────────────────────\n`
+    msg += `──────────────────\n`
     msg += `🎓 *${enrollment.className ?? "Course"}*\n`
     msg += `📦 Type: ${enrollment.itemType.replace("_", " ")}\n`
     msg += `💳 Payment: ${enrollment.status}\n`
@@ -15,7 +15,7 @@ export function renderEnrollmentStatus(enrollment: any) {
         msg += `You’ll receive it by email shortly.\n`
     }
 
-    msg += `────────────────────\n`
+    msg += `──────────────────\n`
     msg += `Need help? Use /support`
 
     return msg
