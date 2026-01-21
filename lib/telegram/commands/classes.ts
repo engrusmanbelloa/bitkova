@@ -53,36 +53,36 @@ export default async function classes(ctx: TelegramContext) {
             return
         }
 
-        await sendTelegramMessage(
-            ctx.chatId,
-            `🎓 *${result.cohort.name}*\nAvailable Classes:\n────────────────────`,
-        )
+        // await sendTelegramMessage(
+        //     ctx.chatId,
+        //     `🎓 *${result.cohort.name}*\nAvailable Classes:\n────────────────────`,
+        // )
 
-        // for (const c of result.classes) {
-        //     const payUrl =
-        //         c.type === "physical"
-        //             ? `https://bitkova.com/pay/physical/${c.id}`
-        //             : `https://bitkova.com/pay/telegram/${c.id}`
+        for (const c of result.classes) {
+            const payUrl =
+                c.type === "physical"
+                    ? `https://bitkova.com/pay/physical/${c.id}`
+                    : `https://bitkova.com/pay/telegram/${c.id}`
 
-        //     await sendTelegramMessage(ctx.chatId, renderClassCard(c), {
-        //         reply_markup: {
-        //             inline_keyboard: [
-        //                 [
-        //                     {
-        //                         text: "💳 Enroll",
-        //                         url: payUrl,
-        //                     },
-        //                 ],
-        //             ],
-        //         },
-        //     })
-        // }
+            await sendTelegramMessage(ctx.chatId, renderClassCard(c), {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {
+                                text: "💳 Enroll",
+                                url: payUrl,
+                            },
+                        ],
+                    ],
+                },
+            })
+        }
     } catch (err) {
         console.error("❌ /classes error:", err)
 
         await sendTelegramMessage(
             ctx.chatId,
-            "⚠️ Unable to load classes right now.\nPlease try again later.",
+            "⚠️ Unable to load available classes right now.\nPlease try again later.",
         )
     }
 }
