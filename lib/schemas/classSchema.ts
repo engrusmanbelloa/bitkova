@@ -1,3 +1,4 @@
+// lib/schemas/classSchema.ts
 import { z } from "zod"
 
 /* =======================

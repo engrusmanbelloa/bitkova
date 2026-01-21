@@ -5,8 +5,6 @@ import { useState, useEffect } from "react"
 import { useForm, Controller, useFieldArray, SubmitHandler } from "react-hook-form"
 import { telegramClassSchema } from "@/lib/schemas/classSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { collection, addDoc, getDocs, query, orderBy } from "firebase/firestore"
-import { db } from "@/lib/firebase/client"
 import { toast } from "sonner"
 import {
     TextField,
@@ -171,27 +169,6 @@ export default function CreateTelegramClass() {
     // Watch selected cohort to show info
     const selectedCohortId = telegramForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
-
-    // const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
-    //     try {
-    //         const classData = {
-    //             name: data.name,
-    //             cohortId: data.cohortId,
-    //             price: data.price,
-    //             capacity: data.capacity,
-    //             enrolled: 0,
-    //             telegramGroupId: data.telegramGroupId,
-    //             schedule: data.schedule,
-    //         }
-    //         await createTelegramClass(classData)
-    //         // await addDoc(collection(db, "telegramClasses"), classData)
-    //         toast.success("Telegram class created successfully!")
-    //         telegramForm.reset()
-    //     } catch (error) {
-    //         console.log("Error creating telegram class:", error)
-    //         toast.error("Failed to create telegram class")
-    //     }
-    // }
 
     const onTelegramClassSubmit: SubmitHandler<TelegramClassForm> = async (data) => {
         setIsLoading(true)
