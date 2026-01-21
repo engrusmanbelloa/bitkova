@@ -55,7 +55,7 @@ export default async function classes(ctx: TelegramContext) {
 
         await sendTelegramMessage(
             ctx.chatId,
-            `🎓 *Bitkova2026A*\nAvailable Classes:\n────────────────────`,
+            "🎓 *Bitkova2026A*\nAvailable Classes:\n────────────────────",
         )
 
         // await sendTelegramMessage(
