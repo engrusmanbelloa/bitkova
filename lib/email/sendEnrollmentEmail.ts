@@ -18,13 +18,13 @@ export async function sendEnrollmentEmail({
     telegramInviteLink,
     physicalQrCode,
 }: EmailParams) {
-    console.log("📨 sendEnrollmentEmail called with:", {
-        to: to,
-        cohortName: cohortName,
-        className: className,
-        hasTelegram: !!telegramInviteLink,
-        hasQr: !!physicalQrCode,
-    })
+    // console.log("📨 sendEnrollmentEmail called with:", {
+    //     to: to,
+    //     cohortName: cohortName,
+    //     className: className,
+    //     hasTelegram: !!telegramInviteLink,
+    //     hasQr: !!physicalQrCode,
+    // })
     let content = `
         <h2>🎉 Enrollment Successful</h2>
         <p>You’ve been enrolled in <strong>${cohortName} - ${className}</strong>.</p>
@@ -56,7 +56,7 @@ export async function sendEnrollmentEmail({
             subject: `You're enrolled in ${cohortName}`,
             html: content,
         })
-        console.log("📨 Enrollment email sent:", res)
+        // console.log("📨 Enrollment email sent:", res)
     } catch (error) {
         console.error("❌ Error sending enrollment email:", error)
         throw error

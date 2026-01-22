@@ -36,12 +36,12 @@ export async function POST(req: Request) {
         const isAdmin = decoded.admin === true
         const isInstructor = decoded.instructor === true
 
-        // console.log("Decoded claims:", {
-        //     admin: decoded.admin,
-        //     instructor: decoded.instructor,
-        //     isAdmin,
-        //     isInstructor,
-        // })
+        console.log("Decoded claims:", {
+            admin: decoded.admin,
+            instructor: decoded.instructor,
+            isAdmin,
+            isInstructor,
+        })
 
         if (!isAdmin && !isInstructor) {
             return NextResponse.json(
@@ -85,6 +85,7 @@ export async function POST(req: Request) {
         // 🧠 BUILD ENROLLMENT
         await enrollStudentServer({
             userId,
+            payerEmail: targetEmail,
             itemId,
             itemType,
             cohortId: cohortId ?? "Not applicable",
