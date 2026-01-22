@@ -4,6 +4,8 @@ import { doc, writeBatch, getDoc, increment } from "firebase/firestore"
 import QRCode from "qrcode"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
+import { markInvitePending } from "@/lib/telegram/markInvitePending"
 import { Enrollment, EnrollmentType } from "@/types/userType"
 
 interface Params {
@@ -16,7 +18,7 @@ interface Params {
     cohortName?: string
 
     telegramGroupId?: string
-    payerEmail?: string
+    payerEmail: string
 
     paymentReference: string
     enrolledBy: "payment" | "admin"
@@ -35,6 +37,7 @@ export async function enrollStudentServer(params: Params) {
         className,
         cohortName,
         telegramGroupId,
+        payerEmail,
         paymentReference,
         enrolledBy,
     } = params
@@ -79,6 +82,26 @@ export async function enrollStudentServer(params: Params) {
 
         if (inviteLink) {
             enrollment.telegramInviteLink = inviteLink
+            // Send email if invite link creation is successfull
+            await sendEnrollmentEmail({
+                to: payerEmail,
+                cohortName: cohortName || className || "Class",
+                className: className || "Class",
+                telegramInviteLink: inviteLink,
+            })
+        } else {
+            // Mark as pending if invite link creation failed
+            if (payerEmail) {
+                await markInvitePending({
+                    userId,
+                    email: payerEmail,
+                    classId: itemId,
+                    telegramGroupId,
+                    cohortName: cohortName || className || "Class",
+                    className: className || "Class",
+                })
+                // console.log(`⏳ Invite marked as pending for ${payerEmail}`)
+            }
         }
 
         if (itemType === "physical_class") {
@@ -103,3 +126,25 @@ export async function enrollStudentServer(params: Params) {
     batch.set(ref, clean(enrollment))
     await batch.commit()
 }
+
+//  if (payerEmail) {
+//         await sendEnrollmentEmail({
+//             to: payerEmail,
+//             cohortName: cohortName || className || "Class",
+//             className: className || "Class",
+//             telegramInviteLink: inviteLink || "",
+//         })
+//     }
+// } else {
+//     // ⏳ Mark invite as pending if link generation failed
+//     if (payerEmail) {
+//         await markInvitePending({
+//             userId: userId,
+//             email: payerEmail,
+//             classId: itemId,
+//             telegramGroupId: telegramGroupId || "",
+//             cohortName: cohortName || className || "Class",
+//             className: className || "Class",
+//         })
+//     }
+// }
