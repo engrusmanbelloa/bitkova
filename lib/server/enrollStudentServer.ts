@@ -1,6 +1,6 @@
 // lib/server/enrollStudentServer.ts
-import { db } from "@/lib/firebase/client"
-import { doc, writeBatch, getDoc, increment } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 import QRCode from "qrcode"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
@@ -43,12 +43,17 @@ export async function enrollStudentServer(params: Params) {
     } = params
 
     const enrollmentId = `${userId}-${itemId}`
-    const ref = doc(db, "enrollments", enrollmentId)
+    // const ref = doc(db, "enrollments", enrollmentId)
+
+    const ref = adminDb.collection("enrollments").doc(enrollmentId)
 
     // ✅ Idempotency
-    if ((await getDoc(ref)).exists()) return
+    // if ((await getDoc(ref)).exists()) return
+    if ((await ref.get()).exists) return
 
-    const batch = writeBatch(db)
+    const batch = adminDb.batch()
+
+    // const batch = writeBatch(db)
     const now = new Date()
 
     const enrollment: Enrollment = {
@@ -111,14 +116,22 @@ export async function enrollStudentServer(params: Params) {
 
             enrollment.qrCode = await QRCode.toDataURL(JSON.stringify(qrPayload))
 
-            batch.update(doc(db, "physicalClasses", itemId), {
-                enrolled: increment(1),
+            // batch.update(doc(db, "physicalClasses", itemId), {
+            //     enrolled: increment(1),
+            // })
+
+            batch.update(adminDb.collection("physicalClasses").doc(itemId), {
+                enrolled: FieldValue.increment(1),
             })
         }
 
         if (itemType === "telegram_class") {
-            batch.update(doc(db, "telegramClasses", itemId), {
-                enrolled: increment(1),
+            // batch.update(doc(db, "telegramClasses", itemId), {
+            //     enrolled: increment(1),
+            // })
+
+            batch.update(adminDb.collection("telegramClasses").doc(itemId), {
+                enrolled: FieldValue.increment(1),
             })
         }
     }
@@ -126,25 +139,3 @@ export async function enrollStudentServer(params: Params) {
     batch.set(ref, clean(enrollment))
     await batch.commit()
 }
-
-//  if (payerEmail) {
-//         await sendEnrollmentEmail({
-//             to: payerEmail,
-//             cohortName: cohortName || className || "Class",
-//             className: className || "Class",
-//             telegramInviteLink: inviteLink || "",
-//         })
-//     }
-// } else {
-//     // ⏳ Mark invite as pending if link generation failed
-//     if (payerEmail) {
-//         await markInvitePending({
-//             userId: userId,
-//             email: payerEmail,
-//             classId: itemId,
-//             telegramGroupId: telegramGroupId || "",
-//             cohortName: cohortName || className || "Class",
-//             className: className || "Class",
-//         })
-//     }
-// }
