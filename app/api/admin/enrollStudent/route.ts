@@ -1,12 +1,9 @@
 // app/api/enrollStudent/route.ts
 import { NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
-import { adminApp } from "@/lib/firebase/admin"
-import { getFirestore } from "firebase-admin/firestore"
+import { adminApp, adminDb, adminAuth } from "@/lib/firebase/admin"
 import { Enrollment } from "@/types/userType"
 import { enrollStudentServer } from "@/lib/server/enrollStudentServer"
-const auth = getAuth(adminApp)
-const db = getFirestore(adminApp)
 
 export async function POST(req: Request) {
     try {
@@ -30,18 +27,16 @@ export async function POST(req: Request) {
         }
 
         const token = authHeader.replace("Bearer ", "")
-        const decoded = await auth.verifyIdToken(token)
+        const decoded = await adminAuth.verifyIdToken(token)
 
         // Custom claims are available directly on the decoded token
         const isAdmin = decoded.admin === true
         const isInstructor = decoded.instructor === true
 
-        console.log("Decoded claims:", {
-            admin: decoded.admin,
-            instructor: decoded.instructor,
-            isAdmin,
-            isInstructor,
-        })
+        // console.log("Decoded claims:", {
+        //     admin: isAdmin,
+        //     instructor: isInstructor,
+        // })
 
         if (!isAdmin && !isInstructor) {
             return NextResponse.json(
@@ -53,11 +48,12 @@ export async function POST(req: Request) {
         }
 
         // 👤 TARGET USER
-        const user = await auth.getUserByEmail(targetEmail)
+        const user = await adminAuth.getUserByEmail(targetEmail)
         const userId = user.uid
 
         const enrollmentId = `${userId}-${itemId}`
-        const enrollmentRef = db.collection("enrollments").doc(enrollmentId)
+        const enrollmentRef = adminDb.collection("enrollments").doc(enrollmentId)
+        const reference = `BIT-MANUAL-${itemType.toUpperCase()}-${Date.now()}-${userId || "guest"}`
 
         // ♻️ IDEMPOTENCY
         if ((await enrollmentRef.get()).exists) {
@@ -74,7 +70,7 @@ export async function POST(req: Request) {
             physical_class: "physicalClasses",
         } as const
 
-        const itemSnap = await db.collection(collectionMap[itemType]).doc(itemId).get()
+        const itemSnap = await adminDb.collection(collectionMap[itemType]).doc(itemId).get()
 
         if (!itemSnap.exists) {
             return NextResponse.json({ error: "Item not found" }, { status: 404 })
@@ -91,7 +87,7 @@ export async function POST(req: Request) {
             cohortId: cohortId ?? "Not applicable",
             className: item.name ?? item.title,
             telegramGroupId,
-            paymentReference: "ADMIN_MANUAL",
+            paymentReference: reference,
             enrolledBy: "admin",
         })
 

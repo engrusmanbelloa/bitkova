@@ -1,9 +1,8 @@
 // app/api/admin/cohorts/create/route.ts
 import { NextResponse } from "next/server"
 import { getAuth } from "firebase-admin/auth"
-import { adminApp } from "@/lib/firebase/admin"
+import { adminApp, adminDb, adminAuth } from "@/lib/firebase/admin"
 import { cohortSchema } from "@/lib/schemas/classSchema"
-import { getFirestore } from "firebase-admin/firestore"
 
 export async function POST(req: Request) {
     try {
@@ -21,8 +20,8 @@ export async function POST(req: Request) {
 
         const body = cohortSchema.parse(await req.json())
 
-        const db = getFirestore(adminApp)
-        await db.collection("cohorts").add({
+        // const db = getFirestore(adminApp)
+        await adminDb.collection("cohorts").add({
             ...body,
             startDate: new Date(body.startDate),
             endDate: new Date(body.endDate),
