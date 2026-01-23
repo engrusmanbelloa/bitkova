@@ -31,7 +31,7 @@ export async function enrollTelegramClass({
         itemType: "telegram_class",
         cohortId,
         paymentReference,
-        telegramInviteLink: inviteLink || "",
+        inviteLink: inviteLink || "",
         status: "paid",
         enrolledAt: new Date(),
     }
