@@ -52,7 +52,7 @@ export async function enrollTelegramClassServer({
         className,
         cohortId,
         paymentReference,
-        telegramInviteLink: inviteLink ?? null,
+        inviteLink: inviteLink ?? null,
         status: "paid",
         enrolledAt: new Date(),
     })
@@ -69,7 +69,8 @@ export async function enrollTelegramClassServer({
             to: payerEmail,
             cohortName,
             className,
-            telegramInviteLink: inviteLink,
+            inviteLink: inviteLink,
+            status: "success",
         })
     } else {
         // await markInvitePending(userId, classId, telegramGroupId)
@@ -80,6 +81,12 @@ export async function enrollTelegramClassServer({
             telegramGroupId: telegramGroupId,
             cohortName: cohortName,
             className: className,
+        })
+        await sendEnrollmentEmail({
+            to: payerEmail,
+            cohortName,
+            className,
+            status: "pending",
         })
     }
 

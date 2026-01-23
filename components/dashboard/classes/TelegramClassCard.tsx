@@ -181,9 +181,9 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
                         </IconWrapper>
                         <InfoContent>
                             <InfoLabel>Telegram Group</InfoLabel>
-                            {enrollment.telegramInviteLink ? (
+                            {enrollment.inviteLink ? (
                                 <LinkButton
-                                    href={enrollment.telegramInviteLink}
+                                    href={enrollment.inviteLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

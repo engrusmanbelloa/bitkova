@@ -38,15 +38,20 @@ export async function enrollPhysicalClassServer({
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Generate QR code
-    const qrPayload = {
-        // enrollmentId,
-        // userId,
-        // classId,
-        // type: "physical_class",
-        inviteLink,
-        // issuedAt: Date.now(),
-    }
-    const qrCode = await QRCode.toDataURL(JSON.stringify(qrPayload))
+    const qrPayload = `BITKOVA PHYSICAL CLASS
+    Cohort: ${cohortName}
+    Class: ${className}
+    Enrolled: ${new Date().toLocaleDateString()}
+    Join: ${inviteLink}`
+
+    const qrCode = await QRCode.toDataURL(qrPayload, {
+        width: 400,
+        margin: 2,
+        color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+        },
+    })
 
     // const batch = writeBatch(db)
     const batch = adminDb.batch()
@@ -98,9 +103,17 @@ export async function enrollPhysicalClassServer({
             to: payerEmail,
             cohortName,
             className,
-            telegramInviteLink: inviteLink,
+            inviteLink: inviteLink,
+            physicalQrCode: qrCode,
+            status: "success",
         })
     } else {
+        await sendEnrollmentEmail({
+            to: payerEmail,
+            cohortName,
+            className,
+            status: "pending",
+        })
         await markInvitePending({
             userId: userId,
             email: payerEmail,

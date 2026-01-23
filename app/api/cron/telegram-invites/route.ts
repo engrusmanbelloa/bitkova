@@ -35,7 +35,7 @@ export async function GET(req: Request) {
                 to: data.email,
                 cohortName: data.cohortName,
                 className: data.className,
-                telegramInviteLink: inviteLink,
+                inviteLink: inviteLink,
             })
 
             await snap.ref.update({

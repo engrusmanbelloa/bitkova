@@ -51,7 +51,7 @@ export interface Enrollment {
     attendanceLog?: { date: Date; attended: boolean }[]
 
     // telegram only
-    telegramInviteLink?: string
+    inviteLink?: string
     telegramUserId?: number
 
     termsAccepted?: true

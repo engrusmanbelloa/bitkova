@@ -2,7 +2,7 @@
 import { adminDb } from "@/lib/firebase/admin"
 import { FieldValue } from "firebase-admin/firestore"
 
-export async function removeCoursesFromCartAdmin(userId: string, courseIds: string[]) {
+export async function removeCoursesFromCartServer(userId: string, courseIds: string[]) {
     await adminDb
         .collection("users")
         .doc(userId)
