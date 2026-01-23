@@ -1,6 +1,6 @@
 // lib/server/enrollAsyncCoursesServer.ts
-import { db } from "@/lib/firebase/client"
-import { doc, writeBatch, getDoc, increment, setDoc, serverTimestamp } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 import { Enrollment } from "@/types/userType"
 export async function enrollAsyncCoursesServer({
     userId,
@@ -11,20 +11,18 @@ export async function enrollAsyncCoursesServer({
     courseIds: string[]
     paymentReference: string
 }) {
-    const batch = writeBatch(db)
+    const batch = adminDb.batch()
     const now = new Date()
 
     for (const courseId of courseIds) {
         const enrollmentId = `${userId}-${courseId}`
 
         // ✅ Idempotency check
-        const existing = await getDoc(doc(db, "enrollments", enrollmentId))
-        if (existing.exists()) continue
+        const ref = adminDb.collection("enrollments").doc(enrollmentId)
+        if ((await ref.get()).exists) continue
 
-        // ✅ Course enrollment record
-        const enrollmentRef = doc(db, "enrollments", enrollmentId)
-
-        const enrollment: Enrollment = {
+        // ✅ Course enrollment record and Create enrollment
+        batch.set(ref, {
             id: enrollmentId,
             userId,
             itemId: courseId,
@@ -35,14 +33,11 @@ export async function enrollAsyncCoursesServer({
             progress: 0,
             completedLessons: 0,
             completedVideos: [],
-        }
-
-        // ✅ Create enrollment
-        batch.set(enrollmentRef, enrollment)
+        })
 
         // ✅ Increment course student count
-        batch.update(doc(db, "courses", courseId), {
-            students: increment(1),
+        batch.update(adminDb.collection("courses").doc(courseId), {
+            students: FieldValue.increment(1),
         })
     }
 

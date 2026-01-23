@@ -1,7 +1,6 @@
 // app/api/cron/cleanup-invites/route.ts
 import { NextResponse } from "next/server"
-import { collection, getDocs, query, where, writeBatch, limit } from "firebase/firestore"
-import { db } from "@/lib/firebase/client"
+import { adminDb } from "@/lib/firebase/admin"
 
 export async function GET(req: Request) {
     // 1. Security Check
@@ -11,20 +10,22 @@ export async function GET(req: Request) {
     }
 
     try {
-        const batch = writeBatch(db)
-        const invitesRef = collection(db, "telegramPendingInvites")
-
         // 2. Query for "sent" or "failed" records
         // We limit to 400 because a Firestore batch has a limit of 500 operations
-        const q = query(invitesRef, where("status", "in", ["sent", "failed"]), limit(400))
 
-        const snapshot = await getDocs(q)
+        const snapshot = await adminDb
+            .collection("telegramPendingInvites")
+            .where("status", "in", ["sent", "failed"])
+            .limit(400)
+            .get()
 
         if (snapshot.empty) {
             return NextResponse.json({ message: "No records to clean up" })
         }
 
         // 3. Add deletions to batch
+        const batch = adminDb.batch()
+
         snapshot.docs.forEach((doc) => {
             batch.delete(doc.ref)
         })
