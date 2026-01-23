@@ -1,12 +1,10 @@
-import { db } from "@/lib/firebase/client"
-import { doc, setDoc, updateDoc, increment, getDoc, writeBatch } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 import QRCode from "qrcode"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
-import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { markInvitePending } from "../telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
-import { Enrollment } from "@/types/userType"
 
 interface Params {
     userId: string
@@ -32,29 +30,35 @@ export async function enrollPhysicalClassServer({
     const enrollmentId = `${userId}-${classId}`
 
     // ✅ Idempotency check (CRITICAL)
-    const existing = await getDoc(doc(db, "enrollments", enrollmentId))
-    if (existing.exists()) return
+    const ref = adminDb.collection("enrollments").doc(enrollmentId)
+    if ((await ref.get()).exists) return
 
     // ✅ Create Telegram invite
     const realChatId = await resolveTelegramChatId(telegramGroupId)
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Generate QR code
-    const qrPayload = {
-        // enrollmentId,
-        // userId,
-        // classId,
-        // type: "physical_class",
-        inviteLink,
-        // issuedAt: Date.now(),
-    }
-    const qrCode = await QRCode.toDataURL(JSON.stringify(qrPayload))
+    const qrPayload = `BITKOVA PHYSICAL CLASS
+    Cohort: ${cohortName}
+    Class: ${className}
+    Enrolled: ${new Date().toLocaleDateString()}
+    Join: ${inviteLink}`
 
-    const batch = writeBatch(db)
+    const qrCode = await QRCode.toDataURL(qrPayload, {
+        width: 400,
+        margin: 2,
+        color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+        },
+    })
+
+    // const batch = writeBatch(db)
+    const batch = adminDb.batch()
     const now = new Date()
 
     // ✅ Enrollment record
-    batch.set(doc(db, "enrollments", enrollmentId), {
+    batch.set(ref, {
         id: enrollmentId,
         userId,
         itemId: classId,
@@ -68,10 +72,28 @@ export async function enrollPhysicalClassServer({
         attendanceLog: [],
         enrolledAt: now,
     })
+    // batch.set(doc(db, "enrollments", enrollmentId), {
+    //     id: enrollmentId,
+    //     userId,
+    //     itemId: classId,
+    //     itemType: "physical_class",
+    //     cohortId,
+    //     className,
+    //     paymentReference,
+    //     status: "paid",
+    //     qrCode,
+    //     inviteLink,
+    //     attendanceLog: [],
+    //     enrolledAt: now,
+    // })
 
     // ✅ Increment class capacity
-    batch.update(doc(db, "physicalClasses", classId), {
-        enrolled: increment(1),
+    // batch.update(doc(db, "physicalClasses", classId), {
+    //     enrolled: increment(1),
+    // })
+
+    batch.update(adminDb.collection("physicalClasses").doc(classId), {
+        enrolled: FieldValue.increment(1),
     })
 
     await batch.commit()
@@ -81,9 +103,17 @@ export async function enrollPhysicalClassServer({
             to: payerEmail,
             cohortName,
             className,
-            telegramInviteLink: inviteLink,
+            inviteLink: inviteLink,
+            physicalQrCode: qrCode,
+            status: "success",
         })
     } else {
+        await sendEnrollmentEmail({
+            to: payerEmail,
+            cohortName,
+            className,
+            status: "pending",
+        })
         await markInvitePending({
             userId: userId,
             email: payerEmail,

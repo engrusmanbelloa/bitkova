@@ -1,6 +1,6 @@
 // lib/server/enrollTelegramClassServer.ts
-import { db } from "@/lib/firebase/client"
-import { doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
@@ -32,17 +32,19 @@ export async function enrollTelegramClassServer({
     className,
 }: Params) {
     const enrollmentId = `${userId}-${itemId}`
+    const enrollmentRef = adminDb.collection("enrollments").doc(enrollmentId)
 
     // ✅ Idempotency check
-    const existing = await getDoc(doc(db, "enrollments", enrollmentId))
-    if (existing.exists()) return
+    if ((await enrollmentRef.get()).exists) return
 
     // ✅ Create Telegram invite
     const realChatId = await resolveTelegramChatId(telegramGroupId)
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
     // ✅ Save enrollment record
-    await setDoc(doc(db, "enrollments", enrollmentId), {
+    const batch = adminDb.batch()
+
+    batch.set(enrollmentRef, {
         id: enrollmentId,
         userId,
         itemId,
@@ -50,22 +52,25 @@ export async function enrollTelegramClassServer({
         className,
         cohortId,
         paymentReference,
-        telegramInviteLink: inviteLink,
+        inviteLink: inviteLink ?? null,
         status: "paid",
         enrolledAt: new Date(),
     })
 
     // ✅ Increment class count
-    await updateDoc(doc(db, "telegramClasses", itemId), {
-        enrolled: increment(1),
+    batch.update(adminDb.collection("telegramClasses").doc(itemId), {
+        enrolled: FieldValue.increment(1),
     })
+
+    await batch.commit()
 
     if (inviteLink) {
         await sendEnrollmentEmail({
             to: payerEmail,
             cohortName,
             className,
-            telegramInviteLink: inviteLink,
+            inviteLink: inviteLink,
+            status: "success",
         })
     } else {
         // await markInvitePending(userId, classId, telegramGroupId)
@@ -76,6 +81,12 @@ export async function enrollTelegramClassServer({
             telegramGroupId: telegramGroupId,
             cohortName: cohortName,
             className: className,
+        })
+        await sendEnrollmentEmail({
+            to: payerEmail,
+            cohortName,
+            className,
+            status: "pending",
         })
     }
 

@@ -1,40 +1,20 @@
-import { db } from "@/lib/firebase/client"
-import { doc, setDoc, updateDoc, increment, getDoc } from "firebase/firestore"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 import { telegramPendingInvites } from "@/types/classTypes"
-export async function markInvitePending({
-    userId,
-    email,
-    classId,
-    telegramGroupId,
-    cohortName,
-    className,
-}: Omit<telegramPendingInvites, "attempts" | "status" | "createdAt" | "updatedAt">) {
-    telegramGroupId
-    const enrollmentId = `${userId}-${classId}`
 
-    const inviteData: telegramPendingInvites = {
-        userId,
-        email,
-        classId,
-        telegramGroupId,
-        cohortName,
-        className,
-        attempts: 0,
-        status: "pending",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    }
-    await setDoc(doc(db, "telegramPendingInvites", enrollmentId), inviteData)
-    //  await setDoc(doc(db, "telegramPendingInvites", enrollmentId), {
-    //      userId,
-    //      email,
-    //      classId,
-    //      cohortName,
-    //      className,
-    //      telegramGroupId,
-    //      attempts: 0,
-    //      status: "pending",
-    //      createdAt: new Date(),
-    //      updatedAt: new Date(),
-    //  })
+export async function markInvitePending(
+    data: Omit<telegramPendingInvites, "attempts" | "status" | "createdAt" | "updatedAt">,
+) {
+    const enrollmentId = `${data.userId}-${data.classId}`
+
+    await adminDb
+        .collection("telegramPendingInvites")
+        .doc(enrollmentId)
+        .set({
+            ...data,
+            attempts: 0,
+            status: "pending",
+            createdAt: FieldValue.serverTimestamp(),
+            updatedAt: FieldValue.serverTimestamp(),
+        })
 }

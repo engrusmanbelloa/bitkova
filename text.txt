@@ -324,3 +324,53 @@ payWithPaystack = () => {
             // console.log("Is enrolled: ", isEnrolled)
             // console.log("Is Certifcate ready: ", isCompleted)
             // console.log("Complete lessons: ", completedVideos)
+
+
+            // export async function markInvitePending({
+//     userId,
+//     email,
+//     classId,
+//     telegramGroupId,
+//     cohortName,
+//     className,
+// }: Omit<telegramPendingInvites, "attempts" | "status" | "createdAt" | "updatedAt">) {
+//     telegramGroupId
+//     const enrollmentId = `${userId}-${classId}`
+
+//     const inviteData: telegramPendingInvites = {
+//         userId,
+//         email,
+//         classId,
+//         telegramGroupId,
+//         cohortName,
+//         className,
+//         attempts: 0,
+//         status: "pending",
+//         createdAt: new Date(),
+//         updatedAt: new Date(),
+//     }
+
+//      await adminDb
+//         .collection("telegramPendingInvites")
+//         .doc(enrollmentId)
+//         .set({
+//             ...data,
+//             attempts: 0,
+//             status: "pending",
+//             createdAt: FieldValue.serverTimestamp(),
+//             updatedAt: FieldValue.serverTimestamp(),
+//         })
+//     // await setDoc(doc(db, "telegramPendingInvites", enrollmentId), inviteData)
+//     //  await setDoc(doc(db, "telegramPendingInvites", enrollmentId), {
+//     //      userId,
+//     //      email,
+//     //      classId,
+//     //      cohortName,
+//     //      className,
+//     //      telegramGroupId,
+//     //      attempts: 0,
+//     //      status: "pending",
+//     //      createdAt: new Date(),
+//     //      updatedAt: new Date(),
+//     //  })
+// }

@@ -1,24 +1,12 @@
 // lib/server/cartServer.ts
-import { db } from "@/lib/firebase/client"
-import { doc, writeBatch, arrayRemove, updateDoc } from "firebase/firestore"
-
-// export async function removeCoursesFromCartServer(userId: string, courseIds: string[]) {
-//     const userRef = doc(db, "users", userId)
-
-//     for (const courseId of courseIds) {
-//         await updateDoc(userRef, {
-//             cart: arrayRemove(courseId),
-//         })
-//     }
-// }
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
 
 export async function removeCoursesFromCartServer(userId: string, courseIds: string[]) {
-    const batch = writeBatch(db)
-    const userRef = doc(db, "users", userId)
-
-    batch.update(userRef, {
-        cart: arrayRemove(...courseIds),
-    })
-
-    await batch.commit()
+    await adminDb
+        .collection("users")
+        .doc(userId)
+        .update({
+            cart: FieldValue.arrayRemove(...courseIds),
+        })
 }
