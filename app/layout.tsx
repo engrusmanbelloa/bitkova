@@ -12,7 +12,6 @@ import Footer from "@/components/home/Footer"
 import IsLoading from "@/components/IsLoading"
 import useNetworkStatus from "@/components/auth/useNetworkStatus"
 import { ipad, mobile } from "@/responsive"
-import useSessionRefresh from "@/hooks/useSessionRefresh"
 import { initAppCheck } from "@/lib/firebase/appCheck"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -34,7 +33,9 @@ const Container = styled.div`
 `
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const isOnline = useNetworkStatus()
-    const queryClient = new QueryClient()
+    // const queryClient = new QueryClient()
+    const [queryClient] = useState(() => new QueryClient())
+
     // Handle session expiration every 30 minutes
     // useSessionRefresh()
     // Network status handler
