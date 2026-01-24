@@ -1,10 +1,9 @@
 // app/api/setRole/route.ts
 import { NextResponse } from "next/server"
-import { getAuth } from "firebase-admin/auth"
-import { adminApp } from "@/lib/firebase/admin"
+import { adminApp, adminAuth, adminDb } from "@/lib/firebase/admin"
 import { UserRole } from "@/types/userType"
 
-const auth = getAuth(adminApp)
+// const auth = getAuth(adminApp)
 
 // Maps app roles → Firebase custom claims
 const ROLE_TO_CLAIM_MAP: Record<UserRole["role"], string> = {
@@ -31,10 +30,20 @@ export async function POST(req: Request) {
         // 🔐 AUTH
         const authHeader = req.headers.get("Authorization")
         if (!authHeader?.startsWith("Bearer ")) {
+            console.log("401 Unauthorized")
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const decoded = await auth.verifyIdToken(authHeader.replace("Bearer ", ""))
+        const decoded = await adminAuth.verifyIdToken(authHeader.replace("Bearer ", ""))
+
+        // Custom claims are available directly on the decoded token
+        const isAdmin = decoded.admin === true
+        const isInstructor = decoded.instructor === true
+
+        console.log("Decoded claims: ", {
+            admin: isAdmin,
+            instructor: isInstructor,
+        })
 
         // 🔒 Only admins can manage roles
         if (decoded.admin !== true) {
@@ -50,7 +59,7 @@ export async function POST(req: Request) {
         }
 
         // 👤 TARGET USER
-        const user = await auth.getUserByEmail(email)
+        const user = await adminAuth.getUserByEmail(email)
         const currentClaims = user.customClaims ?? {}
 
         // 🧹 Clear all managed role claims
@@ -64,7 +73,7 @@ export async function POST(req: Request) {
             cleanedClaims[ROLE_TO_CLAIM_MAP[role]] = true
         }
 
-        await auth.setCustomUserClaims(user.uid, cleanedClaims)
+        await adminAuth.setCustomUserClaims(user.uid, cleanedClaims)
 
         return NextResponse.json({
             ok: true,
