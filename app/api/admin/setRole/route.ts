@@ -30,10 +30,20 @@ export async function POST(req: Request) {
         // 🔐 AUTH
         const authHeader = req.headers.get("Authorization")
         if (!authHeader?.startsWith("Bearer ")) {
+            console.log("401 Unauthorized")
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
         const decoded = await adminAuth.verifyIdToken(authHeader.replace("Bearer ", ""))
+
+        // Custom claims are available directly on the decoded token
+        const isAdmin = decoded.admin === true
+        const isInstructor = decoded.instructor === true
+
+        console.log("Decoded claims: ", {
+            admin: isAdmin,
+            instructor: isInstructor,
+        })
 
         // 🔒 Only admins can manage roles
         if (decoded.admin !== true) {

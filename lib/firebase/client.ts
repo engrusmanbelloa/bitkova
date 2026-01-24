@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore"
 const firebaseConfig = {
     apiKey: "AIzaSyCzfxvifvLm9l__D2PVoC-mI97KOds8U7M",
     authDomain: "bitkova-digital-hub.firebaseapp.com",
-    projectId: process.env.PROJECT_ID,
+    projectId: "bitkova-digital-hub",
     storageBucket: "bitkova-digital-hub.firebasestorage.app",
     messagingSenderId: "541818898111",
     appId: "1:541818898111:web:2d0d7dfdf9e80e86d9680a",
