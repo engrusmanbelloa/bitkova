@@ -6,16 +6,6 @@ import { renderClassCard } from "@/lib/telegram/renderers/renderClassCard"
 
 export default async function classes(ctx: TelegramContext) {
     try {
-        const result = await getActiveClasses()
-
-        if (!result || result.classes.length === 0) {
-            await sendTelegramMessage(
-                ctx.chatId,
-                "⚠️ No active classes available at the moment.\nPlease check back later.",
-            )
-            return
-        }
-
         await sendTelegramMessage(
             ctx.chatId,
             "🎓 *Bitkova2026A*\nAvailable Classes:\n────────────────────",
