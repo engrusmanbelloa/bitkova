@@ -36,5 +36,6 @@ export function useFetchTelegramClass(cohortId?: string) {
         },
         enabled: !!cohortId,
         staleTime: 5 * 60 * 1000,
+        networkMode: "offlineFirst",
     })
 }

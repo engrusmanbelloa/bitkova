@@ -61,5 +61,6 @@ export function useFetchPhysicalClasses(cohortId?: string) {
         enabled: !!cohortId,
         retry: 2,
         staleTime: 5 * 60 * 1000,
+        networkMode: "offlineFirst",
     })
 }
