@@ -10,10 +10,10 @@ interface UploadCourseInput {
 
 export async function uploadNewCourse({ course, modules, reviews }: UploadCourseInput) {
     // try {
-    const batch = writeBatch(db)
+    const batch = writeBatch(db!)
 
     // Create the course document
-    const courseRef = doc(db, "courses", course.id)
+    const courseRef = doc(db!, "courses", course.id)
     batch.set(courseRef, {
         ...course,
         createdAt: serverTimestamp(),
@@ -21,7 +21,7 @@ export async function uploadNewCourse({ course, modules, reviews }: UploadCourse
 
     // Upload modules and nested lessons
     for (const module of modules) {
-        const moduleRef = doc(db, "courseModules", `${course.id}_module_${module.id}`)
+        const moduleRef = doc(db!, "courseModules", `${course.id}_module_${module.id}`)
         batch.set(moduleRef, {
             id: module.id,
             courseId: course.id,
@@ -31,7 +31,7 @@ export async function uploadNewCourse({ course, modules, reviews }: UploadCourse
 
         for (const lesson of module.lessons) {
             const lessonRef = doc(
-                db,
+                db!,
                 "courseLessons",
                 `${course.id}_module_${module.id}_lesson_${lesson.id}`,
             )
@@ -45,7 +45,7 @@ export async function uploadNewCourse({ course, modules, reviews }: UploadCourse
 
     // Upload reviews
     for (const review of reviews) {
-        const reviewRef = doc(db, "courseReviews", review.id)
+        const reviewRef = doc(db!, "courseReviews", review.id)
         batch.set(reviewRef, {
             ...review,
             createdAt: review.createdAt || serverTimestamp(),

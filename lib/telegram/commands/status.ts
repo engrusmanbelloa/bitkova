@@ -7,7 +7,7 @@ import { Timestamp, doc, setDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/client"
 
 export default async function status(ctx: TelegramContext) {
-    await setDoc(doc(db, "telegramSessions", String(ctx.chatId)), {
+    await setDoc(doc(db!, "telegramSessions", String(ctx.chatId)), {
         flow: "status",
         step: "awaiting_input",
         expiresAt: Timestamp.fromMillis(Date.now() + 5 * 60 * 1000),

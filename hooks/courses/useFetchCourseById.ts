@@ -17,7 +17,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
         )
     }
 
-    const docRef = doc(db, "courses", courseId)
+    const docRef = doc(db!, "courses", courseId)
     const docSnap = await getDoc(docRef)
 
     if (!docSnap.exists()) throw new Error("Course not found")
@@ -26,7 +26,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
 
     // Fetch facilitator by email
     const facilitatorSnap = await getDocs(
-        query(collection(db, "users"), where("email", "==", courseData.facilitatorEmail)),
+        query(collection(db!, "users"), where("email", "==", courseData.facilitatorEmail)),
     )
     const facilitator: Facilitator = facilitatorSnap.docs.length
         ? {
@@ -45,7 +45,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
 
     // Fetch related modules and lessons
     const modulesSnap = await getDocs(
-        query(collection(db, "courseModules"), where("courseId", "==", courseId)),
+        query(collection(db!, "courseModules"), where("courseId", "==", courseId)),
     )
 
     let totalMinutes = 0
@@ -54,7 +54,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
         modulesSnap.docs.map(async (moduleDoc) => {
             const module = { id: moduleDoc.id, ...moduleDoc.data() } as Module
             const lessonsSnap = await getDocs(
-                query(collection(db, "courseLessons"), where("moduleId", "==", module.id)),
+                query(collection(db!, "courseLessons"), where("moduleId", "==", module.id)),
             )
             const lessons = lessonsSnap.docs.map((d) => {
                 const lesson = { id: d.id, ...d.data() } as Lesson
@@ -68,7 +68,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
 
     // Fetch reviews
     const reviewsSnap = await getDocs(
-        query(collection(db, "reviews"), where("courseId", "==", courseId)),
+        query(collection(db!, "reviews"), where("courseId", "==", courseId)),
     )
     const reviews = reviewsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
 

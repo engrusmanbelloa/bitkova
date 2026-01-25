@@ -26,7 +26,7 @@ export function useFetchTelegramClass(cohortId?: string) {
         queryFn: async () => {
             if (!cohortId) return []
 
-            const q = query(collection(db, "telegramClasses"), where("cohortId", "==", cohortId))
+            const q = query(collection(db!, "telegramClasses"), where("cohortId", "==", cohortId))
 
             const snapshot = await getDocs(q)
 

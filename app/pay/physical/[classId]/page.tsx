@@ -22,7 +22,7 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
     const { data: classData, isLoading } = useQuery({
         queryKey: ["physicalClass", classId],
         queryFn: async () => {
-            const classDoc = await getDoc(doc(db, "physicalClasses", classId))
+            const classDoc = await getDoc(doc(db!, "physicalClasses", classId))
             if (!classDoc.exists()) throw new Error("Class not found")
             return { id: classDoc.id, ...classDoc.data() } as PhysicalClass
         },
@@ -33,7 +33,7 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
         queryFn: async () => {
             if (!classData?.cohortId) return null
 
-            const cohortDoc = await getDoc(doc(db, "cohorts", classData.cohortId))
+            const cohortDoc = await getDoc(doc(db!, "cohorts", classData.cohortId))
             if (!cohortDoc.exists()) return null
 
             return {

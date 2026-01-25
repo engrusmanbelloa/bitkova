@@ -4,7 +4,7 @@ import { db } from "@/lib/firebase/client"
 import { PhysicalClass } from "@/types/classTypes"
 
 export async function getPhysicalClassesByCohort(cohortId: string): Promise<PhysicalClass[]> {
-    const q = query(collection(db, "physicalClasses"), where("cohortId", "==", cohortId))
+    const q = query(collection(db!, "physicalClasses"), where("cohortId", "==", cohortId))
 
     const snapshot = await getDocs(q)
 

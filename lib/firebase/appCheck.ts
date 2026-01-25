@@ -13,7 +13,9 @@ import { app } from "./client"
  *
  */
 
+let appCheckInitialized = false
 export const initAppCheck = () => {
+    if (appCheckInitialized) return
     // Only run on the client side
     if (typeof window !== "undefined") {
         // Enable debug mode in development
@@ -34,4 +36,5 @@ export const initAppCheck = () => {
             isTokenAutoRefreshEnabled: true,
         })
     }
+    appCheckInitialized = true
 }

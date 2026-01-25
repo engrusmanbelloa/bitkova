@@ -16,7 +16,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
         )
     }
 
-    const courseSnap = await getDocs(collection(db, "courses"))
+    const courseSnap = await getDocs(collection(db!, "courses"))
     if (courseSnap.empty) {
         return []
     }
@@ -28,7 +28,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
 
             // Fetch facilitator
             const facilitatorSnap = await getDocs(
-                query(collection(db, "users"), where("email", "==", courseData.facilitatorEmail)),
+                query(collection(db!, "users"), where("email", "==", courseData.facilitatorEmail)),
             )
 
             const facilitator: Facilitator = facilitatorSnap.docs.length
@@ -48,7 +48,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
 
             // Fetch modules and lessons
             const modulesSnap = await getDocs(
-                query(collection(db, "courseModules"), where("courseId", "==", courseId)),
+                query(collection(db!, "courseModules"), where("courseId", "==", courseId)),
             )
 
             let totalMinutes = 0
@@ -58,7 +58,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
                     const module = { id: moduleDoc.id, ...moduleDoc.data() } as Module
 
                     const lessonsSnap = await getDocs(
-                        query(collection(db, "courseLessons"), where("moduleId", "==", module.id)),
+                        query(collection(db!, "courseLessons"), where("moduleId", "==", module.id)),
                     )
 
                     const lessons = lessonsSnap.docs.map((lessonDoc) => {
@@ -73,7 +73,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
 
             // Fetch reviews
             const reviewsSnap = await getDocs(
-                query(collection(db, "reviews"), where("courseId", "==", courseId)),
+                query(collection(db!, "reviews"), where("courseId", "==", courseId)),
             )
             const reviews = reviewsSnap.docs.map((d) => ({ id: d.id, ...d.data() }))
 

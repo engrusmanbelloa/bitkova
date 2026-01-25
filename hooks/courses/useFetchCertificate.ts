@@ -19,7 +19,7 @@ const fetchCertificateStatus = async ({
 }): Promise<CertificateStatus> => {
     // Fetch certificate existence
     const certQuery = query(
-        collection(db, "users", userId, "certificates"),
+        collection(db!, "users", userId, "certificates"),
         where("courseId", "==", courseId),
     )
     const certSnap = await getDocs(certQuery)
@@ -29,7 +29,7 @@ const fetchCertificateStatus = async ({
     const issuedAt = certSnap.docs[0]?.data()?.issuedAt // Get issuedAt if available
 
     const enrollmentId = `${userId}-${courseId}`
-    const enrollmentSnap = await getDoc(doc(db, "enrollments", enrollmentId))
+    const enrollmentSnap = await getDoc(doc(db!, "enrollments", enrollmentId))
 
     const completedVideos = enrollmentSnap.exists()
         ? enrollmentSnap.data().completedVideos || []

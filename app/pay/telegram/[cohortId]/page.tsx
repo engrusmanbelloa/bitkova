@@ -25,7 +25,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
     const { data: cohort, isLoading: cohortLoading } = useQuery({
         queryKey: ["cohort", cohortId],
         queryFn: async () => {
-            const cohortDoc = await getDoc(doc(db, "cohorts", cohortId))
+            const cohortDoc = await getDoc(doc(db!, "cohorts", cohortId))
             if (!cohortDoc.exists()) throw new Error("Cohort not found")
             return { id: cohortDoc.id, ...cohortDoc.data() } as Cohort
         },
@@ -34,7 +34,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
     const { data: telegramClass, isLoading: classLoading } = useQuery({
         queryKey: ["telegramClass", cohortId],
         queryFn: async () => {
-            const q = query(collection(db, "telegramClasses"), where("cohortId", "==", cohortId))
+            const q = query(collection(db!, "telegramClasses"), where("cohortId", "==", cohortId))
             const snapshot = await getDocs(q)
             if (snapshot.empty) throw new Error("Telegram class not found")
             const doc = snapshot.docs[0]

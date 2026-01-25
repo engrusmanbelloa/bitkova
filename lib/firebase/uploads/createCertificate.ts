@@ -8,7 +8,7 @@ export const createCertificate = async (userId: string, courseId: string): Promi
         // 1. Generate a new, unique certificate ID using nanoid
         const certificateId = nanoid()
         const enrollmentId = `${userId}-${courseId}`
-        const enrollmentRef = doc(db, "enrollments", enrollmentId)
+        const enrollmentRef = doc(db!, "enrollments", enrollmentId)
 
         const now = new Date()
 
@@ -20,7 +20,7 @@ export const createCertificate = async (userId: string, courseId: string): Promi
         })
 
         // 3. Save the certificate and completed course to Firestore under the user's subcollections
-        const certificateRef = doc(db, "users", userId, "certificates", certificateId)
+        const certificateRef = doc(db!, "users", userId, "certificates", certificateId)
         await setDoc(certificateRef, {
             id: certificateId,
             userId,

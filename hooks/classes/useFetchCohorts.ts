@@ -38,7 +38,7 @@ export function useFetchCohorts() {
             console.log("🔍 Fetching all cohorts...")
 
             try {
-                const snapshot = await getDocs(collection(db, "cohorts"))
+                const snapshot = await getDocs(collection(db!, "cohorts"))
 
                 console.log("📊 Total cohorts found:", snapshot.size)
 
@@ -76,7 +76,7 @@ export function useFetchActiveCohort() {
 
             try {
                 // Simple query - just get active cohorts
-                const q = query(collection(db, "cohorts"), where("status", "==", "active"))
+                const q = query(collection(db!, "cohorts"), where("status", "==", "active"))
 
                 const snapshot = await getDocs(q)
 

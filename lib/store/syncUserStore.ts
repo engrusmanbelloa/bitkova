@@ -1,5 +1,3 @@
-// // lib/store/syncUserStore.ts
-
 // lib/store/syncUserStore.ts
 import {
     doc,
@@ -38,9 +36,9 @@ export const syncUserStore = (userId: string): Unsubscribe => {
     const initializeStaticData = async () => {
         try {
             const [userSnap, completedSnap, archivedSnap] = await Promise.all([
-                getDoc(doc(db, "users", userId)),
-                getDocs(collection(db, "users", userId, "completedCourses")),
-                getDocs(collection(db, "users", userId, "archivedCourses")),
+                getDoc(doc(db!, "users", userId)),
+                getDocs(collection(db!, "users", userId, "completedCourses")),
+                getDocs(collection(db!, "users", userId, "archivedCourses")),
             ])
 
             // Set Wishlist & Cart
@@ -74,7 +72,7 @@ export const syncUserStore = (userId: string): Unsubscribe => {
     // )
 
     const unsubscribe = onSnapshot(
-        query(collection(db, "enrollments"), where("userId", "==", userId)),
+        query(collection(db!, "enrollments"), where("userId", "==", userId)),
         (snap) => {
             const list = snap.docs.map(mapDoc) as Enrollment[]
             store.setEnrollments(list)
