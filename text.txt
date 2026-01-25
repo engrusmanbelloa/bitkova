@@ -374,3 +374,28 @@ payWithPaystack = () => {
 //     //      updatedAt: new Date(),
 //     //  })
 // }
+
+        // await sendTelegramMessage(
+        //     ctx.chatId,
+        //     `🎓 *${result.cohort.name}*\nAvailable Classes:\n────────────────────`,
+        // )
+
+        // for (const c of result.classes) {
+        //     const payUrl =
+        //         c.type === "physical"
+        //             ? `https://bitkova.com/pay/physical/${c.id}`
+        //             : `https://bitkova.com/pay/telegram/${c.id}`
+
+        //     await sendTelegramMessage(ctx.chatId, renderClassCard(c), {
+        //         reply_markup: {
+        //             inline_keyboard: [
+        //                 [
+        //                     {
+        //                         text: "💳 Enroll",
+        //                         url: payUrl,
+        //                     },
+        //                 ],
+        //             ],
+        //         },
+        //     })
+        // }
