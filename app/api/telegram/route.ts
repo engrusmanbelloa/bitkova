@@ -5,16 +5,28 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { handleFlow } from "@/lib/telegram/engine/flowEngine"
 import { TelegramContext } from "@/types/telegram"
 import { adminDb } from "@/lib/firebase/admin"
+import { telegramLog } from "@/lib/telegram/logger"
+import { isDuplicateUpdate } from "@/lib/telegram/idempotency"
+import { pushDeadLetter } from "@/lib/telegram/deadLetter"
 
 export async function GET() {
     return new Response("Telegram webhook running ✅", { status: 200 })
 }
 
 export async function POST(req: NextRequest) {
+    let update: any
     try {
-        const update = await req.json()
-        const message = update.message
+        update = await req.json()
 
+        // 🛑 Idempotency guard
+        if (await isDuplicateUpdate(update.update_id)) {
+            telegramLog("info", "Duplicate update skipped", {
+                updateId: update.update_id,
+            })
+            return NextResponse.json({ ok: true })
+        }
+
+        const message = update.message
         if (!message) return NextResponse.json({ ok: true })
         if (message.from?.is_bot) return NextResponse.json({ ok: true })
 
@@ -64,6 +76,11 @@ export async function POST(req: NextRequest) {
             },
         }
 
+        telegramLog("info", "Incoming message", {
+            chatId: ctx.chatId,
+            text: ctx.text,
+        })
+
         // Flow engine first
         if (await handleFlow(ctx)) {
             return NextResponse.json({ ok: true })
@@ -85,6 +102,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ ok: true })
     } catch (error) {
         console.error("Telegram Webhook Error:", error)
-        return NextResponse.json({ error: "Internal error" }, { status: 500 })
+        telegramLog("error", "Webhook failure", { error })
+
+        // ☠️ Dead-letter storage
+        if (update) {
+            await pushDeadLetter(update, error)
+        }
+        // return NextResponse.json({ error: "Internal error" }, { status: 500 })
+        // Always return 200 or Telegram will retry forever
+        return NextResponse.json({ ok: true })
     }
 }
