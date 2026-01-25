@@ -43,16 +43,16 @@ export async function enrollPhysicalClass({
     }
 
     // Save enrollment
-    await setDoc(doc(db, "physicalClassEnrollments", enrollmentId), enrollment)
+    await setDoc(doc(db!, "physicalClassEnrollments", enrollmentId), enrollment)
 
     // Update class enrolled count
-    const classRef = doc(db, "physicalClasses", classId)
+    const classRef = doc(db!, "physicalClasses", classId)
     await updateDoc(classRef, {
         enrolled: increment(1),
     })
 
     // Update user's enrollments list
-    await setDoc(doc(db, "users", userId, "classEnrollments", enrollmentId), {
+    await setDoc(doc(db!, "users", userId, "classEnrollments", enrollmentId), {
         enrollmentId,
         classId,
         type: "physical_class",

@@ -11,7 +11,7 @@ export function useFetchTelegramGroups() {
     return useQuery({
         queryKey: ["telegramGroups"],
         queryFn: async (): Promise<TelegramGroup[]> => {
-            const q = query(collection(db, "telegramGroups"), orderBy("title"))
+            const q = query(collection(db!, "telegramGroups"), orderBy("title"))
             const snap = await getDocs(q)
 
             return snap.docs

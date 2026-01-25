@@ -4,7 +4,7 @@ import { Review } from "@/types/courseType"
 
 // fetchCourseReviews
 export const fetchCourseReviews = async (courseId: string): Promise<Review[]> => {
-    const q = query(collection(db, "courseReviews"), where("courseId", "==", courseId))
+    const q = query(collection(db!, "courseReviews"), where("courseId", "==", courseId))
     const snap = await getDocs(q)
     return snap.docs.map((doc) => doc.data() as Review)
 }

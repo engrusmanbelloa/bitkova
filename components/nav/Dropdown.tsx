@@ -6,7 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import LoginIcon from "@mui/icons-material/Login"
 import { signOut } from "firebase/auth"
 import { auth } from "@/lib/firebase/client"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const DropdownContent = styled.ul<{ $isVisible: boolean }>`
     position: absolute;
@@ -54,6 +54,9 @@ export default function DropdownMenu({
     closeMenu: () => void
 }) {
     const [isOpen, setIsOpen] = useState(true)
+
+    const router = useRouter()
+
     if (!user) {
         // console.log("User or name is missing, showing default avatar.")
         return (
@@ -79,7 +82,7 @@ export default function DropdownMenu({
             //     method: "DELETE",
             // })
             // console.log("Session deleted")
-            redirect("/")
+            router.push("/login")
         } catch (error) {
             console.error("Error signing out:", error)
         }

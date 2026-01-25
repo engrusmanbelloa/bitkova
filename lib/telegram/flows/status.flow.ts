@@ -18,5 +18,5 @@ export async function statusFlow(ctx: any, session: any) {
     await sendTelegramMessage(ctx.chatId, renderEnrollmentStatus(enrollment))
 
     // Exit flow
-    await deleteDoc(doc(db, "telegramSessions", String(ctx.chatId)))
+    await deleteDoc(doc(db!, "telegramSessions", String(ctx.chatId)))
 }

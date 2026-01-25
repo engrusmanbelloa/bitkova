@@ -4,7 +4,7 @@ import { collection, getDocs, query, where, limit } from "firebase/firestore"
 import { db } from "@/lib/firebase/client"
 
 export async function findEnrollmentByRecovery(input: string) {
-    const enrollmentsRef = collection(db, "enrollments")
+    const enrollmentsRef = collection(db!, "enrollments")
 
     // Email lookup
     if (input.includes("@")) {

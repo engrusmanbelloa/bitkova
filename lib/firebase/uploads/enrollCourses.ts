@@ -4,12 +4,12 @@ import { db } from "@/lib/firebase/client"
 import { Enrollment } from "@/types/userType"
 
 export const enrollCourses = async (userId: string, courseId: string[]) => {
-    const batch = writeBatch(db)
+    const batch = writeBatch(db!)
     const now = new Date()
     const enrollmentId = `${userId}-${courseId}`
 
     courseId.forEach((courseId) => {
-        const enrolledCourseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
+        const enrolledCourseRef = doc(db!, "users", userId, "enrolledCourses", enrollmentId)
         const enrolledCourse: Enrollment = {
             id: `${userId}-${courseId}`,
             userId,

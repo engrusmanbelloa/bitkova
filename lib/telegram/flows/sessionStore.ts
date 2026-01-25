@@ -10,7 +10,7 @@ function isValidFlowSession(data: any): data is FlowSession {
 }
 
 export async function getTelegramSession(chatId: number): Promise<FlowSession | null> {
-    const ref = doc(db, COLLECTION, String(chatId))
+    const ref = doc(db!, COLLECTION, String(chatId))
     const snap = await getDoc(ref)
 
     if (!snap.exists()) return null
@@ -21,11 +21,11 @@ export async function getTelegramSession(chatId: number): Promise<FlowSession | 
 }
 
 export async function setTelegramSession(chatId: number, session: FlowSession) {
-    const ref = doc(db, COLLECTION, String(chatId))
+    const ref = doc(db!, COLLECTION, String(chatId))
     await setDoc(ref, session)
 }
 
 export async function clearTelegramSession(chatId: number) {
-    const ref = doc(db, COLLECTION, String(chatId))
+    const ref = doc(db!, COLLECTION, String(chatId))
     await deleteDoc(ref)
 }

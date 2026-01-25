@@ -198,32 +198,6 @@ export default function CreatePhysicalClass() {
     const selectedCohortId = physicalForm.watch("cohortId")
     const selectedCohort = cohorts?.find((c) => c.id === selectedCohortId)
 
-    // const onPhysicalClassSubmit = async (data: PhysicalClassForm) => {
-    //     try {
-    //         const classData = {
-    //             name: data.name,
-    //             location: data.location,
-    //             cohortId: data.cohortId,
-    //             price: data.price,
-    //             capacity: data.capacity,
-    //             schedule: data.schedule, // FROM FORM
-    //             telegramGroupId: data.telegramGroupId ?? "",
-    //             instructors: data.instructors.map((i) => i.value),
-    //             courses: data.courses.map((c) => c.value),
-    //             mapLink: data.mapLink || "",
-    //         }
-
-    //         await createPhysicalClass(classData)
-
-    //         // await addDoc(collection(db, "physicalClasses"), classData)
-    //         toast.success(`Physical class ${data.name} created!`)
-    //         physicalForm.reset()
-    //     } catch (error) {
-    //         console.error("Error creating physical class:", error)
-    //         toast.error("Failed to create physical class")
-    //     }
-    // }
-
     const onPhysicalClassSubmit = async (data: PhysicalClassForm) => {
         setIsLoading(true)
 
@@ -256,7 +230,7 @@ export default function CreatePhysicalClass() {
 
     useEffect(() => {
         async function loadGroups() {
-            const snap = await getDocs(collection(db, "telegramGroups"))
+            const snap = await getDocs(collection(db!, "telegramGroups"))
             const groups = snap.docs.map((doc) => {
                 const data = doc.data()
                 return {

@@ -37,16 +37,16 @@ export async function enrollTelegramClass({
     }
 
     // Save enrollment
-    await setDoc(doc(db, "telegramClassEnrollments", enrollmentId), enrollment)
+    await setDoc(doc(db!, "telegramClassEnrollments", enrollmentId), enrollment)
 
     // Update class enrolled count
-    const classRef = doc(db, "telegramClasses", classId)
+    const classRef = doc(db!, "telegramClasses", classId)
     await updateDoc(classRef, {
         enrolled: increment(1),
     })
 
     // Update user's enrollments list
-    await setDoc(doc(db, "users", userId, "classEnrollments", enrollmentId), {
+    await setDoc(doc(db!, "users", userId, "classEnrollments", enrollmentId), {
         enrollmentId,
         classId,
         type: "telegram_class",

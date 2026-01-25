@@ -18,6 +18,7 @@ import { auth, db } from "@/lib/firebase/client"
 import { toast } from "sonner"
 
 const Container = styled(Dialog)`
+    margin: auto;
     padding: ${(props) => props.theme.paddings.pagePadding};
     display: flex;
     justify-content: space-between;
@@ -204,7 +205,7 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             const info = getAdditionalUserInfo(userCredential)
 
             // check Firestore users collection
-            const userRef = doc(db, "users", user.uid)
+            const userRef = doc(db!, "users", user.uid)
             const userSnap = await getDoc(userRef)
 
             if (userSnap.exists()) {

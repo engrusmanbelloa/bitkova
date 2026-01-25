@@ -7,7 +7,7 @@ export async function getActiveCohort(): Promise<Cohort | null> {
     const now = new Date()
 
     const q = query(
-        collection(db, "cohorts"),
+        collection(db!, "cohorts"),
         where("status", "==", "active"),
         where("registrationClose", ">", now),
         orderBy("registrationClose", "asc"),

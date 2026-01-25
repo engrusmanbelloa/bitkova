@@ -50,7 +50,7 @@ export const useCourseCompletion = ({
         })
 
         try {
-            const enrollmentRef = doc(db, "enrollments", enrollmentId)
+            const enrollmentRef = doc(db!, "enrollments", enrollmentId)
 
             await updateDoc(enrollmentRef, {
                 completedLessons: updatedList.length,

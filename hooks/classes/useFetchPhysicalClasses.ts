@@ -36,7 +36,7 @@ export function useFetchPhysicalClasses(cohortId?: string) {
 
             try {
                 const q = query(
-                    collection(db, "physicalClasses"),
+                    collection(db!, "physicalClasses"),
                     where("cohortId", "==", cohortId),
                 )
 

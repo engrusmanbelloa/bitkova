@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
             for (const item of items) {
                 try {
                     // Find pending enrollment
-                    const enrollmentsRef = collection(db, "classEnrollments")
+                    const enrollmentsRef = collection(db!, "classEnrollments")
                     const q = query(
                         enrollmentsRef,
                         where("paymentReference", "==", reference),
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
                     const enrollmentData = enrollmentDoc.data()
 
                     // Get class details
-                    const classDocRef = doc(db, "classes", item.id)
+                    const classDocRef = doc(db!, "classes", item.id)
                     const classDocSnap = await getDoc(classDocRef)
 
                     if (!classDocSnap.exists()) {
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
                     }
 
                     // Update enrollment with access details
-                    await updateDoc(doc(db, "classEnrollments", enrollmentDoc.id), {
+                    await updateDoc(doc(db!, "classEnrollments", enrollmentDoc.id), {
                         status: "paid",
                         telegramInviteLink,
                         qrCode,
