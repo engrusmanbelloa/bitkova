@@ -15,5 +15,6 @@ export function useFetchAsyncCourses() {
             return snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }))
         },
         staleTime: 5 * 60 * 1000,
+        networkMode: "offlineFirst",
     })
 }

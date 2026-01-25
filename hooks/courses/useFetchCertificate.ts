@@ -49,5 +49,6 @@ export const useFetchCertificateStatus = (userId: string | undefined, courseId: 
         queryKey: ["certificateStatus", userId, courseId],
         queryFn: () => fetchCertificateStatus({ userId: userId!, courseId }),
         enabled: !!userId,
+        networkMode: "offlineFirst",
     })
 }

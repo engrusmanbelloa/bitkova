@@ -93,5 +93,6 @@ export function useCourseById(courseId: string) {
         queryKey: ["course", courseId],
         queryFn: () => fetchCourseById(courseId),
         enabled: !!courseId, // ensures query runs only when courseId is defined
+        networkMode: "offlineFirst",
     })
 }

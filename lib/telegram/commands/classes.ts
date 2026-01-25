@@ -16,14 +16,9 @@ export default async function classes(ctx: TelegramContext) {
             return
         }
 
-        // await sendTelegramMessage(
-        //     ctx.chatId,
-        //     "🎓 *Bitkova2026A*\nAvailable Classes:\n────────────────────",
-        // )
-
         await sendTelegramMessage(
             ctx.chatId,
-            `🎓 *${result.cohort.name}*\nAvailable Classes:\n────────────────────`,
+            `🎓 *${result.cohort.name}*\nAvailable Classes:\n──────────────────`,
         )
 
         for (const c of result.classes) {
