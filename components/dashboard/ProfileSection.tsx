@@ -1,4 +1,3 @@
-import React from "react"
 import styled from "styled-components"
 import { formatToDDMMYYYY } from "@/config/formatDate"
 import { mobile, ipad } from "@/responsive"

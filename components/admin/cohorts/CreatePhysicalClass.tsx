@@ -363,62 +363,6 @@ export default function CreatePhysicalClass() {
                     </CohortInfoContainer>
                 )}
 
-                {/* <FormRow>
-                    <Controller
-                        name="schedule.days"
-                        control={physicalForm.control}
-                        render={({ field }) => (
-                            <Select {...field} multiple fullWidth>
-                                {[
-                                    "Monday",
-                                    "Tuesday",
-                                    "Wednesday",
-                                    "Thursday",
-                                    "Friday",
-                                    "Saturday",
-                                    "Sunday",
-                                ].map((day) => (
-                                    <MenuItem key={day} value={day}>
-                                        {day}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        )}
-                    />
-
-                    <Controller
-                        name="schedule.time"
-                        control={physicalForm.control}
-                        render={({ field, fieldState }) => (
-                            <TextField
-                                {...field}
-                                label="Class Time"
-                                placeholder="e.g. 8pm – 10pm"
-                                error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                fullWidth
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="telegramGroupId"
-                        control={physicalForm.control}
-                        render={({ field, fieldState }) => (
-                            <FormControl fullWidth error={!!fieldState.error}>
-                                <InputLabel>Telegram Group</InputLabel>
-                                <Select {...field} label="Telegram Group">
-                                    {telegramGroups.map((g) => (
-                                        <MenuItem key={g.chatId} value={g.chatId}>
-                                            {g.title}
-                                        </MenuItem>
-                                        // ({g.chatId})
-                                    ))}
-                                </Select>
-                                <FormHelperText>{fieldState.error?.message}</FormHelperText>
-                            </FormControl>
-                        )}
-                    />
-                </FormRow> */}
                 <FullWidthField>
                     <Controller
                         name="telegramGroupId"
