@@ -189,7 +189,7 @@ export default function LeaderboardCard() {
         <Card>
             <Header>
                 <CardMembership sx={{ color: "#2196f3", fontSize: 32 }} />
-                <Title>leaderboard</Title>
+                <Title>Leaderboard</Title>
             </Header>
             {/* <Subtitle>Top referrers this week</Subtitle> */}
             {data.length === 0 ? (

@@ -1,5 +1,6 @@
 import React from "react"
 import styled from "styled-components"
+import HowToRegIcon from "@mui/icons-material/HowToReg"
 import { Campaign, VerifiedUser, Paid } from "@mui/icons-material"
 
 const StepsContainer = styled.div`
@@ -10,6 +11,18 @@ const StepsContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 48px;
+`
+const Header = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+`
+const Title = styled.h2`
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: ${(props) => props.theme.palette.common.black};
 `
 const Step = styled.div`
     display: flex;
@@ -43,6 +56,10 @@ const StepText = styled.p`
 export default function ReferralSteps() {
     return (
         <StepsContainer>
+            <Header>
+                <HowToRegIcon sx={{ color: "#2196f3", fontSize: 32 }} />
+                <Title>How to participate</Title>
+            </Header>
             <Step>
                 <IconCircle>
                     <Campaign sx={{ color: "#f44336", fontSize: 40 }} />
