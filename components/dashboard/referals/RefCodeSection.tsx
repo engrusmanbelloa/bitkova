@@ -1,5 +1,8 @@
 import styled from "styled-components"
 import { Group, ContentCopy } from "@mui/icons-material"
+import { Skeleton } from "@mui/material"
+import { useReferral } from "@/hooks/referrals/useReferral"
+import { toast } from "sonner"
 
 const CardContainer = styled.div`
     border-radius: 8px;
@@ -91,7 +94,47 @@ const StatValue = styled.div<{ $textColor?: string }>`
     margin-top: 8px;
 `
 
+const ReferralSkeleton = () => (
+    <CardContainer>
+        <TitleSection>
+            <Skeleton variant="text" width="40%" height={40} animation="wave" />
+        </TitleSection>
+        {/* <Skeleton variant="text" width="60%" height={32} animation="wave" /> */}
+        <Skeleton
+            variant="text"
+            width="80%"
+            height={35}
+            sx={{ marginBottom: "24px" }}
+            animation="wave"
+        />
+
+        <CodeSection>
+            <Skeleton variant="rounded" height={45} sx={{ flex: 1 }} animation="wave" />
+            <Skeleton variant="rounded" width={100} height={45} animation="wave" />
+        </CodeSection>
+
+        <StatsContainer>
+            <Skeleton
+                variant="rounded"
+                height={100}
+                sx={{ flex: 1, borderRadius: "12px" }}
+                animation="wave"
+            />
+            <Skeleton
+                variant="rounded"
+                height={100}
+                sx={{ flex: 1, borderRadius: "12px" }}
+                animation="wave"
+            />
+        </StatsContainer>
+    </CardContainer>
+)
 export default function RefCodeSection() {
+    const { loading, code, stats } = useReferral()
+
+    // if (loading) return null
+    if (loading) return <ReferralSkeleton />
+    if (!code) return <Description>Referral code not available</Description>
     return (
         <CardContainer>
             <TitleSection>
@@ -102,22 +145,27 @@ export default function RefCodeSection() {
 
             <CodeSection>
                 <CodeBox>
-                    <CodeText>COURSE2025XYZ</CodeText>
+                    <CodeText>{code}</CodeText>
                 </CodeBox>
-                <ApplyButton>
+                <ApplyButton
+                    onClick={() => {
+                        navigator.clipboard.writeText(code!)
+                        toast.success("Referral code copied")
+                    }}
+                >
                     <ContentCopy sx={{ marginRight: "8px", fontSize: "20px" }} />
-                    Apply
+                    Copy
                 </ApplyButton>
             </CodeSection>
 
             <StatsContainer>
                 <StatBox $bgColor="#E3F2FD">
                     <StatLabel>Total Referrals</StatLabel>
-                    <StatValue $textColor="#1976d2">24</StatValue>
+                    <StatValue $textColor="#1976d2">{stats.referralCount}</StatValue>
                 </StatBox>
                 <StatBox $bgColor="#E8F5E9">
                     <StatLabel>This Week</StatLabel>
-                    <StatValue $textColor="#388E3C">7</StatValue>
+                    <StatValue $textColor="#388E3C">{stats.weeklyCount}</StatValue>
                 </StatBox>
             </StatsContainer>
         </CardContainer>

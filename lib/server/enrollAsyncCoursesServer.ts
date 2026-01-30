@@ -1,6 +1,7 @@
 // lib/server/enrollAsyncCoursesServer.ts
 import { adminDb } from "@/lib/firebase/admin"
 import { FieldValue } from "firebase-admin/firestore"
+import { rewardReferrer } from "@/lib/firebase/uploads/referralRewards"
 import { Enrollment } from "@/types/userType"
 export async function enrollAsyncCoursesServer({
     userId,
@@ -34,7 +35,8 @@ export async function enrollAsyncCoursesServer({
             completedLessons: 0,
             completedVideos: [],
         })
-
+        // ✅ award the referrer with 100xp for async course
+        await rewardReferrer(userId, 100)
         // ✅ Increment course student count
         batch.update(adminDb.collection("courses").doc(courseId), {
             students: FieldValue.increment(1),

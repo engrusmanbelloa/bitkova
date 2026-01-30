@@ -1,4 +1,11 @@
 // components/admin/adminTabs.tsx
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
+import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload"
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
+import WidgetsIcon from "@mui/icons-material/Widgets"
+import HistoryIcon from "@mui/icons-material/History"
+import SettingsIcon from "@mui/icons-material/Settings"
 import DashboardOverview from "./DashboardOverview"
 import ProfileSection from "./ProfileSection"
 import ProfileForm from "./Settings"
@@ -7,13 +14,7 @@ import ClassesTabs from "./cohorts/ClassesTabs"
 import EnrollStudent from "./EnrollStudent"
 import RoleManager from "@/components/auth/RoleManager"
 import NoDataAvailable from "./NoData"
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
-import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload"
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
-import WidgetsIcon from "@mui/icons-material/Widgets"
-import HistoryIcon from "@mui/icons-material/History"
-import SettingsIcon from "@mui/icons-material/Settings"
+import Payouts from "@/components/admin/payments/Payouts"
 
 export const ADMIN_TABS = [
     {
@@ -56,7 +57,7 @@ export const ADMIN_TABS = [
         key: "history",
         icon: <HistoryIcon />,
         label: "Payment History",
-        component: () => <NoDataAvailable comment="Coming Soon" />,
+        component: () => <Payouts />,
     },
     {
         key: "settings",

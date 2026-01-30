@@ -8,7 +8,7 @@ import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/aut
 import { auth } from "@/lib/firebase/client"
 import { toast } from "sonner"
 // Hooks & Store
-import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
+// import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
@@ -273,7 +273,7 @@ export default function Navbar() {
             await firebaseUser.reload()
             if (firebaseUser.emailVerified) {
                 setIsManualVerified(true)
-                await createUserIfNotExists(firebaseUser)
+                // await createUserIfNotExists(firebaseUser)
                 toast.success("Account verified and synced!")
                 setActiveModal(null)
             } else {

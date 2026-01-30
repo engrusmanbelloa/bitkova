@@ -1,12 +1,11 @@
 // components/auth/SignUp.tsx
-import { useState, ComponentType, useRef } from "react"
+import { useState, ComponentType, useRef, useEffect } from "react"
 import styled from "styled-components"
 import Dialog from "@mui/material/Dialog"
 import GoogleIcon from "@mui/icons-material/Google"
 import AppleIcon from "@mui/icons-material/Apple"
 import AuthButton from "@/components/auth/AuthButton"
 import { mobile, ipad } from "@/responsive"
-import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 import {
     getAdditionalUserInfo,
     createUserWithEmailAndPassword,
@@ -129,6 +128,18 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
     const [passwordMismatchError, setPasswordMismatchError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [signUpStatus, setSignUpStatus] = useState("initial")
+    const [uplineCode, setUplineCode] = useState("")
+    const [showRefInput, setShowRefInput] = useState(false)
+
+    // Capture referral code from URL automatically
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search)
+        const ref = params.get("ref")
+        if (ref) {
+            setUplineCode(ref)
+            setShowRefInput(true)
+        }
+    }, [])
 
     // form fields validation and handling
     const passwordCharError = "Passwords at least 8 char include uppercase, lowercase, numbers"
@@ -170,24 +181,52 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
     const handleSignUp = async (event: any) => {
         event.preventDefault()
         setIsLoading(true)
+        // try {
+        //     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+        //     const user = userCredential.user
+        //     setSignUpStatus("success")
+        //     setTimeout(() => {
+        //         handleClose()
+        //     }, 3000)
+        //     toast.success("Account created successfully!")
+        //     // console.log(user)
+        // } catch (error: any) {
+        //     const errorCode = error.code
+        //     const errorMessage = error.message
+        //     // console.log("Error creating account:", errorMessage, " ", errorCode)
+        //     setSignUpStatus("error")
+        //     toast.error("Failed", errorMessage)
+        //     setTimeout(() => {
+        //         setSignUpStatus("initial")
+        //     }, 1000)
+        // } finally {
+        //     setIsLoading(false)
+        // }
         try {
+            // 1. Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
+
+            // 2. Call our API to create the Firestore doc and link the referral
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    name: "Guest",
+                    uplineCode: uplineCode, // This is the code from URL or input
+                }),
+            })
+
+            if (!response.ok) throw new Error("Failed to initialize user data")
+
             setSignUpStatus("success")
-            setTimeout(() => {
-                handleClose()
-            }, 3000)
             toast.success("Account created successfully!")
-            // console.log(user)
+            setTimeout(() => handleClose(), 2000)
         } catch (error: any) {
-            const errorCode = error.code
-            const errorMessage = error.message
-            // console.log("Error creating account:", errorMessage, " ", errorCode)
             setSignUpStatus("error")
-            toast.error("Failed", errorMessage)
-            setTimeout(() => {
-                setSignUpStatus("initial")
-            }, 1000)
+            toast.error(error.message)
         } finally {
             setIsLoading(false)
         }
@@ -195,6 +234,47 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
 
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
+        // try {
+        //     const provider = new GoogleAuthProvider()
+        //     const userCredential = await signInWithPopup(auth, provider)
+        //     const user = userCredential.user
+
+        //     // force refresh ID token
+        //     await user.getIdToken(true)
+        //     const info = getAdditionalUserInfo(userCredential)
+
+        //     // check Firestore users collection
+        //     const userRef = doc(db!, "users", user.uid)
+        //     const userSnap = await getDoc(userRef)
+
+        //     if (userSnap.exists()) {
+        //         // user already exists in Firestore → ask them to login instead
+        //         toast.error("Account already exists, please login.")
+        //         setSignUpStatus("duplicate")
+        //         // await auth.signOut() // optional: sign them out again
+        //         return
+        //     }
+
+        //     // if not exists → create user doc
+        //     await createUserIfNotExists(user, uplineCode)
+        //     setSignUpStatus("success")
+        //     toast.success(`${user.email} Account created successfully!`)
+        //     setTimeout(() => {
+        //         handleClose()
+        //     }, 1000)
+        // } catch (error: any) {
+        //     console.error("Error during Google sign-in:", error)
+        //     if (error?.code === "auth/account-exists-with-different-credential") {
+        //         toast.error("Account already exists with different provider.")
+        //     } else {
+        //         toast.error("Failed to sign in. Try again later.")
+        //     }
+        //     setTimeout(() => {
+        //         setSignUpStatus("initial")
+        //     }, 1000)
+        // } finally {
+        //     setIsLoading(false)
+        // }
         try {
             const provider = new GoogleAuthProvider()
             const userCredential = await signInWithPopup(auth, provider)
@@ -217,22 +297,28 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             }
 
             // if not exists → create user doc
-            await createUserIfNotExists(user)
-            setSignUpStatus("success")
-            toast.success(`${user.email} Account created successfully!`)
-            setTimeout(() => {
-                handleClose()
-            }, 1000)
-        } catch (error: any) {
-            console.error("Error during Google sign-in:", error)
-            if (error?.code === "auth/account-exists-with-different-credential") {
-                toast.error("Account already exists with different provider.")
-            } else {
-                toast.error("Failed to sign in. Try again later.")
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    name: user.displayName,
+                    uplineCode: uplineCode,
+                }),
+            })
+
+            if (!response.ok) {
+                // If API fails (e.g. user already exists or DB error), sign them out
+                await auth.signOut()
+                toast.error("Account initialization failed.")
+                return
             }
-            setTimeout(() => {
-                setSignUpStatus("initial")
-            }, 1000)
+            setSignUpStatus("success")
+            toast.success(`Welcome ${user.email}`)
+            setTimeout(() => handleClose(), 1000)
+        } catch (error: any) {
+            toast.error("Google Sign-In Failed")
         } finally {
             setIsLoading(false)
         }
@@ -286,6 +372,25 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
                         />
+                        {!showRefInput ? (
+                            <p
+                                style={{
+                                    cursor: "pointer",
+                                    fontSize: "14px",
+                                    color: "#356DF1",
+                                    marginTop: "10px",
+                                }}
+                                onClick={() => setShowRefInput(true)}
+                            >
+                                Have a referral code?
+                            </p>
+                        ) : (
+                            <Input
+                                placeholder="Referral Code (Optional)"
+                                value={uplineCode}
+                                onChange={(e) => setUplineCode(e.target.value)}
+                            />
+                        )}
                     </InputContainer>
                     <PasswordChar>
                         {emailError ? emailError : passwordError ? passwordError : ""}

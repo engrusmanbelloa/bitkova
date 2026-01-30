@@ -5,10 +5,12 @@ import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { createTelegramInviteLink } from "@/lib/telegram/inviteLink"
 import { markInvitePending } from "../telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { rewardReferral } from "@/lib/referrals/referralRewards"
 
 interface Params {
     userId: string
     classId: string
+    price: number
     cohortId: string
     cohortName: string
     className: string
@@ -26,6 +28,7 @@ export async function enrollPhysicalClassServer({
     paymentReference,
     payerEmail,
     telegramGroupId,
+    price,
 }: Params) {
     const enrollmentId = `${userId}-${classId}`
 
@@ -97,6 +100,13 @@ export async function enrollPhysicalClassServer({
     })
 
     await batch.commit()
+
+    // ✅ award the referrer with 200xp for physical class
+    await rewardReferral({
+        buyerId: userId,
+        price: price,
+        enrollmentId,
+    })
 
     if (inviteLink) {
         await sendEnrollmentEmail({

@@ -24,7 +24,7 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
         })
     },
 
-    physical_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail }) => {
+    physical_class: async ({ userId, itemIds, metadata, paymentReference, payerEmail, price }) => {
         if (!metadata.telegramGroupId) {
             throw new Error("Missing telegramGroupId for physical class")
         }
@@ -37,6 +37,7 @@ export const paymentHandlers: Record<string, PaymentHandler> = {
             cohortName: metadata.cohortName,
             paymentReference,
             payerEmail,
+            price,
         })
     },
 
