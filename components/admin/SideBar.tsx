@@ -93,13 +93,7 @@ const StyledIconButton = styled(IconButton)`
     z-index: 1300;
 `
 
-export default function Sidebar({
-    isAuthorized,
-    activeItem,
-    onSelect,
-    drawerOpen,
-    setDrawerOpen,
-}: any) {
+export default function Sidebar({ activeItem, onSelect, drawerOpen, setDrawerOpen }: any) {
     const router = useRouter()
 
     const renderMenu = () => (

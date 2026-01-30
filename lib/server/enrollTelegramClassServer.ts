@@ -6,6 +6,7 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { markInvitePending } from "@/lib/telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
+import { rewardReferrer } from "@/lib/firebase/uploads/referralRewards"
 import { Enrollment } from "@/types/userType"
 
 interface Params {
@@ -63,6 +64,9 @@ export async function enrollTelegramClassServer({
     })
 
     await batch.commit()
+
+    // ✅ award the referrer with 150xp for physical class
+    await rewardReferrer(userId, 150)
 
     if (inviteLink) {
         await sendEnrollmentEmail({

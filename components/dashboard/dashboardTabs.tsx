@@ -3,6 +3,7 @@ import DashboardOverview from "./DashboardOverview"
 import ProfileSection from "./ProfileSection"
 import ProfileForm from "./Settings"
 import InProgressCourses from "@/components/course/InProgressCourses"
+import Referral from "@/components/dashboard/referals/Referral"
 import NoDataAvailable from "./NoData"
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import {
@@ -40,7 +41,7 @@ export const DASHBOARD_TABS = [
         key: "referral",
         icon: <Redeem />,
         label: "Referrals",
-        component: (user: any) => <NoDataAvailable comment="Coming Soon" />,
+        component: (user: any) => <Referral />,
     },
     {
         key: "certificate",

@@ -146,17 +146,11 @@ export default function SignIn({
             const userCredential = await signInWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
             const idToken = await user.getIdToken()
-            // await fetch("/api/auth/session", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ idToken }),
-            //     credentials: "include",
-            // })
+
             setSignInStatus("success")
             setTimeout(() => {
                 handleClose()
             }, 1000)
-            // alert(user.email + " Account created successfully")
             // console.log("user state persistence is: " + persistence)
         } catch (error: any) {
             // console.log("Signing in error:", errorMessage, " ", errorCode)
@@ -178,14 +172,23 @@ export default function SignIn({
             const user = userCredential.user
 
             // Check if user already exists
-            const response = await fetch("api/auth/login", {
+            const idToken = await userCredential.user.getIdToken()
+            const response = await fetch("/api/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email: user.email,
-                    uid: user.uid,
-                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`,
+                },
             })
+
+            // const response = await fetch("api/auth/login", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({
+            //         email: user.email,
+            //         uid: user.uid,
+            //     }),
+            // })
 
             if (!response.ok) {
                 const errorData = await response.json()

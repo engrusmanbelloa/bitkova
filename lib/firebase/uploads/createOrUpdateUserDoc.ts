@@ -1,58 +1,89 @@
-import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    collection,
-    query,
-    where,
-    getDocs,
-} from "firebase/firestore"
-import { User as FirebaseUser } from "firebase/auth"
+// lib/firebase/uploads/createOrUpdateUserDoc.ts
+
 import { User } from "@/types/userType"
-import { app } from "@/lib/firebase/client"
+import { adminDb } from "@/lib/firebase/admin"
+import { FieldValue } from "firebase-admin/firestore"
+import { email } from "zod/v4/core/regexes"
+import { nanoid } from "@/hooks/certId"
 
-const db = getFirestore(app)
+interface params {
+    uid: string
+    email: string
+    name: string
+    uplineCode?: string
+}
+const generateReferralCode = (email: string) => {
+    const prefix = email.substring(0, 3).toUpperCase()
+    const id = nanoid().toUpperCase()
+    // const random = Math.random().toString(36).substring(2, 5).toUpperCase()
+    return `${prefix}${id}` // e.g., JOHABC
+}
 
-export default async function createUserIfNotExists(user: FirebaseUser) {
-    if (!user?.uid) return
+export default async function createUserIfNotExists({ uid, email, name, uplineCode }: params) {
+    // export default async function createUserIfNotExists(user: FirebaseUser, uplineCode?: string) {
+    if (!uid) return
     // console.log(user.uid)
+    let referralCode = ""
+    let exists = true
+    const userRef = adminDb.collection("users").doc(uid)
+    const userSnap = await userRef.get()
 
-    try {
-        const userRef = doc(db, "users", user.uid)
-        const userSnap = await getDoc(userRef)
+    if (userSnap.exists) return userSnap.data() as User
 
-        if (!userSnap.exists()) {
-            // Optional: Check if another doc with this email exists
-            const q = query(collection(db, "users"), where("email", "==", user.email))
-            const querySnap = await getDocs(q)
+    let uplineUid: string | null = null
 
-            if (!querySnap.empty) {
-                console.warn("User with this email already exists in another document")
-                return
+    // If a referral code was provided, find the referrer
+    if (uplineCode) {
+        const uplineQuery = await adminDb
+            .collection("users")
+            .where("referralCode", "==", uplineCode.trim())
+            .limit(1)
+            .get()
+
+        if (!uplineQuery.empty) {
+            const uplineDoc = uplineQuery.docs[0]
+            uplineUid = uplineDoc.id
+            if (uplineUid === uid) {
+                throw new Error("Self-referral is not allowed")
             }
-
-            const newUser: User = {
-                id: user.uid,
-                name: user.displayName || "Guest User",
-                email: user.email || "",
-                role: "guest",
-                username: user.displayName?.split(" ").join("").toLowerCase() || "guest",
-                phoneNumber: user.phoneNumber || "",
-                skill: "",
-                bio: "",
-                registrationDate: new Date().toISOString(),
-                wishList: [],
-                cart: [],
-            }
-
-            await setDoc(userRef, newUser, { merge: true })
-            // console.log("New user document created")
-        } else {
-            // console.log("User document already exists")
+            // Add this new user to the referrer's list of referees immediately
+            await uplineDoc.ref.update({
+                referees: FieldValue.arrayUnion(uid),
+                referralCount: FieldValue.increment(1),
+            })
         }
-    } catch (error) {
-        // console.log("Error creating or checking user document:", error)
-        throw error
     }
+
+    while (exists) {
+        referralCode = generateReferralCode(email)
+        const snap = await adminDb
+            .collection("users")
+            .where("referralCode", "==", referralCode)
+            .limit(1)
+            .get()
+        exists = !snap.empty
+    }
+
+    const newUser: User = {
+        id: uid,
+        name: name,
+        email: email,
+        role: "guest",
+        username: email.split("@")[0].toLowerCase(),
+        phoneNumber: "",
+        skill: "",
+        bio: "",
+        referralCode: referralCode,
+        referredBy: uplineUid || undefined,
+        referees: [],
+        xpBalance: 0,
+        totalXpEarned: 0,
+        referralCount: 0,
+        registrationDate: new Date().toISOString(),
+        wishList: [],
+        cart: [],
+    }
+
+    await userRef.set(newUser)
+    return newUser
 }

@@ -20,6 +20,12 @@ export interface User {
     registrationDate: string
     wishList: string[]
     cart: string[]
+    referralCode: string
+    referredBy?: string
+    xpBalance: number
+    totalXpEarned: number
+    referralCount: number
+    referees: string[]
 }
 // types/enrollment.ts
 export type EnrollmentType = "async_course" | "telegram_class" | "physical_class"
@@ -90,4 +96,20 @@ export interface CompletedCourse {
     userId: string
     courseId: string
     completedAt: Date
+}
+
+export interface WithdrawalRequest {
+    id: string
+    userId: string
+    userName: string
+    amountXp: number
+    amountNaira: number
+    bankDetails: {
+        bankName: string
+        accountNumber: string
+        accountName: string
+        recipientCode?: string // For Paystack Payouts
+    }
+    status: "pending" | "approved" | "rejected" | "processing" | "completed"
+    createdAt: string
 }

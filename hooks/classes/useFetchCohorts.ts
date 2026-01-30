@@ -35,12 +35,12 @@ export function useFetchCohorts() {
     return useQuery({
         queryKey: ["allCohorts"],
         queryFn: async () => {
-            console.log("🔍 Fetching all cohorts...")
+            // console.log("🔍 Fetching all cohorts...")
 
             try {
                 const snapshot = await getDocs(collection(db!, "cohorts"))
 
-                console.log("📊 Total cohorts found:", snapshot.size)
+                // console.log("📊 Total cohorts found:", snapshot.size)
 
                 if (snapshot.empty) {
                     console.warn("⚠️ No cohorts in database")
@@ -56,7 +56,7 @@ export function useFetchCohorts() {
                     return quarterOrder[b.quarter] - quarterOrder[a.quarter]
                 })
 
-                console.log("✅ Cohorts loaded:", cohorts.length)
+                // console.log("✅ Cohorts loaded:", cohorts.length)
                 return cohorts
             } catch (error) {
                 console.error("❌ Error fetching cohorts:", error)
@@ -72,7 +72,7 @@ export function useFetchActiveCohort() {
     return useQuery({
         queryKey: ["activeCohort"],
         queryFn: async () => {
-            console.log("🔍 Fetching active cohort...")
+            // console.log("🔍 Fetching active cohort...")
 
             try {
                 // Simple query - just get active cohorts
@@ -80,7 +80,7 @@ export function useFetchActiveCohort() {
 
                 const snapshot = await getDocs(q)
 
-                console.log("📊 Active cohorts found:", snapshot.size)
+                // console.log("📊 Active cohorts found:", snapshot.size)
 
                 if (snapshot.empty) {
                     console.warn("⚠️ No active cohort")
@@ -101,7 +101,7 @@ export function useFetchActiveCohort() {
 
                 // Return the first valid one
                 const activeCohort = validCohorts[0]
-                console.log("✅ Active cohort:", activeCohort.name)
+                // console.log("✅ Active cohort:", activeCohort.name)
 
                 return activeCohort
             } catch (error) {

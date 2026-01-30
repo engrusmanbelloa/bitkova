@@ -47,8 +47,10 @@ export async function POST(req: NextRequest) {
 
     const data = event.data
     const metadata = data.metadata
+    const amountPaid = data.amount / 100
 
     // console.log("Processing payment for:", metadata.classType)
+    console.log("Processing payment for parice:", data.amount / 100)
 
     const handler = paymentHandlers[metadata.classType]
 
@@ -64,6 +66,7 @@ export async function POST(req: NextRequest) {
             metadata,
             paymentReference: data.reference,
             payerEmail: data.customer.email,
+            price: amountPaid,
         })
         console.log("✅ Payment processed successfully!")
         return NextResponse.json({ ok: true })
