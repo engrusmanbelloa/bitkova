@@ -181,46 +181,11 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
     const handleSignUp = async (event: any) => {
         event.preventDefault()
         setIsLoading(true)
-        // try {
-        //     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-        //     const user = userCredential.user
-        //     setSignUpStatus("success")
-        //     setTimeout(() => {
-        //         handleClose()
-        //     }, 3000)
-        //     toast.success("Account created successfully!")
-        //     // console.log(user)
-        // } catch (error: any) {
-        //     const errorCode = error.code
-        //     const errorMessage = error.message
-        //     // console.log("Error creating account:", errorMessage, " ", errorCode)
-        //     setSignUpStatus("error")
-        //     toast.error("Failed", errorMessage)
-        //     setTimeout(() => {
-        //         setSignUpStatus("initial")
-        //     }, 1000)
-        // } finally {
-        //     setIsLoading(false)
-        // }
+
         try {
-            // 1. Create user in Firebase Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, password)
             const user = userCredential.user
-
-            // 2. Call our API to create the Firestore doc and link the referral
-            const response = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    uid: user.uid,
-                    email: user.email,
-                    name: "Guest",
-                    uplineCode: uplineCode, // This is the code from URL or input
-                }),
-            })
-
-            if (!response.ok) throw new Error("Failed to initialize user data")
-
+            localStorage.setItem("pendingReferral", uplineCode)
             setSignUpStatus("success")
             toast.success("Account created successfully!")
             setTimeout(() => handleClose(), 2000)
@@ -234,54 +199,14 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
 
     const handleSignInWithGoogle = async () => {
         setIsLoading(true)
-        // try {
-        //     const provider = new GoogleAuthProvider()
-        //     const userCredential = await signInWithPopup(auth, provider)
-        //     const user = userCredential.user
-
-        //     // force refresh ID token
-        //     await user.getIdToken(true)
-        //     const info = getAdditionalUserInfo(userCredential)
-
-        //     // check Firestore users collection
-        //     const userRef = doc(db!, "users", user.uid)
-        //     const userSnap = await getDoc(userRef)
-
-        //     if (userSnap.exists()) {
-        //         // user already exists in Firestore → ask them to login instead
-        //         toast.error("Account already exists, please login.")
-        //         setSignUpStatus("duplicate")
-        //         // await auth.signOut() // optional: sign them out again
-        //         return
-        //     }
-
-        //     // if not exists → create user doc
-        //     await createUserIfNotExists(user, uplineCode)
-        //     setSignUpStatus("success")
-        //     toast.success(`${user.email} Account created successfully!`)
-        //     setTimeout(() => {
-        //         handleClose()
-        //     }, 1000)
-        // } catch (error: any) {
-        //     console.error("Error during Google sign-in:", error)
-        //     if (error?.code === "auth/account-exists-with-different-credential") {
-        //         toast.error("Account already exists with different provider.")
-        //     } else {
-        //         toast.error("Failed to sign in. Try again later.")
-        //     }
-        //     setTimeout(() => {
-        //         setSignUpStatus("initial")
-        //     }, 1000)
-        // } finally {
-        //     setIsLoading(false)
-        // }
         try {
             const provider = new GoogleAuthProvider()
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user
 
             // force refresh ID token
-            await user.getIdToken(true)
+            const idToken = await user.getIdToken(true)
+            // const idToken = await user.getIdToken(true)
             const info = getAdditionalUserInfo(userCredential)
 
             // check Firestore users collection
@@ -299,13 +224,11 @@ export default function SignUp({ open, Transition, handleSignInOpen, handleClose
             // if not exists → create user doc
             const response = await fetch("/api/auth/signup", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    uid: user.uid,
-                    email: user.email,
-                    name: user.displayName,
-                    uplineCode: uplineCode,
-                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`,
+                },
+                body: JSON.stringify({ uplineCode }),
             })
 
             if (!response.ok) {

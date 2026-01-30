@@ -8,7 +8,6 @@ import { signOut, sendEmailVerification, onAuthStateChanged } from "firebase/aut
 import { auth } from "@/lib/firebase/client"
 import { toast } from "sonner"
 // Hooks & Store
-// import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { syncUserStore } from "@/lib/store/syncUserStore"
@@ -274,6 +273,19 @@ export default function Navbar() {
             if (firebaseUser.emailVerified) {
                 setIsManualVerified(true)
                 // await createUserIfNotExists(firebaseUser)
+                const idToken = await firebaseUser.getIdToken(true)
+                const uplineCode = localStorage.getItem("pendingReferral")
+
+                await fetch("/api/auth/signup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                    body: JSON.stringify({ uplineCode }),
+                })
+
+                localStorage.removeItem("pendingReferral")
                 toast.success("Account verified and synced!")
                 setActiveModal(null)
             } else {

@@ -1,6 +1,7 @@
 // app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
+import { getAuth } from "firebase-admin/auth"
 import { getUserByEmail } from "@/lib/firebase/queries/getUserByEmail"
 
 // Custom error types
@@ -18,14 +19,29 @@ class DatabaseError extends Error {
     }
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest): Promise<NextResponse> {
+    const authHeader = req.headers.get("authorization")
+    if (!authHeader) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     try {
         // Parse and validate request body
-        const { email, uid } = await request.json()
-        // console.log("Received email:", email, "and uid:", uid)
+        const token = authHeader.replace("Bearer ", "")
+        const decoded = await getAuth().verifyIdToken(token)
+        // const uid = decoded.uid
+        const email = decoded.email
+
+        // Ensure email is present and a string before querying the database
+        if (!email || typeof email !== "string") {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "INVALID_TOKEN",
+                    message: "Token does not contain a valid email.",
+                },
+                { status: 400 },
+            )
+        }
 
         // Check if user exists in database
-        //   const userExists = await checkUserInDatabaseSafe(email)
         const userExists = await getUserByEmail(email)
         // console.log("User exists:", userExists)
 
