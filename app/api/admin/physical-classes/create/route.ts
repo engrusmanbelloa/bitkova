@@ -1,8 +1,6 @@
 // app/api/admin/physical-classes/create/route.ts
 import { NextResponse } from "next/server"
-import { getAuth } from "firebase-admin/auth"
-import { getFirestore } from "firebase-admin/firestore"
-import { adminApp } from "@/lib/firebase/admin"
+import { adminApp, adminAuth, adminDb } from "@/lib/firebase/admin"
 import { physicalClassSchema } from "@/lib/schemas/classSchema"
 
 export async function POST(req: Request) {
@@ -13,7 +11,7 @@ export async function POST(req: Request) {
         }
 
         const token = authHeader.replace("Bearer ", "")
-        const decoded = await getAuth(adminApp).verifyIdToken(token)
+        const decoded = await adminAuth.verifyIdToken(token)
 
         if (!decoded.admin && !decoded.instructor) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 })
@@ -21,9 +19,7 @@ export async function POST(req: Request) {
 
         const body = physicalClassSchema.parse(await req.json())
 
-        const db = getFirestore(adminApp)
-
-        await db.collection("physicalClasses").add({
+        await adminDb.collection("physicalClasses").add({
             ...body,
             instructors: body.instructors.map((i) => i.value),
             courses: body.courses.map((c) => c.value),

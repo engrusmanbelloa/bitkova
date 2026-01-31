@@ -1,7 +1,7 @@
 // app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { getAuth } from "firebase-admin/auth"
+import { adminAuth } from "@/lib/firebase/admin"
 import { getUserByEmail } from "@/lib/firebase/queries/getUserByEmail"
 
 // Custom error types
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     try {
         // Parse and validate request body
         const token = authHeader.replace("Bearer ", "")
-        const decoded = await getAuth().verifyIdToken(token)
+        const decoded = await adminAuth.verifyIdToken(token)
         // const uid = decoded.uid
         const email = decoded.email
 
