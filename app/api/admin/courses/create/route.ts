@@ -2,8 +2,7 @@
 import { NextResponse } from "next/server"
 import { courseSchema } from "@/lib/schemas/courseSchema"
 import { uploadNewCourse } from "@/lib/firebase/uploads/uploadCourseWithDetails"
-import { adminApp } from "@/lib/firebase/admin"
-import { getAuth } from "firebase-admin/auth"
+import { adminApp, adminAuth } from "@/lib/firebase/admin"
 
 export async function POST(req: Request) {
     try {
@@ -13,7 +12,7 @@ export async function POST(req: Request) {
         }
 
         const token = authHeader.replace("Bearer ", "")
-        const decoded = await getAuth(adminApp).verifyIdToken(token)
+        const decoded = await adminAuth.verifyIdToken(token)
 
         if (!decoded.admin && !decoded.instructor) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 })

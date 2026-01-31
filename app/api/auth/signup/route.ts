@@ -1,6 +1,6 @@
 // app/api/auth/signup/route.ts
 import { NextRequest, NextResponse } from "next/server"
-import { getAuth } from "firebase-admin/auth"
+import { adminAuth } from "@/lib/firebase/admin"
 import createUserIfNotExists from "@/lib/firebase/uploads/createOrUpdateUserDoc"
 
 export async function POST(req: NextRequest) {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const token = authHeader.replace("Bearer ", "")
-        const decoded = await getAuth().verifyIdToken(token)
+        const decoded = await adminAuth.verifyIdToken(token)
 
         const { uplineCode: rawCode } = await req.json()
         const uplineCode = rawCode?.trim().toUpperCase()
