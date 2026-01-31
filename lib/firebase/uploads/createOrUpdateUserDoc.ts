@@ -3,7 +3,6 @@
 import { User } from "@/types/userType"
 import { adminDb } from "@/lib/firebase/admin"
 import { FieldValue } from "firebase-admin/firestore"
-import { email } from "zod/v4/core/regexes"
 import { nanoid } from "@/hooks/certId"
 
 interface params {
@@ -74,7 +73,7 @@ export default async function createUserIfNotExists({ uid, email, name, uplineCo
         skill: "",
         bio: "",
         referralCode: referralCode,
-        referredBy: uplineUid || undefined,
+        // referredBy: uplineUid || undefined,
         referees: [],
         xpBalance: 0,
         totalXpEarned: 0,
@@ -82,6 +81,9 @@ export default async function createUserIfNotExists({ uid, email, name, uplineCo
         registrationDate: new Date().toISOString(),
         wishList: [],
         cart: [],
+    }
+    if (uplineUid) {
+        newUser.referredBy = uplineUid
     }
 
     await userRef.set(newUser)
