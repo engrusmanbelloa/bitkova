@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster, toast } from "sonner"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
@@ -114,6 +115,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         <Navbar />
                                         {children}
                                         <SpeedInsights />
+                                        <Analytics />
                                         <Footer />
                                     </Container>
                                     <Toaster
