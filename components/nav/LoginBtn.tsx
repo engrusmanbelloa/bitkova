@@ -29,7 +29,7 @@ const Btn = styled.button<{ $login?: boolean }>`
 
 export default function LoginBtn(props: { $login: boolean; onClick: () => void }) {
     return (
-        <Btn $login={props.$login} onClick={props.onClick}>
+        <Btn type="button" $login={props.$login} onClick={props.onClick}>
             {props.$login ? "Logout" : "Login"}
         </Btn>
     )

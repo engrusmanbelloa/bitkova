@@ -212,10 +212,12 @@ export default function Navbar() {
 
     const main = "true"
     const isAuthenticated = !!firebaseUser
-    const isVerified =
-        (firebaseUser?.providerId === "password"
-            ? firebaseUser.emailVerified
-            : firebaseUser?.emailVerified) || isManualVerified
+    const isVerified = firebaseUser?.emailVerified || isManualVerified
+
+    // const isVerified =
+    //     (firebaseUser?.providerId === "password"
+    //         ? firebaseUser.emailVerified
+    //         : firebaseUser?.emailVerified) || isManualVerified
 
     // Sync logic
     useEffect(() => {
