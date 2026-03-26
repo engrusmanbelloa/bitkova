@@ -1,5 +1,5 @@
+// app/layout.tsx
 "use client"
-
 import { useEffect, useState, Suspense } from "react"
 import styled, { ThemeProvider } from "styled-components"
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter"

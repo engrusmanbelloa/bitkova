@@ -1,3 +1,4 @@
+// components/home/Home.tsx
 "use client"
 import styled from "styled-components"
 import Link from "next/link"
