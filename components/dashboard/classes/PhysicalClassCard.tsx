@@ -1,6 +1,6 @@
 // components/classes/RegisteredClasses.tsx
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"
 import CircularProgress from "@mui/material/CircularProgress"
@@ -11,8 +11,8 @@ import DownloadIcon from "@mui/icons-material/Download"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { Card, CardContent } from "@mui/material"
 import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
+import { createClassCertificate } from "@/lib/firebase/uploads/createClassCertificate"
 import { deriveCertificateFields } from "@/utils/cohortCertUtils"
-import CertificateVerifier from "@/components/course/CertificateVerifier"
 import CertificateDownload from "@/components/course/DownloadCert"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { mobile } from "@/responsive"
@@ -187,31 +187,6 @@ const InstructorChip = styled.div`
     font-size: 13px;
     color: ${(props) => props.theme.palette.common.black};
 `
-const DownloadButton = styled.button`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: ${(props) => props.theme.palette.primary.main};
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    &:disabled {
-        background: ${(props) => props.theme.palette.action.disabled};
-        cursor: not-allowed;
-        transform: none;
-    }
-`
 const AttendanceButton = styled.button`
     display: flex;
     align-items: center;
@@ -231,13 +206,6 @@ const AttendanceButton = styled.button`
         color: white;
     }
 `
-const ResultBox = styled.div`
-    margin-top: 20px;
-    padding: 20px;
-    background: #f7f7f7;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-`
 
 export default function PhysicalClassCard({ enrollment, cohorts }: any) {
     const router = useRouter()
@@ -245,15 +213,29 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
     const { user, isLoadingUserDoc } = useAuthReady()
     const [result, setResult] = useState<any>(null)
     const [visible, setVisible] = useState(false)
-
-    if (isLoading || isLoadingUserDoc) return <CircularProgress size={24} />
+    const [certificateId, setCertificateId] = useState<string | null>(
+        enrollment.certificateId ?? null,
+    )
 
     const classData = physicalClasses?.find((c) => c.id === enrollment.itemId)
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
-
-    if (!classData) return null
-
     const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
+
+    // Auto-create certificate when cohort period is reached
+    useEffect(() => {
+        if (!completed || !user?.id || !classData || certificateId) {
+            // console.log("Certificate not ready or already exists", {
+            //     completed,
+            //     user: user?.id,
+            //     classData,
+            //     certificateId,
+            // })
+            return
+        }
+        createClassCertificate(user.id, enrollment.id, "physical_class")
+            .then((id) => setCertificateId(id))
+            .catch(console.error)
+    }, [completed, user?.id, classData, certificateId, enrollment.id])
 
     const attendanceRate = enrollment.attendanceLog?.length
         ? Math.round(
@@ -264,158 +246,152 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
         : 0
 
     const openModal = () => {
-        if (!completed) {
-            toast.error("You haven't completed this course yet.")
+        if (!completed || !certificateId) {
+            toast.error("Certificate not ready yet.")
             return
         }
-        // setResult(true)
-        // setOpen(true)
         setVisible(true)
-        toast.success("Congratulations>>> download your certificate")
-        // console.log(visible, id, title, user)
+        toast.success("Congratulations! Download your certificate.")
     }
 
-    const handleClose = () => {
-        // setOpen(false)
-        // setResult(false)
-        setVisible(false)
-    }
+    const handleClose = () => setVisible(false)
+
+    if (isLoading || isLoadingUserDoc) return <CircularProgress size={24} />
+    if (!classData) return null
+
+    console.log("physical class enrollment", physicalClasses)
+    console.log("class data for this user", classData)
 
     return (
-        <ClassCard>
-            <ClassHeader>
-                <ClassType>Physical Class</ClassType>
-                <ClassName>{classData.name}</ClassName>
-                <CohortName>{cohort?.name || enrollment.cohortName}</CohortName>
-            </ClassHeader>
+        <>
+            <ClassCard>
+                <ClassHeader>
+                    <ClassType>Physical Class</ClassType>
+                    <ClassName>{classData.name}</ClassName>
+                    <CohortName>{cohort?.name || enrollment.cohortName}</CohortName>
+                </ClassHeader>
 
-            <ClassBody>
-                <ClassBodyTop>
-                    <InfoGrid>
-                        {/* Location */}
-                        <InfoItem>
-                            <IconWrapper>
-                                <LocationOnIcon />
-                            </IconWrapper>
-                            <InfoContent>
-                                <InfoLabel>Location</InfoLabel>
-                                <InfoValue>{classData.location}</InfoValue>
-                                {classData.mapLink && (
-                                    <LinkButton
-                                        href={classData.mapLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        View Map →
-                                    </LinkButton>
-                                )}
-                            </InfoContent>
-                        </InfoItem>
-                        {/* Schedule */}
-                        <InfoItem>
-                            <IconWrapper>
-                                <CalendarTodayIcon />
-                            </IconWrapper>
-                            <InfoContent>
-                                <InfoLabel>Schedule</InfoLabel>
-                                <ScheduleList>
-                                    {classData.schedule?.slots.map((s: any, i: number) => (
-                                        <ScheduleItem key={i}>
-                                            {s.days}: {s.time}
-                                        </ScheduleItem>
-                                    ))}
-                                </ScheduleList>
-                            </InfoContent>
-                        </InfoItem>
+                <ClassBody>
+                    <ClassBodyTop>
+                        <InfoGrid>
+                            {/* Location */}
+                            <InfoItem>
+                                <IconWrapper>
+                                    <LocationOnIcon />
+                                </IconWrapper>
+                                <InfoContent>
+                                    <InfoLabel>Location</InfoLabel>
+                                    <InfoValue>{classData.location}</InfoValue>
+                                    {classData.mapLink && (
+                                        <LinkButton
+                                            href={classData.mapLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            View Map →
+                                        </LinkButton>
+                                    )}
+                                </InfoContent>
+                            </InfoItem>
+                            {/* Schedule */}
+                            <InfoItem>
+                                <IconWrapper>
+                                    <CalendarTodayIcon />
+                                </IconWrapper>
+                                <InfoContent>
+                                    <InfoLabel>Schedule</InfoLabel>
+                                    <ScheduleList>
+                                        {classData.schedule?.slots.map((s: any, i: number) => (
+                                            <ScheduleItem key={i}>
+                                                {s.days}: {s.time}
+                                            </ScheduleItem>
+                                        ))}
+                                    </ScheduleList>
+                                </InfoContent>
+                            </InfoItem>
 
-                        {/* Instructors */}
-                        <InfoItem>
-                            <IconWrapper>
-                                <PersonIcon />
-                            </IconWrapper>
-                            <InfoContent>
-                                <InfoLabel>Instructors</InfoLabel>
-                                <InstructorList>
-                                    {classData.instructors?.map((instructor: string, i: number) => (
-                                        <InstructorChip key={i}>{instructor}</InstructorChip>
-                                    ))}
-                                </InstructorList>
-                            </InfoContent>
-                        </InfoItem>
-                    </InfoGrid>
+                            {/* Instructors */}
+                            <InfoItem>
+                                <IconWrapper>
+                                    <PersonIcon />
+                                </IconWrapper>
+                                <InfoContent>
+                                    <InfoLabel>Instructors</InfoLabel>
+                                    <InstructorList>
+                                        {classData.instructors?.map(
+                                            (instructor: string, i: number) => (
+                                                <InstructorChip key={i}>
+                                                    {instructor}
+                                                </InstructorChip>
+                                            ),
+                                        )}
+                                    </InstructorList>
+                                </InfoContent>
+                            </InfoItem>
+                        </InfoGrid>
 
-                    {/* QR Code Section */}
-                    {enrollment.qrCode && (
-                        <InfoItem>
-                            <IconWrapper>
-                                <CheckCircleIcon />
-                            </IconWrapper>
+                        {/* QR Code Section */}
+                        {enrollment.qrCode && (
+                            <InfoItem>
+                                <IconWrapper>
+                                    <CheckCircleIcon />
+                                </IconWrapper>
 
-                            <InfoContent>
-                                <InfoLabel>Class Link QR Code </InfoLabel>
-                                <QrContent>
-                                    <img
-                                        src={enrollment.qrCode}
-                                        alt="Class Attendance QR Code"
-                                        style={{
-                                            width: 120,
-                                            height: 120,
-                                            marginTop: 8,
-                                            borderRadius: 8,
-                                            border: "1px solid #eee",
-                                        }}
-                                    />
+                                <InfoContent>
+                                    <InfoLabel>Class Link QR Code </InfoLabel>
+                                    <QrContent>
+                                        <img
+                                            src={enrollment.qrCode}
+                                            alt="Class Attendance QR Code"
+                                            style={{
+                                                width: 120,
+                                                height: 120,
+                                                marginTop: 8,
+                                                borderRadius: 8,
+                                                border: "1px solid #eee",
+                                            }}
+                                        />
 
-                                    <LinkButton
-                                        href={enrollment.qrCode}
-                                        download={`qr-${enrollment.className || "class"}.png`}
-                                        style={{ marginTop: 6 }}
-                                    >
-                                        <DownloadIcon fontSize="small" />
-                                        Download QR
-                                    </LinkButton>
-                                </QrContent>
-                            </InfoContent>
-                        </InfoItem>
-                    )}
-                </ClassBodyTop>
+                                        <LinkButton
+                                            href={enrollment.qrCode}
+                                            download={`qr-${enrollment.className || "class"}.png`}
+                                            style={{ marginTop: 6 }}
+                                        >
+                                            <DownloadIcon fontSize="small" />
+                                            Download QR
+                                        </LinkButton>
+                                    </QrContent>
+                                </InfoContent>
+                            </InfoItem>
+                        )}
+                    </ClassBodyTop>
 
-                <ActionSection>
-                    {/* <CertificateStatus $ready={false}>
-                        Certificate: Not Available Yet
-                    </CertificateStatus> */}
-                    <CertificateStatus $ready={completed} onClick={openModal}>
-                        {completed
-                            ? "Certificate: Ready, Download"
-                            : "Certificate: Not Available Yet"}
-                    </CertificateStatus>
-
-                    {result && (
-                        <ResultBox>
-                            {result.notFound ? (
-                                <p> Certificate not found.</p>
-                            ) : (
-                                <CertificateDownload
-                                    handleClose={handleClose}
-                                    user={user?.name}
-                                    title={classData.courses}
-                                    duration={duration}
-                                    id={enrollment.id}
-                                    $visible={visible}
-                                    desc={shortDesc}
-                                    issuedAt={issuedAt}
-                                />
-                            )}
-                        </ResultBox>
-                    )}
-
-                    <AttendanceButton
-                        onClick={() => router.push(`/dashboard/attendance/${enrollment.id}`)}
-                    >
-                        View Attendance ({attendanceRate}%)
-                    </AttendanceButton>
-                </ActionSection>
-            </ClassBody>
-        </ClassCard>
+                    <ActionSection>
+                        <CertificateStatus $ready={completed} onClick={openModal}>
+                            {completed
+                                ? "Certificate: Ready, Download"
+                                : "Certificate: Not Available Yet"}
+                        </CertificateStatus>
+                        <AttendanceButton
+                            onClick={() => router.push(`/dashboard/attendance/${enrollment.id}`)}
+                        >
+                            View Attendance ({attendanceRate}%)
+                        </AttendanceButton>
+                    </ActionSection>
+                </ClassBody>
+            </ClassCard>
+            {visible && (
+                <CertificateDownload
+                    handleClose={handleClose}
+                    user={user?.name}
+                    title={classData.courses}
+                    duration={duration}
+                    id={certificateId!}
+                    $visible={visible}
+                    desc={shortDesc}
+                    issuedAt={issuedAt}
+                />
+            )}
+        </>
     )
 }
