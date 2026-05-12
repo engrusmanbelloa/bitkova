@@ -12,7 +12,7 @@
             "@/firebase/*": ["firebase/*"],
             "@/models/*": ["old-pages/models/*"],
             "@/lib/*": ["lib/*"],
-            "@/utils/*": ["app/api/auth/utilslib/*"],
+            "@/utils/*": ["utils/*"],
             "@/session/*": ["app/api/auth/session/*"],
             "@/hooks/*": ["hooks/*"],
             "@/*": ["./*"]

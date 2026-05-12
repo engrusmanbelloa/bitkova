@@ -39,33 +39,6 @@ const ResponsivePreview = styled.div`
     align-items: center;
     justify-content: center;
 `
-// Hidden certificate container for PDF generation
-// const HiddenCertContainer = styled.div`
-//     position: fixed;
-//     top: 50px;
-//     left: 50px;
-//     z-index: 9999;
-//     visibility: visible;
-//     opacity: 1;
-//     border: 2px solid red;
-// `
-const HiddenCertContainer = styled.div`
-    position: absolute;
-    top: 300px;
-    left: 100px;
-    width: 842px;
-    height: 595px;
-    background: white;
-    visibility: visible;
-    opacity: 1;
-    border: 2px solid red;
-    z-index: 9999;
-`
-const CertificateContent = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-`
 const Name = styled.div`
     position: absolute;
     top: 46%;
@@ -118,7 +91,6 @@ const Id = styled.div`
     color: #000;
     z-index: 10;
 `
-
 const PreviewName = styled(Name)`
     ${ipad(
         (props: any) => `
@@ -266,7 +238,7 @@ export default function CertificateDownload({
 
     const handleDownload = async () => {
         if (!certRef.current) {
-            console.error("Certificate ref not found")
+            console.log("Certificate ref not found")
             return
         }
 
@@ -380,36 +352,6 @@ export default function CertificateDownload({
                     {id}
                 </PreviewId>
             </ResponsivePreview>
-
-            {/* Hidden certificate for PDF generation */}
-            {/* <HiddenCertContainer ref={certRef}>
-                <CertificateContent>
-                    <Image
-                        src="/BitkovaCert.png"
-                        alt="Certificate"
-                        fill
-                        style={{ objectFit: "contain" }}
-                        priority
-                    />
-                    <Name>{user}</Name>
-                    <CourseTitle>{title}</CourseTitle>
-                    <Desc>
-                        This student has successfully completed more than {duration} Credit hours of
-                        theory and practice courses in {desc}.
-                    </Desc>
-                    <DateIssued>
-                        {new Date().toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        })}
-                    </DateIssued>
-                    <Id>
-                        <span style={{ color: "#36A9E1" }}>Certificate id: </span>
-                        {id}
-                    </Id>
-                </CertificateContent>
-            </HiddenCertContainer> */}
             <HiddenCertificate
                 $visible={$visible}
                 user={user}

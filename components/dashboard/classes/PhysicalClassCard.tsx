@@ -1,5 +1,6 @@
 // components/classes/RegisteredClasses.tsx
 "use client"
+import { useState } from "react"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"
 import CircularProgress from "@mui/material/CircularProgress"
@@ -10,7 +11,12 @@ import DownloadIcon from "@mui/icons-material/Download"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { Card, CardContent } from "@mui/material"
 import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
+import { deriveCertificateFields } from "@/utils/cohortCertUtils"
+import CertificateVerifier from "@/components/course/CertificateVerifier"
+import CertificateDownload from "@/components/course/DownloadCert"
+import { useAuthReady } from "@/hooks/useAuthReady"
 import { mobile } from "@/responsive"
+import { toast } from "sonner"
 
 const ClassCard = styled(Card)`
     border-radius: 12px;
@@ -154,6 +160,7 @@ const CertificateStatus = styled.div<{ $ready: boolean }>`
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
+    cursor: ${(props) => (props.$ready ? "pointer" : "default")};
     background: ${(props) => (props.$ready ? props.theme.mobile.lightAsh : props.theme.mobile.ash)};
     color: ${(props) =>
         props.$ready ? props.theme.mobile.green : props.theme.palette.common.black};
@@ -224,17 +231,29 @@ const AttendanceButton = styled.button`
         color: white;
     }
 `
+const ResultBox = styled.div`
+    margin-top: 20px;
+    padding: 20px;
+    background: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+`
 
 export default function PhysicalClassCard({ enrollment, cohorts }: any) {
     const router = useRouter()
     const { data: physicalClasses, isLoading } = useFetchPhysicalClasses(enrollment.cohortId)
+    const { user, isLoadingUserDoc } = useAuthReady()
+    const [result, setResult] = useState<any>(null)
+    const [visible, setVisible] = useState(false)
 
-    if (isLoading) return <CircularProgress size={24} />
+    if (isLoading || isLoadingUserDoc) return <CircularProgress size={24} />
 
     const classData = physicalClasses?.find((c) => c.id === enrollment.itemId)
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
 
     if (!classData) return null
+
+    const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
 
     const attendanceRate = enrollment.attendanceLog?.length
         ? Math.round(
@@ -243,6 +262,24 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
                   100,
           )
         : 0
+
+    const openModal = () => {
+        if (!completed) {
+            toast.error("You haven't completed this course yet.")
+            return
+        }
+        // setResult(true)
+        // setOpen(true)
+        setVisible(true)
+        toast.success("Congratulations>>> download your certificate")
+        // console.log(visible, id, title, user)
+    }
+
+    const handleClose = () => {
+        // setOpen(false)
+        // setResult(false)
+        setVisible(false)
+    }
 
     return (
         <ClassCard>
@@ -344,9 +381,33 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
                 </ClassBodyTop>
 
                 <ActionSection>
-                    <CertificateStatus $ready={false}>
+                    {/* <CertificateStatus $ready={false}>
                         Certificate: Not Available Yet
+                    </CertificateStatus> */}
+                    <CertificateStatus $ready={completed} onClick={openModal}>
+                        {completed
+                            ? "Certificate: Ready, Download"
+                            : "Certificate: Not Available Yet"}
                     </CertificateStatus>
+
+                    {result && (
+                        <ResultBox>
+                            {result.notFound ? (
+                                <p> Certificate not found.</p>
+                            ) : (
+                                <CertificateDownload
+                                    handleClose={handleClose}
+                                    user={user?.name}
+                                    title={classData.courses}
+                                    duration={duration}
+                                    id={enrollment.id}
+                                    $visible={visible}
+                                    desc={shortDesc}
+                                    issuedAt={issuedAt}
+                                />
+                            )}
+                        </ResultBox>
+                    )}
 
                     <AttendanceButton
                         onClick={() => router.push(`/dashboard/attendance/${enrollment.id}`)}
