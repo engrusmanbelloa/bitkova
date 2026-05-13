@@ -1,5 +1,6 @@
 // components/classes/RegisteredClasses.tsx
 "use client"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import CircularProgress from "@mui/material/CircularProgress"
 import TelegramIcon from "@mui/icons-material/Telegram"
@@ -7,6 +8,11 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday"
 import { Card, CardContent } from "@mui/material"
 import { useFetchTelegramClass } from "@/hooks/classes/useFetchTelegramClass"
 import { mobile } from "@/responsive"
+import { deriveCertificateFields } from "@/utils/cohortCertUtils"
+import { createClassCertificate } from "@/lib/firebase/uploads/createClassCertificate"
+import CertificateDownload from "@/components/course/DownloadCert"
+import { useAuthReady } from "@/hooks/useAuthReady"
+import { toast } from "sonner"
 
 const ClassCard = styled(Card)`
     border-radius: 12px;
@@ -135,6 +141,7 @@ const CertificateStatus = styled.div<{ $ready: boolean }>`
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
+    cursor: ${(props) => (props.$ready ? "pointer" : "default")};
     background: ${(props) => (props.$ready ? props.theme.mobile.lightAsh : props.theme.mobile.ash)};
     color: ${(props) =>
         props.$ready ? props.theme.mobile.green : props.theme.palette.common.black};
@@ -153,72 +160,119 @@ const ScheduleItem = styled.div`
 export default function TelegramClassCard({ enrollment, cohorts }: any) {
     // const { data: telegramClass, isLoading } = useFetchTelegramClass(enrollment.cohortId)
     const { data: telegramClasses = [], isLoading } = useFetchTelegramClass(enrollment.cohortId)
-
+    const { user, isLoadingUserDoc } = useAuthReady()
     const telegramClass = telegramClasses[0]
+    const [visible, setVisible] = useState(false)
+    const [certificateId, setCertificateId] = useState<string | null>(
+        enrollment.certificateId ?? null,
+    )
+    const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
+    const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
 
-    if (!telegramClass) return null
+    // Auto-create certificate when cohort period is reached
+    useEffect(() => {
+        if (!completed || !user?.id || certificateId) {
+            // console.log("Certificate not ready or already exists", {
+            //     completed,
+            //     user: user?.id,
+            //     classData,
+            //     certificateId,
+            // })
+            return
+        }
+        createClassCertificate(user.id, enrollment.id, "physical_class")
+            .then((id) => setCertificateId(id))
+            .catch(console.error)
+    }, [completed, user?.id, telegramClass, certificateId, enrollment.id])
+
+    const openModal = () => {
+        if (!completed || !certificateId) {
+            toast.error("Certificate not ready yet.")
+            return
+        }
+        setVisible(true)
+        toast.success("Congratulations! Download your certificate.")
+    }
+
+    const handleClose = () => setVisible(false)
 
     if (isLoading) return <CircularProgress size={24} />
-
-    const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
-
     if (!telegramClass) return null
 
     return (
-        <ClassCard>
-            <ClassHeader>
-                <ClassType>Telegram Class</ClassType>
-                <ClassName>{telegramClass.name}</ClassName>
-                <CohortName>{cohort?.name || enrollment.cohortName}</CohortName>
-            </ClassHeader>
+        <>
+            <ClassCard>
+                <ClassHeader>
+                    <ClassType>Telegram Class</ClassType>
+                    <ClassName>{telegramClass.name}</ClassName>
+                    <CohortName>{cohort?.name || enrollment.cohortName}</CohortName>
+                </ClassHeader>
 
-            <ClassBody>
-                <InfoGrid>
-                    {/* Telegram Link */}
-                    <InfoItem>
-                        <IconWrapper>
-                            <TelegramIcon />
-                        </IconWrapper>
-                        <InfoContent>
-                            <InfoLabel>Telegram Group</InfoLabel>
-                            {enrollment.inviteLink ? (
-                                <LinkButton
-                                    href={enrollment.inviteLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Join Group →
-                                </LinkButton>
-                            ) : (
-                                <InfoValue>Link pending...</InfoValue>
-                            )}
-                        </InfoContent>
-                    </InfoItem>
+                <ClassBody>
+                    <InfoGrid>
+                        {/* Telegram Link */}
+                        <InfoItem>
+                            <IconWrapper>
+                                <TelegramIcon />
+                            </IconWrapper>
+                            <InfoContent>
+                                <InfoLabel>Telegram Group</InfoLabel>
+                                {enrollment.inviteLink ? (
+                                    <LinkButton
+                                        href={enrollment.inviteLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Join Group →
+                                    </LinkButton>
+                                ) : (
+                                    <InfoValue>Link pending...</InfoValue>
+                                )}
+                            </InfoContent>
+                        </InfoItem>
 
-                    {/* Schedule */}
-                    <InfoItem>
-                        <IconWrapper>
-                            <CalendarTodayIcon />
-                        </IconWrapper>
-                        <InfoContent>
-                            <InfoLabel>Schedule</InfoLabel>
-                            <ScheduleList>
-                                {telegramClass.schedule?.slots.map((s: any, i: number) => (
-                                    <ScheduleItem key={i}>
-                                        {s.days}: {s.time}
-                                    </ScheduleItem>
-                                ))}
-                            </ScheduleList>
-                        </InfoContent>
-                    </InfoItem>
-                </InfoGrid>
+                        {/* Schedule */}
+                        <InfoItem>
+                            <IconWrapper>
+                                <CalendarTodayIcon />
+                            </IconWrapper>
+                            <InfoContent>
+                                <InfoLabel>Schedule</InfoLabel>
+                                <ScheduleList>
+                                    {telegramClass.schedule?.slots.map((s: any, i: number) => (
+                                        <ScheduleItem key={i}>
+                                            {s.days}: {s.time}
+                                        </ScheduleItem>
+                                    ))}
+                                </ScheduleList>
+                            </InfoContent>
+                        </InfoItem>
+                    </InfoGrid>
 
-                <ActionSection>
-                    <CertificateStatus $ready={true}>
-                        Certificate: Not Available Yet
-                    </CertificateStatus>
-                </ActionSection>
-            </ClassBody>
-        </ClassCard>
+                    <ActionSection>
+                        {/* <CertificateStatus $ready={true}>
+                            Certificate: Not Available Yet
+                        </CertificateStatus> */}
+                        <CertificateStatus $ready={completed} onClick={openModal}>
+                            {completed
+                                ? "Certificate: Ready, Download"
+                                : "Certificate: Not Available Yet"}
+                        </CertificateStatus>
+                    </ActionSection>
+                </ClassBody>
+            </ClassCard>
+            {visible && (
+                <CertificateDownload
+                    handleClose={handleClose}
+                    user={user?.name}
+                    title={telegramClass.name}
+                    duration={duration}
+                    id={certificateId!}
+                    $visible={visible}
+                    desc={shortDesc}
+                    issuedAt={issuedAt}
+                />
+            )}
+        </>
     )
 }
