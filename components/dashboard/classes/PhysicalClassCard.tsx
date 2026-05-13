@@ -211,7 +211,6 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
     const router = useRouter()
     const { data: physicalClasses, isLoading } = useFetchPhysicalClasses(enrollment.cohortId)
     const { user, isLoadingUserDoc } = useAuthReady()
-    const [result, setResult] = useState<any>(null)
     const [visible, setVisible] = useState(false)
     const [certificateId, setCertificateId] = useState<string | null>(
         enrollment.certificateId ?? null,
@@ -256,11 +255,19 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
 
     const handleClose = () => setVisible(false)
 
-    if (isLoading || isLoadingUserDoc) return <CircularProgress size={24} />
+    if (isLoading || isLoadingUserDoc || (physicalClasses && !classData)) {
+        return <CircularProgress size={24} />
+    }
+    if (!physicalClasses) return null
     if (!classData) return null
 
-    console.log("physical class enrollment", physicalClasses)
-    console.log("class data for this user", classData)
+    // console.log("physical classes", physicalClasses)
+    // console.log("enrollment.itemId", enrollment.itemId)
+    // console.log(
+    //     "physicalClasses ids",
+    //     physicalClasses?.map((c) => c.id),
+    // )
+    // console.log("classData", classData)
 
     return (
         <>

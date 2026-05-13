@@ -61,33 +61,6 @@ export function useFetchPhysicalClasses(cohortId?: string) {
         enabled: !!cohortId,
         retry: 2,
         staleTime: 5 * 60 * 1000,
-        networkMode: "offlineFirst",
-    })
-}
-
-// hooks/classes/useFetchPhysicalClass.ts
-
-// import { useQuery } from "@tanstack/react-query"
-import { doc, getDoc } from "firebase/firestore"
-// import { db } from "@/lib/firebase/client"
-
-export function useFetchPhysicalClass(classId?: string) {
-    return useQuery({
-        queryKey: ["physicalClass", classId],
-
-        queryFn: async () => {
-            if (!classId) return null
-
-            const snap = await getDoc(doc(db!, "physicalClasses", classId))
-
-            if (!snap.exists()) return null
-
-            return {
-                id: snap.id,
-                ...snap.data(),
-            }
-        },
-
-        enabled: !!classId,
+        // networkMode: "offlineFirst",
     })
 }
