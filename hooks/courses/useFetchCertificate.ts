@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase/client"
-import { useUserStore } from "@/lib/store/useUserStore"
 
 interface CertificateStatus {
     certificateExists: boolean
@@ -34,12 +33,6 @@ const fetchCertificateStatus = async ({
     const completedVideos = enrollmentSnap.exists()
         ? enrollmentSnap.data().completedVideos || []
         : []
-
-    // const courseRef = doc(db, "users", userId, "enrolledCourses", courseId)
-    // const courseSnap = await getDoc(courseRef)
-    // const completedVideos: string[] = courseSnap.exists()
-    //     ? courseSnap.data()?.completedVideos || []
-    //     : []
 
     return { certificateExists, completedVideos, certificateId, issuedAt }
 }

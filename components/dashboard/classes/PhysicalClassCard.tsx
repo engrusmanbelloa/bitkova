@@ -11,12 +11,12 @@ import DownloadIcon from "@mui/icons-material/Download"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { Card, CardContent } from "@mui/material"
 import { useFetchPhysicalClasses } from "@/hooks/classes/useFetchPhysicalClasses"
-import { createClassCertificate } from "@/lib/firebase/uploads/createClassCertificate"
 import { deriveCertificateFields } from "@/utils/cohortCertUtils"
 import CertificateDownload from "@/components/course/DownloadCert"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { mobile } from "@/responsive"
 import { toast } from "sonner"
+import { useClassCertificate } from "@/hooks/classes/useClassCertificate"
 
 const ClassCard = styled(Card)`
     border-radius: 12px;
@@ -212,30 +212,17 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
     const { data: physicalClasses, isLoading } = useFetchPhysicalClasses(enrollment.cohortId)
     const { user, isLoadingUserDoc } = useAuthReady()
     const [visible, setVisible] = useState(false)
-    const [certificateId, setCertificateId] = useState<string | null>(
-        enrollment.certificateId ?? null,
-    )
 
     const classData = physicalClasses?.find((c) => c.id === enrollment.itemId)
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
     const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
-
-    // Auto-create certificate when cohort period is reached
-    useEffect(() => {
-        if (!completed || !user?.id || !classData || certificateId) {
-            // console.log("Certificate not ready or already exists", {
-            //     completed,
-            //     user: user?.id,
-            //     classData,
-            //     certificateId,
-            // })
-            return
-        }
-        createClassCertificate(user.id, enrollment.id, "physical_class")
-            .then((id) => setCertificateId(id))
-            .catch(console.error)
-    }, [completed, user?.id, classData, certificateId, enrollment.id])
-
+    const { certificateId, isCreating } = useClassCertificate({
+        userId: user?.id,
+        enrollmentId: enrollment.id,
+        classType: "physical_class",
+        completed,
+        existingCertificateId: enrollment.certificateId,
+    })
     const attendanceRate = enrollment.attendanceLog?.length
         ? Math.round(
               (enrollment.attendanceLog.filter((a: any) => a.attended).length /

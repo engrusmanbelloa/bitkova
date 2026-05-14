@@ -18,15 +18,12 @@ interface UseCourseCompletionProps {
 export const useCourseCompletion = ({
     courseId,
     firebaseUser,
-    course,
     videoList,
     selectedTitle,
 }: UseCourseCompletionProps) => {
     const queryClient = useQueryClient()
 
     const { data: status, isLoading } = useFetchCertificateStatus(firebaseUser?.uid, courseId)
-
-    // const completedVideos = status?.completedVideos || []
     const certificateReady = status?.certificateExists || false
     const enrollment = useUserStore((s) =>
         s.enrollments.find((e) => e.itemId === courseId && e.itemType === "async_course"),
@@ -58,13 +55,6 @@ export const useCourseCompletion = ({
                 progress: (updatedList.length / videoList.length) * 100,
             })
 
-            // const courseRef = doc(db, "users", userId, "enrolledCourses", enrollmentId)
-            // await updateDoc(courseRef, {
-            //     completedLessons: updatedList.length,
-            //     completedVideos: updatedList,
-            //     progress: (updatedList.length / videoList.length) * 100,
-            // })
-
             const isEnrolled = useUserStore.getState().isEnrolled(courseId)
             if (!isEnrolled) {
                 const enrolledCourse: Enrollment = {
@@ -82,7 +72,9 @@ export const useCourseCompletion = ({
 
             if (updatedList.length === videoList.length) {
                 // Get the new certificate ID from the function
-                const newCertId = await createCertificate(userId, courseId)
+                // const newCertId = await createCertificate(userId, courseId)
+                // await createCertificate(userId, courseId)
+                await createCertificate({ type: "async_course", userId, courseId })
                 useUserStore.getState().addToCompletedCourses({
                     userId,
                     courseId,

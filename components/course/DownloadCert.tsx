@@ -243,7 +243,7 @@ export default function CertificateDownload({
         }
 
         try {
-            console.log("Starting certificate generation...")
+            // console.log("Starting certificate generation...")
 
             // Wait for images to load
             const images = certRef.current.querySelectorAll("img")
@@ -252,21 +252,21 @@ export default function CertificateDownload({
             await Promise.all(
                 Array.from(images).map((img) => {
                     if (img.complete) {
-                        console.log("Image already loaded:", img.src)
+                        // console.log("Image already loaded:", img.src)
                         return Promise.resolve()
                     }
                     return new Promise((resolve, reject) => {
                         img.onload = () => {
-                            console.log("Image loaded:", img.src)
+                            // console.log("Image loaded:", img.src)
                             resolve(null)
                         }
                         img.onerror = (error) => {
-                            console.error("Image failed to load:", img.src, error)
+                            // console.error("Image failed to load:", img.src, error)
                             reject(error)
                         }
                         // Set a timeout in case image loading hangs
                         setTimeout(() => {
-                            console.log("Image loading timeout:", img.src)
+                            // console.log("Image loading timeout:", img.src)
                             resolve(null) // Resolve anyway to continue
                         }, 5000)
                     })
@@ -276,7 +276,7 @@ export default function CertificateDownload({
             // Additional wait for rendering
             await new Promise((resolve) => setTimeout(resolve, 1000))
 
-            console.log("Generating canvas...")
+            // console.log("Generating canvas...")
             const canvas = await html2canvas(certRef.current, {
                 scale: 2,
                 useCORS: true,
@@ -289,29 +289,29 @@ export default function CertificateDownload({
                 windowHeight: 595,
             })
 
-            console.log("Canvas generated:", canvas.width, "x", canvas.height)
+            // console.log("Canvas generated:", canvas.width, "x", canvas.height)
 
             const imgData = canvas.toDataURL("image/png", 1.0)
-            console.log("Image data length:", imgData.length)
+            // console.log("Image data length:", imgData.length)
 
             // Check if imgData is valid
             if (!imgData || imgData === "data:," || imgData.length < 1000) {
                 throw new Error(`Invalid image data generated. Length: ${imgData.length}`)
             }
 
-            console.log("Creating PDF...")
+            // console.log("Creating PDF...")
             const pdf = new jsPDF("landscape", "pt", "a4")
             const pdfWidth = pdf.internal.pageSize.getWidth()
             const pdfHeight = pdf.internal.pageSize.getHeight()
 
-            console.log("PDF dimensions:", pdfWidth, "x", pdfHeight)
+            // console.log("PDF dimensions:", pdfWidth, "x", pdfHeight)
 
             pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
             pdf.save(`Bitkova_Certificate_${user}.pdf`)
 
-            console.log("PDF saved successfully!")
+            // console.log("PDF saved successfully!")
         } catch (error: any) {
-            console.error("Error generating certificate:", error)
+            // console.error("Error generating certificate:", error)
             alert(`Failed to generate certificate: ${error.message}`)
         }
     }

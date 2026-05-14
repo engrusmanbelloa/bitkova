@@ -1,4 +1,4 @@
-// utils/cohortCertUtils.ts
+// utils / cohortCertUtils.ts
 // import { Cohort } from "@/types/classTypes"
 
 // export function deriveCertificateFields(cohort: Cohort) {
@@ -51,6 +51,10 @@ export function deriveCertificateFields(cohort: Cohort) {
     const duration = weeks * 6
 
     const issuedAt = Timestamp.fromDate(new Date(endDate.getTime() - msPerWeek))
+
+    const now = Date.now()
+    const oneWeekBefore = endDate.getTime() - msPerWeek
+    // const completed = now >= oneWeekBefore
 
     const completed = true
 
