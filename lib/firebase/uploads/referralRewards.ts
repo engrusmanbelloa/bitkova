@@ -17,7 +17,7 @@ export async function rewardReferrer(buyerId: string, rewardAmount: number = 500
         totalXpEarned: FieldValue.increment(rewardAmount),
     })
 
-    console.log(
-        `Referrer ${referredBy} credited with ${rewardAmount} XP for purchase by ${buyerId}`,
-    )
+    // console.log(
+    //     `Referrer ${referredBy} credited with ${rewardAmount} XP for purchase by ${buyerId}`,
+    // )
 }

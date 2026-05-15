@@ -66,6 +66,9 @@ export interface Enrollment {
 
     privacyAccepted?: true
     privacyAcceptedAt?: Date
+
+    certificateId?: string
+    completedAt?: Date
 }
 
 export interface WishListItem {

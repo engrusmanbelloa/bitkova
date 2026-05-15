@@ -152,7 +152,7 @@ const MobileNavMiddle = styled.div`
     padding: 5px;
     box-sizing: border-box;
     ${ipad({ display: "flex", justifyContent: "center", alignItems: "center" })}
-    ${mobile({ width: 140 })}
+    ${mobile({ width: 100 })}
 `
 const CartsContainer = styled.div`
     dislpay: flex;
@@ -181,6 +181,7 @@ const NavBtn = styled.button`
 const Toggle = styled.div`
     display: none;
     flex: 0.5;
+    background-color: ${(props) => props.theme.palette.primary.main};
     justify-content: flex-end;
     align-items: center;
     flex-direction: row;
@@ -522,6 +523,7 @@ export default function Navbar() {
                                     }}
                                 />
                             ) : (
+                                // <div>Login</div>
                                 <CloseIcon
                                     sx={{ p: 0, m: 0, fontSize: 25 }}
                                     onClick={() => {

@@ -8,6 +8,7 @@ import styled from "styled-components"
 import Button from "@/components/Button"
 import { mobile, ipad } from "@/responsive"
 import HiddenCertificate from "@/components/course/HiddenCert"
+import { formatDate } from "@/utils/formatDate"
 
 const Container = styled.div<{ $visible?: boolean }>`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -238,7 +239,7 @@ export default function CertificateDownload({
 
     const handleDownload = async () => {
         if (!certRef.current) {
-            console.log("Certificate ref not found")
+            // console.log("Certificate ref not found")
             return
         }
 
@@ -247,7 +248,7 @@ export default function CertificateDownload({
 
             // Wait for images to load
             const images = certRef.current.querySelectorAll("img")
-            console.log(`Found ${images.length} images`)
+            // console.log(`Found ${images.length} images`)
 
             await Promise.all(
                 Array.from(images).map((img) => {
@@ -316,17 +317,17 @@ export default function CertificateDownload({
         }
     }
 
-    const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
-        const date = new Date(firebaseTimestamp.toMillis())
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            // hour: "2-digit",
-            // minute: "2-digit",
-            // second: "2-digit",
-        })
-    }
+    // const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
+    //     const date = new Date(firebaseTimestamp.toMillis())
+    //     return date.toLocaleDateString("en-US", {
+    //         year: "numeric",
+    //         month: "long",
+    //         day: "numeric",
+    //         // hour: "2-digit",
+    //         // minute: "2-digit",
+    //         // second: "2-digit",
+    //     })
+    // }
 
     return (
         <Container $visible={$visible}>

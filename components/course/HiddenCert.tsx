@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import styled from "styled-components"
+import { formatDate } from "@/utils/formatDate"
 
 const Container = styled.div<{ $visible?: boolean }>`
     display: ${(props) => (props.$visible ? "flex" : "none")};
@@ -106,17 +107,17 @@ export default function HiddenCertificate({
     certRef,
     issuedAt,
 }: CertProf) {
-    const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
-        const date = new Date(firebaseTimestamp.toMillis())
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            // hour: "2-digit",
-            // minute: "2-digit",
-            // second: "2-digit",
-        })
-    }
+    // const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
+    //     const date = new Date(firebaseTimestamp.toMillis())
+    //     return date.toLocaleDateString("en-US", {
+    //         year: "numeric",
+    //         month: "long",
+    //         day: "numeric",
+    //         // hour: "2-digit",
+    //         // minute: "2-digit",
+    //         // second: "2-digit",
+    //     })
+    // }
     return (
         <Container $visible={$visible}>
             {/* Hidden certificate for PDF generation */}

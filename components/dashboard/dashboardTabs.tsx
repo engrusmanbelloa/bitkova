@@ -4,6 +4,7 @@ import ProfileSection from "./ProfileSection"
 import ProfileForm from "./Settings"
 import InProgressCourses from "@/components/course/InProgressCourses"
 import Referral from "@/components/dashboard/referals/Referral"
+import CertificatesTab from "@/components/dashboard/certificateTab/CertificatesTab"
 import NoDataAvailable from "./NoData"
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import {
@@ -47,7 +48,7 @@ export const DASHBOARD_TABS = [
         key: "certificate",
         icon: <WorkspacePremiumIcon />,
         label: "Certificates",
-        component: () => <NoDataAvailable comment="Coming Soon" />,
+        component: () => <CertificatesTab />,
     },
     {
         key: "wishlist",
