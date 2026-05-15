@@ -1,6 +1,5 @@
 // components/dashboard/certificateTab/CertififactesTab.tsx
 "use client"
-import { useState } from "react"
 import styled, { keyframes } from "styled-components"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { useAuthReady } from "@/hooks/useAuthReady"
@@ -18,7 +17,6 @@ const pulse = keyframes`
   0%, 100% { opacity: 1;   }
   50%       { opacity: 0.5; }
 `
-
 //Page shell
 const CertificateContainer = styled.div`
     display: flex;
@@ -39,18 +37,6 @@ const Title = styled.h2`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
     margin: 0;
-    padding: 0;
-    ${mobile(
-        (props: any) => `
-            font-weight: 350;
-            margin: 0 0 10px 0;
-        `,
-    )}
-`
-const HeaderTitle = styled.h2`
-    font-weight: 500;
-    color: ${(props) => props.theme.palette.common.black};
-    margin: 0 0 20px 0;
     padding: 0;
     ${mobile(
         (props: any) => `
@@ -84,25 +70,25 @@ const EmptyIconWrap = styled.div`
     width: 76px;
     height: 76px;
     border-radius: 50%;
-    background: ${(p) => p.theme.palette.action.hover};
+    background: ${(props) => props.theme.palette.common.white};
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 18px;
     svg {
         font-size: 36px;
-        color: ${(p) => p.theme.mobile.gray};
+        color: ${(props) => props.theme.mobile.gray};
     }
 `
 const EmptyTitle = styled.h3`
     font-size: 17px;
     font-weight: 700;
     margin: 0 0 8px;
-    color: ${(p) => p.theme.palette.common.black};
+    color: ${(props) => props.theme.palette.common.black};
 `
 const EmptyText = styled.p`
     font-size: 14px;
-    color: ${(p) => p.theme.mobile.gray};
+    color: ${(props) => props.theme.mobile.gray};
     max-width: 260px;
     margin: 0;
     line-height: 1.6;
@@ -112,12 +98,12 @@ const EmptyText = styled.p`
 const SkeletonCard = styled.div`
     border-radius: 16px;
     overflow: hidden;
-    background: ${(p) => p.theme.palette.common.white};
+    background: ${(props) => props.theme.palette.common.white};
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 `
 const SkBanner = styled.div`
     height: 108px;
-    background: ${(p) => p.theme.palette.action.hover};
+    background: ${(props) => props.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 const SkBody = styled.div`
@@ -130,7 +116,7 @@ const SkLine = styled.div<{ $w?: string; $h?: string }>`
     height: ${(p) => p.$h ?? "13px"};
     width: ${(p) => p.$w ?? "100%"};
     border-radius: 6px;
-    background: ${(p) => p.theme.palette.action.hover};
+    background: ${(props) => props.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 
@@ -160,7 +146,7 @@ export default function CertificatesTab() {
         return (
             <CertificateContainer>
                 <Header>
-                    <HeaderTitle>My Certificates</HeaderTitle>
+                    <Title>My Certificates</Title>
                     <PageSub>Loading your achievements…</PageSub>
                 </Header>
                 <Grid>

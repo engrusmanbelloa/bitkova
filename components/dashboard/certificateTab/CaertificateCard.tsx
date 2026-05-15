@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components"
 import DownloadIcon from "@mui/icons-material/Download"
 import SchoolIcon from "@mui/icons-material/School"
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
+import EnrollButton from "@/components/EnrollButton"
 
 // animations
 const shimmer = keyframes`
@@ -93,7 +94,7 @@ const BannerSmallCircle = styled.div`
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: #ffffff0d;
     pointer-events: none;
 `
 const TypeChip = styled.span`
@@ -101,9 +102,9 @@ const TypeChip = styled.span`
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.1px;
-    color: rgba(255, 255, 255, 0.75);
-    background: rgba(255, 255, 255, 0.13);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: ${(props) => props.theme.palette.common.white};
+    background: #ffffff21;
+    border: 1px solid ${(props) => props.theme.mobile.gray};
     border-radius: 20px;
     padding: 3px 10px;
     position: relative;
@@ -120,7 +121,7 @@ const BannerIcon = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: ${(props) => props.theme.palette.common.white};
     z-index: 1;
     svg {
         font-size: 19px;
@@ -144,12 +145,12 @@ const CertTitle = styled.h3`
 `
 const CertSub = styled.p`
     font-size: 12px;
-    color: ${(p) => p.theme.palette.text?.secondary ?? "#888"};
+    color: ${(p) => p.theme.palette.common.black};
     margin: 0 0 14px;
 `
 const Hr = styled.div`
     height: 1px;
-    background: ${(p) => p.theme.palette.divider ?? "#eee"};
+    background: ${(props) => props.theme.mobile.horizontalrule};
     margin-bottom: 14px;
 `
 const MetaRow = styled.div`
@@ -168,12 +169,12 @@ const MetaLabel = styled.span`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: ${(p) => p.theme.palette.text?.secondary ?? "#aaa"};
+    color: ${(p) => p.theme.mobile.gray};
 `
 const MetaValue = styled.span`
     font-size: 13px;
     font-weight: 600;
-    color: ${(p) => p.theme.palette.common.black};
+    color: ${(props) => props.theme.palette.common.black};
 `
 const CertIdRow = styled.div`
     display: flex;
@@ -185,41 +186,11 @@ const CertIdValue = styled.span`
     font-size: 11px;
     font-weight: 600;
     font-family: "Courier New", monospace;
-    color: ${(p) => p.theme.palette.primary?.main ?? "#1565c0"};
+    color: ${(props) => props.theme.palette.primary.main};
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
-`
-const DownloadBtn = styled.button`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 11px 0;
-    border-radius: 10px;
-    border: none;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    cursor: pointer;
-    background: ${(p) => p.theme.palette.primary?.main ?? "#1565c0"};
-    color: #fff;
-    transition:
-        opacity 0.18s,
-        transform 0.15s;
-    svg {
-        font-size: 16px;
-    }
-
-    &:hover {
-        opacity: 0.87;
-        transform: scale(1.01);
-    }
-    &:active {
-        transform: scale(0.98);
-    }
 `
 // banner gradients for different cert types
 const BANNERS = {
@@ -277,9 +248,12 @@ export default function CertificateCard({
                     <CertIdValue title={certId}>{certId}</CertIdValue>
                 </CertIdRow>
                 <Hr />
-                <DownloadBtn onClick={onDownload}>
+                <EnrollButton onClick={onDownload}>
                     <DownloadIcon /> Download Certificate
-                </DownloadBtn>
+                </EnrollButton>
+                {/* <DownloadBtn onClick={onDownload}>
+                    <DownloadIcon /> Download Certificate
+                </DownloadBtn> */}
             </Body>
         </Card>
     )

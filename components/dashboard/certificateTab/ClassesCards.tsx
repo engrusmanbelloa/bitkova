@@ -19,12 +19,13 @@ const pulse = keyframes`
 const SkeletonCard = styled.div`
     border-radius: 16px;
     overflow: hidden;
-    background: ${(p) => p.theme.palette.common.white};
+    background: ${(props) => props.theme.palette.common.white};
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 `
+
 const SkBanner = styled.div`
     height: 108px;
-    background: ${(p) => p.theme.palette.action?.hover ?? "#efefef"};
+    background: ${(props) => props.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 const SkBody = styled.div`
@@ -37,7 +38,7 @@ const SkLine = styled.div<{ $w?: string; $h?: string }>`
     height: ${(p) => p.$h ?? "13px"};
     width: ${(p) => p.$w ?? "100%"};
     border-radius: 6px;
-    background: ${(p) => p.theme.palette.action?.hover ?? "#efefef"};
+    background: ${(props) => props.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 
