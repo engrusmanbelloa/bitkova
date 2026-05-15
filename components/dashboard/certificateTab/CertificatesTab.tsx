@@ -33,9 +33,20 @@ const CertificateContainer = styled.div`
     )}
 `
 const Header = styled.div`
-    margin-bottom: 36px;
+    margin: 0 0 20px 0;
 `
-
+const Title = styled.h2`
+    font-weight: 500;
+    color: ${(props) => props.theme.palette.common.black};
+    margin: 0;
+    padding: 0;
+    ${mobile(
+        (props: any) => `
+            font-weight: 350;
+            margin: 0 0 10px 0;
+        `,
+    )}
+`
 const HeaderTitle = styled.h2`
     font-weight: 500;
     color: ${(props) => props.theme.palette.common.black};
@@ -50,7 +61,7 @@ const HeaderTitle = styled.h2`
 `
 const PageSub = styled.p`
     font-size: 14px;
-    color: ${(p) => p.theme.palette.text?.secondary ?? "#777"};
+    color: ${(props) => props.theme.palette.common.black};
     margin: 0;
 `
 const Grid = styled.div`
@@ -73,14 +84,14 @@ const EmptyIconWrap = styled.div`
     width: 76px;
     height: 76px;
     border-radius: 50%;
-    background: ${(p) => p.theme.palette.action?.hover ?? "#f4f4f4"};
+    background: ${(p) => p.theme.palette.action.hover};
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 18px;
     svg {
         font-size: 36px;
-        color: ${(p) => p.theme.palette.text?.secondary ?? "#ccc"};
+        color: ${(p) => p.theme.mobile.gray};
     }
 `
 const EmptyTitle = styled.h3`
@@ -91,7 +102,7 @@ const EmptyTitle = styled.h3`
 `
 const EmptyText = styled.p`
     font-size: 14px;
-    color: ${(p) => p.theme.palette.text?.secondary ?? "#888"};
+    color: ${(p) => p.theme.mobile.gray};
     max-width: 260px;
     margin: 0;
     line-height: 1.6;
@@ -106,7 +117,7 @@ const SkeletonCard = styled.div`
 `
 const SkBanner = styled.div`
     height: 108px;
-    background: ${(p) => p.theme.palette.action?.hover ?? "#efefef"};
+    background: ${(p) => p.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 const SkBody = styled.div`
@@ -119,7 +130,7 @@ const SkLine = styled.div<{ $w?: string; $h?: string }>`
     height: ${(p) => p.$h ?? "13px"};
     width: ${(p) => p.$w ?? "100%"};
     border-radius: 6px;
-    background: ${(p) => p.theme.palette.action?.hover ?? "#efefef"};
+    background: ${(p) => p.theme.palette.action.hover};
     animation: ${pulse} 1.5s ease infinite;
 `
 
@@ -170,7 +181,7 @@ export default function CertificatesTab() {
     return (
         <CertificateContainer>
             <Header>
-                <HeaderTitle>My Certificates</HeaderTitle>
+                <Title>My Certificates</Title>
                 <PageSub>
                     {total > 0
                         ? `${total} certificate${total > 1 ? "s" : ""} earned`
