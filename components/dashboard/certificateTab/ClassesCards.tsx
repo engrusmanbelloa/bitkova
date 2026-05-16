@@ -22,7 +22,6 @@ const SkeletonCard = styled.div`
     background: ${(props) => props.theme.palette.common.white};
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 `
-
 const SkBanner = styled.div`
     height: 108px;
     background: ${(props) => props.theme.palette.action.hover};
