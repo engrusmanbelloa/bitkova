@@ -131,7 +131,6 @@ export default function CertificateVerifier({
     desc,
     issuedAt,
 }: CertProf) {
-    const [certificateId, setCertificateId] = useState("")
     const [result, setResult] = useState<any>(null)
     const [loading, setLoading] = useState(false)
     const [visible, setVisible] = useState(false)
@@ -158,24 +157,6 @@ export default function CertificateVerifier({
         setOpen(false)
         setResult(false)
     }
-
-    //   const handleVerify = async () => {
-    //     setLoading(true)
-    //     setResult(null)
-    //     try {
-    //       const docRef = doc(db, "certificates", certificateId.trim())
-    //       const docSnap = await getDoc(docRef)
-
-    //       if (docSnap.exists()) {
-    //         setResult(docSnap.data())
-    //       } else {
-    //         setResult({ notFound: true })
-    //       }
-    //     } catch (err) {
-    //       console.error(err)
-    //     }
-    //     setLoading(false)
-    //   }
 
     return (
         <Container>

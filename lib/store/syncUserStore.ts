@@ -21,6 +21,7 @@ const mapDoc = (docSnap: any) => {
     return {
         ...data,
         // Automatically handle any common timestamp fields
+        id: docSnap.id,
         enrolledAt: data.enrolledAt?.toDate(),
         updatedAt: data.updatedAt?.toDate(),
         completedAt: data.completedAt?.toDate(),
@@ -62,20 +63,16 @@ export const syncUserStore = (userId: string): Unsubscribe => {
 
     // 2. Setup Real-time Listener for Enrolled Courses
     // This is the only thing that needs to be "Live"
-    // const unsubscribe = onSnapshot(
-    //     collection(db, "users", userId, "enrolledCourses"),
-    //     (snap) => {
-    //         const list = snap.docs.map(mapDoc) as Enrollment[]
-    //         store.setEnrollments(list)
-    //     },
-    //     (err) => console.error("Enrollment listener error:", err),
-    // )
-
     const unsubscribe = onSnapshot(
         query(collection(db!, "enrollments"), where("userId", "==", userId)),
         (snap) => {
             const list = snap.docs.map(mapDoc) as Enrollment[]
             store.setEnrollments(list)
+
+            // console.log("Enrollment snapshot updated", {
+            //     count: list.length,
+            //     enrollments: list,
+            // })
         },
         (err) => console.error("Enrollment listener error:", err),
     )

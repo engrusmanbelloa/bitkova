@@ -6,7 +6,7 @@ export interface Facilitator {
     email: string
     profileUrl?: string
     expertise: string[] // e.g. ["Blockchain", "Web3"]
-    createdAt: string
+    createdAt: Date
     courses: string[] // Array of course IDs
 }
 
@@ -54,14 +54,14 @@ export interface Review {
     courseId: string
     stars: number // 1 to 5
     comment: string
-    createdAt: string // ISO string or Firestore Timestamp
+    createdAt: Date // ISO string or Firestore Timestamp
 }
 // types/wishlist.ts
 export interface WishlistItem {
     id: string // `${userId}_${courseId}`
     userId: string
     courseId: string
-    addedAt: string
+    addedAt: Date
 }
 
 export type CourseWithExtras = Course & {

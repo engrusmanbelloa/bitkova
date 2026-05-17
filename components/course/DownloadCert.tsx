@@ -8,6 +8,7 @@ import styled from "styled-components"
 import Button from "@/components/Button"
 import { mobile, ipad } from "@/responsive"
 import HiddenCertificate from "@/components/course/HiddenCert"
+import { formatDate } from "@/utils/formatDate"
 
 const Container = styled.div<{ $visible?: boolean }>`
     padding: ${(props) => props.theme.paddings.pagePadding};
@@ -38,33 +39,6 @@ const ResponsivePreview = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`
-// Hidden certificate container for PDF generation
-// const HiddenCertContainer = styled.div`
-//     position: fixed;
-//     top: 50px;
-//     left: 50px;
-//     z-index: 9999;
-//     visibility: visible;
-//     opacity: 1;
-//     border: 2px solid red;
-// `
-const HiddenCertContainer = styled.div`
-    position: absolute;
-    top: 300px;
-    left: 100px;
-    width: 842px;
-    height: 595px;
-    background: white;
-    visibility: visible;
-    opacity: 1;
-    border: 2px solid red;
-    z-index: 9999;
-`
-const CertificateContent = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
 `
 const Name = styled.div`
     position: absolute;
@@ -118,7 +92,6 @@ const Id = styled.div`
     color: #000;
     z-index: 10;
 `
-
 const PreviewName = styled(Name)`
     ${ipad(
         (props: any) => `
@@ -266,35 +239,35 @@ export default function CertificateDownload({
 
     const handleDownload = async () => {
         if (!certRef.current) {
-            console.error("Certificate ref not found")
+            // console.log("Certificate ref not found")
             return
         }
 
         try {
-            console.log("Starting certificate generation...")
+            // console.log("Starting certificate generation...")
 
             // Wait for images to load
             const images = certRef.current.querySelectorAll("img")
-            console.log(`Found ${images.length} images`)
+            // console.log(`Found ${images.length} images`)
 
             await Promise.all(
                 Array.from(images).map((img) => {
                     if (img.complete) {
-                        console.log("Image already loaded:", img.src)
+                        // console.log("Image already loaded:", img.src)
                         return Promise.resolve()
                     }
                     return new Promise((resolve, reject) => {
                         img.onload = () => {
-                            console.log("Image loaded:", img.src)
+                            // console.log("Image loaded:", img.src)
                             resolve(null)
                         }
                         img.onerror = (error) => {
-                            console.error("Image failed to load:", img.src, error)
+                            // console.error("Image failed to load:", img.src, error)
                             reject(error)
                         }
                         // Set a timeout in case image loading hangs
                         setTimeout(() => {
-                            console.log("Image loading timeout:", img.src)
+                            // console.log("Image loading timeout:", img.src)
                             resolve(null) // Resolve anyway to continue
                         }, 5000)
                     })
@@ -304,7 +277,7 @@ export default function CertificateDownload({
             // Additional wait for rendering
             await new Promise((resolve) => setTimeout(resolve, 1000))
 
-            console.log("Generating canvas...")
+            // console.log("Generating canvas...")
             const canvas = await html2canvas(certRef.current, {
                 scale: 2,
                 useCORS: true,
@@ -317,44 +290,44 @@ export default function CertificateDownload({
                 windowHeight: 595,
             })
 
-            console.log("Canvas generated:", canvas.width, "x", canvas.height)
+            // console.log("Canvas generated:", canvas.width, "x", canvas.height)
 
             const imgData = canvas.toDataURL("image/png", 1.0)
-            console.log("Image data length:", imgData.length)
+            // console.log("Image data length:", imgData.length)
 
             // Check if imgData is valid
             if (!imgData || imgData === "data:," || imgData.length < 1000) {
                 throw new Error(`Invalid image data generated. Length: ${imgData.length}`)
             }
 
-            console.log("Creating PDF...")
+            // console.log("Creating PDF...")
             const pdf = new jsPDF("landscape", "pt", "a4")
             const pdfWidth = pdf.internal.pageSize.getWidth()
             const pdfHeight = pdf.internal.pageSize.getHeight()
 
-            console.log("PDF dimensions:", pdfWidth, "x", pdfHeight)
+            // console.log("PDF dimensions:", pdfWidth, "x", pdfHeight)
 
             pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight)
             pdf.save(`Bitkova_Certificate_${user}.pdf`)
 
-            console.log("PDF saved successfully!")
+            // console.log("PDF saved successfully!")
         } catch (error: any) {
-            console.error("Error generating certificate:", error)
+            // console.error("Error generating certificate:", error)
             alert(`Failed to generate certificate: ${error.message}`)
         }
     }
 
-    const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
-        const date = new Date(firebaseTimestamp.toMillis())
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            // hour: "2-digit",
-            // minute: "2-digit",
-            // second: "2-digit",
-        })
-    }
+    // const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
+    //     const date = new Date(firebaseTimestamp.toMillis())
+    //     return date.toLocaleDateString("en-US", {
+    //         year: "numeric",
+    //         month: "long",
+    //         day: "numeric",
+    //         // hour: "2-digit",
+    //         // minute: "2-digit",
+    //         // second: "2-digit",
+    //     })
+    // }
 
     return (
         <Container $visible={$visible}>
@@ -380,36 +353,6 @@ export default function CertificateDownload({
                     {id}
                 </PreviewId>
             </ResponsivePreview>
-
-            {/* Hidden certificate for PDF generation */}
-            {/* <HiddenCertContainer ref={certRef}>
-                <CertificateContent>
-                    <Image
-                        src="/BitkovaCert.png"
-                        alt="Certificate"
-                        fill
-                        style={{ objectFit: "contain" }}
-                        priority
-                    />
-                    <Name>{user}</Name>
-                    <CourseTitle>{title}</CourseTitle>
-                    <Desc>
-                        This student has successfully completed more than {duration} Credit hours of
-                        theory and practice courses in {desc}.
-                    </Desc>
-                    <DateIssued>
-                        {new Date().toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        })}
-                    </DateIssued>
-                    <Id>
-                        <span style={{ color: "#36A9E1" }}>Certificate id: </span>
-                        {id}
-                    </Id>
-                </CertificateContent>
-            </HiddenCertContainer> */}
             <HiddenCertificate
                 $visible={$visible}
                 user={user}

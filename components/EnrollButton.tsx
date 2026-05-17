@@ -4,6 +4,7 @@ import { ipad, mobile } from "@/responsive"
 
 const EnrollButton = styled(Button)<ButtonProps>`
     width: 100%;
+    height: 40px;
     margin-top: 20px;
     background: ${({ theme }) => theme.palette.primary.main};
     color: white;
@@ -11,6 +12,11 @@ const EnrollButton = styled(Button)<ButtonProps>`
     font-weight: 500;
     padding: 12px;
     font-size: 16px;
+    border-radius: 8px;
+
+    &:hover {
+        background: ${({ theme }) => theme.palette.action.hover};
+    }
 
     ${ipad`
         height: 40px;

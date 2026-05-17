@@ -2,20 +2,21 @@ import { useQuery } from "@tanstack/react-query"
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase/client"
 import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types/courseType"
+import { toDate } from "@/utils/formatDate"
 
 // fetchCourses by course id
 const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
     // serialize data ready for the client side
-    function serializeDoc<T extends object>(data: T): any {
-        return JSON.parse(
-            JSON.stringify(data, (_key, value) => {
-                if (value?.toDate instanceof Function) {
-                    return value.toDate().toISOString()
-                }
-                return value
-            }),
-        )
-    }
+    // function serializeDoc<T extends object>(data: T): any {
+    //     return JSON.parse(
+    //         JSON.stringify(data, (_key, value) => {
+    //             if (value?.toDate instanceof Function) {
+    //                 return value.toDate().toISOString()
+    //             }
+    //             return value
+    //         }),
+    //     )
+    // }
 
     const docRef = doc(db!, "courses", courseId)
     const docSnap = await getDoc(docRef)
@@ -39,7 +40,7 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
               email: courseData.facilitatorEmail,
               profileUrl: "",
               expertise: [],
-              createdAt: new Date().toISOString(),
+              createdAt: toDate(courseData.createdAt) ?? new Date(),
               courses: [],
           }
 
@@ -78,14 +79,14 @@ const fetchCourseById = async (courseId: string): Promise<CourseWithExtras> => {
     // console.log("Duration of this course: ", hours)
     // console.log("Data of this course: ", courseData)
     // console.log("Lessons of this course: ", lesson)
-    return serializeDoc({
+    return {
         id: docSnap.id,
         ...(courseData as any),
         modules,
         reviews,
         duration: { hours, minutes },
         facilitator,
-    })
+    }
 }
 
 export function useCourseById(courseId: string) {

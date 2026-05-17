@@ -220,9 +220,7 @@ export default function CourseHeader({ courseId }: CourseId) {
     const [enrolled, setEnrolled] = useState(false)
     const [selectedVideo, setSelectedVideo] = useState<string>("")
     const [selectedTitle, setSelectedTitle] = useState<string>("")
-    // const [completedVideos, setCompletedVideos] = useState<string[]>([])
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-    // const [certificateReady, setCertificateReady] = useState(true)
     const { data: course, isLoading, error } = useCourseById(courseId)
 
     const videoList: VideoItem[] =

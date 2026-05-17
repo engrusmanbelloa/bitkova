@@ -2,20 +2,9 @@ import { collection, getDocs, query, where, doc, getDoc } from "firebase/firesto
 import { db } from "@/lib/firebase/client"
 import { Course, Review, Module, Lesson, CourseWithExtras, Facilitator } from "@/types/courseType"
 import { useQuery } from "@tanstack/react-query"
+import { toDate } from "@/utils/formatDate"
 
 const fetchCourses = async (): Promise<CourseWithExtras[]> => {
-    // Serialize function to handle Date fields
-    function serializeDoc<T extends object>(data: T): any {
-        return JSON.parse(
-            JSON.stringify(data, (_key, value) => {
-                if (value?.toDate instanceof Function) {
-                    return value.toDate().toISOString()
-                }
-                return value
-            }),
-        )
-    }
-
     const courseSnap = await getDocs(collection(db!, "courses"))
     if (courseSnap.empty) {
         return []
@@ -42,7 +31,7 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
                       email: courseData.facilitatorEmail,
                       profileUrl: "",
                       expertise: [],
-                      createdAt: new Date().toISOString(),
+                      createdAt: toDate(courseData.createdAt) ?? new Date(),
                       courses: [],
                   }
 
@@ -80,14 +69,14 @@ const fetchCourses = async (): Promise<CourseWithExtras[]> => {
             const hours = Math.floor(totalMinutes / 60)
             const minutes = totalMinutes % 60
 
-            return serializeDoc({
+            return {
                 id: courseId,
                 ...(courseData as any),
                 modules,
                 reviews,
                 duration: { hours, minutes },
                 facilitator,
-            })
+            }
         }),
     )
 
