@@ -163,9 +163,7 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
     const { user, isLoadingUserDoc } = useAuthReady()
     const telegramClass = telegramClasses[0]
     const [visible, setVisible] = useState(false)
-    // const [certificateId, setCertificateId] = useState<string | null>(
-    //     enrollment.certificateId ?? null,
-    // )
+
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
     const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
     const { certificateId, isCreating } = useClassCertificate({
@@ -175,22 +173,6 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
         completed,
         existingCertificateId: enrollment.certificateId,
     })
-
-    // // Auto-create certificate when cohort period is reached
-    // useEffect(() => {
-    //     if (!completed || !user?.id || certificateId) {
-    //         // console.log("Certificate not ready or already exists", {
-    //         //     completed,
-    //         //     user: user?.id,
-    //         //     classData,
-    //         //     certificateId,
-    //         // })
-    //         return
-    //     }
-    //     createClassCertificate(user.id, enrollment.id, "physical_class")
-    //         .then((id) => setCertificateId(id))
-    //         .catch(console.error)
-    // }, [completed, user?.id, telegramClass, certificateId, enrollment.id])
 
     const openModal = () => {
         if (!completed || !certificateId) {
