@@ -181,7 +181,7 @@ const NavBtn = styled.button`
 const Toggle = styled.div`
     display: none;
     flex: 0.5;
-    background-color: ${(props) => props.theme.palette.primary.main};
+    // background-color: ${(props) => props.theme.palette.primary.main};
     justify-content: flex-end;
     align-items: center;
     flex-direction: row;

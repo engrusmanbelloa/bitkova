@@ -54,9 +54,9 @@ export function deriveCertificateFields(cohort: Cohort) {
 
     const now = Date.now()
     const oneWeekBefore = endDate.getTime() - msPerWeek
-    // const completed = now >= oneWeekBefore
+    const completed = now >= oneWeekBefore
 
-    const completed = true
+    // const completed = true
 
     const shortDesc =
         "Blockchain Fundamentals Course. The secure record-keeping system behind Bitcoin. Fundamental Analysis, Technical analysis, Risk management and psychology "
