@@ -17,6 +17,7 @@ function convertTelegramClassDoc(doc: any): TelegramClass {
         // modules: data.modules || [],
         telegramGroupId: data.telegramGroupId || "",
         schedule: data.schedule,
+        certDesc: data.certDesc || "",
     }
 }
 

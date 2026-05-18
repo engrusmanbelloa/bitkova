@@ -19,7 +19,7 @@ export default function AsyncCourseCheckoutPage() {
     const cartCourses = (courses ?? []).filter((course) => cart.includes(course.id))
 
     if (isLoading) return <IsLoading />
-    if (!user) return <AuthMessage message="Authentication required" />
+    if (!user) return <AuthMessage message="Please sign in to continue" />
 
     const checkoutItems = cartCourses.map((course) => ({
         id: course.id,

@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
+
 const Container = styled.div``
 const Wraper = styled.div`
     margin: auto;

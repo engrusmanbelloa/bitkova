@@ -1,6 +1,6 @@
 // hooks/classes/useFetchCohorts.ts
 import { useQuery } from "@tanstack/react-query"
-import { collection, getDocs, query, where, Timestamp } from "firebase/firestore"
+import { collection, getDocs, query, where, writeBatch, Timestamp, doc } from "firebase/firestore"
 import { db } from "@/lib/firebase/client"
 import { Cohort } from "@/types/classTypes"
 
@@ -87,11 +87,30 @@ export function useFetchActiveCohort() {
                     return null
                 }
 
+                const now = new Date()
+                const batch = writeBatch(db!)
+                let hasUpdates = false
+
                 // Get all active cohorts and filter in JS
-                const cohorts = snapshot.docs.map(convertFirestoreDoc)
+                // const cohorts = snapshot.docs.map(convertFirestoreDoc)
+                const cohorts = snapshot.docs.map((docSnap) => {
+                    const cohort = convertFirestoreDoc(docSnap)
+
+                    // Auto-close if endDate has passed and status isn't already closed
+                    if (cohort.endDate < now && cohort.status !== "closed") {
+                        batch.update(doc(db!, "cohorts", docSnap.id), { status: "closed" })
+                        hasUpdates = true
+                        return { ...cohort, status: "closed" as const }
+                    }
+
+                    return cohort
+                })
+
+                // Write all status updates in one batch
+                if (hasUpdates) await batch.commit()
 
                 // Filter by registration close date
-                const now = new Date()
+                // const now = new Date()
                 const validCohorts = cohorts.filter((cohort) => cohort.registrationClose > now)
 
                 if (validCohorts.length === 0) {
