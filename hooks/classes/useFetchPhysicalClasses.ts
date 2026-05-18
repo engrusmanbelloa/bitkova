@@ -14,6 +14,7 @@ function convertPhysicalClassDoc(doc: any): PhysicalClass {
         cohortId: data.cohortId || "",
         price: data.price || 0,
         capacity: data.capacity || 0,
+        certDesc: data.certDesc || "",
         enrolled: data.enrolled || 0,
         telegramGroupId: data.telegramGroupId || "",
         schedule: data.schedule,

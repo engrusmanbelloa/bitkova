@@ -152,6 +152,7 @@ export default function CreatePhysicalClass() {
             cohortId: "",
             price: 0,
             capacity: 30,
+            certDesc: "",
             schedule: {
                 slots: [
                     {
@@ -380,6 +381,24 @@ export default function CreatePhysicalClass() {
                                 </Select>
                                 <FormHelperText>{fieldState.error?.message}</FormHelperText>
                             </FormControl>
+                        )}
+                    />
+                </FullWidthField>
+                <FullWidthField>
+                    <Controller
+                        name="certDesc"
+                        control={physicalForm.control}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                label="Certificate Description"
+                                placeholder="e.g. Blockchain Fundamentals, Technical Analysis, Risk Management"
+                                multiline
+                                rows={3}
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                                fullWidth
+                            />
                         )}
                     />
                 </FullWidthField>

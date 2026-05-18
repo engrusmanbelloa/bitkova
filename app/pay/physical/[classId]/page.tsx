@@ -48,7 +48,7 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
 
     if (!classData || !cohort) return <div>Class not found</div>
 
-    if (!user) return <AuthMessage message="Authentication required" />
+    if (!user) return <AuthMessage message="Please sign in to continue" />
 
     // Check if registration is open
     if (cohort) {

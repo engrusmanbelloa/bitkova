@@ -43,6 +43,7 @@ export const physicalClassSchema = z.object({
     courses: z
         .array(z.object({ value: z.string().min(1, "Course name required") }))
         .min(1, "At least one course required"),
+    certDesc: z.string().min(1, "Certificate description is required"),
 })
 
 export const telegramClassSchema = z.object({
@@ -52,4 +53,5 @@ export const telegramClassSchema = z.object({
     capacity: z.number().min(1, "Capacity must be at least 1"),
     telegramGroupId: z.string().min(1, "Telegram Group ID is required"),
     schedule: scheduleSchema,
+    certDesc: z.string().min(1, "Certificate description is required"),
 })

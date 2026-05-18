@@ -32,6 +32,7 @@ export interface PhysicalClass {
     instructors: string[]
     courses: string[]
     mapLink?: string
+    certDesc: string
 }
 
 export interface TelegramClass {
@@ -48,6 +49,7 @@ export interface TelegramClass {
             time: string
         }[]
     }
+    certDesc: string
 }
 
 export type InviteStatus = "pending" | "processing" | "sent" | "failed"

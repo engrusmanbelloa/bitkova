@@ -45,7 +45,7 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
 
     if (cohortLoading || classLoading) return <IsLoading />
 
-    if (!user) return <AuthMessage message="Authentication required" />
+    if (!user) return <AuthMessage message="Please sign in to continue" />
 
     if (!cohort || !telegramClass) return <AuthMessage message="Class not found" />
 

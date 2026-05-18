@@ -1,6 +1,5 @@
 // components/payments/Cart.tsx
 "use client"
-import "animate.css/animate.min.css"
 import styled from "styled-components"
 import { mobile, ipad } from "@/responsive"
 import { useUserStore } from "@/lib/store/useUserStore"

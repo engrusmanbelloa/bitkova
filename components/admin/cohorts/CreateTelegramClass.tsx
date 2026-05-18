@@ -144,6 +144,7 @@ export default function CreateTelegramClass() {
             price: 0,
             capacity: 100,
             telegramGroupId: "",
+            certDesc: "",
             schedule: {
                 slots: [
                     {
@@ -310,6 +311,25 @@ export default function CreateTelegramClass() {
                         </InfoGrid>
                     </CohortInfoContainer>
                 )}
+
+                <FullWidthField>
+                    <Controller
+                        name="certDesc"
+                        control={telegramForm.control}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                label="Certificate Description"
+                                placeholder="e.g. Blockchain Fundamentals, Technical Analysis, Risk Management"
+                                multiline
+                                rows={3}
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                                fullWidth
+                            />
+                        )}
+                    />
+                </FullWidthField>
 
                 <ArrayInput>
                     <SectionTitle>Class Schedule</SectionTitle>
