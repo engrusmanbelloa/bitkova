@@ -165,7 +165,7 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
     const [visible, setVisible] = useState(false)
 
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
-    const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
+    const { duration, issuedAt, completed } = deriveCertificateFields(cohort)
     const { certificateId, isCreating } = useClassCertificate({
         userId: user?.id,
         enrollmentId: enrollment.id,
@@ -258,7 +258,7 @@ export default function TelegramClassCard({ enrollment, cohorts }: any) {
                     duration={duration}
                     id={certificateId!}
                     $visible={visible}
-                    desc={shortDesc}
+                    desc={telegramClass.certDesc}
                     issuedAt={issuedAt}
                 />
             )}

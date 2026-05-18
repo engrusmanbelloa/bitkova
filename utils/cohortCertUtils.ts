@@ -58,8 +58,5 @@ export function deriveCertificateFields(cohort: Cohort) {
 
     // const completed = true
 
-    const shortDesc =
-        "Blockchain Fundamentals Course. The secure record-keeping system behind Bitcoin. Fundamental Analysis, Technical analysis, Risk management and psychology "
-
-    return { duration, issuedAt, completed, shortDesc }
+    return { duration, issuedAt, completed }
 }
