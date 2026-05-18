@@ -41,26 +41,6 @@ export default function CartButton({ courseId }: Props) {
 
     const handleCartToggle = async () => {
         setLoading(true)
-        // try {
-        //     if (user && isInUserCart) {
-        //         if (isUserEnrolled) {
-        //             toast.error("You are already enrolled in this course!")
-        //             return // Exit the function
-        //         }
-        //         await removeFromCartDb(user.id, courseId)
-        //         removeFromCart(courseId)
-        //         toast.success("Removed from wishlist")
-        //     } else if (user && !isInUserCart) {
-        //         await addToCartDb(user.id, courseId)
-        //         addToCart(courseId)
-        //         toast.success("Added to wishlist")
-        //     }
-        // } catch (err) {
-        //     toast.error("Failed to update wishlist")
-        // } finally {
-        //     setLoading(false)
-        // }
-        setLoading(true)
         try {
             if (user) {
                 // If the user is already enrolled, show an error and do nothing else
@@ -88,23 +68,6 @@ export default function CartButton({ courseId }: Props) {
             setLoading(false)
         }
     }
-    // const handleCartToggle = async () => {
-    //     setLoading(true)
-    //     try {
-    //         if (inCart) {
-    //             await removeFromCart(userId, courseId)
-    //             toast.success("Removed from cart")
-    //         } else {
-    //             await addToCart(userId, courseId)
-    //             toast.success("Added to cart")
-    //         }
-    //         setInCart(!inCart)
-    //     } catch (err) {
-    //         toast.error("Failed to update cart")
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
 
     return (
         <Button $background="#fdb913" onClick={handleCartToggle} disabled={loading}>

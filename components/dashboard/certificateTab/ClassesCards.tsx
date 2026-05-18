@@ -116,7 +116,7 @@ export function PhysicalCertCard({
 
     if (!cohort || !classData) return null
 
-    const { duration, issuedAt, shortDesc } = deriveCertificateFields(cohort)
+    const { duration, issuedAt } = deriveCertificateFields(cohort)
     const issued = new Date(
         typeof issuedAt === "object" && "toDate" in issuedAt
             ? (issuedAt as any).toDate()
@@ -143,7 +143,7 @@ export function PhysicalCertCard({
                     duration={duration}
                     id={enrollment.certificateId}
                     $visible={visible}
-                    desc={shortDesc}
+                    desc={classData.certDesc}
                     issuedAt={issuedAt}
                 />
             )}
@@ -169,7 +169,7 @@ export function TelegramCertCard({
 
     if (!cohort || !telegramClass) return null
 
-    const { duration, issuedAt, shortDesc } = deriveCertificateFields(cohort)
+    const { duration, issuedAt } = deriveCertificateFields(cohort)
     const issued = new Date(
         typeof issuedAt === "object" && "toDate" in issuedAt
             ? (issuedAt as any).toDate()
@@ -196,7 +196,7 @@ export function TelegramCertCard({
                     duration={duration}
                     id={enrollment.certificateId}
                     $visible={visible}
-                    desc={shortDesc}
+                    desc={telegramClass.certDesc}
                     issuedAt={issuedAt}
                 />
             )}
