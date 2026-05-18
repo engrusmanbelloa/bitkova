@@ -10,7 +10,7 @@ import { isDuplicateUpdate } from "@/lib/telegram/idempotency"
 import { pushDeadLetter } from "@/lib/telegram/deadLetter"
 
 export async function GET() {
-    return new Response("Telegram webhook running ✅", { status: 200 })
+    return new Response("Telegram webhook running...", { status: 200 })
 }
 
 export async function POST(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     try {
         update = await req.json()
 
-        // 🛑 Idempotency guard
+        // Idempotency guard
         if (await isDuplicateUpdate(update.update_id)) {
             telegramLog("info", "Duplicate update skipped", {
                 updateId: update.update_id,
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         if (!message) return NextResponse.json({ ok: true })
         if (message.from?.is_bot) return NextResponse.json({ ok: true })
 
-        // 1️⃣ AUTO-SAVE GROUP INFO
+        // 1 AUTO-SAVE GROUP INFO
         if (message.chat?.type === "group" || message.chat?.type === "supergroup") {
             const oldId = String(message.chat.id)
 
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        // 2️⃣ COMMAND PROCESSING
+        // 2 COMMAND PROCESSING
         if (!message.text) return NextResponse.json({ ok: true })
 
         const fullText = message.text.trim()
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
         console.error("Telegram Webhook Error:", error)
         telegramLog("error", "Webhook failure", { error })
 
-        // ☠️ Dead-letter storage
+        // Dead-letter storage
         if (update) {
             await pushDeadLetter(update, error)
         }
