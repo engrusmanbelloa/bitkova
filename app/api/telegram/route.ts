@@ -58,6 +58,17 @@ export async function POST(req: NextRequest) {
                 )
 
                 return NextResponse.json({ ok: true })
+            } else {
+                // NEW: save any group that isn't a migration
+                await adminDb.collection("telegramGroups").doc(oldId).set(
+                    {
+                        chatId: oldId,
+                        title: message.chat.title,
+                        type: message.chat.type,
+                        lastActive: new Date(),
+                    },
+                    { merge: true },
+                )
             }
         }
 
