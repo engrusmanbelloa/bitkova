@@ -4,6 +4,9 @@ import { Timestamp } from "firebase/firestore"
 import { Cohort } from "@/types/classTypes"
 
 export function deriveCertificateFields(cohort: Cohort) {
+    if (!cohort) {
+        return { duration: 0, issuedAt: null, completed: false }
+    }
     const regClose =
         cohort.registrationClose instanceof Date
             ? cohort.registrationClose

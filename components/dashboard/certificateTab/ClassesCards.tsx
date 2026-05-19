@@ -117,11 +117,13 @@ export function PhysicalCertCard({
     if (!cohort || !classData) return null
 
     const { duration, issuedAt } = deriveCertificateFields(cohort)
-    const issued = new Date(
-        typeof issuedAt === "object" && "toDate" in issuedAt
-            ? (issuedAt as any).toDate()
-            : issuedAt,
-    ).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+    const issued = issuedAt
+        ? new Date(
+              issuedAt && typeof issuedAt === "object" && "toDate" in issuedAt
+                  ? (issuedAt as any).toDate()
+                  : issuedAt,
+          ).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        : "—"
 
     return (
         <>
@@ -170,11 +172,13 @@ export function TelegramCertCard({
     if (!cohort || !telegramClass) return null
 
     const { duration, issuedAt } = deriveCertificateFields(cohort)
-    const issued = new Date(
-        typeof issuedAt === "object" && "toDate" in issuedAt
-            ? (issuedAt as any).toDate()
-            : issuedAt,
-    ).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+    const issued = issuedAt
+        ? new Date(
+              issuedAt && typeof issuedAt === "object" && "toDate" in issuedAt
+                  ? (issuedAt as any).toDate()
+                  : issuedAt,
+          ).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+        : "—"
 
     return (
         <>

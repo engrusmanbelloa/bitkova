@@ -113,17 +113,17 @@ export default function NavAvatar({ user }: any) {
         },
         {
             id: 2,
-            href: "#",
+            href: "/partnership",
             title: "Be a partner",
         },
         {
             id: 3,
-            href: "#",
+            href: "/our-hub",
             title: "Our Hub",
         },
         {
             id: 4,
-            href: "#",
+            href: "/my-learning",
             title: "My Learning",
         },
     ]
