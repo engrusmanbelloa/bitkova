@@ -1,10 +1,7 @@
 "use client"
-import React from "react"
 import styled from "styled-components"
 import Image from "next/image"
-import Rating from "@mui/material/Rating"
 import StarBorderIcon from "@mui/icons-material/StarBorder"
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
 import LockIcon from "@mui/icons-material/Lock"
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
@@ -12,9 +9,7 @@ import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
 import PersonIcon from "@mui/icons-material/Person"
 import CartButton from "@/components/payments/CartButton"
 import { formatPrice } from "@/config/FormatPrice"
-import { useUserStore } from "@/lib/store/useUserStore"
 import { CourseWithExtras } from "@/types/courseType"
-import { User } from "@/types/userType"
 
 const Top = styled.div`
     border-width: 1px;

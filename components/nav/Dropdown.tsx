@@ -44,15 +44,13 @@ const Links = styled(Link)`
     color: ${(props) => props.theme.palette.common.black};
     text-transform: capitalize;
 `
-export default function DropdownMenu({
-    user,
-    handleSingUpOpen,
-    closeMenu,
-}: {
+
+interface DropdownMenuProps {
     user: any
     handleSingUpOpen: () => void
     closeMenu: () => void
-}) {
+}
+export default function DropdownMenu({ user, handleSingUpOpen, closeMenu }: DropdownMenuProps) {
     const [isOpen, setIsOpen] = useState(true)
 
     const router = useRouter()
@@ -82,7 +80,7 @@ export default function DropdownMenu({
             //     method: "DELETE",
             // })
             // console.log("Session deleted")
-            router.push("/login")
+            // router.push("/login")
         } catch (error) {
             console.error("Error signing out:", error)
         }

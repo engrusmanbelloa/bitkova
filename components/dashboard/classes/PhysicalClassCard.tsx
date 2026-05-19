@@ -215,7 +215,7 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
 
     const classData = physicalClasses?.find((c) => c.id === enrollment.itemId)
     const cohort = cohorts?.find((c: any) => c.id === enrollment.cohortId)
-    const { duration, issuedAt, completed, shortDesc } = deriveCertificateFields(cohort)
+    const { duration, issuedAt, completed } = deriveCertificateFields(cohort)
     const { certificateId, isCreating } = useClassCertificate({
         userId: user?.id,
         enrollmentId: enrollment.id,
@@ -382,7 +382,7 @@ export default function PhysicalClassCard({ enrollment, cohorts }: any) {
                     duration={duration}
                     id={certificateId!}
                     $visible={visible}
-                    desc={shortDesc}
+                    desc={classData.certDesc}
                     issuedAt={issuedAt}
                 />
             )}
