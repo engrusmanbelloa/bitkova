@@ -9,7 +9,7 @@ import { auth } from "@/lib/firebase/client"
 const Container = styled(Dialog)`
     padding: ${(props) => props.theme.paddings.pagePadding};
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     background-color: ${(props) => props.theme.mobile.mobileNavBg};
 `
