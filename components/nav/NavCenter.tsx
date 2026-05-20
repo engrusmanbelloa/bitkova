@@ -4,14 +4,13 @@ import { useRouter } from "next/navigation"
 import { ipad } from "@/responsive"
 
 const Center = styled.ul`
-    flex: 2;
+    flex: 2.2;
     display: flex;
     justify-content: center;
     align-items: center;
     list-style-type: none;
     height: 40px;
-    padding: 10px;
-    gap: 10px;
+    padding: 10px 0;
     ${ipad({ display: "none" })}
 `
 const MenuItem = styled.li`
@@ -19,7 +18,7 @@ const MenuItem = styled.li`
     font-weight: 400;
     line-height: 20px;
     text-align: center;
-    padding: 5px 25px;
+    padding: 5px 20px;
     border-radius: 5px;
     cursor: pointer;
     color: ${(props) => props.theme.palette.common.black};

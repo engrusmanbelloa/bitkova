@@ -140,7 +140,7 @@ const EnrollmentInfo = styled.div`
     text-align: center;
 `
 
-export default function TelegramClass() {
+export default function TelegramClass({ id }: { id?: string }) {
     const router = useRouter()
     const { isEnrolled } = useUserStore()
 
@@ -163,7 +163,7 @@ export default function TelegramClass() {
 
     if (cohortLoading || classesLoading) {
         return (
-            <ClassContainer>
+            <ClassContainer id={id}>
                 <ClassesCard>
                     <LoadingContainer>
                         <CircularProgress />
@@ -175,7 +175,7 @@ export default function TelegramClass() {
 
     if (!cohort || !telegramClass) {
         return (
-            <ClassContainer>
+            <ClassContainer id={id}>
                 <ClassesCard>
                     <ErrorMessage>
                         No active Telegram class available. Check back soon!
@@ -193,7 +193,7 @@ export default function TelegramClass() {
     )
 
     return (
-        <ClassContainer>
+        <ClassContainer id={id}>
             <ClassesCard>
                 <ClassesTitle>
                     <TelegramIcon sx={{ fontSize: 28 }} />

@@ -301,7 +301,7 @@ const CohortBadge = styled.div`
     margin-bottom: 12px;
 `
 
-export default function PhysicalClassesSwiper() {
+export default function PhysicalClassesSwiper({ id }: { id?: string }) {
     const router = useRouter()
     // const { isEnrolledInClass } = useUserStore()
     const { isEnrolled } = useUserStore()
@@ -352,7 +352,7 @@ export default function PhysicalClassesSwiper() {
         )
     }
     return (
-        <>
+        <div id={id}>
             <SectionTitle>
                 <LocationOnIcon sx={{ color: "#356DF1" }} />
                 Physical Classes
@@ -491,6 +491,6 @@ export default function PhysicalClassesSwiper() {
                     })}
                 </Swiper>
             </SwiperContainer>
-        </>
+        </div>
     )
 }
