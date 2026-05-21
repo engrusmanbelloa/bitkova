@@ -9,7 +9,6 @@ import TelegramIcon from "@mui/icons-material/Telegram"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 import { useSearch, SearchResult } from "@/hooks/search/useSearch"
 import { mobile } from "@/responsive"
-import { maxWidth, width } from "@mui/system"
 
 // Animations
 const fadeSlide = keyframes`
@@ -32,7 +31,7 @@ const InputRow = styled.div<{ $focused: boolean }>`
     border: 1.5px solid
         ${(props) =>
             props.$focused ? props.theme.palette.primary.main : props.theme.mobile.offWhite};
-    background: ${(props) => props.theme.mobile.horizontalrule};
+    background: ${(props) => props.theme.palette.common.white};
     transition:
         border-color 0.2s,
         box-shadow 0.2s;
@@ -70,7 +69,6 @@ const Kbd = styled.span`
     font-family: monospace;
     ${mobile({ display: "none" })}
 `
-
 // Dropdown
 const Dropdown = styled.div`
     position: absolute;

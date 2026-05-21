@@ -4,10 +4,10 @@ import styled from "styled-components"
 import Link from "next/link"
 import Image from "next/image"
 import Card from "@mui/material/Card"
-import BarChartIcon from "@mui/icons-material/BarChart"
-import ComputerIcon from "@mui/icons-material/Computer"
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment"
 import PlayCircleIcon from "@mui/icons-material/PlayCircle"
+import HandshakeIcon from "@mui/icons-material/Handshake"
+import CodeIcon from "@mui/icons-material/Code"
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote"
 import { mobile, ipad } from "@/responsive"
 import HomeHero from "@/components/home/HomeHero"
 import CoursesList from "@/components/course/CoursesList"
@@ -18,6 +18,7 @@ import HotCoursesSection from "@/components/course/sections/HotCourses"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import { useCourseFilters } from "@/hooks/courses/useCourseFilters"
 import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
+import LearningPaths from "./LearningPaths"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -62,47 +63,41 @@ const Description = styled.p`
     margin: 10px auto 0;
     color: ${(props) => props.theme.palette.common.black};
 `
-const Services = styled.section`
+const ServicesGrid = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
-    height: 315px;
-    margin: 50px 0 0;
-    padding: 0px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    animation: pulse;
-    animation-duration: 2s;
+    margin: 0px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
     ${ipad(
         (props: any) => `
-        width: ${props.theme.widths.ipadWidth};
-        margin-top: 20px;
-        padding: 5px 0;
-        height: 650px;
-    `,
+            width: ${props.theme.widths.ipadWidth};
+            grid-template-columns: repeat(2, 1fr); gap: 12px;
+        `,
     )}
     ${mobile(
         (props: any) => `
-        width: ${props.theme.widths.mobileWidth};
-        flex-direction: column;
-        flex-wrap: nowrap;
-        height: 850px;
-    `,
+            width: ${props.theme.widths.mobileWidth};
+            grid-template-columns: 1fr;
+        `,
     )}
 `
-const ServicesBox = styled(Card)`
-    width: 350px;
-    height: 315px;
-    display: flex;
-    margin: 0 auto;
-    flex-direction: column;
+const ServicesCard = styled(Card)`
     border: 0.93px solid #abd0ed;
-    border-radius: 8px;
-    ${ipad({ width: 325, height: 305, padding: "5px 0", marginBottom: 10 })};
-    ${mobile({ width: "350px", padding: 0 })}
+    border-radius: 12px;
+    padding: 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+    transition:
+        transform 0.18s,
+        box-shadow 0.18s;
+
     &:hover {
-        background: ${(props) => props.theme.palette.action.hover};
-        animation: pulse;
-        animation-duration: 1s;
+        transform: translateY(-4px);
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09);
     }
 `
 const ServicesInnerBox = styled(Link)`
@@ -235,31 +230,35 @@ export default function HomeComponent() {
     const master = "Master a"
     const headerSpan = "digital skill"
     const heroText =
-        "Build the tech skills you need for your dream job. We offer affordable courses for everyone, from beginners to developers, designers and entrepreneurs."
+        "Build the tech skills you need for your dream job. We offer affordable courses for everyone, from beginners to developers, designers and entrepreneurs. Here At Bitkova Academy, our classes are designed to accommodate your current level matched with our unique learning process."
+
     const servicesData = [
         {
-            icon: BarChartIcon,
-            title: "In-depth training and mentorship",
-            desc: "Let’s accelerate your journey into tech with our immersive training program. ",
-            href: "#",
+            icon: HandshakeIcon,
+            title: "Host Events With Us",
+            desc: "Partner with Bitkova to host financial literacy programs, corporate blockchain training, digital skills workshops, and youth empowerment events.",
+            href: "/partnership#host-events",
             color: "#34296B",
             background: "#D5CDFF",
+            cta: "Explore partnership →",
         },
         {
-            icon: ComputerIcon,
-            title: "Internship placement & job oppoopportunities ",
-            desc: "At the end of the training, you would be placed into an internship program to use your new skills.",
-            href: "#",
-            color: "#F3D400",
-            background: "#FEF3AE",
+            icon: CodeIcon,
+            title: "Hire Bitkova",
+            desc: "Need custom software, blockchain development, or UI/UX design? Our expert team delivers professional tech solutions tailored to your business.",
+            href: "/partnership#hire-bitkova",
+            color: "#1565c0",
+            background: "#e8f4fd",
+            cta: "See our services →",
         },
         {
-            icon: LocalFireDepartmentIcon,
-            title: "Supportive community online and offline",
-            desc: "A fun & interactive community of like minds from all over the world, committed to helping each other grow",
-            href: "#",
-            color: "#FF9CAE",
-            background: "#FFCED7",
+            icon: RequestQuoteIcon,
+            title: "Request a Quote",
+            desc: "Tell us about your project. We'll get back to you with a tailored proposal covering scope, timeline, and pricing.",
+            href: "/partnership#request-quote",
+            color: "#00796b",
+            background: "#e8fdf4",
+            cta: "Get a quote →",
         },
     ]
 
@@ -275,17 +274,26 @@ export default function HomeComponent() {
                 heroText={heroText}
             />
             {/* introduction to bitkova section */}
-            <Intro>
+            {/* <Intro>
                 <Title>Here At Bitkova Academy,</Title>
                 <Description>
                     Our classes are designed to accommodate your current level matched with our
                     unique learning process.
                 </Description>
-            </Intro>
+            </Intro> */}
+            <LearningPaths />
             {/* servces offered by bitkova */}
-            <Services>
+            {/* // Replace the current <Intro> before ServicesGrid with: */}
+            <Intro>
+                <Title>More Than Just Courses</Title>
+                <Description>
+                    We build technology, host events, and partner with organizations to drive
+                    digital growth.
+                </Description>
+            </Intro>
+            <ServicesGrid>
                 {servicesData.map((boxData, index) => (
-                    <ServicesBox key={index} variant="elevation" elevation={0}>
+                    <ServicesCard key={index} variant="elevation" elevation={0}>
                         <ServicesInnerBox href={boxData.href}>
                             <ServicesIconBox
                                 style={{ background: boxData.background, opacity: 0.8 }}
@@ -296,10 +304,15 @@ export default function HomeComponent() {
                             </ServicesIconBox>
                             <ServicesTitle>{boxData.title}</ServicesTitle>
                             <ServicesDesc>{boxData.desc}</ServicesDesc>
+                            <ServicesDesc
+                                style={{ color: boxData.color, fontWeight: 600, marginTop: 12 }}
+                            >
+                                {boxData.cta}
+                            </ServicesDesc>
                         </ServicesInnerBox>
-                    </ServicesBox>
+                    </ServicesCard>
                 ))}
-            </Services>
+            </ServicesGrid>
             <Intro>
                 <Title>Find your perfect Course</Title>
                 <Description>
