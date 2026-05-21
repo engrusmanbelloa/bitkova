@@ -36,8 +36,8 @@ export default function Hub() {
     return (
         <Container>
             <HomeHero master={master} headerSpan={headerSpan} heroText={heroText} />
-            <PhysicalClassesSwiper />
-            <TelegramClass />
+            <PhysicalClassesSwiper id="physical-classes" />
+            <TelegramClass id="telegram-class" />
             <StartupIncubationSwiper />
             <EventsSwiper type="upcoming" />
             <EventsSwiper type="past" />

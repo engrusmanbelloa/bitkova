@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 const Container = styled.section`
-    height: 450px;
+    height: 500px;
     width: ${(props) => props.theme.widths.heroWidth};
     margin: 10px auto 0;
     padding: 0px;
@@ -17,6 +17,7 @@ const Container = styled.section`
         width: ${props.theme.widths.ipadWidth};
         height: 276px;
         padding: 5px 0;
+        margin-bottom: 20px;
     `,
     )}
     ${mobile(
@@ -24,6 +25,7 @@ const Container = styled.section`
         width: ${props.theme.widths.mobileWidth};
         flex-direction: column;
         height: 600px;
+        margin-bottom: 80px;
     `,
     )}
 `
@@ -79,8 +81,8 @@ const HeroText = styled.p`
     height: 80px;
     animation: pulse;
     animation-duration: 2s;
-    ${ipad({ width: "350px", height: "70px" })}
-    ${mobile({ height: "80px", marginBottom: 10 })}
+    ${ipad({ width: "350px", height: "150px" })}
+    ${mobile({ marginBottom: 10 })}
 `
 const Right = styled.div`
     flex: 1;
@@ -254,13 +256,13 @@ export default function HomeHero({
                     </Herocontent>
                 )}
 
-                {home && (
+                {/* {home && (
                     <Button
                         $main={main}
                         title="Browse courses"
                         onClick={() => router.push("/courses")}
                     />
-                )}
+                )} */}
             </Left>
             <Right>
                 <HeroImg

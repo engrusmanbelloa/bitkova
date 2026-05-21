@@ -183,7 +183,7 @@ const benefits = [
     "Certificate programs",
 ]
 
-export default function HostEventsWithUs() {
+export default function HostEventsWithUs({ id }: { id?: string }) {
     const {
         register,
         handleSubmit,
@@ -201,7 +201,7 @@ export default function HostEventsWithUs() {
             console.log("Partnership form submitted:", data)
             // Add your API call here
             await new Promise((resolve) => setTimeout(resolve, 1000))
-            toast.success("✅ Partnership request submitted successfully!")
+            toast.success("Partnership request submitted successfully!")
             // alert("Partnership request submitted successfully!")
             reset()
         } catch (error) {
@@ -210,7 +210,7 @@ export default function HostEventsWithUs() {
     }
 
     return (
-        <Container>
+        <Container id={id}>
             <EventsTitle>Host Events With Us</EventsTitle>
             <EventsCard elevation={3}>
                 <TrainingSection>

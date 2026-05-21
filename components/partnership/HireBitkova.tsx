@@ -166,20 +166,13 @@ const getIconComponent = (iconName: string) => {
     return <IconComponent />
 }
 
-export default function HireBitkova() {
+export default function HireBitkova({ id }: { id?: string }) {
     // In production, fetch from Firebase:
-    // const [services, setServices] = useState<Service[]>([]);
-    // useEffect(() => {
-    //   const fetchServices = async () => {
-    //     const snapshot = await getDocs(collection(db, 'services'));
-    //     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    //     setServices(data);
-    //   };
-    //   fetchServices();
-    // }, []);
+    // 1. use usequery to get services collection
+    // 2. map over the data to render the cards
 
     return (
-        <Container>
+        <Container id={id}>
             <SectionTitle>Hire Bitkova</SectionTitle>
             <SectionSubtitle>
                 Professional services tailored for your business needs

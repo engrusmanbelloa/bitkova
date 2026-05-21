@@ -140,7 +140,7 @@ const quoteSchema = z.object({
 
 type QuoteFormData = z.infer<typeof quoteSchema>
 
-export default function RequestQuote() {
+export default function RequestQuote({ id }: { id?: string }) {
     const {
         register,
         handleSubmit,
@@ -169,7 +169,7 @@ export default function RequestQuote() {
     }
 
     return (
-        <Container>
+        <Container id={id}>
             <Title>Request a Quote</Title>
             <Subtitle>Fill out the form and we'll get back to you shortly</Subtitle>
 

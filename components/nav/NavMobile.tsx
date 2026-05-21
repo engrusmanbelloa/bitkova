@@ -3,11 +3,8 @@ import { useState } from "react"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"
 import { Badge } from "@mui/material"
-import IconButton from "@mui/material/IconButton"
-import InputBase from "@mui/material/InputBase"
 import MenuIcon from "@mui/icons-material/Menu"
 import CloseIcon from "@mui/icons-material/Close"
-import SearchIcon from "@mui/icons-material/Search"
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications"
@@ -17,24 +14,22 @@ import { ipad, mobile } from "@/responsive"
 const Container = styled.div`
     display: none;
     flex: 7;
-    //  background-color: ${(props) => props.theme.mobile.orange};
-    ${ipad({ display: "flex" })}
-    ${mobile({ display: "flex" })}
+    ${ipad({ display: "flex", flex: 1.5 })}
+    ${mobile({ flex: 5 })}
 `
 const Toggle = styled.div`
     display: none;
-    flex: 1;
     justify-content: flex-end;
     align-items: center;
     flex-direction: row;
     text-align: end;
     padding: 0px;
-    margin: auto auto auto 5px;
+    margin: auto 0 auto auto;
     height: 30px;
     border-radius: 5px;
     z-index: 99;
     ${ipad({ display: "flex" })}
-    ${mobile({ flex: 3 })}
+    ${mobile({})}
 `
 const MobileSearch = styled.div`
     display: none;
@@ -107,18 +102,6 @@ export default function NavMobile({
 
     return (
         <Container>
-            {/* Mobile search bar - always visible on ipad */}
-            <MobileSearch>
-                <InputBase
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search courses"
-                    inputProps={{ "aria-label": "search bitkova" }}
-                />
-                <IconButton type="button" sx={{ m: 0, pr: "0" }} aria-label="search">
-                    <SearchIcon />
-                </IconButton>
-            </MobileSearch>
-
             <Toggle>
                 {isLoggedIn ? (
                     /* ── Authenticated mobile icons ── */

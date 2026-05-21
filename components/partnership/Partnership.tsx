@@ -68,9 +68,9 @@ export default function Partnership() {
                 <BannerText>Patner With Bitkova </BannerText>
                 <BannerDesc>Collaborate with us to drive innovation and growth</BannerDesc>
             </Banner>
-            <HostEventsWithUs />
-            <HireBitkova />
-            <RequestQuote />
+            <HostEventsWithUs id="host-events" />
+            <HireBitkova id="hire-bitkova" />
+            <RequestQuote id="request-quote" />
         </Container>
     )
 }

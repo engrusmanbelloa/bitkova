@@ -1,7 +1,12 @@
 import React from "react"
+import styled from "styled-components"
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import ResetPsswd from "./ResetPsswd"
+
+const Container = styled.div`
+    margin: auto;
+`
 
 interface AuthModalManagerProps {
     activeModal: "signin" | "signup" | "reset" | null
@@ -17,7 +22,7 @@ export default function AuthModalManager({
     if (!activeModal) return null
 
     return (
-        <>
+        <Container>
             {/* Modal for signup  */}
             {activeModal === "signup" && (
                 <SignUp
@@ -45,6 +50,6 @@ export default function AuthModalManager({
                     Transition={Transition}
                 />
             )}
-        </>
+        </Container>
     )
 }
