@@ -8,6 +8,8 @@ import { CourseWithExtras } from "@/types/courseType"
 import { useAuthReady } from "@/hooks/useAuthReady"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
 import IsLoading from "@/components/IsLoading"
+import { addToCartDb, removeFromCartDb } from "@/lib/firebase/queries/cart"
+import { toast } from "sonner"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.dsktopWidth};
@@ -197,12 +199,20 @@ export default function Cart() {
 
     console.log("Total amount in your cart", totalAmount)
 
+    if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
+
+    if (!user) {
+        router.push("/")
+        toast.error("Please log in to view your cart.")
+        return null
+    }
+
     // remove course from cart
-    const remove = (courseId: string) => {
+    const remove = async (courseId: string) => {
+        await removeFromCartDb(user.id, courseId)
         removeFromCart(courseId)
     }
 
-    if (isLoadingUserDoc || isLoading || !authReady) return <IsLoading />
     return (
         <Container>
             {firebaseUser ? (

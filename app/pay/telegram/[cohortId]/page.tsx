@@ -92,7 +92,8 @@ export default function Page({ params }: { params: Promise<{ cohortId: string }>
     return (
         <UnifiedCheckout
             items={checkoutItems}
-            classType="telegram_class"
+            // classType="telegram_class"
+            paymentType="telegram_class"
             className={telegramClass.name}
             cohortName={cohort.name}
             successMessage={successMessage}

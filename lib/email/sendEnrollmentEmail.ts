@@ -20,7 +20,7 @@ export async function sendEnrollmentEmail({
     physicalQrCode,
     status = "success",
 }: EmailParams) {
-    // console.log("📨 sendEnrollmentEmail called with:", {
+    // console.log(" sendEnrollmentEmail called with:", {
     //     to,
     //     cohortName,
     //     className,
@@ -33,7 +33,7 @@ export async function sendEnrollmentEmail({
     let content = ``
 
     /* =======================
-       ⏳ PENDING INVITE EMAIL
+        PENDING INVITE EMAIL
        ======================= */
     if (status === "pending") {
         subject = "Your Telegram Class Access Is Being Prepared ⏳"
@@ -81,7 +81,7 @@ export async function sendEnrollmentEmail({
     }
 
     /* =======================
-       🎉 SUCCESS EMAIL
+        SUCCESS EMAIL
        ======================= */
     if (status === "success") {
         content = `
@@ -137,9 +137,9 @@ export async function sendEnrollmentEmail({
             html: content,
         })
 
-        console.log("📨 Enrollment email sent to:", to)
+        // console.log(" Enrollment email sent to:", to)
     } catch (error) {
-        console.error("❌ Error sending enrollment email:", error)
+        // console.error(" Error sending enrollment email:", error)
         throw error
     }
 }

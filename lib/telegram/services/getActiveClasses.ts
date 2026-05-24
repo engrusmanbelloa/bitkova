@@ -9,7 +9,7 @@ export async function getActiveClasses(): Promise<{
     cohort: Cohort
     classes: (TelegramClassWithType | PhysicalClassWithType)[]
 } | null> {
-    // 1️⃣ Active cohort
+    // 1 Active cohort
     const cohortSnap = await adminDb
         .collection("cohorts")
         .where("status", "==", "active")
@@ -25,7 +25,7 @@ export async function getActiveClasses(): Promise<{
         ...(cohortDoc.data() as Omit<Cohort, "id">),
     }
 
-    // 2️⃣ Telegram classes
+    // 2 Telegram classes
     const telegramSnap = await adminDb
         .collection("telegramClasses")
         .where("cohortId", "==", cohort.id)
@@ -37,7 +37,7 @@ export async function getActiveClasses(): Promise<{
         type: "telegram",
     }))
 
-    // 3️⃣ Physical classes
+    // 3 Physical classes
     const physicalSnap = await adminDb
         .collection("physicalClasses")
         .where("cohortId", "==", cohort.id)

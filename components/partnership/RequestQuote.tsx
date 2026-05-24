@@ -1,11 +1,13 @@
+// components/partnership/RequestQuote.tsx
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import styled from "styled-components"
-import { Typography, TextField, MenuItem, Select, FormControl, Button } from "@mui/material"
+import { TextField, MenuItem, Select, FormControl } from "@mui/material"
 import { toast } from "sonner"
 import EnrollButton from "@/components/EnrollButton"
 import { mobile, ipad } from "@/responsive"
+import { auth } from "@/lib/firebase/client"
 
 const Container = styled.div`
     width: ${(props) => props.theme.widths.heroWidth};
@@ -155,16 +157,44 @@ export default function RequestQuote({ id }: { id?: string }) {
     const serviceValue = watch("service", "")
     const hasErrors = Object.keys(errors).length > 0
 
+    // const onSubmit = async (data: QuoteFormData) => {
+    //     try {
+    //         console.log("Form submitted:", data)
+    //         // Add your API call here
+    //         await new Promise((resolve) => setTimeout(resolve, 1000))
+    //         toast.success("Quote request submitted successfully!")
+    //         reset() // Reset form after successful submission
+    //     } catch (error) {
+    //         console.error("Submit error:", error)
+    //         toast.error("Failed to submit request. Please try again.")
+    //     }
+    // }
+
+    // components/partnership/RequestQuote.tsx
     const onSubmit = async (data: QuoteFormData) => {
         try {
-            console.log("Form submitted:", data)
-            // Add your API call here
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            toast.success("✅ Quote request submitted successfully!")
-            reset() // Reset form after successful submission
-        } catch (error) {
-            console.error("Submit error:", error)
-            toast.error("❌ Failed to submit request. Please try again.")
+            const token = await auth.currentUser?.getIdToken()
+            if (!token) {
+                toast.error("Please sign in from the nav top right to submit a quote request")
+                // router.push("/") // trigger sign in modal
+                return
+            }
+
+            const res = await fetch("/api/quotes/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            })
+
+            if (!res.ok) throw new Error("Failed to submit")
+
+            toast.success("Quote request submitted! We'll respond within 24 hours.")
+            reset()
+        } catch (error: any) {
+            toast.error(error.message)
         }
     }
 
@@ -234,6 +264,7 @@ export default function RequestQuote({ id }: { id?: string }) {
                             <MenuItem value="web">Web & App Development</MenuItem>
                             <MenuItem value="blockchain">Blockchain Development</MenuItem>
                             <MenuItem value="design">Graphics & UI/UX Design</MenuItem>
+                            <MenuItem value="event">Event hosting</MenuItem>
                         </StyledSelect>
                     </FormControl>
                     {errors.service && <ErrorMessage>{errors.service.message}</ErrorMessage>}

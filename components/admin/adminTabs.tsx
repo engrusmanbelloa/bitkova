@@ -1,11 +1,4 @@
 // components/admin/adminTabs.tsx
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
-import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt"
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload"
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"
-import WidgetsIcon from "@mui/icons-material/Widgets"
-import HistoryIcon from "@mui/icons-material/History"
-import SettingsIcon from "@mui/icons-material/Settings"
 import DashboardOverview from "./DashboardOverview"
 import ProfileSection from "./ProfileSection"
 import ProfileForm from "./Settings"
@@ -15,53 +8,70 @@ import EnrollStudent from "./EnrollStudent"
 import RoleManager from "@/components/auth/RoleManager"
 import NoDataAvailable from "./NoData"
 import Payouts from "@/components/admin/payments/Payouts"
+import AdminQuoteCard from "@/components/admin/quotes/AdminQuotesPanel"
+import {
+    DriveFolderUpload,
+    PersonAddAlt,
+    Widgets,
+    RequestQuote,
+    SignalCellularAlt,
+    AdminPanelSettings,
+    History,
+    Settings,
+} from "@mui/icons-material"
 
 export const ADMIN_TABS = [
     {
         key: "panel",
-        icon: <AdminPanelSettingsIcon />,
+        icon: <AdminPanelSettings />,
         label: "Panel",
         component: () => <DashboardOverview />,
     },
     {
         key: "performance",
-        icon: <SignalCellularAltIcon />,
+        icon: <SignalCellularAlt />,
         label: "Performance",
         component: (user: any) => <ProfileSection user={user} />,
     },
     {
+        key: "quotes",
+        icon: <RequestQuote />,
+        label: "Quotes",
+        component: () => <AdminQuoteCard />,
+    },
+    {
         key: "course",
-        icon: <DriveFolderUploadIcon />,
-        label: "Upload Course",
+        icon: <DriveFolderUpload />,
+        label: "Manage Courses",
         component: () => <UploadCourse />,
     },
     {
         key: "classes",
-        icon: <WidgetsIcon />,
-        label: "Classes",
+        icon: <Widgets />,
+        label: "Manage Classes",
         component: () => <ClassesTabs />,
     },
     {
-        key: "student",
-        icon: <PersonAddAltIcon />,
-        label: "Add Student",
+        key: "students",
+        icon: <PersonAddAlt />,
+        label: "Manage Students",
         component: () => <EnrollStudent />,
     },
     {
         key: "instructor",
-        icon: <PersonAddAltIcon />,
-        label: "Add Instructor",
+        icon: <PersonAddAlt />,
+        label: "Manage Instructor",
         component: () => <RoleManager />,
     },
     {
         key: "history",
-        icon: <HistoryIcon />,
-        label: "Payment History",
+        icon: <History />,
+        label: "Manage Payments",
         component: () => <Payouts />,
     },
     {
         key: "settings",
-        icon: <SettingsIcon />,
+        icon: <Settings />,
         label: "Settings",
         component: () => <ProfileForm />,
     },

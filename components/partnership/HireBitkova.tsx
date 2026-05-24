@@ -188,7 +188,9 @@ export default function HireBitkova({ id }: { id?: string }) {
                                 </ServiceIconWrapper>
                                 <ServiceTitle>{service.title}</ServiceTitle>
                                 <ServiceDescription>{service.description}</ServiceDescription>
-                                <ReadMoreLink href={service.link || "#"}>Read More ›</ReadMoreLink>
+                                <ReadMoreLink href={service.link || "#request-quote"}>
+                                    Read More ›
+                                </ReadMoreLink>
                             </ServiceCard>
                         </SwiperSlide>
                     ))}

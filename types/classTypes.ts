@@ -1,5 +1,7 @@
 // types/classTypes.ts
 export type ClassType = "async_course" | "physical_class" | "telegram_class"
+// | "quote_commitment"
+// | "quote_balance"
 
 export interface Cohort {
     id: string

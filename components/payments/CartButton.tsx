@@ -1,3 +1,4 @@
+// components/payments/CartButton.tsx
 "use client"
 import React, { useState, useEffect } from "react"
 import { useAuthReady } from "@/hooks/useAuthReady"

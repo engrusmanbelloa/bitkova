@@ -26,19 +26,26 @@ export async function rewardReferral({
         const { referrerXP, refereeXP } = calculateReferralXP(price)
         const referrerRef = adminDb.collection("users").doc(referredBy)
 
-        // ✅ Referrer reward
+        // Check referrer actually exists before updating
+        const referrerDoc = await tx.get(referrerRef)
+        if (!referrerDoc.exists) {
+            console.warn(`Referrer ${referredBy} not found — skipping XP reward`)
+            return
+        }
+
+        // Referrer reward
         tx.update(referrerRef, {
             xpBalance: FieldValue.increment(referrerXP),
             totalXpEarned: FieldValue.increment(referrerXP),
         })
 
-        // ✅ Referee reward
+        // Referee reward
         tx.update(buyerRef, {
             xpBalance: FieldValue.increment(refereeXP),
             totalXpEarned: FieldValue.increment(refereeXP),
         })
 
-        // ✅ Audit trail (HIGHLY RECOMMENDED)
+        // Audit trail
         const rewardRef = adminDb.collection("referralRewards").doc()
         tx.set(rewardRef, {
             buyerId,

@@ -11,7 +11,14 @@ export async function rewardReferrer(buyerId: string, rewardAmount: number = 500
 
     const referrerRef = adminDb.collection("users").doc(referredBy)
 
-    // ✅ Credit the referrer
+    // Check referrer actually exists before updating
+    const referrerDoc = await referrerRef.get()
+    if (!referrerDoc.exists) {
+        console.warn(`Referrer ${referredBy} not found — skipping XP reward`)
+        return
+    }
+
+    // Credit the referrer
     await referrerRef.update({
         xpBalance: FieldValue.increment(rewardAmount),
         totalXpEarned: FieldValue.increment(rewardAmount),
