@@ -1,7 +1,7 @@
 // lib/store/useUserStore.ts
 import { create } from "zustand"
 import { Enrollment, CompletedCourse, ArchivedCourse, EnrollmentType } from "@/types/userType"
-
+import { QuoteRequest } from "@/types/quotes/quoteTypes"
 type UserStore = {
     // State
     cart: string[]
@@ -9,6 +9,7 @@ type UserStore = {
     completedCourses: CompletedCourse[]
     archivedCourses: ArchivedCourse[]
     enrollments: Enrollment[]
+    quotes: QuoteRequest[]
 
     // Setters
     setCart: (cart: string[]) => void
@@ -38,6 +39,11 @@ type UserStore = {
     addToArchivedCourses: (course: ArchivedCourse) => void
     removeFromArchivedCourses: (courseId: string) => void
 
+    // Quotes actions
+    setQuotes: (quotes: QuoteRequest[]) => void
+    addQuote: (quote: QuoteRequest) => void
+    updateQuote: (id: string, updates: Partial<QuoteRequest>) => void
+
     // Query helpers
     isInCart: (courseId: string) => boolean
     isInWishlist: (courseId: string) => boolean
@@ -53,6 +59,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     completedCourses: [],
     archivedCourses: [],
     enrollments: [],
+    quotes: [],
 
     // Setters
     setCart: (cart) => set({ cart }),
@@ -60,7 +67,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
     setCompletedCourses: (courses) => set({ completedCourses: courses }),
     setArchivedCourses: (courses) => set({ archivedCourses: courses }),
     setEnrollments: (enrollments) => set({ enrollments }),
-
+    setQuotes: (quotes) => set({ quotes }),
     addEnrollment: (enrollment) => {
         const exists = get().enrollments.some(
             (e) => e.itemId === enrollment.itemId && e.itemType === enrollment.itemType,
@@ -117,6 +124,17 @@ export const useUserStore = create<UserStore>((set, get) => ({
     },
     removeFromArchivedCourses: (courseId) => {
         set({ archivedCourses: get().archivedCourses.filter((c) => c.courseId !== courseId) })
+    },
+    // Quotes actions
+    addQuote: (quote) => {
+        const exists = get().quotes.some((q) => q.id === quote.id)
+        if (!exists) set({ quotes: [...get().quotes, quote] })
+    },
+
+    updateQuote: (id, updates) => {
+        set({
+            quotes: get().quotes.map((q) => (q.id === id ? { ...q, ...updates } : q)),
+        })
     },
 
     isInCart: (courseId) => get().cart.includes(courseId),

@@ -35,7 +35,8 @@ export default function AsyncCourseCheckoutPage() {
     return (
         <UnifiedCheckout
             items={checkoutItems}
-            classType="async_course"
+            // classType="async_course"
+            paymentType="async_course"
             className="async_course"
             successMessage={successMessage}
             successRedirect="/success"

@@ -10,7 +10,7 @@ export async function statusFlow(ctx: any, session: any) {
     const enrollment = await findEnrollmentByRecovery(input)
 
     if (!enrollment) {
-        await sendTelegramMessage(ctx.chatId, "❌ No enrollment found.\nTry again or type /cancel.")
+        await sendTelegramMessage(ctx.chatId, " No enrollment found.\nTry again or type /cancel.")
         return
     }
 

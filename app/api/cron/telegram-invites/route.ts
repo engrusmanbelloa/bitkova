@@ -25,10 +25,19 @@ export async function GET(req: Request) {
         const data = snap.data()
 
         try {
-            const inviteLink = await createTelegramInviteLink(data.chatId, data.userId)
+            const inviteLink = await createTelegramInviteLink(data.telegramGroupId, data.userId)
 
             if (!inviteLink) {
                 throw new Error("Telegram invite still failed")
+            }
+
+            const enrollmentRef = adminDb
+                .collection("enrollments")
+                .doc(`${data.userId}-${data.classId}`)
+            const enrollmentSnap = await enrollmentRef.get()
+
+            if (enrollmentSnap.exists) {
+                await enrollmentRef.update({ inviteLink })
             }
 
             await sendEnrollmentEmail({

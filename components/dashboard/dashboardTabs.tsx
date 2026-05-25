@@ -5,8 +5,10 @@ import ProfileForm from "./Settings"
 import InProgressCourses from "@/components/course/InProgressCourses"
 import Referral from "@/components/dashboard/referals/Referral"
 import CertificatesTab from "@/components/dashboard/certificateTab/CertificatesTab"
+import QuotesTab from "@/components/dashboard/quotes/QuotesTab"
 import NoDataAvailable from "./NoData"
 import DashboardIcon from "@mui/icons-material/Dashboard"
+// import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import {
     AccountCircle,
     School,
@@ -16,6 +18,7 @@ import {
     Help,
     Redeem,
     Settings,
+    RequestQuote,
 } from "@mui/icons-material"
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium"
 
@@ -57,11 +60,17 @@ export const DASHBOARD_TABS = [
         component: () => <NoDataAvailable comment="Coming Soon" />,
     },
     {
-        key: "quiz",
-        icon: <Quiz />,
-        label: "Quiz Attempts",
-        component: () => <NoDataAvailable comment="Coming Soon" />,
+        key: "quotes",
+        icon: <RequestQuote />,
+        label: "Quotes",
+        component: (user: any) => <QuotesTab user={user} />,
     },
+    // {
+    //     key: "quiz",
+    //     icon: <Quiz />,
+    //     label: "Quiz Attempts",
+    //     component: () => <NoDataAvailable comment="Coming Soon" />,
+    // },
     {
         key: "history",
         icon: <History />,

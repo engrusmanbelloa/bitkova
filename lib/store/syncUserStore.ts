@@ -12,6 +12,7 @@ import {
 import { db } from "@/lib/firebase/client"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { Enrollment, CompletedCourse, ArchivedCourse } from "@/types/userType"
+import { QuoteRequest } from "@/types/quotes/quoteTypes"
 
 /**
  * Helper to map Firestore timestamps to JS Dates
@@ -77,6 +78,29 @@ export const syncUserStore = (userId: string): Unsubscribe => {
         (err) => console.error("Enrollment listener error:", err),
     )
 
+    const unsubscribeQuotes = onSnapshot(
+        query(collection(db!, "quoteRequests"), where("userId", "==", userId)),
+        (snap) => {
+            const list = snap.docs.map((docSnap) => {
+                const data = docSnap.data()
+                return {
+                    ...data,
+                    id: docSnap.id,
+                    createdAt: data.createdAt?.toDate(),
+                    updatedAt: data.updatedAt?.toDate(),
+                    quotedAt: data.quotedAt?.toDate(),
+                    commitmentPaidAt: data.commitmentPaidAt?.toDate(),
+                    balancePaidAt: data.balancePaidAt?.toDate(),
+                } as QuoteRequest
+            })
+            store.setQuotes(list)
+        },
+        (err) => console.error("Quotes listener error:", err),
+    )
+
     // 3. Return unsubscribe so the hook can clean up
-    return unsubscribe
+    return () => {
+        unsubscribe()
+        unsubscribeQuotes()
+    }
 }

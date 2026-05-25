@@ -45,9 +45,9 @@ export async function enrollStudentServer(params: Params) {
     const enrollmentId = `${userId}-${itemId}`
     const ref = adminDb.collection("enrollments").doc(enrollmentId)
 
-    // ✅ Idempotency
+    // Idempotency
     if ((await ref.get()).exists) {
-        console.log(`⚠️ Enrollment ${enrollmentId} already exists`)
+        console.log(`Enrollment ${enrollmentId} already exists`)
         return
     }
 
@@ -72,7 +72,7 @@ export async function enrollStudentServer(params: Params) {
         enrollment.progress = 0
         enrollment.completedLessons = 0
         enrollment.completedVideos = []
-        console.log(`✅ Async course enrollment created for user ${userId}`)
+        console.log(` Async course enrollment created for user ${userId}`)
     }
 
     // ---------------- TELEGRAM / PHYSICAL ----------------
@@ -88,7 +88,7 @@ export async function enrollStudentServer(params: Params) {
             if (inviteLink) {
                 enrollment.inviteLink = inviteLink
 
-                // 📧 Prepare email data
+                // Prepare email data
                 const emailData = {
                     to: payerEmail,
                     cohortName: cohortName || className || "Class",
@@ -96,7 +96,7 @@ export async function enrollStudentServer(params: Params) {
                     inviteLink: inviteLink,
                 }
 
-                // 🎫 PHYSICAL CLASS: Generate QR Code
+                // PHYSICAL CLASS: Generate QR Code
                 if (itemType === "physical_class") {
                     const qrPayload = `BITKOVA PHYSICAL CLASS
 Cohort: ${cohortName}
@@ -122,7 +122,7 @@ Join: ${inviteLink}`
                         // qrPayload
                     })
 
-                    console.log(`📧 Physical class email with QR sent to ${payerEmail}`)
+                    // console.log(` Physical class email with QR sent to ${payerEmail}`)
 
                     // Increment enrolled count
                     batch.update(adminDb.collection("physicalClasses").doc(itemId), {
@@ -130,11 +130,11 @@ Join: ${inviteLink}`
                     })
                 }
 
-                // 💬 TELEGRAM CLASS: Send email without QR
+                // TELEGRAM CLASS: Send email without QR
                 if (itemType === "telegram_class") {
                     await sendEnrollmentEmail({ ...emailData, status: "success" })
 
-                    console.log(`📧 Telegram class email sent to ${payerEmail}`)
+                    // // console.log(` Telegram class email sent to ${payerEmail}`)
 
                     // Increment enrolled count
                     batch.update(adminDb.collection("telegramClasses").doc(itemId), {
@@ -142,8 +142,8 @@ Join: ${inviteLink}`
                     })
                 }
             } else {
-                // ⏳ Invite link creation failed - mark as pending
-                console.warn(`⚠️ Failed to create invite link for ${enrollmentId}`)
+                // Invite link creation failed - mark as pending
+                // console.warn(` Failed to create invite link for ${enrollmentId}`)
 
                 await sendEnrollmentEmail({
                     to: payerEmail,
@@ -161,15 +161,15 @@ Join: ${inviteLink}`
                     className: className || "Class",
                 })
 
-                console.log(`⏳ Invite marked as pending for ${payerEmail}`)
+                // console.log(` Invite marked as pending for ${payerEmail}`)
             }
         } catch (error) {
-            console.error(`❌ Error during enrollment for ${itemType}:`, error)
+            // console.error(` Error during enrollment for ${itemType}:`, error)
         }
     }
 
     batch.set(ref, clean(enrollment))
     await batch.commit()
 
-    console.log(`✅ Enrollment ${enrollmentId} committed successfully`)
+    // console.log(` Enrollment ${enrollmentId} committed successfully`)
 }

@@ -85,7 +85,8 @@ export default function Page({ params }: { params: Promise<{ classId: string }> 
             items={checkoutItems}
             className={classData.name}
             cohortName={cohort.name}
-            classType="physical_class"
+            // classType="physical_class"
+            paymentType="physical_class"
             successMessage={successMessage}
             successRedirect="/dashboard"
             metadata={{

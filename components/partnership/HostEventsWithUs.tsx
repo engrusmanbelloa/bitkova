@@ -209,6 +209,12 @@ export default function HostEventsWithUs({ id }: { id?: string }) {
         }
     }
 
+    const handleRequestQuote = () => {
+        setTimeout(() => {
+            document.getElementById("request-quote")?.scrollIntoView({ behavior: "smooth" })
+        }, 150)
+    }
+
     return (
         <Container id={id}>
             <EventsTitle>Host Events With Us</EventsTitle>
@@ -238,7 +244,7 @@ export default function HostEventsWithUs({ id }: { id?: string }) {
                     </ErrorBanner>
                 )}
 
-                <form onSubmit={handleSubmit(onSubmit)}>
+                {/* <form onSubmit={handleSubmit(onSubmit)}>
                     <FormField>
                         <StyledTextField
                             {...register("orgName")}
@@ -287,10 +293,10 @@ export default function HostEventsWithUs({ id }: { id?: string }) {
                         )}
                     </FormField>
 
-                    <EnrollButton type="submit" disabled={isSubmitting} variant="contained">
-                        {isSubmitting ? "Submitting..." : "Submit Partnership Request"}
-                    </EnrollButton>
-                </form>
+                </form> */}
+                <EnrollButton onClick={handleRequestQuote} type="submit">
+                    Submit Partnership Request
+                </EnrollButton>
             </EventsCard>
         </Container>
     )

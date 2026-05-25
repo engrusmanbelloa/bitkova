@@ -48,11 +48,11 @@ export default function RegisteredClasses({ userData, limit }: RegisteredClasses
 
     const totalClassEnrollments = physicalEnrollments.length + telegramEnrollments.length
 
-    console.log("User enrollments", {
-        physicalEnrollments,
-        telegramEnrollments,
-        totalClassEnrollments,
-    })
+    // console.log("User enrollments", {
+    //     physicalEnrollments,
+    //     telegramEnrollments,
+    //     totalClassEnrollments,
+    // })
 
     return (
         <Container>

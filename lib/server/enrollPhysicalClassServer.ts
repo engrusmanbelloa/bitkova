@@ -32,15 +32,15 @@ export async function enrollPhysicalClassServer({
 }: Params) {
     const enrollmentId = `${userId}-${classId}`
 
-    // ✅ Idempotency check (CRITICAL)
+    // Idempotency check (CRITICAL)
     const ref = adminDb.collection("enrollments").doc(enrollmentId)
     if ((await ref.get()).exists) return
 
-    // ✅ Create Telegram invite
+    // Create Telegram invite
     const realChatId = await resolveTelegramChatId(telegramGroupId)
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
-    // ✅ Generate QR code
+    // Generate QR code
     const qrPayload = `BITKOVA PHYSICAL CLASS
     Cohort: ${cohortName}
     Class: ${className}
@@ -60,7 +60,7 @@ export async function enrollPhysicalClassServer({
     const batch = adminDb.batch()
     const now = new Date()
 
-    // ✅ Enrollment record
+    // Enrollment record
     batch.set(ref, {
         id: enrollmentId,
         userId,
@@ -90,7 +90,7 @@ export async function enrollPhysicalClassServer({
     //     enrolledAt: now,
     // })
 
-    // ✅ Increment class capacity
+    // Increment class capacity
     // batch.update(doc(db, "physicalClasses", classId), {
     //     enrolled: increment(1),
     // })
@@ -101,7 +101,7 @@ export async function enrollPhysicalClassServer({
 
     await batch.commit()
 
-    // ✅ award the referrer with 200xp for physical class
+    // award the referrer with 200xp for physical class
     await rewardReferral({
         buyerId: userId,
         price: price,
@@ -134,7 +134,7 @@ export async function enrollPhysicalClassServer({
         })
     }
 
-    // ✅ Telegram auto-DM
+    // Telegram auto-DM
     //  await sendTelegramMessage(
     //      userId,
     //      `🎉 *Payment Successful!*\n\nHere’s your private Telegram class access:\n\n👉 ${inviteLink}\n\n⚠️ Link is single-use. Join immediately.`,

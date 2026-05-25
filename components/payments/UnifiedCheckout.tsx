@@ -9,7 +9,8 @@ import { useAuthReady } from "@/hooks/useAuthReady"
 import { useUserStore } from "@/lib/store/useUserStore"
 import { toast } from "sonner"
 import { ClassType } from "@/types/classTypes"
-import { Enrollment } from "@/types/userType"
+import { PaymentType, EnrollmentPaymentType } from "@/types/payments/paymentTypes"
+import { Enrollment, EnrollmentType } from "@/types/userType"
 import TestModeWarning from "@/components/payments/TestModeWarning"
 
 const Container = styled.div`
@@ -97,7 +98,9 @@ interface CheckoutItem {
 
 interface UnifiedCheckoutProps {
     items: CheckoutItem[]
-    classType: ClassType
+    paymentType: PaymentType
+    paymentLabel?: string
+    // classType: ClassType
     className: string
     cohortName?: string
 
@@ -107,9 +110,20 @@ interface UnifiedCheckoutProps {
     metadata?: Record<string, any>
 }
 
+const ENROLLMENT_TYPES: EnrollmentPaymentType[] = [
+    "async_course",
+    "physical_class",
+    "telegram_class",
+]
+
+const isEnrollmentPayment = (type: PaymentType): type is EnrollmentPaymentType =>
+    (ENROLLMENT_TYPES as string[]).includes(type)
+
 export default function UnifiedCheckout({
     items,
-    classType,
+    // classType,
+    paymentType,
+    paymentLabel = "Payment",
     className,
     cohortName,
     successMessage,
@@ -123,13 +137,14 @@ export default function UnifiedCheckout({
     const totalAmount = items.reduce((sum, item) => sum + item.price, 0)
 
     const config = {
-        reference: `BIT-${classType.toUpperCase()}-${Date.now()}-${user?.id || "guest"}`,
+        reference: `BIT-${paymentType.toUpperCase()}-${Date.now()}-${user?.id || "guest"}`,
         email: user?.email || "",
         amount: totalAmount * 100, // Paystack expects kobo
         publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
         metadata: {
             userId: user?.id,
-            classType,
+            // classType,
+            paymentType,
             className,
             cohortName,
             itemIds: items.map((i) => i.id),
@@ -146,9 +161,10 @@ export default function UnifiedCheckout({
                     variable_name: "user_phone",
                 },
                 {
-                    display_name: "Class Type",
-                    value: classType,
-                    variable_name: "class_type",
+                    display_name: "Payment Type",
+                    // value: classType,
+                    value: paymentType,
+                    variable_name: "payment_type",
                 },
                 {
                     display_name: "Class Name",
@@ -172,39 +188,42 @@ export default function UnifiedCheckout({
 
             if (!res.ok) throw new Error("Verification failed")
 
-            // ✅ UI STATE CLEANUP ONLY
+            // UI STATE CLEANUP ONLY
 
             // 1. Loop through the items being purchased
-            items.forEach((item) => {
-                // 2. Remove from cart (UI state)
-                removeFromCart(item.id)
-                const enrollmentId = `${user!.id}-${item.id}`
+            if (isEnrollmentPayment(paymentType)) {
+                items.forEach((item) => {
+                    // 2. Remove from cart (UI state)
+                    removeFromCart(item.id)
+                    const enrollmentId = `${user!.id}-${item.id}`
 
-                // 3. Prepare the enrollment object
-                const baseEnrollment: Enrollment = {
-                    id: enrollmentId,
-                    userId: user!.id,
-                    itemId: item.id,
-                    itemType: classType,
-                    status: "paid",
-                    paymentReference: reference.reference,
-                    enrolledAt: new Date(),
-                }
+                    // 3. Prepare the enrollment object
+                    const baseEnrollment: Enrollment = {
+                        id: enrollmentId,
+                        userId: user!.id,
+                        itemId: item.id,
+                        // itemType: classType,
+                        itemType: paymentType as EnrollmentType,
+                        status: "paid",
+                        paymentReference: reference.reference,
+                        enrolledAt: new Date(),
+                    }
 
-                // Add async-course only fields when needed
-                const enrollment: Enrollment =
-                    classType === "async_course"
-                        ? {
-                              ...baseEnrollment,
-                              progress: 0,
-                              completedLessons: 0,
-                              status: "in progress",
-                          }
-                        : baseEnrollment
+                    // Add async-course only fields when needed
+                    const enrollment: Enrollment =
+                        paymentType === "async_course"
+                            ? {
+                                  ...baseEnrollment,
+                                  progress: 0,
+                                  completedLessons: 0,
+                                  status: "in progress",
+                              }
+                            : baseEnrollment
 
-                // 4. Add to enrolled courses (UI state)
-                addEnrollment(enrollment)
-            })
+                    // 4. Add to enrolled courses (UI state)
+                    addEnrollment(enrollment)
+                })
+            }
 
             toast.success(successMessage)
             router.push(successRedirect)
@@ -221,12 +240,14 @@ export default function UnifiedCheckout({
     const initializePayment = usePaystackPayment(config)
 
     useEffect(() => {
-        items.forEach((item) => {
-            if (isEnrolled(item.id)) {
-                toast.error("You are already enrolled")
-                router.replace("/dashboard")
-            }
-        })
+        if (isEnrollmentPayment(paymentType)) {
+            items.forEach((item) => {
+                if (isEnrolled(item.id)) {
+                    toast.error("You are already enrolled")
+                    router.replace("/dashboard")
+                }
+            })
+        }
     }, [])
 
     if (!authReady)
@@ -250,7 +271,7 @@ export default function UnifiedCheckout({
         <Container>
             <Wrapper>
                 <TestModeWarning />
-                <h2>Complete Your Enrollment</h2>
+                <h2>Complete Your {paymentLabel}</h2>
 
                 {items.map((item) => (
                     <ItemCard key={item.id}>

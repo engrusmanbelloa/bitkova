@@ -6,7 +6,7 @@ import { sendTelegramMessage } from "@/lib/telegram/bot"
 import { sendEnrollmentEmail } from "@/lib/email/sendEnrollmentEmail"
 import { markInvitePending } from "@/lib/telegram/markInvitePending"
 import { resolveTelegramChatId } from "@/lib/telegram/resolveChatId"
-import { rewardReferrer } from "@/lib/firebase/uploads/referralRewards"
+import { rewardReferral } from "@/lib/referrals/referralRewards"
 import { Enrollment } from "@/types/userType"
 
 interface Params {
@@ -18,6 +18,7 @@ interface Params {
     telegramGroupId: string
     paymentReference: string
     payerEmail: string
+    price: number
     itemId: string
     enrolledAt: Date
 }
@@ -31,18 +32,19 @@ export async function enrollTelegramClassServer({
     paymentReference,
     payerEmail,
     className,
+    price,
 }: Params) {
     const enrollmentId = `${userId}-${itemId}`
     const enrollmentRef = adminDb.collection("enrollments").doc(enrollmentId)
 
-    // ✅ Idempotency check
+    // Idempotency check
     if ((await enrollmentRef.get()).exists) return
 
-    // ✅ Create Telegram invite
+    // Create Telegram invite
     const realChatId = await resolveTelegramChatId(telegramGroupId)
     const inviteLink = await createTelegramInviteLink(realChatId, userId)
 
-    // ✅ Save enrollment record
+    // Save enrollment record
     const batch = adminDb.batch()
 
     batch.set(enrollmentRef, {
@@ -58,15 +60,21 @@ export async function enrollTelegramClassServer({
         enrolledAt: new Date(),
     })
 
-    // ✅ Increment class count
+    // Increment class count
     batch.update(adminDb.collection("telegramClasses").doc(itemId), {
         enrolled: FieldValue.increment(1),
     })
 
     await batch.commit()
 
-    // ✅ award the referrer with 150xp for physical class
-    await rewardReferrer(userId, 150)
+    // award the referrer with 150xp for physical class
+    // await rewardReferrer(userId, 150)
+    // award the referrer with 200xp for physical class
+    await rewardReferral({
+        buyerId: userId,
+        price: price,
+        enrollmentId,
+    })
 
     if (inviteLink) {
         await sendEnrollmentEmail({
@@ -94,7 +102,7 @@ export async function enrollTelegramClassServer({
         })
     }
 
-    // ✅ Telegram auto-DM
+    // Telegram auto-DM
     //  await sendTelegramMessage(
     //      userId,
     //      `🎉 *Payment Successful!*\n\nHere’s your private Telegram class access:\n\n👉 ${inviteLink}\n\n⚠️ Link is single-use. Join immediately.`,
