@@ -6,6 +6,7 @@ import { QuoteRequest } from "@/types/quotes/quoteTypes"
 import { toDate } from "@/utils/formatDate"
 
 export function useFetchUserQuotes(userId?: string) {
+    console.log("useFetchUserQuotes called with userId:", userId) // Debug log
     return useQuery({
         queryKey: ["userQuotes", userId],
         queryFn: async () => {
@@ -15,8 +16,10 @@ export function useFetchUserQuotes(userId?: string) {
                 orderBy("createdAt", "desc"),
             )
             const snap = await getDocs(q)
+            console.log("Fetched quotes snapshot:", snap) // Debug log
             return snap.docs.map((d) => {
                 const data = d.data()
+                console.log("Raw quote data:", data) // Debug log
                 return {
                     ...data,
                     createdAt: toDate(data.createdAt),

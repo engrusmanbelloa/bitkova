@@ -3,7 +3,7 @@
 import { useState } from "react"
 import styled from "styled-components"
 import { useRouter } from "next/navigation"
-import { useFetchUserQuotes } from "@/hooks/quotes/useFetchUserQuotes"
+// import { useFetchUserQuotes } from "@/hooks/quotes/useFetchUserQuotes"
 import { usePaystackPayment } from "react-paystack"
 import { QuoteRequest } from "@/types/quotes/quoteTypes"
 import { formatDate } from "@/utils/formatDate"
@@ -159,6 +159,7 @@ function QuoteCard({ quote, user }: QuoteCardProps) {
     const status = STATUS_COLORS[quote.status] ?? STATUS_COLORS.pending
     const quotes = useUserStore((s) => s.quotes)
     const { updateQuote } = useUserStore()
+
     const commitmentConfig = {
         reference: `BIT-QUOTE_COMMITMENT-${Date.now()}-${user.id}`,
         email: user.email,
@@ -344,9 +345,10 @@ function QuoteCard({ quote, user }: QuoteCardProps) {
 }
 
 export default function QuotesTab({ user }: { user: User }) {
-    const { data: quotes, isLoading } = useFetchUserQuotes(user.id)
+    // const { data: quotes, isLoading } = useFetchUserQuotes(user.id)
+    const quotes = useUserStore((s) => s.quotes)
 
-    if (isLoading) return <CircularProgress />
+    // if (isLoading) return <CircularProgress />
 
     return (
         <QuotesContainer>
