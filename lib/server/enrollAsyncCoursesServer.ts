@@ -66,7 +66,7 @@ export async function enrollAsyncCoursesServer({
                 enrollmentId: `${userId}-${courseId}`,
             })
         } catch (err) {
-            console.warn(`rewardReferral failed for ${courseId}:`, err)
+            // console.warn(`rewardReferral failed for ${courseId}:`, err)
         }
     }
 }

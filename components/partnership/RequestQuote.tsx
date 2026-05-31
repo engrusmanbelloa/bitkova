@@ -181,6 +181,7 @@ export default function RequestQuote({ id }: { id?: string }) {
             }
 
             const res = await fetch("/api/quotes/submit", {
+                // api/admin/quotes/respond
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
