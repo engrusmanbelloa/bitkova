@@ -1,4 +1,4 @@
-// app/api/admin/quotes/respond/route.ts
+// app/api/quotes/respond/route.ts
 import { NextRequest, NextResponse } from "next/server"
 import { adminAuth, adminDb } from "@/lib/firebase/admin"
 
@@ -10,9 +10,16 @@ export async function POST(req: NextRequest) {
 
     const token = authHeader.replace("Bearer ", "")
     const decoded = await adminAuth.verifyIdToken(token)
+
     if (!decoded.admin) {
+        console.warn(
+            "Unauthorized access attempt to quote response endpoint only admins allowed. Token decoded but no admin claim: ",
+            decoded,
+        )
         return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
+
+    console.log("Admin authenticated for quote response:", decoded.uid)
 
     const { quoteId, quotedPrice, adminNote } = await req.json()
 

@@ -146,7 +146,8 @@ function AdminQuoteCard({ quote }: { quote: QuoteRequest }) {
         setLoading(true)
         try {
             const token = await auth.currentUser?.getIdToken()
-            const res = await fetch("/api/admin/quotes/respond", {
+            const res = await fetch("/api/quotes/respond", {
+                // api/admin/quotes/respond app/api/quotes/respond/route.ts
                 method: "POST",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify({
