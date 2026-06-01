@@ -7,6 +7,7 @@ import { QuoteRequest } from "@/types/quotes/quoteTypes"
 import { formatDate } from "@/utils/formatDate"
 import { toast } from "sonner"
 import TextField from "@mui/material/TextField"
+import EnrollButton from "@/components/EnrollButton"
 
 const Card = styled.div`
     border: 1px solid #eee;
@@ -74,7 +75,7 @@ const Btn = styled.button`
     font-weight: 600;
     cursor: pointer;
     border: none;
-    background: #1565c0;
+    background: ${(props) => props.theme.palette.primary.main};
     color: #fff;
     &:hover {
         opacity: 0.85;
@@ -194,9 +195,17 @@ export default function AdminQuoteCard({ quote }: { quote: QuoteRequest }) {
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                     />
-                    <Btn onClick={handleRespond} disabled={loading}>
+                    <EnrollButton
+                        type="submit"
+                        onClick={handleRespond}
+                        disabled={loading}
+                        variant="contained"
+                    >
                         {loading ? "Sending..." : "Send Quote"}
-                    </Btn>
+                    </EnrollButton>
+                    {/* <Btn onClick={handleRespond} disabled={loading}>
+                        {loading ? "Sending..." : "Send Quote"}
+                    </Btn> */}
                 </QuoteForm>
             )}
         </Card>

@@ -179,7 +179,7 @@ export default function RequestQuote({ id }: { id?: string }) {
                 // router.push("/") // trigger sign in modal
                 return
             }
-
+            console.log("request submitted")
             const res = await fetch("/api/quotes/submit", {
                 // api/admin/quotes/respond
                 method: "POST",

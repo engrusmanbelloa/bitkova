@@ -87,7 +87,7 @@ export default function Dashboard() {
         }
 
         // Check for authorization based on custom claims and specific email
-        const isClaimAuthorized = claims?.admin || claims?.instructor
+        const isClaimAuthorized = claims?.admin || claims?.instructor || claims?.businessDev
 
         // console.log("The claims:...", claims.admin, claims.instructor)
 
