@@ -74,6 +74,7 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
             commitmentReference: paymentReference,
             updatedAt: new Date(),
         })
+        // console.log("Quote commitment payment recorded for quote ID:", quoteId) // Debug log
         // Email both admin and user
         await Promise.all([
             sendQuoteEmail({
@@ -86,6 +87,11 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
                 commitmentAmount: quote?.commitmentAmount,
                 quoteId,
             }),
+            // console.log(
+            //     "Admin email for commitment payment notification sent to business dev team for quote ID:",
+            //     quoteId,
+            //     await getBusinessDevEmails(),
+            // ), // Debug log
             sendQuoteEmail({
                 event: "commitment_paid",
                 to: userEmail,
@@ -96,6 +102,7 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
                 commitmentAmount: quote?.commitmentAmount,
                 quoteId,
             }),
+            // console.log("User email for commitment payment notification:", userEmail), // Debug log
         ])
     },
 
@@ -114,7 +121,7 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
             balanceReference: paymentReference,
             updatedAt: new Date(),
         })
-
+        // console.log("Quote balance payment recorded for quote ID:", quoteId) // Debug log
         // Email both admin and user
         await Promise.all([
             sendQuoteEmail({
@@ -127,6 +134,11 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
                 commitmentAmount: quote?.commitmentAmount,
                 quoteId,
             }),
+            // console.log(
+            //     "Admin email for balance payment notification sent to business dev team for quote ID:",
+            //     quoteId,
+            //     await getBusinessDevEmails(),
+            // ), // Debug log
             sendQuoteEmail({
                 event: "balance_paid",
                 to: userEmail,
@@ -137,6 +149,7 @@ export const paymentHandlers: Record<PaymentType, PaymentHandler> = {
                 commitmentAmount: quote?.commitmentAmount,
                 quoteId,
             }),
+            // console.log("User email for balance payment notification:", userEmail), // Debug log
         ])
     },
 }

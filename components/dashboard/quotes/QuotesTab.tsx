@@ -167,7 +167,7 @@ function QuoteCard({ quote, user }: QuoteCardProps) {
         publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
         metadata: {
             userId: user.id,
-            classType: "quote_commitment",
+            paymentType: "quote_commitment",
             itemIds: [quote.id],
             custom_fields: [
                 {
