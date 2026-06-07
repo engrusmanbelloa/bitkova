@@ -6,7 +6,13 @@ export type QuoteStatus =
     | "in_progress" // commitment paid, work started
     | "completed" // balance paid, work done
     | "declined" // user declined the quote
+    | "work_started" // admin marked as started after acceptance
 
+export interface QuoteDeliverable {
+    label: string // e.g. "GitHub Repository", "Figma Design", "Event Registration"
+    url: string
+    addedAt: Date
+}
 export interface QuoteRequest {
     id: string
     userId: string
@@ -17,6 +23,9 @@ export interface QuoteRequest {
     service: "web" | "blockchain" | "design" | "event"
     details: string
     status: QuoteStatus
+    deliverables?: QuoteDeliverable[]
+    workStartedAt?: Date
+    workNote?: string // admin message when sharing deliverables
 
     // Admin fills on quoting
     quotedPrice?: number

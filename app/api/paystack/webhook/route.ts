@@ -51,8 +51,8 @@ export async function POST(req: NextRequest) {
     const amountPaid = data.amount / 100
     const paymentType = metadata.paymentType as PaymentType
 
-    // console.log("Processing payment for:", metadata.paymentType)
-    // console.log("Processing payment for price:", data.amount / 100)
+    console.log("Processing payment for:", metadata.paymentType)
+    console.log("Processing payment for price:", data.amount / 100)
 
     const handler = paymentHandlers[paymentType]
 
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
             payerEmail: data.customer.email,
             price: amountPaid,
         })
-        // console.log(" Payment processed successfully!")
+        console.log(" Payment processed successfully!")
         return NextResponse.json({ ok: true })
     } catch (err) {
         console.error("Webhook processing error:", err)

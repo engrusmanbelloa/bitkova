@@ -16,6 +16,15 @@ const ROLE_TO_CLAIM_MAP: Record<UserRole["role"], string> = {
     business_dev: "businessDev",
 }
 
+// Roles tracked in Firestore for email/notification lookup
+const TRACKED_ROLES: UserRole["role"][] = [
+    "admin",
+    "instructor",
+    "event_manager",
+    "business_dev",
+    "blog_admin",
+]
+
 export async function POST(req: Request) {
     try {
         const { email, role } = (await req.json()) as {
@@ -40,10 +49,10 @@ export async function POST(req: Request) {
         const isAdmin = decoded.admin === true
         const isInstructor = decoded.instructor === true
 
-        console.log("Decoded claims: ", {
-            admin: isAdmin,
-            instructor: isInstructor,
-        })
+        // console.log("Decoded claims: ", {
+        //     admin: isAdmin,
+        //     instructor: isInstructor,
+        // })
 
         // 🔒 Only admins can manage roles
         if (decoded.admin !== true) {
@@ -74,6 +83,25 @@ export async function POST(req: Request) {
         }
 
         await adminAuth.setCustomUserClaims(user.uid, cleanedClaims)
+
+        // 📄 Update staffRoles collection for tracked roles (for email/notification targeting)
+        const staffRef = adminDb.collection("staffRoles").doc(user.uid)
+
+        if (role !== "none" && TRACKED_ROLES.includes(role as UserRole["role"])) {
+            await staffRef.set(
+                {
+                    uid: user.uid,
+                    email: user.email,
+                    role,
+                    claim: ROLE_TO_CLAIM_MAP[role as UserRole["role"]],
+                    assignedAt: new Date(),
+                },
+                { merge: true },
+            )
+        } else {
+            // Role removed or non-tracked role (guest/student) — remove from staff collection
+            await staffRef.delete()
+        }
 
         return NextResponse.json({
             ok: true,

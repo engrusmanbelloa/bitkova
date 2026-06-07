@@ -10,6 +10,9 @@ import { onAuthStateChanged, User as FirebaseUserType } from "firebase/auth"
 export interface CustomClaims {
     admin?: boolean
     instructor?: boolean
+    businessDev?: boolean
+    eventManager?: boolean
+    blogAdmin?: boolean
 }
 export interface AuthUser {
     userDoc: UserDocType | null
