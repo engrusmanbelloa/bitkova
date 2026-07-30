@@ -13,7 +13,6 @@ import Button from "@/components/Button"
 import CourseRating from "@/components/course/Review"
 import CourseCardSkeleton from "@/components/course/CourseCardSkeleton"
 import { useFetchCourses } from "@/hooks/courses/useFetchCourse"
-import "animate.css/animate.min.css"
 
 const Container = styled.section`
     width: ${(props) => props.theme.widths.heroWidth};

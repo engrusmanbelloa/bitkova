@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import Image from "next/image"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
@@ -7,7 +7,6 @@ import LaptopIcon from "@mui/icons-material/Laptop"
 import LanguageIcon from "@mui/icons-material/Language"
 import { mobile, ipad } from "@/responsive"
 import { toast } from "sonner"
-import Certificate from "@/components/course/Certificate"
 import CertificateDownload from "@/components/course/DownloadCert"
 
 const Container = styled.div`

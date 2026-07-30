@@ -5,7 +5,7 @@ import { enrollTelegramClassServer } from "@/lib/server/enrollTelegramClassServe
 import { enrollAsyncCoursesServer } from "@/lib/server/enrollAsyncCoursesServer"
 import { removeCoursesFromCartServer } from "@/lib/server/cartServer"
 import { enrollPhysicalClassServer } from "../enrollPhysicalClassServer"
-import { adminDb } from "@/lib/firebase/admin-new"
+import { adminDb } from "@/lib/firebase/admin"
 import { sendQuoteEmail } from "@/lib/email/sendQuoteEmail"
 import { getBusinessDevEmails } from "@/lib/email/getStaffEmails"
 

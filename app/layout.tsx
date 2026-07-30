@@ -11,7 +11,6 @@ import { Analytics } from "@vercel/analytics/next"
 import StyledComponentsRegistry from "@/lib/registry"
 import { GlobalStyle, theme } from "@/styles/theme"
 import { initAppCheck } from "@/lib/firebase/appCheck"
-import useSessionRefresh from "@/hooks/useSessionRefresh"
 import Announcement from "@/components/home/Announcement"
 import Navbar from "@/components/nav/Navbar"
 import Footer from "@/components/home/Footer"
@@ -58,9 +57,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         initAppCheck()
     }, [])
-
-    // Handle session expiration every 30 minutes
-    // useSessionRefresh()
 
     // Network status handler
     useEffect(() => {

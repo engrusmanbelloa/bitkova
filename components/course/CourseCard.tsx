@@ -12,7 +12,6 @@ import CourseRating from "@/components/course/Review"
 import { formatPrice } from "@/config/FormatPrice"
 import { CourseWithExtras } from "@/types//courseType"
 import { mobile, ipad } from "@/responsive"
-import "animate.css/animate.min.css"
 
 const StyledCard = styled(Card)`
     margin: 0px;

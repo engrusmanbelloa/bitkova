@@ -107,17 +107,6 @@ export default function HiddenCertificate({
     certRef,
     issuedAt,
 }: CertProf) {
-    // const formatDate = (firebaseTimestamp: FirebaseFirestore.Timestamp) => {
-    //     const date = new Date(firebaseTimestamp.toMillis())
-    //     return date.toLocaleDateString("en-US", {
-    //         year: "numeric",
-    //         month: "long",
-    //         day: "numeric",
-    //         // hour: "2-digit",
-    //         // minute: "2-digit",
-    //         // second: "2-digit",
-    //     })
-    // }
     return (
         <Container $visible={$visible}>
             {/* Hidden certificate for PDF generation */}

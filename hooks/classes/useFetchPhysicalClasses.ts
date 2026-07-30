@@ -29,7 +29,7 @@ export function useFetchPhysicalClasses(cohortId?: string) {
         queryKey: ["physicalClasses", cohortId],
         queryFn: async () => {
             if (!cohortId) {
-                // console.log("⏭️ Skipping physical classes fetch - no cohort ID")
+                // console.log("Skipping physical classes fetch - no cohort ID")
                 return []
             }
 
@@ -43,19 +43,19 @@ export function useFetchPhysicalClasses(cohortId?: string) {
 
                 const snapshot = await getDocs(q)
 
-                // console.log("📊 Physical classes found:", snapshot.size)
+                // console.log("Physical classes found:", snapshot.size)
 
                 if (snapshot.empty) {
-                    // console.warn("⚠️ No physical classes for this cohort")
+                    // console.warn("No physical classes for this cohort")
                     return []
                 }
 
                 const classes = snapshot.docs.map(convertPhysicalClassDoc)
 
-                // console.log("✅ Physical classes loaded:", classes.length)
+                // console.log(" Physical classes loaded:", classes.length)
                 return classes
             } catch (error) {
-                // console.error("❌ Error fetching physical classes:", error)
+                // console.error("Error fetching physical classes:", error)
                 throw error
             }
         },

@@ -32,4 +32,26 @@ if (getApps().length === 0) {
     adminDb = getFirestore(adminApp)
 }
 
+// Create session cookie with retries (for transient Google API failures)
+export async function createSessionCookieWithRetry(
+    idToken: string,
+    expiresIn: number,
+    retries = 2,
+) {
+    let lastErr
+    for (let i = 0; i <= retries; i++) {
+        try {
+            return await adminAuth.createSessionCookie(idToken, { expiresIn })
+        } catch (err: any) {
+            lastErr = err
+            console.error(`createSessionCookie attempt ${i + 1} failed:`, err?.message || err)
+            // Only retry on network errors / Google API token fetch errors
+            if (!String(err?.message).includes("oauth2") && !String(err?.message).includes("fetch"))
+                break
+            if (i < retries) await new Promise((res) => setTimeout(res, 500 * (i + 1))) // backoff
+        }
+    }
+    throw lastErr
+}
+
 export { adminApp, adminAuth, adminDb }
